@@ -66,8 +66,8 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
 - [x] 4. Checkpoint — Verify effects layer compiles
   - Ensure the project compiles with no errors, ask the user if questions arise.
 
-- [ ] 5. Create MeasurementCardView and refactor MeasurementView (glue layer)
-  - [ ] 5.1 Create `MeasurementCardView` with compact/expanded modes
+- [x] 5. Create MeasurementCardView and refactor MeasurementView (glue layer)
+  - [x] 5.1 Create `MeasurementCardView` with compact/expanded modes
     - Create `LightMeter/MeasurementCardView.swift` accepting `lux: Double`, `kelvin: Double`, `isCaptured: Bool`
     - Compact mode (live): display Kelvin value + "K" label, lux value + "LUX" label with frosted-glass background (`.ultraThinMaterial`)
     - Expanded mode (captured): add a `Divider`, "User Guide" label, lux interpretation description and tip from `LuxInterpreter`, and contextual comparison from `ComparisonGenerator`
@@ -75,7 +75,7 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
     - Apply `.cornerRadius(16)` and white foreground color
     - _Requirements: 4.1, 4.2, 4.3, 4.5, 5.1, 5.2, 5.3, 5.4, 5.5, 5.7_
 
-  - [ ] 5.2 Refactor `MeasurementView` with live/captured mode state and controls
+  - [x] 5.2 Refactor `MeasurementView` with live/captured mode state and controls
     - Add `@State` properties: `isCaptured: Bool`, `frozenFrame: UIImage?`, `capturedLux: Double`, `capturedKelvin: Double`
     - Background: show `CameraPreviewView` in live mode, `Image(uiImage: frozenFrame)` with `.resizable().aspectRatio(contentMode: .fill).ignoresSafeArea()` in captured mode, `Color.black` fallback when no permission
     - Add capture button (round, bottom center) and camera toggle button (adjacent) — visible only in live mode
@@ -86,7 +86,7 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
     - Pass `cameraManager.toggleCamera()` to the camera toggle button action
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.3, 3.1, 4.4, 4.6, 5.6_
 
-- [ ] 6. Final checkpoint — Ensure all tests pass and project compiles
+- [x] 6. Final checkpoint — Ensure all tests pass and project compiles
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
