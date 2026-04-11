@@ -52,20 +52,20 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
 - [x] 3. Checkpoint — Verify pure interpreter logic
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. Add camera preview and expose session
-  - [ ] 4.1 Expose `session` property on `CameraManager`
+- [x] 4. Add camera preview and expose session
+  - [x] 4.1 Expose `session` property on `CameraManager`
     - Add a computed read-only property `var session: AVCaptureSession { captureSession }` to `CameraManager`
     - No changes to existing published properties or session lifecycle methods
     - _Requirements: 5.1, 5.2, 5.3_
 
-  - [ ] 4.2 Create `CameraPreviewView` as a `UIViewRepresentable`
+  - [x] 4.2 Create `CameraPreviewView` as a `UIViewRepresentable`
     - Create `LightMeter/CameraPreviewView.swift` accepting an `AVCaptureSession`
     - In `makeUIView`, create a `UIView`, add an `AVCaptureVideoPreviewLayer` with `.resizeAspectFill` gravity
     - In `updateUIView`, update the preview layer frame to match the view bounds
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 5. Update MeasurementView with interpretation overlay and camera preview
-  - [ ] 5.1 Replace black background with `CameraPreviewView` and add interpretation text
+- [x] 5. Update MeasurementView with interpretation overlay and camera preview
+  - [x] 5.1 Replace black background with `CameraPreviewView` and add interpretation text
     - When `permissionGranted` is true, use `CameraPreviewView(session: cameraManager.session)` as the ZStack background instead of `Color.black`
     - When `permissionGranted` is false, keep `Color.black` as fallback
     - Add lux interpretation text (description + tip) below the lux value/label
@@ -75,7 +75,7 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
     - Use fixed `.font(.system(size: N))` for all text — no Dynamic Type
     - _Requirements: 3.1, 3.7, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 6. Final checkpoint — Ensure all tests pass
+- [x] 6. Final checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
