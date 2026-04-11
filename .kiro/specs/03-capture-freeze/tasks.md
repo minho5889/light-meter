@@ -6,8 +6,8 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
 
 ## Tasks
 
-- [ ] 1. Implement ComparisonGenerator (pure logic layer)
-  - [ ] 1.1 Create `ComparisonGenerator` with contextual comparison sentence generation
+- [x] 1. Implement ComparisonGenerator (pure logic layer)
+  - [x] 1.1 Create `ComparisonGenerator` with contextual comparison sentence generation
     - Create `LightMeter/ComparisonGenerator.swift` as a `struct` with `static func generate(lux: Double) -> String`
     - Define an internal array of 8 range tuples matching the design document's short environment labels (e.g., "very dark outdoors", "hallways and movie theaters", "a living room", "an office", "a study room", "a bright window indoors", "a cloudy day outdoors", "direct sunlight")
     - Use the same 8 lux range boundaries as `LuxInterpreter` (0–10, 11–100, 101–200, 201–500, 501–1000, 1001–2000, 2001–10000, 10001+)
@@ -16,13 +16,13 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
     - No platform framework imports — pure function only
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8_
 
-  - [ ]* 1.2 Write property test for ComparisonGenerator — Property 1: Comparison sentence completeness
+  - [x] 1.2 Write property test for ComparisonGenerator — Property 1: Comparison sentence completeness
     - **Property 1: Comparison sentence completeness**
     - Generate 100+ random `Double` values across [-1000, 200000]
     - For each value, call `ComparisonGenerator.generate(lux:)` and verify the result is a non-empty `String`
     - **Validates: Requirements 6.5, 6.7**
 
-  - [ ]* 1.3 Write property test for ComparisonGenerator — Property 2: Comparison sentence correctness
+  - [x] 1.3 Write property test for ComparisonGenerator — Property 2: Comparison sentence correctness
     - **Property 2: Comparison sentence correctness**
     - Generate 100+ random `Double` values across [-1000, 200000]
     - For each value, independently compute the expected range index using the 8 lux boundaries
@@ -30,14 +30,14 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
     - Verify the returned sentence contains the correct adjacent environment labels
     - **Validates: Requirements 6.1, 6.2, 6.3, 6.4, 6.6**
 
-  - [ ]* 1.4 Write property test for ComparisonGenerator — Property 3: Comparison range consistency
+  - [x] 1.4 Write property test for ComparisonGenerator — Property 3: Comparison range consistency
     - **Property 3: Comparison range consistency**
     - Generate 100+ random `Double` values across [-1000, 200000]
     - For each value, verify that the range identified by `ComparisonGenerator` (via the sentence content) matches the range identified by `LuxInterpreter.interpret(lux:)` for the same value
     - Both must use the same 8-range boundaries — the comparison sentence's adjacent environments must be consistent with the interpreter's range placement
     - **Validates: Requirements 6.1, 6.6**
 
-  - [ ]* 1.5 Write unit tests for ComparisonGenerator
+  - [x] 1.5 Write unit tests for ComparisonGenerator
     - Test one representative value per range (5, 50, 150, 350, 750, 1500, 5000, 50000) with exact sentence string matching
     - Test boundary values (0, 10, 11, 100, 101, 200, 201, 500, 501, 1000, 1001, 2000, 2001, 10000, 10001)
     - Test negative value produces the lowest-range sentence ("Darker than hallways and movie theaters")
@@ -46,7 +46,7 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
     - Test middle range sentence format: "Brighter than ... but darker than ..."
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.7_
 
-- [ ] 2. Checkpoint — Verify pure logic layer
+- [x] 2. Checkpoint — Verify pure logic layer
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 3. Add CameraManager effects (captureFrame + toggleCamera)
