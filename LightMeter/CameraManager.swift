@@ -1,15 +1,18 @@
 import AVFoundation
 import SwiftUI
+import CoreImage
 
 class CameraManager: NSObject, ObservableObject {
     @Published var lux: Double = 0.0
     @Published var colorTemperature: Double = 0.0
     @Published var cameraError: String? = nil
     @Published var permissionGranted: Bool = false
+    @Published var currentCameraPosition: AVCaptureDevice.Position = .back
 
     private let captureSession = AVCaptureSession()
     private let sessionQueue = DispatchQueue(label: "camera.session.queue")
     private var captureDevice: AVCaptureDevice?
+    private var latestSampleBuffer: CMSampleBuffer?
 
     /// Exposes the capture session for CameraPreviewView to connect.
     var session: AVCaptureSession { captureSession }
@@ -30,7 +33,7 @@ class CameraManager: NSObject, ObservableObject {
             guard let self = self else { return }
 
             guard let device = AVCaptureDevice.default(
-                .builtInWideAngleCamera, for: .video, position: .back
+                .builtInWideAngleCamera, for: .video, position: self.currentCameraPosition
             ) else {
                 DispatchQueue.main.async {
                     self.cameraError = "Back camera is not available on this device."
@@ -77,6 +80,63 @@ class CameraManager: NSObject, ObservableObject {
         }
     }
 
+    /// Returns a UIImage from the latest video sample buffer, or nil if unavailable.
+    func captureFrame() -> UIImage? {
+        guard let sampleBuffer = latestSampleBuffer,
+              let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return nil
+        }
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
+            return nil
+        }
+        return UIImage(cgImage: cgImage)
+    }
+
+    /// Switches the active camera input between front and rear.
+    /// If the target camera is unavailable, retains the current input silently.
+    func toggleCamera() {
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            let newPosition: AVCaptureDevice.Position = (self.currentCameraPosition == .back) ? .front : .back
+
+            guard let newDevice = AVCaptureDevice.default(
+                .builtInWideAngleCamera, for: .video, position: newPosition
+            ) else {
+                return
+            }
+
+            self.captureSession.beginConfiguration()
+
+            // Remove existing video input
+            if let currentInput = self.captureSession.inputs.first as? AVCaptureDeviceInput {
+                self.captureSession.removeInput(currentInput)
+            }
+
+            do {
+                let newInput = try AVCaptureDeviceInput(device: newDevice)
+                if self.captureSession.canAddInput(newInput) {
+                    self.captureSession.addInput(newInput)
+                    self.captureDevice = newDevice
+                    DispatchQueue.main.async {
+                        self.currentCameraPosition = newPosition
+                    }
+                }
+            } catch {
+                // Re-add the previous input if switching fails
+                if let previousDevice = self.captureDevice,
+                   let previousInput = try? AVCaptureDeviceInput(device: previousDevice),
+                   self.captureSession.canAddInput(previousInput) {
+                    self.captureSession.addInput(previousInput)
+                }
+            }
+
+            self.captureSession.commitConfiguration()
+        }
+    }
+
     func startSession() {
         sessionQueue.async { [weak self] in
             guard let self = self else { return }
@@ -104,6 +164,8 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
         didOutput sampleBuffer: CMSampleBuffer,
         from connection: AVCaptureConnection
     ) {
+        latestSampleBuffer = sampleBuffer
+
         guard let device = captureDevice else { return }
 
         let iso = device.iso

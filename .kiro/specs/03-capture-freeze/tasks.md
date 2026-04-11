@@ -49,14 +49,14 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
 - [x] 2. Checkpoint — Verify pure logic layer
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 3. Add CameraManager effects (captureFrame + toggleCamera)
-  - [ ] 3.1 Add `latestSampleBuffer` storage and `captureFrame()` method to `CameraManager`
+- [x] 3. Add CameraManager effects (captureFrame + toggleCamera)
+  - [x] 3.1 Add `latestSampleBuffer` storage and `captureFrame()` method to `CameraManager`
     - Add a private `latestSampleBuffer: CMSampleBuffer?` property to `CameraManager`
     - Update the `captureOutput` delegate method to store the latest sample buffer on each frame
     - Implement `captureFrame() -> UIImage?` that converts `latestSampleBuffer` to a `UIImage` via `CIImage` → `CGImage` → `UIImage`, returning `nil` if no buffer is available
     - _Requirements: 2.1, 2.2, 2.4_
 
-  - [ ] 3.2 Add `currentCameraPosition` property and `toggleCamera()` method to `CameraManager`
+  - [x] 3.2 Add `currentCameraPosition` property and `toggleCamera()` method to `CameraManager`
     - Add `@Published var currentCameraPosition: AVCaptureDevice.Position = .back`
     - Implement `toggleCamera()` that runs on `sessionQueue`: calls `beginConfiguration()`, removes current input, creates new `AVCaptureDeviceInput` for the opposite position, adds it, calls `commitConfiguration()`, updates `currentCameraPosition` on main thread
     - If the target camera is unavailable, retain current input silently (no error published)
