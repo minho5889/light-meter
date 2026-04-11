@@ -28,14 +28,14 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
     - Test negative value returns 0–10 range result
     - _Requirements: 1.1, 1.2, 1.5_
 
-- [ ] 2. Create KelvinInterpreter
-  - [ ] 2.1 Implement `KelvinInterpreter` with 6-range mapping
+- [x] 2. Create KelvinInterpreter
+  - [x] 2.1 Implement `KelvinInterpreter` with 6-range mapping
     - Create `LightMeter/KelvinInterpreter.swift` with `static func interpret(kelvin: Double) -> InterpretationResult`
     - Implement chained if-else mapping Kelvin to the 6 ranges from the design document (with emoji in description)
     - Values below 1000 fall back to the "Below 2,000K" range; no platform framework imports
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-  - [ ] 2.2 Write property test for KelvinInterpreter — Property 2: Kelvin range mapping correctness
+  - [x] 2.2 Write property test for KelvinInterpreter — Property 2: Kelvin range mapping correctness
     - **Property 2: Kelvin range mapping correctness**
     - Generate 100+ random `Double` values across [0, 20000]
     - For each value, call `KelvinInterpreter.interpret(kelvin:)` and independently compute the expected range
@@ -43,7 +43,7 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
     - Verify values below 1000 return the "Below 2,000K" range result
     - **Validates: Requirements 2.1, 2.4, 2.5**
 
-  - [ ] 2.3 Write unit tests for KelvinInterpreter
+  - [x] 2.3 Write unit tests for KelvinInterpreter
     - Test one representative value per range (1500, 2700, 4000, 5500, 8000, 12000) with exact string matching
     - Test boundary values (1000, 1999, 2000, 3499, 3500, 4999, 5000, 6499, 6500, 9999, 10000, 15000)
     - Test value below 1000 returns "Below 2,000K" range result
