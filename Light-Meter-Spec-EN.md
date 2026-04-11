@@ -169,3 +169,168 @@ graph TD
 ```
 
 The gap between spec 01 and the full product includes: live camera preview rendering, capture/freeze functionality, lux/kelvin interpretation tables, flicker detection, records persistence, camera switching, localization, and settings. These would each be their own spec.
+
+## UI Screen Reference (from product mockups)
+
+The following diagrams represent the key screens and flows observed in the product design mockups.
+
+### Main Screen — Live Measurement (LUX Tab)
+
+The primary screen shows the live camera feed as a full-screen background with a frosted-glass measurement card overlaid near the top. A bottom tab bar provides navigation.
+
+```mermaid
+graph TD
+    subgraph "Main Screen — Live Mode"
+        direction TB
+        SB["─── Status Bar (9:41, signal, battery) ───"]
+        GEAR["⚙ Settings icon (top-right)"]
+        SB --- CARD
+        subgraph CARD["Frosted Glass Card"]
+            K["3,800K"]
+            LUX["120 LUX (large text)"]
+            K --- LUX
+        end
+        CARD --- CAMERA_BG["Live Camera Feed (full-screen background)<br/>e.g. indoor room with sofa, window light"]
+        CAMERA_BG --- BUTTONS
+        subgraph BUTTONS["Bottom Controls"]
+            CAPTURE["◯ Capture Button (white circle)"]
+            TOGGLE["🔄 Camera Toggle (front/rear)"]
+        end
+        BUTTONS --- TAB
+        subgraph TAB["Bottom Tab Bar"]
+            T1["LUX (selected)"]
+            T2["Temperature"]
+            T3["Find"]
+            T4["Record"]
+        end
+    end
+```
+
+### Main Screen — After Capture (Frozen + Interpretation)
+
+Tapping the capture button freezes the camera background and expands the card to show the user guide interpretation text.
+
+```mermaid
+graph TD
+    subgraph "Main Screen — Captured Mode"
+        direction TB
+        SB2["─── Status Bar ───"]
+        BACK["‹ Back arrow (top-left)"]
+        GEAR2["⚙ Settings (top-right)"]
+        SB2 --- CARD2
+        subgraph CARD2["Expanded Frosted Glass Card"]
+            K2["3,800K"]
+            LUX2["120 LUX (large text)"]
+            DIV["──── divider ────"]
+            GUIDE["User Guide (사용자 가이드)"]
+            DESC["Living room relaxation, dining, hotel rooms<br/>Optimal for comfortable rest.<br/>Good for watching TV."]
+            CONTEXT["Brighter than a movie theater<br/>but darker than a living room"]
+            K2 --- LUX2 --- DIV --- GUIDE --- DESC --- CONTEXT
+        end
+        CARD2 --- FROZEN_BG["Frozen Camera Image<br/>(background stops moving, like a photo)"]
+        FROZEN_BG --- TAB2
+        subgraph TAB2["Bottom Tab Bar"]
+            T2_1["LUX (selected)"]
+            T2_2["Temperature"]
+            T2_3["Find"]
+            T2_4["Record"]
+        end
+    end
+```
+
+### Outdoor High-Lux Example
+
+When pointing at bright outdoor scenes, the readings and interpretation update accordingly.
+
+```mermaid
+graph TD
+    subgraph "Outdoor — Direct Sunlight"
+        direction TB
+        SB3["─── Status Bar ───"]
+        SB3 --- CARD3
+        subgraph CARD3["Frosted Glass Card (expanded)"]
+            K3["5,000K"]
+            LUX3["100,000 LUX (large text)"]
+            DIV3["──── divider ────"]
+            GUIDE3["User Guide"]
+            DESC3["Strong sunlight.<br/>Protect your eyes and<br/>watch for plant burns."]
+            K3 --- LUX3 --- DIV3 --- GUIDE3 --- DESC3
+        end
+        CARD3 --- OUTDOOR_BG["Outdoor Camera Feed<br/>(lake, sky, bright daylight)"]
+        OUTDOOR_BG --- TAB3
+        subgraph TAB3["Bottom Tab Bar"]
+            T3_1["LUX (selected)"]
+            T3_2["Temperature"]
+            T3_3["Find"]
+            T3_4["Record"]
+        end
+    end
+```
+
+### Record Detail — Tapped Card
+
+Tapping a record card opens a full-screen view with the captured photo as background and lux + Kelvin interpretation overlaid.
+
+```mermaid
+graph TD
+    subgraph "Record Detail View"
+        direction TB
+        CLOSE["✕ Close button (top-right)"]
+        CLOSE --- PHOTO["Captured Photo<br/>(e.g. lamp in a room)"]
+        PHOTO --- RLUX["120 LUX (large blue text)"]
+        RLUX --- RLUX_DESC["Living room relaxation, dining, hotel rooms<br/>Optimal for comfortable rest.<br/>Good for watching TV."]
+        RLUX_DESC --- RKELVIN["3,500K (large blue text)"]
+        RKELVIN --- RKELVIN_DESC["Natural White 🌤<br/>Kitchens, dressing rooms, bathrooms"]
+    end
+```
+
+### Records Screen — Card List
+
+The Records tab shows saved measurement cards in reverse chronological order. Swipe left reveals a delete button.
+
+```mermaid
+graph TD
+    subgraph "Records Screen"
+        direction TB
+        subgraph CARD_1["Record Card 1"]
+            D1["10/12/2026  10:45 AM"]
+            B1["Brightness: 120"]
+            CT1["Color Temp: 3,500K"]
+        end
+        subgraph CARD_2["Record Card 2"]
+            D2["10/09/2026  08:22 PM"]
+            B2["Brightness: 150"]
+            CT2["Color Temp: 3,650K"]
+        end
+        subgraph CARD_3["Record Card 3 (swiped left → 🗑 delete)"]
+            D3["09/27/2026  06:32 AM"]
+            B3["Brightness: 80"]
+            CT3["Color Temp: 2,750K"]
+        end
+        CARD_1 --- CARD_2 --- CARD_3
+        CARD_3 --- TAB_R
+        subgraph TAB_R["Bottom Tab Bar"]
+            TR1["LUX"]
+            TR2["Color Temperature"]
+            TR3["Check"]
+            TR4["Records (selected)"]
+        end
+    end
+```
+
+### Screen Flow Overview
+
+```mermaid
+graph LR
+    A["App Launch"] --> B["Main Screen<br/>(Live Camera + LUX)"]
+    B -->|"Tap Capture ◯"| C["Captured Mode<br/>(Frozen BG + Interpretation)"]
+    C -->|"‹ Back"| B
+    B -->|"Tab: Temperature"| D["Color Temperature Tab"]
+    B -->|"Tab: Find"| E["Find Tab"]
+    B -->|"Tab: Record"| F["Records List"]
+    F -->|"Tap Card"| G["Record Detail<br/>(Photo + LUX + Kelvin)"]
+    G -->|"✕ Close"| F
+    F -->|"Swipe Left"| H["Delete Record"]
+    B -->|"⚙ Settings"| I["Settings Screen"]
+    B -->|"🔄 Toggle"| J["Switch Front/Rear Camera"]
+```
