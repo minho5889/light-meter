@@ -63,7 +63,7 @@ Incrementally add capture-and-freeze functionality following the deterministic-s
     - Update `setupSession()` to use `currentCameraPosition` instead of hardcoding `.back`
     - _Requirements: 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 4. Checkpoint — Verify effects layer compiles
+- [x] 4. Checkpoint — Verify effects layer compiles
   - Ensure the project compiles with no errors, ask the user if questions arise.
 
 - [ ] 5. Create MeasurementCardView and refactor MeasurementView (glue layer)
