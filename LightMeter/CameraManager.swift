@@ -11,6 +11,9 @@ class CameraManager: NSObject, ObservableObject {
     private let sessionQueue = DispatchQueue(label: "camera.session.queue")
     private var captureDevice: AVCaptureDevice?
 
+    /// Exposes the capture session for CameraPreviewView to connect.
+    var session: AVCaptureSession { captureSession }
+
     func requestPermission() {
         AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
             DispatchQueue.main.async {
