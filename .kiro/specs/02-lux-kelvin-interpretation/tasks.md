@@ -49,7 +49,7 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
     - Test value below 1000 returns "Below 2,000K" range result
     - _Requirements: 2.1, 2.2, 2.5_
 
-- [ ] 3. Checkpoint — Verify pure interpreter logic
+- [x] 3. Checkpoint — Verify pure interpreter logic
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 4. Add camera preview and expose session
