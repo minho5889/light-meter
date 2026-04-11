@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Post-Task Commit",
+  "description": "Manually triggered hook that auto-stages all changes and commits with the spec task commit message convention [S{XX}_T{YY}_{category}]. Analyzes the completed task context to generate an appropriate commit message with a one-liner summary and bullet point details.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A spec task has just been completed. Do the following:\n\n1. Run `git diff` and `git status` to see what changed.\n2. Identify which spec task was just worked on by looking at the recent changes and the tasks.md file in the active spec.\n3. Determine the spec number (S{XX}) from the spec folder name and the top-level task number (T{YY}).\n4. Pick the appropriate commit category (feat, fix, test, refactor, docs, chore, style).\n5. Stage all changes with `git add -A`.\n6. Commit using the format: `[S{XX}_T{YY}_{category}]: one-liner summary` with a body containing bullet points describing what changed.\n7. Follow the commit conventions from the steering doc exactly.\n\nDo NOT ask the user for confirmation — just analyze, stage, and commit."
+  }
+}
