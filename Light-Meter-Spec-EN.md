@@ -1,90 +1,86 @@
-# Sunny Light Meter — Product Specification (Translated from Korean)
+# Sunny Light Meter — Product Specification
 
-## Page 1: Title
+## What Is It?
 
-Sunny Light Meter
+Sunny Light Meter is an iOS app that turns your iPhone camera into a real-time light measurement tool. Point your phone at any environment and instantly see the brightness (lux) and color temperature (Kelvin) of the light around you — along with plain-language interpretations of what those numbers mean.
 
-## Page 2: Target Resolutions
+The app is designed for anyone curious about their lighting environment: photographers checking exposure, parents evaluating nursery lighting, office workers wondering if their desk lamp is bright enough, or plant owners checking if their succulents are getting enough sun.
 
-Our baseline resolution: 1,179 x 2,556 pixels
+## How It Works
 
-Supported devices at this resolution:
-- iPhone 14 Pro
-- iPhone 15
-- iPhone 15 Pro
+When you open the app, the camera activates and the live feed becomes the full-screen background. Overlaid on top is a frosted-glass card showing real-time readings:
 
-The design must be responsive. The following resolution must also be supported:
+- The current brightness in lux
+- The current color temperature in Kelvin
+- Both values update continuously as you move the phone
 
-1,170 x 2,532:
-- iPhone 13
-- iPhone 14
+Tap the capture button to freeze the moment. The background stops moving (like taking a photo), and the card expands to show an interpretation: what kind of environment matches that brightness level, a practical tip, and a contextual comparison (e.g., "Brighter than a movie theater but darker than a living room").
 
-## Page 3: Font Scaling Rules
+## Target Devices
 
-All text on the main screen must disable system font scaling so the smartphone's font size settings do not affect the app layout.
+Baseline resolution: 1,179 × 2,556 pixels (iPhone 14 Pro, iPhone 15, iPhone 15 Pro)
 
-For React Native (reference from original doc):
-```jsx
-<Text {...props} allowFontScaling={false} />
-```
+Also supported at 1,170 × 2,532: iPhone 13, iPhone 14
 
-Alternative approach — allow limited scaling with a cap:
-```jsx
-maxFontSizeMultiplier={1.2}
-```
+The layout must be responsive across these resolutions. All text on the main screen uses fixed font sizes — system Dynamic Type settings must not affect the app layout. For accessibility balance, a capped scaling approach (max 1.2×) is acceptable.
 
-This lets the text grow slightly with system settings but caps the maximum size. Best of both worlds for accessibility and layout stability.
+## Core Features
 
-> Note: The original doc references React Native props. For our SwiftUI implementation, the equivalent approach is using fixed font sizes (`.font(.system(size: N))`) or capping Dynamic Type with `.dynamicTypeSize(...:.large)`.
+### 1. Live Light Measurement
 
-## Page 4: (Blank page — likely a visual mockup placeholder)
+The primary experience. The camera feed fills the screen, and a translucent measurement card floats near the top showing:
 
-## Page 5: Main Screen Behavior
+- Color temperature (e.g., `3,800K`)
+- Brightness (e.g., `120 LUX`) in large, prominent text
 
-When the app launches:
-- The camera turns on and the live camera feed becomes the app's real-time background
-- The lux value updates in real time on screen
+Both values stream in real time from the back camera's exposure metadata.
 
-Capture button (round button at the bottom):
-- Tapping it captures the current moment
-- Shows the captured lux value and an interpretation/description of that lux level
+### 2. Capture & Interpret
 
-Camera toggle button (next to capture button):
-- Switches between front and rear camera
+A round capture button sits at the bottom of the screen. Tapping it:
 
-After capture:
-- The background freezes (like taking a photo — the background image stops moving)
-- Displays lux reading + contextual interpretation (e.g., "Brighter than a movie theater but darker than a living room")
+1. Freezes the camera background (the image stops moving)
+2. Expands the measurement card to show:
+   - The lux range interpretation (environment description + user guide tip)
+   - A contextual comparison sentence
+3. A back arrow appears to return to live mode
 
-Reference: A similar app's demo video was linked in the original doc.
+### 3. Camera Toggle
 
-## Page 6: Lux Range Reference Table
+A toggle button next to the capture button switches between front and rear cameras.
 
-| Lux Range | Environment / Use Case | User Guide Tip |
-|-----------|----------------------|----------------|
-| 0–10 | Very dark outdoors, full moon night | "Pre-sleep conditions. Be careful when moving around." |
-| 20–100 | Hallways, bathrooms, storage rooms, movie theaters | "Suitable for passing through. Not appropriate for extended work." |
-| 100–200 | Living room relaxation, dining, hotel rooms | "Optimal for comfortable rest. Good for watching TV." |
-| 200–500 | General office work, kitchen cooking, light reading | "The most standard brightness for daily activities and office work." |
-| 500–1,000 | Focused studying, precision handwork, store displays | "Recommended for study rooms or detailed tasks like sewing." |
-| 1,000–2,000 | Bright window (indoors), broadcast studios, operating rooms | "Very bright. Suitable for video production or professional work." |
-| 2,000–10,000 | Cloudy day outdoors, sunset outdoors | "Good for outdoor activities. Partial shade level for plants." |
-| 10,000–100,000+ | Direct sunlight on a clear day, noon outdoors | "Strong sunlight. Protect your eyes and watch for plant burns." |
+### 4. Lux Interpretation
 
-## Page 7: Color Temperature Reference Table
+Raw lux numbers are mapped to human-readable descriptions:
+
+| Lux Range | Environment | User Guide Tip |
+|-----------|------------|----------------|
+| 0–10 | Very dark outdoors, full moon night | Pre-sleep conditions. Be careful when moving around. |
+| 11–100 | Hallways, bathrooms, storage rooms, movie theaters | Suitable for passing through. Not appropriate for extended work. |
+| 101–200 | Living room relaxation, dining, hotel rooms | Optimal for comfortable rest. Good for watching TV. |
+| 201–500 | General office work, kitchen cooking, light reading | The most standard brightness for daily activities and office work. |
+| 501–1,000 | Focused studying, precision handwork, store displays | Recommended for study rooms or detailed tasks like sewing. |
+| 1,001–2,000 | Bright window (indoors), broadcast studios, operating rooms | Very bright. Suitable for video production or professional work. |
+| 2,001–10,000 | Cloudy day outdoors, sunset outdoors | Good for outdoor activities. Partial shade level for plants. |
+| 10,001+ | Direct sunlight on a clear day, noon outdoors | Strong sunlight. Protect your eyes and watch for plant burns. |
+
+### 5. Color Temperature Interpretation
+
+Raw Kelvin values are mapped to color tone labels and recommended environments:
 
 | Kelvin | Color Tone | Recommended Environment |
 |--------|-----------|------------------------|
 | Below 2,000K | Candlelight / Sunset 🔥 | Psychological calm, pre-sleep, atmospheric cafes |
-| 2,700K–3,000K | Warm White 💡 | Bedrooms, living rooms, relaxation spaces |
-| 3,500K–4,500K | Natural White 🌤 | Kitchens, dressing rooms, bathrooms |
-| 5,000K–6,000K | Daylight 📖 | Study rooms, offices, precision work (improves focus) |
-| 6,500K+ | Cool White ❄ | Hospitals, factories, warehouses |
+| 2,000K–3,499K | Warm White 💡 | Bedrooms, living rooms, relaxation spaces |
+| 3,500K–4,999K | Natural White 🌤 | Kitchens, dressing rooms, bathrooms |
+| 5,000K–6,499K | Daylight 📖 | Study rooms, offices, precision work (improves focus) |
+| 6,500K–9,999K | Cool White ❄ | Hospitals, factories, warehouses |
 | 10,000K+ | Blue Sky 🧊 | Clear day shade, specialized lab environments |
 
-Contextual example: "The color temperature is higher than a bedroom but lower than a study room."
 
-## Page 8: Flicker Percentage & Eye Health
+### 6. Flicker Detection & Eye Health
+
+The app measures light flicker percentage to assess eye safety:
 
 | Flicker % | Safety Level | Description |
 |-----------|-------------|-------------|
@@ -94,89 +90,44 @@ Contextual example: "The color temperature is higher than a bedroom but lower th
 | 30%–60% | Dangerous | Severe eye fatigue, migraines, dizziness. Focus drops sharply |
 | 60%+ | Very Dangerous | Visible flickering. Risk of nausea, photosensitive seizures for sensitive individuals |
 
-The page also shows a captured reading example:
-- 120 LUX / 3,500 Kelvin / 5% Flicker
-- With contextual tags: Reading & Study, Office & Focus, TV & Movies, Dining & Conversation, Sleep & Rest, Baby & Childcare, Kitchen/Dressing Room suitable, Date & Romantic, Coffee & Tea time
+A captured reading might show: `120 LUX / 3,500K / 5% Flicker` with contextual activity tags like "Reading & Study", "Office & Focus", "TV & Movies", "Sleep & Rest", "Baby & Childcare", etc.
 
-## Page 9: Records Screen
+### 7. Records
 
-Each time the capture button is pressed, a record card is automatically saved with:
-- Date
-- Time
+Every capture is automatically saved as a record card containing:
+
+- Date and time
 - Brightness (lux)
-- Color Temperature (Kelvin)
+- Color temperature (Kelvin)
 
-Records screen behavior:
-- Tapping "Record" shows cards in newest-first order (top to bottom)
-- Swipe left on a card to reveal a Delete icon — tap to delete
-- Tapping a card shows the captured photo with lux and color temperature info overlaid
+The Records tab displays cards in newest-first order. Swipe left on a card to reveal a delete button. Tapping a card opens a full-screen detail view showing the captured photo with lux and Kelvin interpretations overlaid.
 
-Time format localization:
-- English/French/Spanish: time suffix (e.g., 09:45 AM, 11:10 PM)
-- Korean/Japanese/Chinese (Simplified & Traditional): time prefix (e.g., 오전 09:45, 午後 11:10)
+Time format is localized:
+- English/French/Spanish: suffix format (e.g., `09:45 AM`)
+- Korean/Japanese/Chinese: prefix format (e.g., `오전 09:45`, `午後 11:10`)
 
-## Page 10: Settings
+### 8. Settings
 
-References an external Google Slides document for the settings screen design.
+A settings screen is accessible via the gear icon in the top-right corner. (Design details are maintained in a separate document.)
 
----
+## App Navigation
 
-## Analysis & Understanding
+The app uses a bottom tab bar with four tabs:
 
-This PDF describes a full-featured light meter app called "Sunny Light Meter" that goes well beyond our current spec 01 skeleton. Here's what the full product vision includes:
+| Tab | Purpose |
+|-----|---------|
+| LUX | Main measurement screen with live camera background |
+| Temperature | Color temperature focused view |
+| Check | Light quality check (flicker analysis) |
+| Records | Saved measurement history |
 
-1. Live camera background — the camera feed is the app background, not just metadata extraction
-2. Capture functionality — a shutter button that freezes the frame and records the reading
-3. Lux interpretation — contextual descriptions based on lux ranges (not just raw numbers)
-4. Color temperature interpretation — contextual descriptions based on Kelvin ranges
-5. Flicker detection — measuring light flicker percentage for eye health assessment
-6. Front/rear camera toggle — switching between cameras
-7. Records system — persistent storage of captured readings as cards with date/time
-8. Record management — swipe-to-delete, tap-to-review with photo overlay
-9. Localized time formatting — different time display formats per language
-10. Responsive design — supporting multiple iPhone resolutions
-11. Font scaling control — preventing system font size from breaking the layout
-12. Settings screen — referenced externally, details not in this PDF
+## UI Screen Reference
 
-Our current spec 01 covers items 1 (partially — metadata only, no live preview), the raw lux calculation, and the raw color temperature calculation. The full product is significantly larger.
-
-```mermaid
-graph TD
-    subgraph "Spec 01 — Current (Skeleton)"
-        A[Camera Session<br/>Back camera metadata only] --> B[Lux Calculator<br/>Raw number]
-        A --> C[Color Temp Calculator<br/>Raw Kelvin]
-        B --> D[Measurement View<br/>Numbers only]
-        C --> D
-    end
-
-    subgraph "Full Product — Sunny Light Meter"
-        E[Live Camera Preview<br/>Real-time background] --> F[Lux Calculator<br/>+ Range Interpretation]
-        E --> G[Color Temp Calculator<br/>+ Kelvin Interpretation]
-        E --> H[Flicker Detector<br/>Eye health %]
-        I[Capture Button] --> J[Freeze Frame<br/>+ Save Reading]
-        K[Camera Toggle<br/>Front / Rear]
-        J --> L[Records System<br/>Cards with date/time]
-        L --> M[Record Management<br/>Swipe delete, tap review]
-        F --> N[Main Display<br/>Lux + Context + Tips]
-        G --> N
-        H --> N
-        N --> I
-        N --> K
-        O[Settings Screen] --> P[Font Scaling<br/>Responsive Design<br/>Localization]
-    end
-
-    D -.->|"evolves into"| N
-```
-
-The gap between spec 01 and the full product includes: live camera preview rendering, capture/freeze functionality, lux/kelvin interpretation tables, flicker detection, records persistence, camera switching, localization, and settings. These would each be their own spec.
-
-## UI Screen Reference (from product mockups)
-
-The following diagrams represent the key screens and flows observed in the product design mockups.
+The following diagrams represent the key screens and user flows.
 
 ### Main Screen — Live Measurement (LUX Tab)
 
-The primary screen shows the live camera feed as a full-screen background with a frosted-glass measurement card overlaid near the top. A bottom tab bar provides navigation.
+The live camera feed fills the screen. A frosted-glass card shows real-time lux and Kelvin. Capture and camera toggle buttons sit near the bottom.
 
 ```mermaid
 graph TD
@@ -208,7 +159,7 @@ graph TD
 
 ### Main Screen — After Capture (Frozen + Interpretation)
 
-Tapping the capture button freezes the camera background and expands the card to show the user guide interpretation text.
+Tapping capture freezes the background and expands the card with interpretation text.
 
 ```mermaid
 graph TD
@@ -222,7 +173,7 @@ graph TD
             K2["3,800K"]
             LUX2["120 LUX (large text)"]
             DIV["──── divider ────"]
-            GUIDE["User Guide (사용자 가이드)"]
+            GUIDE["User Guide"]
             DESC["Living room relaxation, dining, hotel rooms<br/>Optimal for comfortable rest.<br/>Good for watching TV."]
             CONTEXT["Brighter than a movie theater<br/>but darker than a living room"]
             K2 --- LUX2 --- DIV --- GUIDE --- DESC --- CONTEXT
@@ -240,7 +191,7 @@ graph TD
 
 ### Outdoor High-Lux Example
 
-When pointing at bright outdoor scenes, the readings and interpretation update accordingly.
+Bright outdoor scenes produce high lux readings with corresponding interpretation.
 
 ```mermaid
 graph TD
@@ -269,7 +220,7 @@ graph TD
 
 ### Record Detail — Tapped Card
 
-Tapping a record card opens a full-screen view with the captured photo as background and lux + Kelvin interpretation overlaid.
+Tapping a record opens a full-screen view with the captured photo and lux + Kelvin interpretations.
 
 ```mermaid
 graph TD
@@ -286,7 +237,7 @@ graph TD
 
 ### Records Screen — Card List
 
-The Records tab shows saved measurement cards in reverse chronological order. Swipe left reveals a delete button.
+Saved measurements displayed as cards. Swipe left to delete.
 
 ```mermaid
 graph TD
@@ -326,11 +277,43 @@ graph LR
     B -->|"Tap Capture ◯"| C["Captured Mode<br/>(Frozen BG + Interpretation)"]
     C -->|"‹ Back"| B
     B -->|"Tab: Temperature"| D["Color Temperature Tab"]
-    B -->|"Tab: Find"| E["Find Tab"]
-    B -->|"Tab: Record"| F["Records List"]
+    B -->|"Tab: Check"| E["Flicker Check Tab"]
+    B -->|"Tab: Records"| F["Records List"]
     F -->|"Tap Card"| G["Record Detail<br/>(Photo + LUX + Kelvin)"]
     G -->|"✕ Close"| F
     F -->|"Swipe Left"| H["Delete Record"]
     B -->|"⚙ Settings"| I["Settings Screen"]
     B -->|"🔄 Toggle"| J["Switch Front/Rear Camera"]
+```
+
+## Implementation Progress
+
+The app is being built incrementally through a series of specs:
+
+```mermaid
+graph TD
+    subgraph "Spec 01 — Skeleton (Complete ✅)"
+        A[Camera Session<br/>Back camera metadata] --> B[Lux Calculator<br/>Raw number]
+        A --> C[Color Temp Calculator<br/>Raw Kelvin]
+        B --> D[Measurement View<br/>Numbers only, black background]
+        C --> D
+    end
+
+    subgraph "Spec 02 — Interpretation + Preview (In Progress 🔧)"
+        E[Lux Interpreter<br/>8-range mapping] --> F[Updated Measurement View<br/>Numbers + descriptions + tips]
+        G[Kelvin Interpreter<br/>6-range mapping] --> F
+        H[Camera Preview<br/>Live feed background] --> F
+    end
+
+    subgraph "Future Specs"
+        I[Capture & Freeze]
+        J[Flicker Detection]
+        K[Records System]
+        L[Camera Toggle]
+        M[Settings & Localization]
+    end
+
+    D -.->|"evolves into"| F
+    F -.->|"next"| I
+    I -.-> J -.-> K -.-> L -.-> M
 ```
