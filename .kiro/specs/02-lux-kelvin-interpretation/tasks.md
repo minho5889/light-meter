@@ -6,15 +6,15 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
 
 ## Tasks
 
-- [ ] 1. Create InterpretationResult value type and LuxInterpreter
-  - [ ] 1.1 Create `InterpretationResult` struct and `LuxInterpreter` with 8-range mapping
+- [x] 1. Create InterpretationResult value type and LuxInterpreter
+  - [x] 1.1 Create `InterpretationResult` struct and `LuxInterpreter` with 8-range mapping
     - Create `LightMeter/InterpretationResult.swift` with an `Equatable` struct containing `description: String` and `tip: String`
     - Create `LightMeter/LuxInterpreter.swift` with `static func interpret(lux: Double) -> InterpretationResult`
     - Implement chained if-else mapping lux to the 8 ranges from the design document
     - Negative values fall back to the 0–10 range; no platform framework imports
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-  - [ ] 1.2 Write property test for LuxInterpreter — Property 1: Lux range mapping correctness
+  - [x] 1.2 Write property test for LuxInterpreter — Property 1: Lux range mapping correctness
     - **Property 1: Lux range mapping correctness**
     - Generate 100+ random `Double` values across [-1000, 200000]
     - For each value, call `LuxInterpreter.interpret(lux:)` and independently compute the expected range
@@ -22,7 +22,7 @@ Incrementally add lux/Kelvin interpretation logic (pure layer), a camera preview
     - Verify negative values always return the 0–10 range result
     - **Validates: Requirements 1.1, 1.4, 1.5**
 
-  - [ ] 1.3 Write unit tests for LuxInterpreter
+  - [x] 1.3 Write unit tests for LuxInterpreter
     - Test one representative value per range (5, 50, 150, 350, 750, 1500, 5000, 50000) with exact string matching
     - Test boundary values (0, 10, 11, 100, 101, 200, 201, 500, 501, 1000, 1001, 2000, 2001, 10000, 10001)
     - Test negative value returns 0–10 range result
