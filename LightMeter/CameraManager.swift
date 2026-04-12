@@ -173,17 +173,17 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard let device = captureDevice else { return }
 
         let iso = device.iso
-        let exposureDuration = device.exposureDuration
+        let exposureDurationInSeconds = CMTimeGetSeconds(device.exposureDuration)
         let gains = device.deviceWhiteBalanceGains
+        let rawKelvin = Double(device.temperatureAndTintValues(for: gains).temperature)
 
         let luxValue = LuxCalculator.calculateLux(
             iso: iso,
-            exposureDuration: exposureDuration
+            exposureDurationInSeconds: exposureDurationInSeconds
         )
 
         let kelvinValue = ColorTemperatureCalculator.calculateColorTemperature(
-            gains: gains,
-            device: device
+            rawKelvin: rawKelvin
         )
 
         Task { @MainActor [weak self] in

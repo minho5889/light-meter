@@ -6,22 +6,22 @@ This plan restores the strict pure/effects/glue separation by removing platform 
 
 ## Tasks
 
-- [ ] 1. Refactor LuxCalculator and ColorTemperatureCalculator to pure interfaces, update CameraManager
-  - [ ] 1.1 Refactor LuxCalculator to accept plain Double
+- [x] 1. Refactor LuxCalculator and ColorTemperatureCalculator to pure interfaces, update CameraManager
+  - [x] 1.1 Refactor LuxCalculator to accept plain Double
     - Remove `import CoreMedia` from `LightMeter/LuxCalculator.swift`
     - Rename parameter `exposureDuration: CMTime` to `exposureDurationInSeconds: Double`
     - Remove the internal `CMTimeGetSeconds()` call; use the Double parameter directly
     - Keep the guard clause (`iso > 0, exposureDurationInSeconds > 0`) and formula identical
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-  - [ ] 1.2 Refactor ColorTemperatureCalculator to accept plain Double
+  - [x] 1.2 Refactor ColorTemperatureCalculator to accept plain Double
     - Remove `import AVFoundation` from `LightMeter/ColorTemperatureCalculator.swift`
     - Remove the `calculateColorTemperature(gains:device:)` method entirely
     - Add `static func calculateColorTemperature(rawKelvin: Double) -> Double` that delegates to `clamp()`
     - Keep `clamp()` and constants unchanged
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-  - [ ] 1.3 Update CameraManager to perform platform-specific conversions
+  - [x] 1.3 Update CameraManager to perform platform-specific conversions
     - In `captureOutput(_:didOutput:from:)` in `LightMeter/CameraManager.swift`:
       - Extract `let exposureDurationInSeconds = CMTimeGetSeconds(device.exposureDuration)` before calling LuxCalculator
       - Extract `let rawKelvin = Double(device.temperatureAndTintValues(for: gains).temperature)` before calling ColorTemperatureCalculator
