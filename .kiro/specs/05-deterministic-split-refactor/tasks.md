@@ -103,7 +103,7 @@ This plan restores the strict pure/effects/glue separation by removing platform 
   - Gear icon navigates to `PlaceholderView(title: "Settings", subtitle: "Coming Soon")`
   - _Requirements: 6.2, 6.3, 6.4_
 
-- [ ] 9. Final checkpoint — Ensure all tests pass
+- [x] 9. Final checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
