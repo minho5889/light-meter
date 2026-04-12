@@ -4,6 +4,9 @@ struct MeasurementCardView: View {
     let lux: Double
     let kelvin: Double
     let isCaptured: Bool
+    var interpretationDescription: String = ""
+    var interpretationTip: String = ""
+    var comparisonText: String = ""
 
     var body: some View {
         VStack(spacing: 8) {
@@ -26,13 +29,13 @@ struct MeasurementCardView: View {
                 Text("User Guide")
                     .font(.system(size: 14, weight: .semibold))
 
-                Text(LuxInterpreter.interpret(lux: lux).description)
+                Text(interpretationDescription)
                     .font(.system(size: 13))
 
-                Text(LuxInterpreter.interpret(lux: lux).tip)
+                Text(interpretationTip)
                     .font(.system(size: 12))
 
-                Text(ComparisonGenerator.generate(lux: lux))
+                Text(comparisonText)
                     .font(.system(size: 12))
                     .italic()
             }

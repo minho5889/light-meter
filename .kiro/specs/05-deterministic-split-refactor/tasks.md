@@ -78,7 +78,7 @@ This plan restores the strict pure/effects/glue separation by removing platform 
   - Run `swift test` to verify all pure logic tests compile and pass under SPM
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 6. Refactor MeasurementCardView to pure display component
+- [x] 6. Refactor MeasurementCardView to pure display component
   - Remove inline calls to `LuxInterpreter.interpret(lux:)` and `ComparisonGenerator.generate(lux:)` from `LightMeter/MeasurementCardView.swift`
   - Add parameters `interpretationDescription: String = ""`, `interpretationTip: String = ""`, `comparisonText: String = ""` with empty string defaults
   - In the `isCaptured` block, display the pre-computed `interpretationDescription`, `interpretationTip`, and `comparisonText` strings instead of calling business logic
