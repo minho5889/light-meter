@@ -7,8 +7,12 @@ struct MeasurementView: View {
     @State private var frozenFrame: UIImage? = nil
     @State private var capturedLux: Double = 0.0
     @State private var capturedKelvin: Double = 0.0
+    @State private var capturedInterpretationDescription: String = ""
+    @State private var capturedInterpretationTip: String = ""
+    @State private var capturedComparisonText: String = ""
 
     var body: some View {
+        NavigationStack {
         ZStack {
             // Background layer
             if isCaptured, let frame = frozenFrame {
@@ -25,7 +29,7 @@ struct MeasurementView: View {
 
             // Overlay content
             VStack {
-                // Back arrow (captured mode only)
+                // Top bar: back arrow (captured) or gear icon (live)
                 if isCaptured {
                     HStack {
                         Button(action: returnToLiveMode) {
@@ -35,6 +39,17 @@ struct MeasurementView: View {
                                 .padding(12)
                         }
                         Spacer()
+                    }
+                    .padding(.horizontal)
+                } else {
+                    HStack {
+                        Spacer()
+                        NavigationLink(destination: PlaceholderView(title: "Settings", subtitle: "Coming Soon")) {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 22, weight: .medium))
+                                .foregroundColor(.white)
+                                .padding(12)
+                        }
                     }
                     .padding(.horizontal)
                 }
@@ -61,7 +76,10 @@ struct MeasurementView: View {
                     MeasurementCardView(
                         lux: isCaptured ? capturedLux : cameraManager.lux,
                         kelvin: isCaptured ? capturedKelvin : cameraManager.colorTemperature,
-                        isCaptured: isCaptured
+                        isCaptured: isCaptured,
+                        interpretationDescription: capturedInterpretationDescription,
+                        interpretationTip: capturedInterpretationTip,
+                        comparisonText: capturedComparisonText
                     )
                     .padding(.horizontal)
 
@@ -95,6 +113,7 @@ struct MeasurementView: View {
                 }
             }
         }
+        }
         .toolbar(isCaptured ? .hidden : .visible, for: .tabBar)
         .onDisappear {
             if isCaptured {
@@ -108,6 +127,10 @@ struct MeasurementView: View {
         frozenFrame = frame
         capturedLux = cameraManager.lux
         capturedKelvin = cameraManager.colorTemperature
+        let interpretation = LuxInterpreter.interpret(lux: capturedLux)
+        capturedInterpretationDescription = interpretation.description
+        capturedInterpretationTip = interpretation.tip
+        capturedComparisonText = ComparisonGenerator.generate(lux: capturedLux)
         isCaptured = true
     }
 

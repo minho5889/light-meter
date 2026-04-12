@@ -85,14 +85,14 @@ This plan restores the strict pure/effects/glue separation by removing platform 
   - In live mode (`isCaptured == false`), display only lux and Kelvin numeric readings (no interpretation text)
   - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 7. Update MeasurementView to pre-compute interpretation and add settings gear
-  - [ ] 7.1 Pre-compute interpretation strings in capture()
+- [x] 7. Update MeasurementView to pre-compute interpretation and add settings gear
+  - [x] 7.1 Pre-compute interpretation strings in capture()
     - Add `@State` properties: `capturedInterpretationDescription`, `capturedInterpretationTip`, `capturedComparisonText` (all `String`, default `""`)
     - In `capture()`, call `LuxInterpreter.interpret(lux: capturedLux)` and `ComparisonGenerator.generate(lux: capturedLux)` to populate the state properties
     - Pass the pre-computed strings to `MeasurementCardView` initializer
     - _Requirements: 5.5_
 
-  - [ ] 7.2 Add settings gear icon button to MeasurementView
+  - [x] 7.2 Add settings gear icon button to MeasurementView
     - Add a gear icon button (SF Symbol `"gearshape"`) in the top-right corner during live mode
     - Hide the gear icon in captured mode (back arrow takes its place)
     - Gear icon navigates to `PlaceholderView(title: "Settings", subtitle: "Coming Soon")`
