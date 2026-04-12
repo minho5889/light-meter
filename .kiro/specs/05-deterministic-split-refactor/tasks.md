@@ -70,7 +70,7 @@ This plan restores the strict pure/effects/glue separation by removing platform 
 - [x] 4. Checkpoint — Verify calculator refactor
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Sync Package.swift with pure logic files
+- [x] 5. Sync Package.swift with pure logic files
   - Add `"LuxCalculator.swift"` to the SPM target sources list in `Package.swift`
   - Add `"ColorTemperatureCalculator.swift"` to the SPM target sources list in `Package.swift`
   - Add `"LuxCalculatorTests.swift"` to the SPM test target sources list in `Package.swift`

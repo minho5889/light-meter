@@ -11,6 +11,8 @@ let package = Package(
             exclude: ["Info.plist"],
             sources: [
                 "InterpretationResult.swift",
+                "LuxCalculator.swift",
+                "ColorTemperatureCalculator.swift",
                 "LuxInterpreter.swift",
                 "KelvinInterpreter.swift",
                 "ComparisonGenerator.swift"
@@ -21,6 +23,8 @@ let package = Package(
             dependencies: ["LightMeter"],
             path: "LightMeterTests",
             sources: [
+                "LuxCalculatorTests.swift",
+                "ColorTemperatureCalculatorTests.swift",
                 "LuxInterpreterTests.swift",
                 "KelvinInterpreterTests.swift",
                 "ComparisonGeneratorTests.swift"
