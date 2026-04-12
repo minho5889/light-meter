@@ -44,8 +44,8 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
     - LUX tab is selected by default (selectedTab = 0)
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 6.1, 6.4_
 
-- [ ] 4. Modify MeasurementView for tab bar integration
-  - [ ] 4.1 Hide tab bar in captured mode and reset state on tab switch
+- [x] 4. Modify MeasurementView for tab bar integration
+  - [x] 4.1 Hide tab bar in captured mode and reset state on tab switch
     - Add `.toolbar(isCaptured ? .hidden : .visible, for: .tabBar)` to the `MeasurementView` root `ZStack`
     - Add `.onDisappear { if isCaptured { returnToLiveMode() } }` to reset captured state when the user switches away from the LUX tab
     - Verify that the capture button, camera toggle, back arrow, and frozen frame behavior remain unchanged

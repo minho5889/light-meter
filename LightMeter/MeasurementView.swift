@@ -95,6 +95,12 @@ struct MeasurementView: View {
                 }
             }
         }
+        .toolbar(isCaptured ? .hidden : .visible, for: .tabBar)
+        .onDisappear {
+            if isCaptured {
+                returnToLiveMode()
+            }
+        }
     }
 
     private func capture() {
