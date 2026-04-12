@@ -17,18 +17,28 @@ The architecture follows a clean separation between camera management, calculati
 
 ```mermaid
 graph TD
-    A[LightMeterApp - SwiftUI App Entry] --> B[ContentView]
-    B --> C[MeasurementView]
-    B --> D[CameraManager - ObservableObject]
-    D --> E[AVCaptureSession]
-    E --> F[AVCaptureDeviceInput - Back Camera]
-    E --> G[AVCaptureVideoDataOutput]
-    G -->|captureOutput delegate| D
-    D --> H[LuxCalculator]
-    D --> I[ColorTemperatureCalculator]
-    H -->|lux value| D
-    I -->|kelvin value| D
-    D -->|@Published lux, kelvin| C
+    A["LightMeterApp"] --> B["ContentView"]
+    B --> C["MeasurementView"]
+    B --> D["CameraManager"]
+    D --> E["AVCaptureSession"]
+    E --> F["AVCaptureDeviceInput"]
+    E --> G["AVCaptureVideoDataOutput"]
+    G -- "captureOutput delegate" --> D
+    D --> H["LuxCalculator"]
+    D --> I["ColorTemperatureCalculator"]
+    H -- "lux value" --> D
+    I -- "kelvin value" --> D
+    D -- "@Published lux, kelvin" --> C
+
+    style A fill:#e3f2fd,stroke:#1976d2
+    style B fill:#e3f2fd,stroke:#1976d2
+    style C fill:#e3f2fd,stroke:#1976d2
+    style D fill:#fff3e0,stroke:#f57c00
+    style E fill:#f3e5f5,stroke:#7b1fa2
+    style F fill:#f3e5f5,stroke:#7b1fa2
+    style G fill:#f3e5f5,stroke:#7b1fa2
+    style H fill:#e8f5e9,stroke:#388e3c
+    style I fill:#e8f5e9,stroke:#388e3c
 ```
 
 ### Data Flow

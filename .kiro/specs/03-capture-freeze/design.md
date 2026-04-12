@@ -21,30 +21,42 @@ This design adds capture-and-freeze functionality to the Light Meter app, buildi
 
 ```mermaid
 graph TD
-    A[LightMeterApp] --> B[ContentView]
-    B --> C[MeasurementView<br/>Live/Captured mode state]
+    A["LightMeterApp"] --> B["ContentView"]
+    B --> C["MeasurementView"]
 
-    C --> D[CameraPreviewView<br/>UIViewRepresentable]
-    D --> E[AVCaptureVideoPreviewLayer]
-    E --> F[AVCaptureSession]
+    C --> D["CameraPreviewView"]
+    D --> E["AVCaptureVideoPreviewLayer"]
+    E --> F["AVCaptureSession"]
 
-    C --> G[MeasurementCardView<br/>Compact or Expanded]
+    C --> G["MeasurementCardView"]
 
-    B --> H[CameraManager<br/>ObservableObject]
+    B --> H["CameraManager"]
     H --> F
-    H -->|@Published lux| C
-    H -->|@Published colorTemperature| C
-    H -->|@Published currentCameraPosition| C
-    H -->|captureFrame → UIImage?| C
-    H -->|toggleCamera| C
-    H -->|session property| D
+    H -- "@Published lux" --> C
+    H -- "@Published colorTemperature" --> C
+    H -- "@Published currentCameraPosition" --> C
+    H -- "captureFrame" --> C
+    H -- "toggleCamera" --> C
+    H -- "session property" --> D
 
-    G --> I[LuxInterpreter]
-    G --> J[KelvinInterpreter]
-    G --> K[ComparisonGenerator<br/>Pure function]
-    I -->|InterpretationResult| G
-    J -->|InterpretationResult| G
-    K -->|String| G
+    G --> I["LuxInterpreter"]
+    G --> J["KelvinInterpreter"]
+    G --> K["ComparisonGenerator"]
+    I -- "InterpretationResult" --> G
+    J -- "InterpretationResult" --> G
+    K -- "String" --> G
+
+    style A fill:#e3f2fd,stroke:#1976d2
+    style B fill:#e3f2fd,stroke:#1976d2
+    style C fill:#e3f2fd,stroke:#1976d2
+    style D fill:#e3f2fd,stroke:#1976d2
+    style E fill:#f3e5f5,stroke:#7b1fa2
+    style F fill:#f3e5f5,stroke:#7b1fa2
+    style G fill:#e3f2fd,stroke:#1976d2
+    style H fill:#fff3e0,stroke:#f57c00
+    style I fill:#e8f5e9,stroke:#388e3c
+    style J fill:#e8f5e9,stroke:#388e3c
+    style K fill:#e8f5e9,stroke:#388e3c
 ```
 
 ### Data Flow — Capture Action
@@ -90,7 +102,7 @@ sequenceDiagram
     MeasurementView->>CameraManager: toggleCamera()
     CameraManager->>AVCaptureSession: beginConfiguration()
     CameraManager->>AVCaptureSession: Remove current input
-    CameraManager->>AVCaptureSession: Add new camera input (front↔back)
+    CameraManager->>AVCaptureSession: Add new camera input (front/back)
     CameraManager->>AVCaptureSession: commitConfiguration()
     CameraManager->>CameraManager: Update currentCameraPosition
     CameraManager-->>MeasurementView: Preview updates automatically

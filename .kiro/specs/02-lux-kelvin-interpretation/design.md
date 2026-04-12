@@ -21,22 +21,32 @@ This design adds three capabilities to the Light Meter app on top of the spec 01
 
 ```mermaid
 graph TD
-    A[LightMeterApp] --> B[ContentView]
-    B --> C[MeasurementView]
-    C --> D[CameraPreviewView<br/>UIViewRepresentable]
-    D --> E[AVCaptureVideoPreviewLayer]
-    E --> F[AVCaptureSession]
+    A["LightMeterApp"] --> B["ContentView"]
+    B --> C["MeasurementView"]
+    C --> D["CameraPreviewView"]
+    D --> E["AVCaptureVideoPreviewLayer"]
+    E --> F["AVCaptureSession"]
 
-    B --> G[CameraManager<br/>ObservableObject]
+    B --> G["CameraManager"]
     G --> F
-    G -->|@Published lux| C
-    G -->|@Published colorTemperature| C
-    G -->|session property| D
+    G -- "@Published lux" --> C
+    G -- "@Published colorTemperature" --> C
+    G -- "session property" --> D
 
-    C --> H[LuxInterpreter]
-    C --> I[KelvinInterpreter]
-    H -->|InterpretationResult| C
-    I -->|InterpretationResult| C
+    C --> H["LuxInterpreter"]
+    C --> I["KelvinInterpreter"]
+    H -- "InterpretationResult" --> C
+    I -- "InterpretationResult" --> C
+
+    style A fill:#e3f2fd,stroke:#1976d2
+    style B fill:#e3f2fd,stroke:#1976d2
+    style C fill:#e3f2fd,stroke:#1976d2
+    style D fill:#e3f2fd,stroke:#1976d2
+    style E fill:#f3e5f5,stroke:#7b1fa2
+    style F fill:#f3e5f5,stroke:#7b1fa2
+    style G fill:#fff3e0,stroke:#f57c00
+    style H fill:#e8f5e9,stroke:#388e3c
+    style I fill:#e8f5e9,stroke:#388e3c
 ```
 
 ### Data Flow

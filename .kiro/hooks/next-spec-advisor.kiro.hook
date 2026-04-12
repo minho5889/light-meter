@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Next Spec Advisor",
+  "description": "Manually triggered hook that scans all existing specs (requirements, design, tasks), git log history, the product specification, and current source files to recommend the next spec to develop. Provides a prioritized recommendation with rationale.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the project state and recommend the next spec to develop. Do the following:\n\n1. Read the product specification at `Light-Meter-Spec-EN.md` to understand all planned features.\n2. Read all existing spec folders under `.kiro/specs/` — for each, read `requirements.md`, `design.md`, and `tasks.md` to understand what has been built and what's complete.\n3. Run `git log --oneline -30` to see recent development activity and understand the current momentum.\n4. Review the current source files in `LightMeter/` and `LightMeterTests/` to understand what's implemented.\n5. Cross-reference the product spec's feature list against completed specs to identify unbuilt features.\n\nThen produce a recommendation with:\n- **Completed Specs Summary**: A one-liner per completed spec showing what it covered.\n- **Unbuilt Features**: List features from the product spec that have no spec yet (e.g., Flicker Detection, Records, Tab Navigation, Settings, Localization).\n- **Recommended Next Spec**: The single best next spec to build, with:\n  - Suggested spec folder name (following the naming convention: `{next_number}-{description}`)\n  - What product spec sections it would cover\n  - Why it should come next (dependencies, complexity, user value)\n  - Key requirements it would address\n- **Alternative Options**: 1-2 other reasonable next specs if the user prefers a different direction.\n\nBe opinionated — pick the one you think is the strongest next step based on dependency order, incremental complexity, and user-facing value. Follow the spec naming convention from the steering docs."
+  }
+}
