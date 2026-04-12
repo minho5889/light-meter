@@ -49,20 +49,20 @@ This plan restores the strict pure/effects/glue separation by removing platform 
     - For 100 random `iso` (Float -1000...10000) and `exposureDurationInSeconds` (Double -10.0...30.0), verify result >= 0.0
     - **Validates: Requirements 1.4, 1.5, 1.6, 7.6**
 
-- [ ] 3. Update ColorTemperatureCalculatorTests for new method
-  - [ ] 3.1 Add tests for calculateColorTemperature(rawKelvin:) method
+- [x] 3. Update ColorTemperatureCalculatorTests for new method
+  - [x] 3.1 Add tests for calculateColorTemperature(rawKelvin:) method
     - Add `calculateColorTemperature_belowMin_returnsMin()` — pass 500.0, expect 1000.0
     - Add `calculateColorTemperature_aboveMax_returnsMax()` — pass 20000.0, expect 15000.0
     - Add `calculateColorTemperature_withinRange_returnsUnchanged()` — pass 5500.0, expect 5500.0
     - Keep all existing `clamp()` unit tests unchanged
     - _Requirements: 7.3, 7.4_
 
-  - [ ] 3.2 Write property test for color temperature clamping invariant
+  - [x] 3.2 Write property test for color temperature clamping invariant
     - **Property 3: Color temperature clamping invariant**
     - For 100 random `rawKelvin` (Double -1000...50000), verify `calculateColorTemperature(rawKelvin:)` returns value in [1000.0, 15000.0]
     - **Validates: Requirements 2.2, 2.3, 2.4, 2.6, 7.7**
 
-  - [ ] 3.3 Write property test for color temperature identity on in-range values
+  - [x] 3.3 Write property test for color temperature identity on in-range values
     - **Property 4: Color temperature identity for in-range values**
     - For 100 random `rawKelvin` (Double 1000.0...15000.0), verify `calculateColorTemperature(rawKelvin:)` returns input unchanged (output == input)
     - **Validates: Requirements 2.5**
