@@ -29,8 +29,8 @@ This plan restores the strict pure/effects/glue separation by removing platform 
       - Call `ColorTemperatureCalculator.calculateColorTemperature(rawKelvin: rawKelvin)`
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 2. Update LuxCalculatorTests for pure interface
-  - [ ] 2.1 Rewrite LuxCalculatorTests to use plain Double inputs
+- [x] 2. Update LuxCalculatorTests for pure interface
+  - [x] 2.1 Rewrite LuxCalculatorTests to use plain Double inputs
     - Remove `import CoreMedia` from `LightMeterTests/LuxCalculatorTests.swift`
     - Replace all `CMTime` / `CMTimeMake` / `CMTimeMakeWithSeconds` usage with plain `Double` values
     - Update `knownValues()`: use `exposureDurationInSeconds: 0.008` (1/125s) instead of `CMTimeMake(value: 1, timescale: 125)`
@@ -39,12 +39,12 @@ This plan restores the strict pure/effects/glue separation by removing platform 
     - Update `property_luxNonNegativity()`: generate random `exposureSeconds` Double, pass directly
     - _Requirements: 7.1, 7.2, 7.5, 7.6_
 
-  - [ ] 2.2 Write property test for lux formula correctness
+  - [x] 2.2 Write property test for lux formula correctness
     - **Property 1: Lux formula correctness**
     - For 100 random positive `iso` (Float 0.01...10000) and `exposureDurationInSeconds` (Double 0.00001...30.0), verify result matches `(calibrationConstant * aperture²) / (Double(iso) * exposureDurationInSeconds)` within relative tolerance 1e-6
     - **Validates: Requirements 1.3, 1.7, 7.5**
 
-  - [ ] 2.3 Write property test for lux non-negativity invariant
+  - [x] 2.3 Write property test for lux non-negativity invariant
     - **Property 2: Lux non-negativity invariant**
     - For 100 random `iso` (Float -1000...10000) and `exposureDurationInSeconds` (Double -10.0...30.0), verify result >= 0.0
     - **Validates: Requirements 1.4, 1.5, 1.6, 7.6**
