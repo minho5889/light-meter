@@ -32,7 +32,7 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
     - Use fixed font sizes and `Color.black.ignoresSafeArea()` for the background
     - _Requirements: 4.1, 4.2, 4.3, 5.1, 5.2, 5.3_
 
-- [-] 3. Refactor ContentView to use TabView
+- [x] 3. Refactor ContentView to use TabView
   - [x] 3.1 Replace single-view layout with a four-tab `TabView` in `ContentView`
     - Add `@State private var selectedTab: Int = 0` to `ContentView`
     - Wrap the view body in a `TabView(selection: $selectedTab)` with four tabs
@@ -51,7 +51,7 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
     - Verify that the capture button, camera toggle, back arrow, and frozen frame behavior remain unchanged
     - _Requirements: 2.3, 2.4, 6.3_
 
-- [ ] 5. Final checkpoint — Verify project compiles and all tests pass
+- [x] 5. Final checkpoint — Verify project compiles and all tests pass
   - Ensure all existing tests still pass (ComparisonGenerator, LuxInterpreter, KelvinInterpreter, LuxCalculator, ColorTemperatureCalculator)
   - Verify the tab bar displays four tabs with correct icons and labels
   - Verify the LUX tab preserves all existing capture-freeze behavior

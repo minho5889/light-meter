@@ -24,6 +24,9 @@
 		DE2FD56039BAF0385E6FAFA2 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378E52F1591BF0FD80AE9A8 /* LuxInterpreter.swift */; };
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
 		EF90B2A90B4FD002ED55E24A /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E2F3A4B5C60718293A4B5C /* PlaceholderView.swift */; };
+		B2C3D4E5F6A70829314B5C6D /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F3A4B5C6D70829314B5C6D /* TemperatureCardView.swift */; };
+		C3D4E5F6A7B8093A425C6D7E /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A4B5C6D7E8093A425C6D7E /* TemperatureView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +57,10 @@
 		BE1BE82D8135B3A3D5F03D0B /* KelvinInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreter.swift; sourceTree = "<group>"; };
 		C4C2293E6CE9B726313AD7BF /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D1E2F3A4B5C60718293A4B5C /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
 		E022296FD140A31589953D77 /* MeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementView.swift; sourceTree = "<group>"; };
+		E2F3A4B5C6D70829314B5C6D /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
+		F3A4B5C6D7E8093A425C6D7E /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		F8EDBB228CB8DBD841F1EDB1 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,6 +98,9 @@
 				7378E52F1591BF0FD80AE9A8 /* LuxInterpreter.swift */,
 				9BBA789FCB7FD8998F10FA69 /* MeasurementCardView.swift */,
 				E022296FD140A31589953D77 /* MeasurementView.swift */,
+				D1E2F3A4B5C60718293A4B5C /* PlaceholderView.swift */,
+				E2F3A4B5C6D70829314B5C6D /* TemperatureCardView.swift */,
+				F3A4B5C6D7E8093A425C6D7E /* TemperatureView.swift */,
 			);
 			path = LightMeter;
 			sourceTree = "<group>";
@@ -210,6 +219,9 @@
 				DE2FD56039BAF0385E6FAFA2 /* LuxInterpreter.swift in Sources */,
 				84D974D581009B23E9D446EC /* MeasurementCardView.swift in Sources */,
 				644FC996462B69769FDF56C7 /* MeasurementView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* PlaceholderView.swift in Sources */,
+				B2C3D4E5F6A70829314B5C6D /* TemperatureCardView.swift in Sources */,
+				C3D4E5F6A7B8093A425C6D7E /* TemperatureView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -402,6 +415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
