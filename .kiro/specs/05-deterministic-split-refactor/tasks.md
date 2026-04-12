@@ -67,7 +67,7 @@ This plan restores the strict pure/effects/glue separation by removing platform 
     - For 100 random `rawKelvin` (Double 1000.0...15000.0), verify `calculateColorTemperature(rawKelvin:)` returns input unchanged (output == input)
     - **Validates: Requirements 2.5**
 
-- [ ] 4. Checkpoint — Verify calculator refactor
+- [x] 4. Checkpoint — Verify calculator refactor
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 5. Sync Package.swift with pure logic files
