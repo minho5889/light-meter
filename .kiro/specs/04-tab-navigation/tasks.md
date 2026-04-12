@@ -25,8 +25,8 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
     - Values update in real time as `CameraManager` publishes new color temperature readings
     - _Requirements: 3.1, 3.2, 3.7, 3.9_
 
-- [ ] 2. Create PlaceholderView for stub tabs
-  - [ ] 2.1 Create `PlaceholderView` as a reusable stub view
+- [x] 2. Create PlaceholderView for stub tabs
+  - [x] 2.1 Create `PlaceholderView` as a reusable stub view
     - Create `LightMeter/PlaceholderView.swift` accepting `title: String` and `subtitle: String`
     - Display the title in bold white text and the subtitle in gray text, centered on a black background
     - Use fixed font sizes and `Color.black.ignoresSafeArea()` for the background
