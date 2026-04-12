@@ -32,8 +32,8 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
     - Use fixed font sizes and `Color.black.ignoresSafeArea()` for the background
     - _Requirements: 4.1, 4.2, 4.3, 5.1, 5.2, 5.3_
 
-- [ ] 3. Refactor ContentView to use TabView
-  - [ ] 3.1 Replace single-view layout with a four-tab `TabView` in `ContentView`
+- [-] 3. Refactor ContentView to use TabView
+  - [x] 3.1 Replace single-view layout with a four-tab `TabView` in `ContentView`
     - Add `@State private var selectedTab: Int = 0` to `ContentView`
     - Wrap the view body in a `TabView(selection: $selectedTab)` with four tabs
     - Tab 0 (LUX): `MeasurementView(cameraManager: cameraManager)` with `Image(systemName: "sun.max")` and `Text("LUX")`
