@@ -4,6 +4,7 @@ struct TemperatureView: View {
     @ObservedObject var cameraManager: CameraManager
 
     var body: some View {
+        NavigationStack {
         ZStack {
             // Background: live camera or black fallback
             if cameraManager.permissionGranted {
@@ -14,6 +15,18 @@ struct TemperatureView: View {
             }
 
             VStack {
+                // Top bar: gear icon in top-right
+                HStack {
+                    Spacer()
+                    NavigationLink(destination: PlaceholderView(title: "Settings", subtitle: "Coming Soon")) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 22, weight: .medium))
+                            .foregroundColor(.white)
+                            .padding(12)
+                    }
+                }
+                .padding(.horizontal)
+
                 if !cameraManager.permissionGranted {
                     Spacer()
                     Text("Camera access is required to measure light.\nPlease enable it in Settings.")
@@ -29,6 +42,7 @@ struct TemperatureView: View {
                     Spacer()
                 }
             }
+        }
         }
     }
 }

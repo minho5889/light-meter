@@ -98,7 +98,7 @@ This plan restores the strict pure/effects/glue separation by removing platform 
     - Gear icon navigates to `PlaceholderView(title: "Settings", subtitle: "Coming Soon")`
     - _Requirements: 6.1, 6.3, 6.4, 6.5_
 
-- [ ] 8. Add settings gear icon to TemperatureView
+- [x] 8. Add settings gear icon to TemperatureView
   - Add a gear icon button (SF Symbol `"gearshape"`) in the top-right corner of `LightMeter/TemperatureView.swift`
   - Gear icon navigates to `PlaceholderView(title: "Settings", subtitle: "Coming Soon")`
   - _Requirements: 6.2, 6.3, 6.4_
