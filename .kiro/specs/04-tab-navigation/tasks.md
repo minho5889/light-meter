@@ -6,8 +6,8 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
 
 ## Tasks
 
-- [ ] 1. Create TemperatureCardView and TemperatureView
-  - [ ] 1.1 Create `TemperatureCardView` with Kelvin reading and interpretation
+- [x] 1. Create TemperatureCardView and TemperatureView
+  - [x] 1.1 Create `TemperatureCardView` with Kelvin reading and interpretation
     - Create `LightMeter/TemperatureCardView.swift` accepting `kelvin: Double`
     - Display the Kelvin value in large monospaced text with a "K" unit label
     - Add a `Divider` below the reading
@@ -17,7 +17,7 @@ Add a four-tab navigation structure following the deterministic-split pattern. N
     - Use fixed font sizes (`.system(size: N)`) — no Dynamic Type
     - _Requirements: 3.3, 3.4, 3.5, 3.6, 3.8_
 
-  - [ ] 1.2 Create `TemperatureView` with live camera background and temperature card
+  - [x] 1.2 Create `TemperatureView` with live camera background and temperature card
     - Create `LightMeter/TemperatureView.swift` accepting `@ObservedObject var cameraManager: CameraManager`
     - Display `CameraPreviewView(session: cameraManager.session)` as the full-screen background when `permissionGranted` is true
     - Display `Color.black` with a permission-required message when `permissionGranted` is false
