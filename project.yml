@@ -1,0 +1,38 @@
+name: LightMeter
+options:
+  bundleIdPrefix: com.lightmeter
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: false
+
+targets:
+  LightMeter:
+    type: application
+    platform: iOS
+    sources:
+      - path: LightMeter
+        excludes:
+          - Info.plist
+    settings:
+      base:
+        INFOPLIST_FILE: LightMeter/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.lightmeter.LightMeter
+        SWIFT_VERSION: "6.0"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+    info:
+      path: LightMeter/Info.plist
+      properties:
+        NSCameraUsageDescription: "This app needs camera access to measure light levels (lux and color temperature) in your environment."
+
+  LightMeterTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: LightMeterTests
+    dependencies:
+      - target: LightMeter
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"

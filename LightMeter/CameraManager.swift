@@ -2,6 +2,7 @@ import AVFoundation
 import SwiftUI
 import CoreImage
 
+@MainActor
 class CameraManager: NSObject, ObservableObject {
     @Published var lux: Double = 0.0
     @Published var colorTemperature: Double = 0.0
@@ -9,17 +10,17 @@ class CameraManager: NSObject, ObservableObject {
     @Published var permissionGranted: Bool = false
     @Published var currentCameraPosition: AVCaptureDevice.Position = .back
 
-    private let captureSession = AVCaptureSession()
-    private let sessionQueue = DispatchQueue(label: "camera.session.queue")
-    private var captureDevice: AVCaptureDevice?
-    private var latestSampleBuffer: CMSampleBuffer?
+    private nonisolated(unsafe) let captureSession = AVCaptureSession()
+    private nonisolated(unsafe) let sessionQueue = DispatchQueue(label: "camera.session.queue")
+    private nonisolated(unsafe) var captureDevice: AVCaptureDevice?
+    private nonisolated(unsafe) var latestSampleBuffer: CMSampleBuffer?
 
     /// Exposes the capture session for CameraPreviewView to connect.
-    var session: AVCaptureSession { captureSession }
+    nonisolated var session: AVCaptureSession { captureSession }
 
     func requestPermission() {
         AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self?.permissionGranted = granted
                 if granted {
                     self?.setupSession()
@@ -29,13 +30,14 @@ class CameraManager: NSObject, ObservableObject {
     }
 
     func setupSession() {
+        let position = currentCameraPosition
         sessionQueue.async { [weak self] in
             guard let self = self else { return }
 
             guard let device = AVCaptureDevice.default(
-                .builtInWideAngleCamera, for: .video, position: self.currentCameraPosition
+                .builtInWideAngleCamera, for: .video, position: position
             ) else {
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.cameraError = "Back camera is not available on this device."
                 }
                 return
@@ -48,7 +50,7 @@ class CameraManager: NSObject, ObservableObject {
             do {
                 let input = try AVCaptureDeviceInput(device: device)
                 guard self.captureSession.canAddInput(input) else {
-                    DispatchQueue.main.async {
+                    Task { @MainActor in
                         self.cameraError = "Unable to add camera input to session."
                     }
                     self.captureSession.commitConfiguration()
@@ -56,8 +58,9 @@ class CameraManager: NSObject, ObservableObject {
                 }
                 self.captureSession.addInput(input)
             } catch {
-                DispatchQueue.main.async {
-                    self.cameraError = "Camera setup failed: \(error.localizedDescription)"
+                let message = error.localizedDescription
+                Task { @MainActor in
+                    self.cameraError = "Camera setup failed: \(message)"
                 }
                 self.captureSession.commitConfiguration()
                 return
@@ -67,7 +70,7 @@ class CameraManager: NSObject, ObservableObject {
             output.setSampleBufferDelegate(self, queue: self.sessionQueue)
 
             guard self.captureSession.canAddOutput(output) else {
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.cameraError = "Unable to add video output to session."
                 }
                 self.captureSession.commitConfiguration()
@@ -81,7 +84,7 @@ class CameraManager: NSObject, ObservableObject {
     }
 
     /// Returns a UIImage from the latest video sample buffer, or nil if unavailable.
-    func captureFrame() -> UIImage? {
+    nonisolated func captureFrame() -> UIImage? {
         guard let sampleBuffer = latestSampleBuffer,
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return nil
@@ -97,10 +100,11 @@ class CameraManager: NSObject, ObservableObject {
     /// Switches the active camera input between front and rear.
     /// If the target camera is unavailable, retains the current input silently.
     func toggleCamera() {
+        let currentPosition = currentCameraPosition
         sessionQueue.async { [weak self] in
             guard let self = self else { return }
 
-            let newPosition: AVCaptureDevice.Position = (self.currentCameraPosition == .back) ? .front : .back
+            let newPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
 
             guard let newDevice = AVCaptureDevice.default(
                 .builtInWideAngleCamera, for: .video, position: newPosition
@@ -120,7 +124,7 @@ class CameraManager: NSObject, ObservableObject {
                 if self.captureSession.canAddInput(newInput) {
                     self.captureSession.addInput(newInput)
                     self.captureDevice = newDevice
-                    DispatchQueue.main.async {
+                    Task { @MainActor in
                         self.currentCameraPosition = newPosition
                     }
                 }
@@ -159,7 +163,7 @@ class CameraManager: NSObject, ObservableObject {
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
 extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
-    func captureOutput(
+    nonisolated func captureOutput(
         _ output: AVCaptureOutput,
         didOutput sampleBuffer: CMSampleBuffer,
         from connection: AVCaptureConnection
@@ -182,7 +186,7 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             device: device
         )
 
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
             self?.lux = luxValue
             self?.colorTemperature = kelvinValue
         }
