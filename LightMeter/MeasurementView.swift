@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MeasurementView: View {
-    @ObservedObject var cameraManager: CameraManager
+    @ObservedObject var cameraViewModel: CameraViewModel
 
     @State private var isCaptured: Bool = false
     @State private var frozenFrame: UIImage? = nil
@@ -14,23 +14,15 @@ struct MeasurementView: View {
     var body: some View {
         NavigationStack {
         ZStack {
-            // Background layer
             if isCaptured, let frame = frozenFrame {
+                // Captured mode: frozen frame background
                 Image(uiImage: frame)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .ignoresSafeArea()
-            } else if cameraManager.permissionGranted {
-                CameraPreviewView(session: cameraManager.session)
-                    .ignoresSafeArea()
-            } else {
-                Color.black.ignoresSafeArea()
-            }
 
-            // Overlay content
-            VStack {
-                // Top bar: back arrow (captured) or gear icon (live)
-                if isCaptured {
+                // Overlay content for captured mode
+                VStack {
                     HStack {
                         Button(action: returnToLiveMode) {
                             Image(systemName: "arrow.left")
@@ -41,42 +33,11 @@ struct MeasurementView: View {
                         Spacer()
                     }
                     .padding(.horizontal)
-                } else {
-                    HStack {
-                        Spacer()
-                        NavigationLink(destination: PlaceholderView(title: "Settings", subtitle: "Coming Soon")) {
-                            Image(systemName: "gearshape")
-                                .font(.system(size: 22, weight: .medium))
-                                .foregroundColor(.white)
-                                .padding(12)
-                        }
-                    }
-                    .padding(.horizontal)
-                }
 
-                // Error / permission states
-                if !cameraManager.permissionGranted {
-                    Spacer()
-                    Text("Camera access is required to measure light.\nPlease enable it in Settings.")
-                        .font(.system(size: 16))
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                    Spacer()
-                } else if let error = cameraManager.cameraError {
-                    Spacer()
-                    Text(error)
-                        .font(.system(size: 16))
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                    Spacer()
-                } else {
-                    // Measurement card
                     MeasurementCardView(
-                        lux: isCaptured ? capturedLux : cameraManager.lux,
-                        kelvin: isCaptured ? capturedKelvin : cameraManager.colorTemperature,
-                        isCaptured: isCaptured,
+                        lux: capturedLux,
+                        kelvin: capturedKelvin,
+                        isCaptured: true,
                         interpretationDescription: capturedInterpretationDescription,
                         interpretationTip: capturedInterpretationTip,
                         comparisonText: capturedComparisonText
@@ -84,9 +45,38 @@ struct MeasurementView: View {
                     .padding(.horizontal)
 
                     Spacer()
+                }
+            } else {
+                // Live mode: use CameraStateOverlay for background/permission/error
+                CameraStateOverlay(
+                    permissionGranted: cameraViewModel.permissionGranted,
+                    cameraError: cameraViewModel.cameraError,
+                    session: cameraViewModel.session
+                ) {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            NavigationLink(destination: PlaceholderView(title: "Settings", subtitle: "Coming Soon")) {
+                                Image(systemName: "gearshape")
+                                    .font(.system(size: 22, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .padding(12)
+                            }
+                        }
+                        .padding(.horizontal)
 
-                    // Bottom controls (live mode only)
-                    if !isCaptured {
+                        MeasurementCardView(
+                            lux: cameraViewModel.lux,
+                            kelvin: cameraViewModel.colorTemperature,
+                            isCaptured: false,
+                            interpretationDescription: "",
+                            interpretationTip: "",
+                            comparisonText: ""
+                        )
+                        .padding(.horizontal)
+
+                        Spacer()
+
                         HStack(spacing: 24) {
                             Button(action: capture) {
                                 Circle()
@@ -99,7 +89,7 @@ struct MeasurementView: View {
                                     )
                             }
 
-                            Button(action: { cameraManager.toggleCamera() }) {
+                            Button(action: { cameraViewModel.toggleCamera() }) {
                                 Image(systemName: "camera.rotate")
                                     .font(.system(size: 22, weight: .medium))
                                     .foregroundColor(.white)
@@ -123,10 +113,10 @@ struct MeasurementView: View {
     }
 
     private func capture() {
-        guard let frame = cameraManager.captureFrame() else { return }
+        guard let frame = cameraViewModel.captureFrame() else { return }
         frozenFrame = frame
-        capturedLux = cameraManager.lux
-        capturedKelvin = cameraManager.colorTemperature
+        capturedLux = cameraViewModel.lux
+        capturedKelvin = cameraViewModel.colorTemperature
         let interpretation = LuxInterpreter.interpret(lux: capturedLux)
         capturedInterpretationDescription = interpretation.description
         capturedInterpretationTip = interpretation.tip

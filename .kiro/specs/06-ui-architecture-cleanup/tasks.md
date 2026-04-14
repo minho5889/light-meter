@@ -55,26 +55,26 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
     - Update the body to use the new string properties directly
     - _Requirements: 5.1, 5.2_
 
-- [~] 6. Migrate views to CameraViewModel and CameraStateOverlay
-  - [ ] 6.1 Migrate ContentView
+- [x] 6. Migrate views to CameraViewModel and CameraStateOverlay
+  - [x] 6.1 Migrate ContentView
     - Replace `@StateObject private var cameraManager = CameraManager()` with `@StateObject private var cameraViewModel = CameraViewModel()`
     - Pass `cameraViewModel` to `MeasurementView` and `TemperatureView`
     - Update lifecycle hooks (`onAppear`, foreground/background notifications) to call `cameraViewModel` methods
     - _Requirements: 6.1, 6.2, 6.3_
-  - [ ] 6.2 Migrate MeasurementView
+  - [x] 6.2 Migrate MeasurementView
     - Replace `@ObservedObject var cameraManager: CameraManager` with `@ObservedObject var cameraViewModel: CameraViewModel`
     - Use `CameraStateOverlay` for background/permission/error states instead of inline checks
     - Update `capture()` to use `cameraViewModel.captureFrame()`, `cameraViewModel.lux`, `cameraViewModel.colorTemperature`
     - Keep `LuxInterpreter.interpret(lux:)` and `ComparisonGenerator.generate(lux:)` calls at capture time (unchanged behavior)
     - Handle the frozen-frame overlay for captured mode (CameraStateOverlay handles live mode background only)
     - _Requirements: 4.4, 6.4_
-  - [ ] 6.3 Migrate TemperatureView
+  - [x] 6.3 Migrate TemperatureView
     - Replace `@ObservedObject var cameraManager: CameraManager` with `@ObservedObject var cameraViewModel: CameraViewModel`
     - Use `CameraStateOverlay` for background/permission/error states instead of inline checks
     - Compute `KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature)` in the view and pass `description` and `tip` strings to `TemperatureCardView`
     - _Requirements: 4.5, 5.3, 6.5_
 
-- [ ] 7. Delete CameraManager and clean up Xcode project
+- [~] 7. Delete CameraManager and clean up Xcode project
   - Delete `LightMeter/CameraManager.swift`
   - Remove the `CameraManager.swift` file reference and build phase entry from `project.pbxproj`
   - Verify no remaining references to `CameraManager` in the codebase

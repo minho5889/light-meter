@@ -1,19 +1,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var cameraManager = CameraManager()
+    @StateObject private var cameraViewModel = CameraViewModel()
     @State private var selectedTab: Int = 0
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            MeasurementView(cameraManager: cameraManager)
+            MeasurementView(cameraViewModel: cameraViewModel)
                 .tabItem {
                     Image(systemName: "sun.max")
                     Text("LUX")
                 }
                 .tag(0)
 
-            TemperatureView(cameraManager: cameraManager)
+            TemperatureView(cameraViewModel: cameraViewModel)
                 .tabItem {
                     Image(systemName: "thermometer.medium")
                     Text("Temperature")
@@ -35,21 +35,21 @@ struct ContentView: View {
                 .tag(3)
         }
         .onAppear {
-            cameraManager.requestPermission()
+            cameraViewModel.requestPermission()
         }
         .onReceive(
             NotificationCenter.default.publisher(
                 for: UIApplication.willEnterForegroundNotification
             )
         ) { _ in
-            cameraManager.startSession()
+            cameraViewModel.startSession()
         }
         .onReceive(
             NotificationCenter.default.publisher(
                 for: UIApplication.didEnterBackgroundNotification
             )
         ) { _ in
-            cameraManager.stopSession()
+            cameraViewModel.stopSession()
         }
     }
 }
