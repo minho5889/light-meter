@@ -136,7 +136,7 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Add `.accessibilityLabel("Saved records")` on tab 3
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [~] 8. Implement per-tab camera session management in ContentView
+- [x] 8. Implement per-tab camera session management in ContentView
   - Add `.onChange(of: selectedTab)` handler: call `cameraViewModel.startSession()` for tabs 0/1, call `cameraViewModel.stopSession()` for tabs 2/3
   - Modify the `willEnterForeground` handler to only call `startSession()` when `selectedTab` is 0 or 1
   - Keep the `didEnterBackground` handler stopping the session unconditionally

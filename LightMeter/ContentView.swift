@@ -41,12 +41,21 @@ struct ContentView: View {
         .onAppear {
             cameraViewModel.requestPermission()
         }
+        .onChange(of: selectedTab) { _, newTab in
+            if newTab == 0 || newTab == 1 {
+                cameraViewModel.startSession()
+            } else {
+                cameraViewModel.stopSession()
+            }
+        }
         .onReceive(
             NotificationCenter.default.publisher(
                 for: UIApplication.willEnterForegroundNotification
             )
         ) { _ in
-            cameraViewModel.startSession()
+            if selectedTab == 0 || selectedTab == 1 {
+                cameraViewModel.startSession()
+            }
         }
         .onReceive(
             NotificationCenter.default.publisher(
