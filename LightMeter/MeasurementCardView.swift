@@ -52,5 +52,15 @@ struct MeasurementCardView: View {
         .padding()
         .background(.ultraThinMaterial)
         .cornerRadius(16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        var label = "\(Self.formatValue(lux)) lux, \(Self.formatValue(kelvin)) Kelvin"
+        if isCaptured {
+            label += ", \(interpretationDescription), \(comparisonText)"
+        }
+        return label
     }
 }

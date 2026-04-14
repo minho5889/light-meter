@@ -30,6 +30,7 @@ struct MeasurementView: View {
                                 .foregroundColor(.white)
                                 .padding(DesignConstants.spacingSM)
                         }
+                        .accessibilityLabel("Back to live mode")
                         Spacer()
                     }
                     .padding(.horizontal)
@@ -62,6 +63,7 @@ struct MeasurementView: View {
                                     .foregroundColor(.white)
                                     .padding(DesignConstants.spacingSM)
                             }
+                            .accessibilityLabel("Settings")
                         }
                         .padding(.horizontal)
 
@@ -88,6 +90,8 @@ struct MeasurementView: View {
                                             .frame(width: DesignConstants.captureButtonInner, height: DesignConstants.captureButtonInner)
                                     )
                             }
+                            .accessibilityLabel("Capture")
+                            .accessibilityHint("Freezes the current light reading")
 
                             Button(action: { cameraViewModel.toggleCamera() }) {
                                 Image(systemName: "camera.rotate")
@@ -97,6 +101,8 @@ struct MeasurementView: View {
                                     .background(Color.white.opacity(0.2))
                                     .clipShape(Circle())
                             }
+                            .accessibilityLabel("Switch Camera")
+                            .accessibilityHint("Toggles between front and rear cameras")
                         }
                         .padding(.bottom, DesignConstants.spacingLG)
                     }

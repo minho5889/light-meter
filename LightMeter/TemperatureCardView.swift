@@ -36,5 +36,7 @@ struct TemperatureCardView: View {
         .padding()
         .background(.ultraThinMaterial)
         .cornerRadius(16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(Self.formatValue(kelvin)) Kelvin, \(interpretationDescription), \(interpretationTip)")
     }
 }

@@ -19,6 +19,7 @@ struct TemperatureView: View {
                                 .foregroundColor(.white)
                                 .padding(12)
                         }
+                        .accessibilityLabel("Settings")
                     }
                     .padding(.horizontal)
 

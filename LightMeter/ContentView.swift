@@ -12,6 +12,7 @@ struct ContentView: View {
                     Text("LUX")
                 }
                 .tag(0)
+                .accessibilityLabel("Lux measurement")
 
             TemperatureView(cameraViewModel: cameraViewModel)
                 .tabItem {
@@ -19,6 +20,7 @@ struct ContentView: View {
                     Text("Temperature")
                 }
                 .tag(1)
+                .accessibilityLabel("Color temperature")
 
             PlaceholderView(title: "Flicker Detection", subtitle: "Coming Soon")
                 .tabItem {
@@ -26,6 +28,7 @@ struct ContentView: View {
                     Text("Check")
                 }
                 .tag(2)
+                .accessibilityLabel("Flicker detection")
 
             PlaceholderView(title: "Records", subtitle: "Coming Soon")
                 .tabItem {
@@ -33,6 +36,7 @@ struct ContentView: View {
                     Text("Records")
                 }
                 .tag(3)
+                .accessibilityLabel("Saved records")
         }
         .onAppear {
             cameraViewModel.requestPermission()

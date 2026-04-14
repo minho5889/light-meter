@@ -106,37 +106,37 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
   - Run `swift test` to ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Add VoiceOver accessibility modifiers
-  - [ ] 7.1 Add accessibility to `MeasurementCardView`
+- [x] 7. Add VoiceOver accessibility modifiers
+  - [x] 7.1 Add accessibility to `MeasurementCardView`
     - Add `.accessibilityElement(children: .combine)` on the outer VStack
     - Add `.accessibilityLabel` including lux value, "lux", kelvin value, "Kelvin"
     - When `isCaptured`, append interpretation description and comparison text to the label
     - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 7.2 Add accessibility to `TemperatureCardView`
+  - [x] 7.2 Add accessibility to `TemperatureCardView`
     - Add `.accessibilityElement(children: .combine)` on the outer VStack
     - Add `.accessibilityLabel` including kelvin value, "Kelvin", description, and tip
     - _Requirements: 1.4, 1.5_
 
-  - [ ] 7.3 Add accessibility to `MeasurementView` interactive controls
+  - [x] 7.3 Add accessibility to `MeasurementView` interactive controls
     - Add `.accessibilityLabel("Capture")` and `.accessibilityHint("Freezes the current light reading")` on the capture button
     - Add `.accessibilityLabel("Switch Camera")` and `.accessibilityHint("Toggles between front and rear cameras")` on the camera toggle button
     - Add `.accessibilityLabel("Back to live mode")` on the back arrow button
     - Add `.accessibilityLabel("Settings")` on the settings gear icon NavigationLink
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-  - [ ] 7.4 Add accessibility to `TemperatureView` settings icon
+  - [x] 7.4 Add accessibility to `TemperatureView` settings icon
     - Add `.accessibilityLabel("Settings")` on the gear icon NavigationLink
     - _Requirements: 2.5_
 
-  - [ ] 7.5 Add accessibility labels to tab items in `ContentView`
+  - [x] 7.5 Add accessibility labels to tab items in `ContentView`
     - Add `.accessibilityLabel("Lux measurement")` on tab 0
     - Add `.accessibilityLabel("Color temperature")` on tab 1
     - Add `.accessibilityLabel("Flicker detection")` on tab 2
     - Add `.accessibilityLabel("Saved records")` on tab 3
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 8. Implement per-tab camera session management in ContentView
+- [~] 8. Implement per-tab camera session management in ContentView
   - Add `.onChange(of: selectedTab)` handler: call `cameraViewModel.startSession()` for tabs 0/1, call `cameraViewModel.stopSession()` for tabs 2/3
   - Modify the `willEnterForeground` handler to only call `startSession()` when `selectedTab` is 0 or 1
   - Keep the `didEnterBackground` handler stopping the session unconditionally
