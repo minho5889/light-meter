@@ -40,11 +40,11 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Add to `LightMeterTests/LuxRangeTests.swift`
     - _Requirements: 6.1, 6.4_
 
-- [~] 2. Checkpoint — Verify LuxRange refactor
+- [x] 2. Checkpoint — Verify LuxRange refactor
   - Run `swift test` to ensure all existing tests (`LuxInterpreterTests`, `ComparisonGeneratorTests`, etc.) still pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 3. Create DesignConstants and add Sendable conformance
+- [~] 3. Create DesignConstants and add Sendable conformance
   - [ ] 3.1 Create `LightMeter/DesignConstants.swift` with the `DesignConstants` enum
     - Define static properties for font sizes: `fontSizeXXL` (48), `fontSizeXL` (22), `fontSizeLG` (20), `fontSizeMD` (18), `fontSizeSM` (16), `fontSizeXS` (14), `fontSizeXXS` (13), `fontSizeXXXS` (12)
     - Define static properties for spacing: `spacingLG` (40), `spacingMD` (24), `spacingSM` (12), `spacingXS` (8)
