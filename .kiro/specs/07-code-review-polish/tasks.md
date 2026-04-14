@@ -101,7 +101,7 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Add to `LightMeterTests/NumberFormattingTests.swift` and add file to SPM test target sources
     - **Validates: Requirements 5.5**
 
-- [~] 6. Checkpoint — Verify DesignConstants and formatting
+- [x] 6. Checkpoint — Verify DesignConstants and formatting
   - Build the project to confirm all DesignConstants references resolve and locale formatting compiles
   - Run `swift test` to ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
