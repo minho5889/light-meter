@@ -10,14 +10,14 @@ let package = Package(
             path: "LightMeter",
             exclude: ["Info.plist"],
             sources: [
-                "InterpretationResult.swift",
-                "LuxCalculator.swift",
-                "ColorTemperatureCalculator.swift",
-                "LuxInterpreter.swift",
-                "KelvinInterpreter.swift",
-                "ComparisonGenerator.swift",
-                "LuxRange.swift",
-                "DesignConstants.swift"
+                "Logic/InterpretationResult.swift",
+                "Logic/LuxCalculator.swift",
+                "Logic/ColorTemperatureCalculator.swift",
+                "Logic/LuxInterpreter.swift",
+                "Logic/KelvinInterpreter.swift",
+                "Logic/ComparisonGenerator.swift",
+                "Logic/LuxRange.swift",
+                "Design/DesignConstants.swift"
             ]
         ),
         .testTarget(
@@ -25,13 +25,13 @@ let package = Package(
             dependencies: ["LightMeter"],
             path: "LightMeterTests",
             sources: [
-                "LuxCalculatorTests.swift",
-                "ColorTemperatureCalculatorTests.swift",
-                "LuxInterpreterTests.swift",
-                "KelvinInterpreterTests.swift",
-                "ComparisonGeneratorTests.swift",
-                "LuxRangeTests.swift",
-                "NumberFormattingTests.swift"
+                "Logic/LuxCalculatorTests.swift",
+                "Logic/ColorTemperatureCalculatorTests.swift",
+                "Logic/LuxInterpreterTests.swift",
+                "Logic/KelvinInterpreterTests.swift",
+                "Logic/ComparisonGeneratorTests.swift",
+                "Logic/LuxRangeTests.swift",
+                "Formatting/NumberFormattingTests.swift"
             ]
         )
     ]
