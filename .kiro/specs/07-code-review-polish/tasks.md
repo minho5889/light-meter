@@ -6,27 +6,27 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
 
 ## Tasks
 
-- [ ] 1. Create LuxRange shared construct and refactor consumers
-  - [ ] 1.1 Create `LightMeter/LuxRange.swift` with the `LuxRange` enum
+- [x] 1. Create LuxRange shared construct and refactor consumers
+  - [x] 1.1 Create `LightMeter/LuxRange.swift` with the `LuxRange` enum
     - Define `static let thresholds: [Double]` with canonical values `[10, 100, 200, 500, 1000, 2000, 10000]`
     - Implement `static func rangeIndex(for lux: Double) -> Int` using the if/else chain returning 0–7
     - No framework imports — pure logic only
     - Add `"LuxRange.swift"` to the SPM target sources in `Package.swift`
     - _Requirements: 6.1, 6.5, 6.6_
 
-  - [ ] 1.2 Refactor `LuxInterpreter` to use `LuxRange.rangeIndex(for:)`
+  - [x] 1.2 Refactor `LuxInterpreter` to use `LuxRange.rangeIndex(for:)`
     - Replace the inline if/else chain with an array lookup keyed by `LuxRange.rangeIndex(for: lux)`
     - Define `private static let results: [InterpretationResult]` array with all 8 entries in index order
     - Public API `interpret(lux:) -> InterpretationResult` remains identical
     - _Requirements: 6.2_
 
-  - [ ] 1.3 Refactor `ComparisonGenerator` to use `LuxRange.rangeIndex(for:)`
+  - [x] 1.3 Refactor `ComparisonGenerator` to use `LuxRange.rangeIndex(for:)`
     - Remove the `private static func rangeIndex(for:)` method
     - Replace its call in `generate(lux:)` with `LuxRange.rangeIndex(for: lux)`
     - Keep the `ranges` array and sentence-building logic unchanged
     - _Requirements: 6.3_
 
-  - [ ] 1.4 Write property test for LuxRange equivalence
+  - [x] 1.4 Write property test for LuxRange equivalence
     - **Property 2: LuxRange equivalence**
     - Generate 150+ random non-negative Doubles in [0, 200_000]
     - Compare `LuxRange.rangeIndex(for:)` against an independent oracle implementing the original if/else chain
@@ -34,13 +34,13 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Add to `LightMeterTests/LuxRangeTests.swift` and add file to SPM test target sources
     - **Validates: Requirements 6.1, 6.4**
 
-  - [ ] 1.5 Write unit tests for LuxRange boundary values
+  - [x] 1.5 Write unit tests for LuxRange boundary values
     - Test each threshold boundary: 0, 10, 10.001, 100, 100.001, 200, 200.001, 500, 500.001, 1000, 1000.001, 2000, 2000.001, 10000, 10000.001
     - Test negative lux maps to index 0
     - Add to `LightMeterTests/LuxRangeTests.swift`
     - _Requirements: 6.1, 6.4_
 
-- [ ] 2. Checkpoint — Verify LuxRange refactor
+- [~] 2. Checkpoint — Verify LuxRange refactor
   - Run `swift test` to ensure all existing tests (`LuxInterpreterTests`, `ComparisonGeneratorTests`, etc.) still pass
   - Ensure all tests pass, ask the user if questions arise.
 

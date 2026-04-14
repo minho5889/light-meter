@@ -15,7 +15,8 @@ let package = Package(
                 "ColorTemperatureCalculator.swift",
                 "LuxInterpreter.swift",
                 "KelvinInterpreter.swift",
-                "ComparisonGenerator.swift"
+                "ComparisonGenerator.swift",
+                "LuxRange.swift"
             ]
         ),
         .testTarget(
@@ -27,7 +28,8 @@ let package = Package(
                 "ColorTemperatureCalculatorTests.swift",
                 "LuxInterpreterTests.swift",
                 "KelvinInterpreterTests.swift",
-                "ComparisonGeneratorTests.swift"
+                "ComparisonGeneratorTests.swift",
+                "LuxRangeTests.swift"
             ]
         )
     ]
