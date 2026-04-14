@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0841575370CAEC5BFA1F69EC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1A0B7E0863FAA2AF8ECC0E /* CameraManager.swift */; };
 		A4B5C6D7E8F90A1B2C3D4E5F /* CameraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C90A1B2C3D4E5F /* CameraSessionManager.swift */; };
 		B5C6D7E8F9A01B2C3D4E5F6A /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F6A7B8C9D01B2C3D4E5F6A /* CameraFrameProvider.swift */; };
 		C6D7E8F9A0B12C3D4E5F6A7B /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7B8C9D0E12C3D4E5F6A7B /* CameraViewModel.swift */; };
@@ -56,7 +55,6 @@
 		63B73B7F348E65D3B9179261 /* LuxInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreterTests.swift; sourceTree = "<group>"; };
 		663AE249FD92BFCB0C0D102D /* ColorTemperatureCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculatorTests.swift; sourceTree = "<group>"; };
 		7378E52F1591BF0FD80AE9A8 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
-		8A1A0B7E0863FAA2AF8ECC0E /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		9BBA789FCB7FD8998F10FA69 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
 		B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGenerator.swift; sourceTree = "<group>"; };
 		B947A3A0DA0144946939E2E7 /* ComparisonGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGeneratorTests.swift; sourceTree = "<group>"; };
@@ -94,7 +92,6 @@
 		A01057C35C248096046CD8A8 /* LightMeter */ = {
 			isa = PBXGroup;
 			children = (
-				8A1A0B7E0863FAA2AF8ECC0E /* CameraManager.swift */,
 				2A2993900ED27F21213C4079 /* CameraPreviewView.swift */,
 				E5F6A7B8C9D01B2C3D4E5F6A /* CameraFrameProvider.swift */,
 				F6A7B8C9D0E12C3D4E5F6A7B /* CameraViewModel.swift */,
@@ -219,7 +216,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0841575370CAEC5BFA1F69EC /* CameraManager.swift in Sources */,
 				9231773F947DC0148F1C1B3D /* CameraPreviewView.swift in Sources */,
 				B5C6D7E8F9A01B2C3D4E5F6A /* CameraFrameProvider.swift in Sources */,
 				C6D7E8F9A0B12C3D4E5F6A7B /* CameraViewModel.swift in Sources */,

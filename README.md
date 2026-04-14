@@ -76,17 +76,21 @@ Feature specs live in `.kiro/specs/`, each with requirements, design, and tasks:
 LightMeter/
 ├── LightMeterApp.swift          # App entry point
 ├── ContentView.swift            # Main tab container
-├── CameraManager.swift          # Camera session + effects layer
+├── CameraSessionManager.swift   # Session lifecycle (effects)
+├── CameraFrameProvider.swift    # Frame capture + delegation (effects)
+├── CameraViewModel.swift        # Published state for views (glue)
 ├── CameraPreviewView.swift      # Live camera feed
+├── CameraStateOverlay.swift     # Shared permission/error overlay
 ├── LuxCalculator.swift          # Brightness calculation (pure)
 ├── LuxInterpreter.swift         # Lux → human description (pure)
-├── ColorTemperatureCalculator.swift  # Kelvin calculation
+├── ColorTemperatureCalculator.swift  # Kelvin calculation (pure)
 ├── KelvinInterpreter.swift      # Kelvin → human description (pure)
 ├── ComparisonGenerator.swift    # Contextual comparisons (pure)
 ├── MeasurementView.swift        # Lux measurement UI
 ├── MeasurementCardView.swift    # Measurement card component
 ├── TemperatureView.swift        # Kelvin display UI
-├── TemperatureCardView.swift    # Temperature card component
+├── TemperatureCardView.swift    # Temperature card component (pure display)
+├── InterpretationResult.swift   # Shared result type
 └── PlaceholderView.swift        # Empty state
 
 LightMeterTests/                 # Unit tests for pure logic layer
@@ -97,8 +101,8 @@ LightMeterTests/                 # Unit tests for pure logic layer
 The app follows a **deterministic split** pattern:
 
 - **Pure layer** — Calculators, interpreters, generators. No platform imports, fully testable via `swift test`.
-- **Effects layer** — `CameraManager` handles AVFoundation, device I/O.
-- **View layer** — SwiftUI views consume published values from the effects layer.
+- **Effects layer** — `CameraSessionManager` (session lifecycle) and `CameraFrameProvider` (frame capture, lux/kelvin dispatch) wrap AVFoundation.
+- **Glue layer** — `CameraViewModel` coordinates effects and exposes `@Published` state. SwiftUI views observe the view model and call pure logic at display time.
 
 ## License
 

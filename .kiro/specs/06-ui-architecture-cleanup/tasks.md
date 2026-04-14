@@ -74,13 +74,13 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
     - Compute `KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature)` in the view and pass `description` and `tip` strings to `TemperatureCardView`
     - _Requirements: 4.5, 5.3, 6.5_
 
-- [~] 7. Delete CameraManager and clean up Xcode project
+- [x] 7. Delete CameraManager and clean up Xcode project
   - Delete `LightMeter/CameraManager.swift`
   - Remove the `CameraManager.swift` file reference and build phase entry from `project.pbxproj`
   - Verify no remaining references to `CameraManager` in the codebase
   - _Requirements: 6.6 (CameraPreviewView unchanged), 1.1–3.5 (migration complete)_
 
-- [ ] 8. Checkpoint — Full build and test verification
+- [~] 8. Checkpoint — Full build and test verification
   - Ensure the project builds successfully without `CameraManager.swift`
   - Ensure all existing tests pass (pure logic tests are unaffected by the refactor)
   - Ensure all tests pass, ask the user if questions arise.
