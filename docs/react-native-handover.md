@@ -1,6 +1,24 @@
 # React Native Handover — LightMeter Android App
 
-## Overview
+<a id="table-of-contents"></a>
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Team Structure](#team-structure)
+3. [Reference Codebase Map](#reference-codebase-map)
+4. [Three-Layer Architecture](#three-layer-architecture-must-preserve)
+5. [Priority Breakdown](#priority-breakdown)
+6. [Camera Pipeline — Key Technical Details](#camera-pipeline--key-technical-details)
+7. [Key Differences: Swift/iOS vs React Native/Android](#key-differences-swiftios-vs-react-nativeandroid)
+8. [What Ports Directly](#what-ports-directly-common-ground)
+9. [Week-by-Week Suggested Timeline](#week-by-week-suggested-timeline)
+10. [Testing Requirements](#testing-requirements)
+11. [Out of Scope](#out-of-scope)
+12. [Reference Files to Read First](#reference-files-to-read-first)
+
+---
+
+## [Overview](#table-of-contents)
 
 You are building an Android version of the LightMeter iOS app using React Native. The iOS codebase in this repo is your reference implementation. Your target is flagship Samsung phones (Galaxy S24/S25 series). The engagement is three weeks with two developers: a lead and a support developer.
 
@@ -8,7 +26,7 @@ The iOS app is a real-time light measurement tool that uses the camera to displa
 
 ---
 
-## Team Structure
+## [Team Structure](#table-of-contents)
 
 | Role | Focus | Weeks |
 |------|-------|-------|
@@ -19,7 +37,7 @@ Both developers should coordinate on the camera pipeline early (week 1) since fl
 
 ---
 
-## Reference Codebase Map
+## [Reference Codebase Map](#table-of-contents)
 
 The iOS project follows a strict three-layer architecture called the "deterministic split." Understanding this is critical because the pure logic layer ports directly to TypeScript with zero changes to the algorithms.
 
@@ -73,7 +91,7 @@ LightMeterTests/
 
 ---
 
-## Three-Layer Architecture (Must Preserve)
+## [Three-Layer Architecture (Must Preserve)](#table-of-contents)
 
 This is the most important architectural constraint. The iOS codebase enforces it and the React Native version must too.
 
@@ -93,7 +111,7 @@ This split exists so the pure logic is portable. You are proving that right now 
 
 ---
 
-## Priority Breakdown
+## [Priority Breakdown](#table-of-contents)
 
 ### P0 — Must complete (week 1–2)
 
@@ -229,7 +247,7 @@ Build the Records tab as a UI shell. No real persistence — use in-memory state
 
 This is a UI shell only. Data does not persist across app restarts. Real persistence (SQLite, AsyncStorage) is out of scope.
 
-Reference: spec.md "Records" section for the card layout and detail view design.
+Reference: the handover doc's P1.2 section above describes the card layout and detail view design.
 
 #### P1.3 — Number formatting
 
@@ -270,7 +288,7 @@ Reference: `PlaceholderView.swift`
 
 ---
 
-## Camera Pipeline — Key Technical Details
+## [Camera Pipeline — Key Technical Details](#table-of-contents)
 
 This is the most significant technical challenge. The iOS app reads camera metadata directly from `AVCaptureDevice` properties on every frame. Android requires a different approach.
 
@@ -327,7 +345,7 @@ The lux formula uses `aperture = 1.6` (iPhone wide camera f/1.6). Samsung Galaxy
 
 ---
 
-## Key Differences: Swift/iOS vs React Native/Android
+## [Key Differences: Swift/iOS vs React Native/Android](#table-of-contents)
 
 | Aspect | iOS (this repo) | React Native Android |
 |--------|----------------|---------------------|
@@ -343,7 +361,7 @@ The lux formula uses `aperture = 1.6` (iPhone wide camera f/1.6). Samsung Galaxy
 | Build system | Xcode + XcodeGen | Metro bundler + Gradle |
 | Permissions | `NSCameraUsageDescription` in Info.plist | `<uses-permission android:name="android.permission.CAMERA"/>` in AndroidManifest.xml |
 
-## What Ports Directly (Common Ground)
+## [What Ports Directly (Common Ground)](#table-of-contents)
 
 These are identical between the two platforms — same algorithms, same thresholds, same output:
 
@@ -361,7 +379,7 @@ These are identical between the two platforms — same algorithms, same threshol
 
 ---
 
-## Week-by-Week Suggested Timeline
+## [Week-by-Week Suggested Timeline](#table-of-contents)
 
 ### Week 1 — Foundation
 
@@ -410,7 +428,7 @@ Support developer:
 
 ---
 
-## Testing Requirements
+## [Testing Requirements](#table-of-contents)
 
 | What | Required | Tool |
 |------|----------|------|
@@ -422,7 +440,7 @@ Support developer:
 
 ---
 
-## Out of Scope
+## [Out of Scope](#table-of-contents)
 
 - iOS support (this is Android-only for now)
 - Real data persistence for Records (in-memory only)
@@ -434,11 +452,11 @@ Support developer:
 
 ---
 
-## Reference Files to Read First
+## [Reference Files to Read First](#table-of-contents)
 
 If you are short on time, read these files in this order to understand the app:
 
-1. `docs/spec.md` — full product specification with UI diagrams
+1. `docs/developer-guide.md` — how the codebase works, module reference, architecture diagrams
 2. `LightMeter/Logic/LuxCalculator.swift` — the core formula (15 lines)
 3. `LightMeter/Logic/LuxInterpreter.swift` — how lux maps to descriptions
 4. `LightMeter/Logic/KelvinInterpreter.swift` — how Kelvin maps to color tones
@@ -449,6 +467,6 @@ If you are short on time, read these files in this order to understand the app:
 
 ---
 
-## Questions? Contact
+## [Questions? Contact](#table-of-contents)
 
 If anything in this document is unclear or you hit a blocker with the Camera2 API metadata extraction, escalate early. The camera pipeline is the highest-risk item — if it slips past week 1, the whole timeline is at risk.

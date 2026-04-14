@@ -37,6 +37,37 @@ The app has four tabs:
 
 When the user taps the capture button on the LUX tab, the camera frame freezes and the card expands to show a human-readable interpretation: what kind of environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room."
 
+### Lux interpretation ranges
+
+| Lux | Environment | Tip |
+|-----|------------|-----|
+| 0–10 | Very dark outdoors, full moon night | Pre-sleep conditions |
+| 11–100 | Hallways, bathrooms, movie theaters | Suitable for passing through |
+| 101–200 | Living room relaxation, dining, hotel rooms | Optimal for comfortable rest |
+| 201–500 | General office work, kitchen cooking | Standard brightness for daily activities |
+| 501–1,000 | Focused studying, precision handwork | Recommended for detailed tasks |
+| 1,001–2,000 | Bright window indoors, broadcast studios | Suitable for video production |
+| 2,001–10,000 | Cloudy day outdoors, sunset outdoors | Good for outdoor activities |
+| 10,001+ | Direct sunlight, noon on a clear day | Protect your eyes |
+
+### Kelvin interpretation ranges
+
+| Kelvin | Color tone | Recommended environment |
+|--------|-----------|------------------------|
+| Below 2,000K | Candlelight / Sunset 🔥 | Pre-sleep, atmospheric cafes |
+| 2,000–3,499K | Warm White 💡 | Bedrooms, living rooms |
+| 3,500–4,999K | Natural White 🌤 | Kitchens, bathrooms |
+| 5,000–6,499K | Daylight 📖 | Study rooms, offices |
+| 6,500–9,999K | Cool White ❄ | Hospitals, factories |
+| 10,000K+ | Blue Sky 🧊 | Clear day shade, labs |
+
+### Capture flow
+
+1. User taps the capture button → camera frame freezes (like taking a photo)
+2. Measurement card expands to show: environment description, user guide tip, comparison sentence
+3. Back arrow appears → tap to return to live mode
+4. Tab bar hides during captured mode
+
 ---
 
 ## [2. Architecture — The Three Layers](#table-of-contents)

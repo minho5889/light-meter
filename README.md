@@ -47,7 +47,7 @@ Built for anyone curious about their lighting: photographers checking exposure, 
 
 ```bash
 # Clone the repo
-git clone <repo-url>
+git clone https://github.com/minho5889/light-meter.git
 cd light-meter
 
 # Generate the Xcode project
@@ -129,30 +129,39 @@ The pure logic layer is 100% unit testable without mocks or devices, and portabl
 
 ## [5. Documentation](#table-of-contents)
 
-| Document | Audience | Description |
-|----------|----------|-------------|
-| [Developer Guide](docs/developer-guide.md) | PM, Developers | How the code works — modules, data flow, test suite, architecture diagrams |
-| [Light Science Primer](docs/light-science-primer.md) | PM, Developers | What lux, Kelvin, and flicker are — the science behind the app |
-| [React Native Handover](docs/react-native-handover.md) | RN Developers | Scope, priorities, and technical guide for the Android port |
-| [GitHub Guide](docs/github-guide.md) | Developers | Git workflow and branching conventions for this project |
+Four documents cover everything you need to know. Read them in this order:
 
-Start with the [Developer Guide](docs/developer-guide.md) if you want to understand the code. Start with the [Light Science Primer](docs/light-science-primer.md) if you want to understand the domain.
+### 1. [Light Science Primer](docs/light-science-primer.md)
+
+Start here. Before touching any code, understand what the app actually measures. This doc explains lux, Kelvin, and flicker in plain language — what they are physically, why people care about them, and how a phone camera captures them. It takes 15 minutes and saves hours of confusion later when you encounter the formulas and range tables in the code.
+
+### 2. [Developer Guide](docs/developer-guide.md)
+
+Read this second. It maps the science to the code — which module implements which formula, how data flows from the camera hardware through three layers to the screen, and how the test suite covers each module. It includes the product requirements (lux/Kelvin range tables, capture flow) so you know what the app is supposed to do, and architecture diagrams so you know how it does it.
+
+### 3. [GitHub Guide](docs/github-guide.md)
+
+Read this before making your first commit. It covers the Git workflow for this project — branching, commit message conventions, and pull request process. If you already know Git well, skim the common commands table at the bottom and move on.
+
+### 4. [React Native Handover](docs/react-native-handover.md)
+
+Read this only if you are working on the Android port. It defines the scope, three-tier priorities, week-by-week timeline, and the key technical differences between the iOS camera pipeline and Android's Camera2 API. It assumes you have already read the primer and developer guide.
 
 ---
 
 ## [6. Specs](#table-of-contents)
 
-Feature specs live in `.kiro/specs/`, each with requirements, design, and implementation tasks:
+Feature specs document the incremental development history of the app. Each spec contains requirements, design decisions, and implementation tasks:
 
 | # | Spec | Status |
 |---|------|--------|
-| 01 | [iOS Light Meter Skeleton](.kiro/specs/01-ios-light-meter-skeleton/) | ✅ Done |
-| 02 | [Lux & Kelvin Interpretation](.kiro/specs/02-lux-kelvin-interpretation/) | ✅ Done |
-| 03 | [Capture Freeze](.kiro/specs/03-capture-freeze/) | ✅ Done |
-| 04 | [Tab Navigation](.kiro/specs/04-tab-navigation/) | ✅ Done |
-| 05 | [Deterministic Split Refactor](.kiro/specs/05-deterministic-split-refactor/) | ✅ Done |
-| 06 | [UI Architecture Cleanup](.kiro/specs/06-ui-architecture-cleanup/) | ✅ Done |
-| 07 | [Code Review Polish](.kiro/specs/07-code-review-polish/) | ✅ Done |
+| 01 | iOS Light Meter Skeleton | ✅ Done |
+| 02 | Lux & Kelvin Interpretation | ✅ Done |
+| 03 | Capture Freeze | ✅ Done |
+| 04 | Tab Navigation | ✅ Done |
+| 05 | Deterministic Split Refactor | ✅ Done |
+| 06 | UI Architecture Cleanup | ✅ Done |
+| 07 | Code Review Polish | ✅ Done |
 
 ---
 

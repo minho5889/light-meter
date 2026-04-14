@@ -2,14 +2,35 @@
 
 This guide covers everything you need to work on the Light Meter iOS project using Git and GitHub. Follow each section in order.
 
-## Prerequisites
+---
+
+<a id="table-of-contents"></a>
+## Table of Contents
+
+1. [Prerequisites](#1-prerequisites)
+2. [Configure Git](#2-configure-git-one-time-setup)
+3. [Clone the Repository](#3-clone-the-repository)
+4. [Create a Branch](#4-create-a-branch)
+5. [Make Your Changes](#5-make-your-changes)
+6. [Check What Changed](#6-check-what-changed)
+7. [Stage Your Changes](#7-stage-your-changes)
+8. [Commit Your Changes](#8-commit-your-changes)
+9. [Push Your Branch to GitHub](#9-push-your-branch-to-github)
+10. [Create a Pull Request](#10-create-a-pull-request-pr)
+11. [Pull Latest Changes](#11-pull-latest-changes)
+12. [Common Commands Reference](#12-common-commands-reference)
+13. [Review Checklist](#13-review-checklist)
+
+---
+
+## [1. Prerequisites](#table-of-contents)
 
 Before starting, make sure you have:
 - A GitHub account (sign up at https://github.com)
 - Git installed on your Mac (open Terminal and type `git --version` — if it's not installed, macOS will prompt you to install it)
-- A code editor (Kiro, VS Code, or Xcode)
+- A code editor (VS Code, Xcode, or your preferred IDE)
 
-## 1. Configure Git (One-Time Setup)
+## [2. Configure Git (One-Time Setup)](#table-of-contents)
 
 Open Terminal and set your name and email. These show up on your commits.
 
@@ -18,7 +39,7 @@ git config --global user.name "Your Name"
 git config --global user.email "your-email@example.com"
 ```
 
-## 2. Clone the Repository
+## [3. Clone the Repository](#table-of-contents)
 
 Cloning downloads the project from GitHub to your computer.
 
@@ -30,7 +51,7 @@ cd light-meter
 
 You now have the full project on your machine.
 
-## 3. Create a Branch
+## [4. Create a Branch](#table-of-contents)
 
 Never work directly on `main`. Always create a branch for your changes.
 
@@ -40,11 +61,11 @@ git checkout -b your-branch-name
 
 Use a descriptive name like `add-settings-view` or `fix-lux-label`. Keep it lowercase with hyphens.
 
-## 4. Make Your Changes
+## [5. Make Your Changes](#table-of-contents)
 
 Edit files in the project using your code editor. Save your work as you go.
 
-## 5. Check What Changed
+## [6. Check What Changed](#table-of-contents)
 
 Before committing, see what files you modified:
 
@@ -58,7 +79,7 @@ This shows files that are modified (red) or staged (green). To see the actual co
 git diff
 ```
 
-## 6. Stage Your Changes
+## [7. Stage Your Changes](#table-of-contents)
 
 Staging tells Git which changes you want to include in your next commit.
 
@@ -74,7 +95,7 @@ To stage a specific file:
 git add LightMeter/SomeFile.swift
 ```
 
-## 7. Commit Your Changes
+## [8. Commit Your Changes](#table-of-contents)
 
 A commit is a snapshot of your work with a message describing what you did.
 
@@ -96,7 +117,7 @@ For work outside of spec tasks:
 
 Ask your teammate if you're unsure which format to use.
 
-## 8. Push Your Branch to GitHub
+## [9. Push Your Branch to GitHub](#table-of-contents)
 
 Pushing uploads your branch and commits to GitHub so others can see them.
 
@@ -106,7 +127,7 @@ git push origin your-branch-name
 
 The first time you push a new branch, Git will create it on GitHub automatically.
 
-## 9. Create a Pull Request (PR)
+## [10. Create a Pull Request (PR)](#table-of-contents)
 
 A pull request is how you propose your changes to be merged into `main`.
 
@@ -117,7 +138,7 @@ A pull request is how you propose your changes to be merged into `main`.
 
 Your teammate will review the PR before it gets merged.
 
-## 10. Pull Latest Changes
+## [11. Pull Latest Changes](#table-of-contents)
 
 Before starting new work, always pull the latest changes from `main`:
 
@@ -128,7 +149,7 @@ git pull origin main
 
 Then create a new branch from the updated `main` for your next task.
 
-## Common Commands Reference
+## [12. Common Commands Reference](#table-of-contents)
 
 | Command | What It Does |
 |---------|-------------|
@@ -142,7 +163,7 @@ Then create a new branch from the updated `main` for your next task.
 | `git checkout main` | Switches back to the main branch |
 | `git log --oneline` | Shows recent commit history |
 
-## Review Checklist
+## [13. Review Checklist](#table-of-contents)
 
 Go through this list to confirm you understand the basics:
 
