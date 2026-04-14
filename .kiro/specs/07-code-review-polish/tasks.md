@@ -142,7 +142,7 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
   - Keep the `didEnterBackground` handler stopping the session unconditionally
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 9. Final checkpoint — Full verification
+- [x] 9. Final checkpoint — Full verification
   - Run `swift build` to verify the project compiles without warnings under Swift 6 strict concurrency
   - Run `swift test` to verify all existing and new tests pass
   - Ensure all tests pass, ask the user if questions arise.
