@@ -52,10 +52,10 @@ open LightMeter.xcodeproj
 
 | Document | Description |
 |----------|-------------|
-| [Light-Meter-Spec-EN.md](Light-Meter-Spec-EN.md) | Full product specification — features, UX, target devices |
-| [CODE-REVIEW.md](CODE-REVIEW.md) | Architecture review — P0/P1/P2 issues and fixes |
-| [XCODE-TRANSITION-GUIDE.md](XCODE-TRANSITION-GUIDE.md) | How the SPM + Xcode two-world setup works |
-| [GITHUB.md](GITHUB.md) | Git/GitHub workflow guide for this project |
+| [spec.md](docs/spec.md) | Full product specification — features, UX, target devices |
+| [code-review.md](docs/code-review.md) | Architecture review — P0/P1/P2 issues and fixes |
+| [xcode-guide.md](docs/xcode-guide.md) | How the SPM + Xcode two-world setup works |
+| [github-guide.md](docs/github-guide.md) | Git/GitHub workflow guide for this project |
 
 ## Kiro Specs
 
