@@ -82,17 +82,17 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Replace hardcoded font size (16) with `DesignConstants.fontSizeSM`
     - _Requirements: 4.8_
 
-- [~] 5. Add locale-aware number formatting to card views
-  - [ ] 5.1 Add locale-aware formatting to `MeasurementCardView`
+- [x] 5. Add locale-aware number formatting to card views
+  - [x] 5.1 Add locale-aware formatting to `MeasurementCardView`
     - Replace `String(format: "%.0f", lux)` and `String(format: "%.0f", kelvin)` with `NumberFormatter` using `.decimal` style and `maximumFractionDigits = 0`
     - Create a private static helper or computed property for the formatter
     - _Requirements: 5.1, 5.2, 5.4_
 
-  - [ ] 5.2 Add locale-aware formatting to `TemperatureCardView`
+  - [x] 5.2 Add locale-aware formatting to `TemperatureCardView`
     - Replace `String(format: "%.0f", kelvin)` with the same locale-aware `NumberFormatter` approach
     - _Requirements: 5.3, 5.4_
 
-  - [ ] 5.3 Write property test for number formatting round-trip
+  - [x] 5.3 Write property test for number formatting round-trip
     - **Property 1: Number formatting round-trip**
     - Generate 150+ random non-negative Doubles in [0, 200_000]
     - Format with `NumberFormatter(.decimal, maximumFractionDigits: 0)` using fixed `Locale(identifier: "en_US")`
@@ -101,7 +101,7 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Add to `LightMeterTests/NumberFormattingTests.swift` and add file to SPM test target sources
     - **Validates: Requirements 5.5**
 
-- [ ] 6. Checkpoint — Verify DesignConstants and formatting
+- [~] 6. Checkpoint — Verify DesignConstants and formatting
   - Build the project to confirm all DesignConstants references resolve and locale formatting compiles
   - Run `swift test` to ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.

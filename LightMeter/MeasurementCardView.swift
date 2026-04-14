@@ -8,16 +8,24 @@ struct MeasurementCardView: View {
     var interpretationTip: String = ""
     var comparisonText: String = ""
 
+    /// Formats a Double as a locale-aware integer string with thousands separators.
+    private static func formatValue(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: value)) ?? "\(Int(value))"
+    }
+
     var body: some View {
         VStack(spacing: DesignConstants.spacingXS) {
             // Kelvin reading
-            Text(String(format: "%.0f", kelvin))
+            Text(Self.formatValue(kelvin))
                 .font(.system(size: DesignConstants.fontSizeLG, weight: .medium))
             Text("K")
                 .font(.system(size: DesignConstants.fontSizeXXXS))
 
             // Lux reading
-            Text(String(format: "%.0f", lux))
+            Text(Self.formatValue(lux))
                 .font(.system(size: DesignConstants.fontSizeXXL, weight: .bold, design: .monospaced))
             Text("LUX")
                 .font(.system(size: DesignConstants.fontSizeXS))

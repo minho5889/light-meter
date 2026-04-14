@@ -30,7 +30,8 @@ let package = Package(
                 "LuxInterpreterTests.swift",
                 "KelvinInterpreterTests.swift",
                 "ComparisonGeneratorTests.swift",
-                "LuxRangeTests.swift"
+                "LuxRangeTests.swift",
+                "NumberFormattingTests.swift"
             ]
         )
     ]
