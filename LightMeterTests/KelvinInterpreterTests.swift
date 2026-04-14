@@ -65,6 +65,23 @@ struct KelvinInterpreterTests {
         }
     }
 
+    // MARK: - Property 1: Kelvin interpretation consistency (150+ iterations)
+    // Feature: 06-ui-architecture-cleanup, Property 1: Kelvin interpretation consistency
+
+    @Test func property_kelvinInterpretationConsistency() {
+        var rng = SystemRandomNumberGenerator()
+
+        for _ in 0..<200 {
+            let kelvin = Double.random(in: 1000...15000, using: &rng)
+            let result1 = KelvinInterpreter.interpret(kelvin: kelvin)
+            let result2 = KelvinInterpreter.interpret(kelvin: kelvin)
+
+            #expect(!result1.description.isEmpty, "Empty description for kelvin=\(kelvin)")
+            #expect(!result1.tip.isEmpty, "Empty tip for kelvin=\(kelvin)")
+            #expect(result1 == result2, "Non-deterministic result for kelvin=\(kelvin)")
+        }
+    }
+
     // MARK: - Representative value per range
 
     @Test func range_candlelight() {

@@ -85,7 +85,7 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
   - Ensure all existing tests pass (pure logic tests are unaffected by the refactor)
   - Ensure all tests pass, ask the user if questions arise.
 
-- [~] 9. Add property test for kelvin interpretation consistency
+- [x] 9. Add property test for kelvin interpretation consistency
   - Add a new test to `LightMeterTests/KelvinInterpreterTests.swift`
   - **Property 1: Kelvin interpretation consistency**
   - For 150+ random kelvin values in [1000, 15000], verify `KelvinInterpreter.interpret(kelvin:)` returns non-empty `description` and non-empty `tip`, and calling it twice with the same input produces the same output
