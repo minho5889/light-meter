@@ -1,6 +1,39 @@
 # Sunny Light Meter
 
+[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
+[![Platform](https://img.shields.io/badge/Platform-iOS%2017+-blue.svg)](https://developer.apple.com/ios/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 An iOS app that turns your iPhone camera into a real-time light measurement tool — showing brightness (lux) and color temperature (Kelvin) with plain-language interpretations.
+
+## Screenshots
+
+<!-- Add screenshots here after capturing from device -->
+| Live Measurement | Captured Reading | Temperature View |
+|:---:|:---:|:---:|
+| ![Live](screenshots/live.png) | ![Captured](screenshots/captured.png) | ![Temperature](screenshots/temperature.png) |
+
+> To add screenshots: create a `screenshots/` folder and drop in PNG files from your device.
+
+## Try It — TestFlight
+
+You can install the beta on your iPhone without Xcode:
+
+1. Install [TestFlight](https://apps.apple.com/app/testflight/id899247664) from the App Store
+2. Tap this invite link: **`[coming soon]`**
+3. Accept the invite and install Sunny Light Meter
+
+> **For the developer (distributing via TestFlight):**
+>
+> 1. Open `LightMeter.xcodeproj` in Xcode
+> 2. Select **Product → Archive** (requires a real device or "Any iOS Device" as target)
+> 3. In the Organizer window, click **Distribute App → TestFlight Internal Testing**
+> 4. Xcode uploads the build to App Store Connect
+> 5. Go to [App Store Connect](https://appstoreconnect.apple.com) → your app → **TestFlight** tab
+> 6. Add testers by email or create a **public link** anyone can use
+> 7. Paste the public link above to replace `[coming soon]`
+>
+> **Requirements:** An Apple Developer account ($99/year). Free accounts can't use TestFlight.
 
 ## Quick Start
 
@@ -66,3 +99,7 @@ The app follows a **deterministic split** pattern:
 - **Pure layer** — Calculators, interpreters, generators. No platform imports, fully testable via `swift test`.
 - **Effects layer** — `CameraManager` handles AVFoundation, device I/O.
 - **View layer** — SwiftUI views consume published values from the effects layer.
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
