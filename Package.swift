@@ -16,7 +16,8 @@ let package = Package(
                 "LuxInterpreter.swift",
                 "KelvinInterpreter.swift",
                 "ComparisonGenerator.swift",
-                "LuxRange.swift"
+                "LuxRange.swift",
+                "DesignConstants.swift"
             ]
         ),
         .testTarget(

@@ -44,8 +44,8 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
   - Run `swift test` to ensure all existing tests (`LuxInterpreterTests`, `ComparisonGeneratorTests`, etc.) still pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [~] 3. Create DesignConstants and add Sendable conformance
-  - [ ] 3.1 Create `LightMeter/DesignConstants.swift` with the `DesignConstants` enum
+- [x] 3. Create DesignConstants and add Sendable conformance
+  - [x] 3.1 Create `LightMeter/DesignConstants.swift` with the `DesignConstants` enum
     - Define static properties for font sizes: `fontSizeXXL` (48), `fontSizeXL` (22), `fontSizeLG` (20), `fontSizeMD` (18), `fontSizeSM` (16), `fontSizeXS` (14), `fontSizeXXS` (13), `fontSizeXXXS` (12)
     - Define static properties for spacing: `spacingLG` (40), `spacingMD` (24), `spacingSM` (12), `spacingXS` (8)
     - Define static properties for dimensions: `captureButtonOuter` (70), `captureButtonInner` (58), `toggleButtonSize` (44)
@@ -53,12 +53,12 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Add `"DesignConstants.swift"` to the SPM target sources in `Package.swift`
     - _Requirements: 4.1, 4.2, 4.3, 4.9_
 
-  - [ ] 3.2 Add explicit `Sendable` conformance to `InterpretationResult`
+  - [x] 3.2 Add explicit `Sendable` conformance to `InterpretationResult`
     - Change declaration to `struct InterpretationResult: Equatable, Sendable`
     - Verify `LuxInterpreter`, `KelvinInterpreter`, and `ComparisonGenerator` remain safe for Sendable (no mutable state, no reference-type properties — no code changes needed, just verify)
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 4. Update views with DesignConstants references
+- [~] 4. Update views with DesignConstants references
   - [ ] 4.1 Update `MeasurementCardView` to use DesignConstants
     - Replace hardcoded font sizes (48, 20, 14, 13, 12) with corresponding `DesignConstants` properties
     - Replace hardcoded spacing (8) with `DesignConstants.spacingXS`
