@@ -38,11 +38,11 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
   - Add the new file to the Xcode project's LightMeter target in `project.pbxproj`
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 4. Checkpoint — Verify new components compile
+- [x] 4. Checkpoint — Verify new components compile
   - Ensure the project builds successfully with the three new files alongside the existing `CameraManager.swift` (no views changed yet)
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Create CameraStateOverlay and make TemperatureCardView pure
+- [~] 5. Create CameraStateOverlay and make TemperatureCardView pure
   - [ ] 5.1 Create CameraStateOverlay shared view
     - Create `LightMeter/CameraStateOverlay.swift` as a generic `View` with `@ViewBuilder` content
     - Accept `permissionGranted: Bool`, `cameraError: String?`, `session: AVCaptureSession`
