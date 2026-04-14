@@ -51,11 +51,15 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return nil
         }
+        // Lock the pixel buffer to prevent AVFoundation from recycling it
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
+
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        let context = CIContext()
+        let context = CIContext(options: [.useSoftwareRenderer: false])
         guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
             return nil
         }
-        return UIImage(cgImage: cgImage)
+        return UIImage(cgImage: cgImage, scale: 1.0, orientation: .right)
     }
 }

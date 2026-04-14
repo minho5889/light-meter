@@ -19,15 +19,18 @@ final class CameraViewModel: ObservableObject {
     /// Exposes the AVCaptureSession for CameraPreviewView.
     nonisolated var session: AVCaptureSession { sessionManager.session }
 
+    /// Exposes the session queue so the preview layer can safely connect.
+    nonisolated var sessionQueue: DispatchQueue { sessionManager.sessionQueue }
+
     init() {
         sessionManager.onError = { [weak self] message in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.cameraError = message
             }
         }
 
         frameProvider.onFrameUpdate = { [weak self] luxValue, kelvinValue in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.lux = luxValue
                 self?.colorTemperature = kelvinValue
             }
@@ -36,12 +39,11 @@ final class CameraViewModel: ObservableObject {
 
     /// Requests camera permission. On grant, sets up the session.
     func requestPermission() {
-        AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-            Task { @MainActor in
-                self?.permissionGranted = granted
-                if granted {
-                    self?.setupSession()
-                }
+        Task {
+            let granted = await AVCaptureDevice.requestAccess(for: .video)
+            self.permissionGranted = granted
+            if granted {
+                self.setupSession()
             }
         }
     }
@@ -59,15 +61,23 @@ final class CameraViewModel: ObservableObject {
     /// Toggles between front and rear cameras.
     func toggleCamera() {
         sessionManager.toggleCamera { [weak self] newPosition in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.currentCameraPosition = newPosition
+                // Update frame provider with the new device so lux/kelvin reads
+                // come from the correct camera after switching
+                self?.frameProvider.captureDevice = self?.sessionManager.device
             }
         }
     }
 
-    /// Captures the current frame as a UIImage.
-    nonisolated func captureFrame() -> UIImage? {
-        frameProvider.captureFrame()
+    /// Captures the current frame as a UIImage asynchronously.
+    func captureFrameAsync() async -> UIImage? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async { [frameProvider] in
+                let image = frameProvider.captureFrame()
+                continuation.resume(returning: image)
+            }
+        }
     }
 
     // MARK: - Private
@@ -75,7 +85,7 @@ final class CameraViewModel: ObservableObject {
     private func setupSession() {
         let position = currentCameraPosition
         sessionManager.setupSession(position: position, delegate: frameProvider) { [weak self] in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.frameProvider.captureDevice = self?.sessionManager.device
                 self?.sessionReady = true
             }

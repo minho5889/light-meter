@@ -4,7 +4,7 @@
 /// session configuration, input/output setup, start, stop, and camera toggling.
 final class CameraSessionManager: @unchecked Sendable {
     private nonisolated(unsafe) let captureSession = AVCaptureSession()
-    private let sessionQueue = DispatchQueue(label: "camera.session.queue")
+    let sessionQueue = DispatchQueue(label: "camera.session.queue")
     private nonisolated(unsafe) var captureDevice: AVCaptureDevice?
     private nonisolated(unsafe) var currentPosition: AVCaptureDevice.Position = .back
 

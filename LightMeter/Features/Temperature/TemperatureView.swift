@@ -4,35 +4,23 @@ struct TemperatureView: View {
     @ObservedObject var cameraViewModel: CameraViewModel
 
     var body: some View {
-        NavigationStack {
-            CameraStateOverlay(
-                permissionGranted: cameraViewModel.permissionGranted,
-                cameraError: cameraViewModel.cameraError,
-                session: cameraViewModel.session,
-                sessionReady: cameraViewModel.sessionReady
-            ) {
-                VStack {
-                    HStack {
-                        Spacer()
-                        NavigationLink(destination: PlaceholderView(title: "Settings", subtitle: "Coming Soon")) {
-                            Image(systemName: "gearshape")
-                                .font(.system(size: 22, weight: .medium))
-                                .foregroundColor(.white)
-                                .padding(12)
-                        }
-                        .accessibilityLabel("Settings")
-                    }
-                    .padding(.horizontal)
+        ZStack {
+            // Camera preview — always in the view tree
+            CameraPreviewView(session: cameraViewModel.session)
+                .ignoresSafeArea()
 
-                    TemperatureCardView(
-                        kelvin: cameraViewModel.colorTemperature,
-                        interpretationDescription: KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature).description,
-                        interpretationTip: KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature).tip
-                    )
-                    .padding(.horizontal)
+            // Content overlay
+            VStack {
+                Spacer().frame(height: 8)
 
-                    Spacer()
-                }
+                TemperatureCardView(
+                    kelvin: cameraViewModel.colorTemperature,
+                    interpretationDescription: KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature).description,
+                    interpretationTip: KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature).tip
+                )
+                .padding(.horizontal)
+
+                Spacer()
             }
         }
     }

@@ -5,13 +5,12 @@ struct CameraStateOverlay<Content: View>: View {
     let permissionGranted: Bool
     let cameraError: String?
     let session: AVCaptureSession
-    let sessionReady: Bool
     @ViewBuilder let content: () -> Content
 
     var body: some View {
         ZStack {
             // Background layer
-            if permissionGranted && sessionReady {
+            if permissionGranted {
                 CameraPreviewView(session: session)
                     .ignoresSafeArea()
             } else {
