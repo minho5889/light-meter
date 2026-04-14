@@ -58,31 +58,31 @@ Address six code review items (P1 #7, P2 #8, P2 #10, P2 #11, P2 #12, P3 #13) acr
     - Verify `LuxInterpreter`, `KelvinInterpreter`, and `ComparisonGenerator` remain safe for Sendable (no mutable state, no reference-type properties — no code changes needed, just verify)
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [~] 4. Update views with DesignConstants references
-  - [ ] 4.1 Update `MeasurementCardView` to use DesignConstants
+- [x] 4. Update views with DesignConstants references
+  - [x] 4.1 Update `MeasurementCardView` to use DesignConstants
     - Replace hardcoded font sizes (48, 20, 14, 13, 12) with corresponding `DesignConstants` properties
     - Replace hardcoded spacing (8) with `DesignConstants.spacingXS`
     - _Requirements: 4.4_
 
-  - [ ] 4.2 Update `TemperatureCardView` to use DesignConstants
+  - [x] 4.2 Update `TemperatureCardView` to use DesignConstants
     - Replace hardcoded font sizes (48, 18, 14) with corresponding `DesignConstants` properties
     - Replace hardcoded spacing (8) with `DesignConstants.spacingXS`
     - _Requirements: 4.5_
 
-  - [ ] 4.3 Update `MeasurementView` to use DesignConstants
+  - [x] 4.3 Update `MeasurementView` to use DesignConstants
     - Replace hardcoded font sizes (22), padding (12, 24, 40), and button dimensions (70, 58, 44) with `DesignConstants` properties
     - _Requirements: 4.6_
 
-  - [ ] 4.4 Update `PlaceholderView` to use DesignConstants
+  - [x] 4.4 Update `PlaceholderView` to use DesignConstants
     - Replace hardcoded font sizes (24, 16) and spacing (12) with `DesignConstants` properties
     - Note: 24 is not in DesignConstants — use `DesignConstants.spacingMD` (24) for spacing; for the 24pt font, add or use the closest match
     - _Requirements: 4.7_
 
-  - [ ] 4.5 Update `CameraStateOverlay` to use DesignConstants
+  - [x] 4.5 Update `CameraStateOverlay` to use DesignConstants
     - Replace hardcoded font size (16) with `DesignConstants.fontSizeSM`
     - _Requirements: 4.8_
 
-- [ ] 5. Add locale-aware number formatting to card views
+- [~] 5. Add locale-aware number formatting to card views
   - [ ] 5.1 Add locale-aware formatting to `MeasurementCardView`
     - Replace `String(format: "%.0f", lux)` and `String(format: "%.0f", kelvin)` with `NumberFormatter` using `.decimal` style and `maximumFractionDigits = 0`
     - Create a private static helper or computed property for the formatter

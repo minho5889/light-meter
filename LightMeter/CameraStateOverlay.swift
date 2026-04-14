@@ -22,7 +22,7 @@ struct CameraStateOverlay<Content: View>: View {
                 VStack {
                     Spacer()
                     Text("Camera access is required to measure light.\nPlease enable it in Settings.")
-                        .font(.system(size: 16))
+                        .font(.system(size: DesignConstants.fontSizeSM))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .padding()
@@ -32,7 +32,7 @@ struct CameraStateOverlay<Content: View>: View {
                 VStack {
                     Spacer()
                     Text(error)
-                        .font(.system(size: 16))
+                        .font(.system(size: DesignConstants.fontSizeSM))
                         .foregroundColor(.red)
                         .multilineTextAlignment(.center)
                         .padding()

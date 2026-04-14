@@ -8,12 +8,12 @@ struct PlaceholderView: View {
         ZStack {
             Color.black.ignoresSafeArea()
 
-            VStack(spacing: 12) {
+            VStack(spacing: DesignConstants.spacingSM) {
                 Text(title)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: DesignConstants.fontSizeTitle, weight: .bold))
                     .foregroundColor(.white)
                 Text(subtitle)
-                    .font(.system(size: 16))
+                    .font(.system(size: DesignConstants.fontSizeSM))
                     .foregroundColor(.gray)
             }
         }

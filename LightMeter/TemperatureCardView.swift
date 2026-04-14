@@ -6,22 +6,22 @@ struct TemperatureCardView: View {
     let interpretationTip: String
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignConstants.spacingXS) {
             // Kelvin reading
             Text(String(format: "%.0f", kelvin))
-                .font(.system(size: 48, weight: .bold, design: .monospaced))
+                .font(.system(size: DesignConstants.fontSizeXXL, weight: .bold, design: .monospaced))
             Text("K")
-                .font(.system(size: 14))
+                .font(.system(size: DesignConstants.fontSizeXS))
 
             Divider()
 
             // Color tone label
             Text(interpretationDescription)
-                .font(.system(size: 18, weight: .semibold))
+                .font(.system(size: DesignConstants.fontSizeMD, weight: .semibold))
 
             // Recommended environment
             Text(interpretationTip)
-                .font(.system(size: 14))
+                .font(.system(size: DesignConstants.fontSizeXS))
                 .multilineTextAlignment(.center)
         }
         .foregroundColor(.white)

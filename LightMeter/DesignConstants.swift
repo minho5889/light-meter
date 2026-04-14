@@ -4,6 +4,7 @@ enum DesignConstants {
     // Font sizes
     static let fontSizeXXL: CGFloat = 48
     static let fontSizeXL: CGFloat = 22
+    static let fontSizeTitle: CGFloat = 24
     static let fontSizeLG: CGFloat = 20
     static let fontSizeMD: CGFloat = 18
     static let fontSizeSM: CGFloat = 16

@@ -26,9 +26,9 @@ struct MeasurementView: View {
                     HStack {
                         Button(action: returnToLiveMode) {
                             Image(systemName: "arrow.left")
-                                .font(.system(size: 22, weight: .medium))
+                                .font(.system(size: DesignConstants.fontSizeXL, weight: .medium))
                                 .foregroundColor(.white)
-                                .padding(12)
+                                .padding(DesignConstants.spacingSM)
                         }
                         Spacer()
                     }
@@ -58,9 +58,9 @@ struct MeasurementView: View {
                             Spacer()
                             NavigationLink(destination: PlaceholderView(title: "Settings", subtitle: "Coming Soon")) {
                                 Image(systemName: "gearshape")
-                                    .font(.system(size: 22, weight: .medium))
+                                    .font(.system(size: DesignConstants.fontSizeXL, weight: .medium))
                                     .foregroundColor(.white)
-                                    .padding(12)
+                                    .padding(DesignConstants.spacingSM)
                             }
                         }
                         .padding(.horizontal)
@@ -77,28 +77,28 @@ struct MeasurementView: View {
 
                         Spacer()
 
-                        HStack(spacing: 24) {
+                        HStack(spacing: DesignConstants.spacingMD) {
                             Button(action: capture) {
                                 Circle()
                                     .strokeBorder(Color.white, lineWidth: 3)
-                                    .frame(width: 70, height: 70)
+                                    .frame(width: DesignConstants.captureButtonOuter, height: DesignConstants.captureButtonOuter)
                                     .overlay(
                                         Circle()
                                             .fill(Color.white.opacity(0.3))
-                                            .frame(width: 58, height: 58)
+                                            .frame(width: DesignConstants.captureButtonInner, height: DesignConstants.captureButtonInner)
                                     )
                             }
 
                             Button(action: { cameraViewModel.toggleCamera() }) {
                                 Image(systemName: "camera.rotate")
-                                    .font(.system(size: 22, weight: .medium))
+                                    .font(.system(size: DesignConstants.fontSizeXL, weight: .medium))
                                     .foregroundColor(.white)
-                                    .frame(width: 44, height: 44)
+                                    .frame(width: DesignConstants.toggleButtonSize, height: DesignConstants.toggleButtonSize)
                                     .background(Color.white.opacity(0.2))
                                     .clipShape(Circle())
                             }
                         }
-                        .padding(.bottom, 40)
+                        .padding(.bottom, DesignConstants.spacingLG)
                     }
                 }
             }
