@@ -11,6 +11,7 @@ final class CameraViewModel: ObservableObject {
     @Published var permissionGranted: Bool = false
     @Published var cameraError: String? = nil
     @Published var currentCameraPosition: AVCaptureDevice.Position = .back
+    @Published var sessionReady: Bool = false
 
     private let sessionManager = CameraSessionManager()
     private let frameProvider = CameraFrameProvider()
@@ -73,7 +74,11 @@ final class CameraViewModel: ObservableObject {
 
     private func setupSession() {
         let position = currentCameraPosition
-        sessionManager.setupSession(position: position, delegate: frameProvider)
-        frameProvider.captureDevice = sessionManager.device
+        sessionManager.setupSession(position: position, delegate: frameProvider) { [weak self] in
+            Task { @MainActor in
+                self?.frameProvider.captureDevice = self?.sessionManager.device
+                self?.sessionReady = true
+            }
+        }
     }
 }

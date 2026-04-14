@@ -8,7 +8,8 @@ struct TemperatureView: View {
             CameraStateOverlay(
                 permissionGranted: cameraViewModel.permissionGranted,
                 cameraError: cameraViewModel.cameraError,
-                session: cameraViewModel.session
+                session: cameraViewModel.session,
+                sessionReady: cameraViewModel.sessionReady
             ) {
                 VStack {
                     HStack {

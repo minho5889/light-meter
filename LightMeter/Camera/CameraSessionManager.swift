@@ -18,7 +18,8 @@ final class CameraSessionManager: @unchecked Sendable {
     /// Sets the provided delegate on the video data output.
     func setupSession(
         position: AVCaptureDevice.Position,
-        delegate: AVCaptureVideoDataOutputSampleBufferDelegate
+        delegate: AVCaptureVideoDataOutputSampleBufferDelegate,
+        completion: (@Sendable () -> Void)? = nil
     ) {
         sessionQueue.async { [weak self] in
             guard let self = self else { return }
@@ -63,6 +64,7 @@ final class CameraSessionManager: @unchecked Sendable {
             self.captureSession.commitConfiguration()
 
             self.startSessionOnQueue()
+            completion?()
         }
     }
 
