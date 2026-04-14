@@ -16,7 +16,7 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
   - Add the new file to the Xcode project's LightMeter target in `project.pbxproj`
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-- [ ] 2. Create CameraFrameProvider (effects layer)
+- [x] 2. Create CameraFrameProvider (effects layer)
   - Create `LightMeter/CameraFrameProvider.swift` as a `final class: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate`
   - Extract sample buffer delegation from `CameraManager`: `captureOutput(_:didOutput:from:)` implementation
   - Store latest `CMSampleBuffer`, implement `captureFrame() -> UIImage?`
