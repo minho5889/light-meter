@@ -25,7 +25,7 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
   - Add the new file to the Xcode project's LightMeter target in `project.pbxproj`
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 3. Create CameraViewModel (glue layer)
+- [x] 3. Create CameraViewModel (glue layer)
   - Create `LightMeter/CameraViewModel.swift` as `@MainActor final class CameraViewModel: ObservableObject`
   - Declare `@Published` properties: `lux`, `colorTemperature`, `permissionGranted`, `cameraError`, `currentCameraPosition`
   - Instantiate `CameraSessionManager` and `CameraFrameProvider` internally

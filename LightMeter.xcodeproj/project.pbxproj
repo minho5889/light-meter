@@ -10,6 +10,7 @@
 		0841575370CAEC5BFA1F69EC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1A0B7E0863FAA2AF8ECC0E /* CameraManager.swift */; };
 		A4B5C6D7E8F90A1B2C3D4E5F /* CameraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C90A1B2C3D4E5F /* CameraSessionManager.swift */; };
 		B5C6D7E8F9A01B2C3D4E5F6A /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F6A7B8C9D01B2C3D4E5F6A /* CameraFrameProvider.swift */; };
+		C6D7E8F9A0B12C3D4E5F6A7B /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7B8C9D0E12C3D4E5F6A7B /* CameraViewModel.swift */; };
 		0D21BCAEA1FD76CDC693B9BD /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1BE82D8135B3A3D5F03D0B /* KelvinInterpreter.swift */; };
 		3C687C72B159D630C3B222D7 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4687E039089D16FCEB4F5019 /* LuxCalculator.swift */; };
 		41D25DEB496225D5B5473416 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3973EA48E143A8AE4AA53521 /* LuxCalculatorTests.swift */; };
@@ -45,6 +46,7 @@
 		05CC5449066C71C1FEB3A67E /* LightMeter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LightMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E5F6A7B8C90A1B2C3D4E5F /* CameraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionManager.swift; sourceTree = "<group>"; };
 		E5F6A7B8C9D01B2C3D4E5F6A /* CameraFrameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFrameProvider.swift; sourceTree = "<group>"; };
+		F6A7B8C9D0E12C3D4E5F6A7B /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		2A2993900ED27F21213C4079 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		3973EA48E143A8AE4AA53521 /* LuxCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculatorTests.swift; sourceTree = "<group>"; };
 		4687E039089D16FCEB4F5019 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				8A1A0B7E0863FAA2AF8ECC0E /* CameraManager.swift */,
 				2A2993900ED27F21213C4079 /* CameraPreviewView.swift */,
 				E5F6A7B8C9D01B2C3D4E5F6A /* CameraFrameProvider.swift */,
+				F6A7B8C9D0E12C3D4E5F6A7B /* CameraViewModel.swift */,
 				D4E5F6A7B8C90A1B2C3D4E5F /* CameraSessionManager.swift */,
 				B9F19EDB2FEED4C44DF0BFCC /* ColorTemperatureCalculator.swift */,
 				B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */,
@@ -216,6 +219,7 @@
 				0841575370CAEC5BFA1F69EC /* CameraManager.swift in Sources */,
 				9231773F947DC0148F1C1B3D /* CameraPreviewView.swift in Sources */,
 				B5C6D7E8F9A01B2C3D4E5F6A /* CameraFrameProvider.swift in Sources */,
+				C6D7E8F9A0B12C3D4E5F6A7B /* CameraViewModel.swift in Sources */,
 				A4B5C6D7E8F90A1B2C3D4E5F /* CameraSessionManager.swift in Sources */,
 				C739BF2C2E94FBFB8A9F85DA /* ColorTemperatureCalculator.swift in Sources */,
 				EF90B2A90B4FD002ED55E24A /* ComparisonGenerator.swift in Sources */,
