@@ -36,7 +36,11 @@ struct TemperatureView: View {
                         .padding()
                     Spacer()
                 } else {
-                    TemperatureCardView(kelvin: cameraManager.colorTemperature)
+                    TemperatureCardView(
+                        kelvin: cameraManager.colorTemperature,
+                        interpretationDescription: KelvinInterpreter.interpret(kelvin: cameraManager.colorTemperature).description,
+                        interpretationTip: KelvinInterpreter.interpret(kelvin: cameraManager.colorTemperature).tip
+                    )
                         .padding(.horizontal)
 
                     Spacer()

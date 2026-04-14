@@ -2,10 +2,8 @@ import SwiftUI
 
 struct TemperatureCardView: View {
     let kelvin: Double
-
-    private var interpretation: InterpretationResult {
-        KelvinInterpreter.interpret(kelvin: kelvin)
-    }
+    let interpretationDescription: String
+    let interpretationTip: String
 
     var body: some View {
         VStack(spacing: 8) {
@@ -18,11 +16,11 @@ struct TemperatureCardView: View {
             Divider()
 
             // Color tone label
-            Text(interpretation.description)
+            Text(interpretationDescription)
                 .font(.system(size: 18, weight: .semibold))
 
             // Recommended environment
-            Text(interpretation.tip)
+            Text(interpretationTip)
                 .font(.system(size: 14))
                 .multilineTextAlignment(.center)
         }

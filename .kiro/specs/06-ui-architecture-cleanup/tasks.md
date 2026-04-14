@@ -42,20 +42,20 @@ Refactor the monolithic `CameraManager` into three focused components (`CameraSe
   - Ensure the project builds successfully with the three new files alongside the existing `CameraManager.swift` (no views changed yet)
   - Ensure all tests pass, ask the user if questions arise.
 
-- [~] 5. Create CameraStateOverlay and make TemperatureCardView pure
-  - [ ] 5.1 Create CameraStateOverlay shared view
+- [x] 5. Create CameraStateOverlay and make TemperatureCardView pure
+  - [x] 5.1 Create CameraStateOverlay shared view
     - Create `LightMeter/CameraStateOverlay.swift` as a generic `View` with `@ViewBuilder` content
     - Accept `permissionGranted: Bool`, `cameraError: String?`, `session: AVCaptureSession`
     - Render `CameraPreviewView` background when permitted, black when not, permission message when denied, red error text when error exists, and `content()` when all clear
     - Add the new file to the Xcode project's LightMeter target in `project.pbxproj`
     - _Requirements: 4.1, 4.2, 4.3, 4.6_
-  - [ ] 5.2 Make TemperatureCardView a pure display component
+  - [x] 5.2 Make TemperatureCardView a pure display component
     - Replace the `private var interpretation` computed property with two new input properties: `interpretationDescription: String` and `interpretationTip: String`
     - Remove the `KelvinInterpreter.interpret(kelvin:)` call from the view body
     - Update the body to use the new string properties directly
     - _Requirements: 5.1, 5.2_
 
-- [ ] 6. Migrate views to CameraViewModel and CameraStateOverlay
+- [~] 6. Migrate views to CameraViewModel and CameraStateOverlay
   - [ ] 6.1 Migrate ContentView
     - Replace `@StateObject private var cameraManager = CameraManager()` with `@StateObject private var cameraViewModel = CameraViewModel()`
     - Pass `cameraViewModel` to `MeasurementView` and `TemperatureView`

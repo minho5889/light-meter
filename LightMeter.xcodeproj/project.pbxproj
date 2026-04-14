@@ -30,6 +30,7 @@
 		A1B2C3D4E5F60718293A4B5C /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E2F3A4B5C60718293A4B5C /* PlaceholderView.swift */; };
 		B2C3D4E5F6A70829314B5C6D /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F3A4B5C6D70829314B5C6D /* TemperatureCardView.swift */; };
 		C3D4E5F6A7B8093A425C6D7E /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A4B5C6D7E8093A425C6D7E /* TemperatureView.swift */; };
+		D7E8F9A0B1C23D4E5F6A7B8C /* CameraStateOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B8C9D0E1F23D4E5F6A7B8C /* CameraStateOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		E2F3A4B5C6D70829314B5C6D /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
 		F3A4B5C6D7E8093A425C6D7E /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		F8EDBB228CB8DBD841F1EDB1 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
+		A7B8C9D0E1F23D4E5F6A7B8C /* CameraStateOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStateOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -97,6 +99,7 @@
 				E5F6A7B8C9D01B2C3D4E5F6A /* CameraFrameProvider.swift */,
 				F6A7B8C9D0E12C3D4E5F6A7B /* CameraViewModel.swift */,
 				D4E5F6A7B8C90A1B2C3D4E5F /* CameraSessionManager.swift */,
+				A7B8C9D0E1F23D4E5F6A7B8C /* CameraStateOverlay.swift */,
 				B9F19EDB2FEED4C44DF0BFCC /* ColorTemperatureCalculator.swift */,
 				B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */,
 				CB9D9057780326CEC3398958 /* ContentView.swift */,
@@ -221,6 +224,7 @@
 				B5C6D7E8F9A01B2C3D4E5F6A /* CameraFrameProvider.swift in Sources */,
 				C6D7E8F9A0B12C3D4E5F6A7B /* CameraViewModel.swift in Sources */,
 				A4B5C6D7E8F90A1B2C3D4E5F /* CameraSessionManager.swift in Sources */,
+				D7E8F9A0B1C23D4E5F6A7B8C /* CameraStateOverlay.swift in Sources */,
 				C739BF2C2E94FBFB8A9F85DA /* ColorTemperatureCalculator.swift in Sources */,
 				EF90B2A90B4FD002ED55E24A /* ComparisonGenerator.swift in Sources */,
 				BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */,
