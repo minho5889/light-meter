@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 An iOS app that turns your iPhone camera into a real-time light measurement tool — showing brightness (lux) and color temperature (Kelvin) with plain-language interpretations.
-
+s
 ## Screenshots
 
 <!-- Add screenshots here after capturing from device -->
