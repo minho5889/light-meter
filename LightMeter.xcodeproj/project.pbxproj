@@ -7,33 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0ACBBDBFD5BB91CFAD55BE98 /* CameraStateOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B60DBF4F724A5E02D46679 /* CameraStateOverlay.swift */; };
-		0D21BCAEA1FD76CDC693B9BD /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1BE82D8135B3A3D5F03D0B /* KelvinInterpreter.swift */; };
-		2253A1E71F6ADA45EB0C0B6A /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9379FC22EAF8708260EA989C /* TemperatureCardView.swift */; };
-		3779241FE6C85E05EA1F0F88 /* CameraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F8C8E9DC2706EAE6ECCF6 /* CameraSessionManager.swift */; };
-		37C5890FED9F37B88D1D87D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C28FBBB1B3F7F8B70D46E /* LuxRangeTests.swift */; };
-		3C687C72B159D630C3B222D7 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4687E039089D16FCEB4F5019 /* LuxCalculator.swift */; };
-		3C9237B341D00E92C8708ED7 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A95717E970ECB0AF732459 /* NumberFormattingTests.swift */; };
-		41D25DEB496225D5B5473416 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3973EA48E143A8AE4AA53521 /* LuxCalculatorTests.swift */; };
-		63EC2228ABE45A534BA86BC1 /* KelvinInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C2293E6CE9B726313AD7BF /* KelvinInterpreterTests.swift */; };
-		644FC996462B69769FDF56C7 /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E022296FD140A31589953D77 /* MeasurementView.swift */; };
-		78A11B8586BF7D7106E38400 /* LuxRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1E441B6ED7B091C25BF3C /* LuxRange.swift */; };
-		84D974D581009B23E9D446EC /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBA789FCB7FD8998F10FA69 /* MeasurementCardView.swift */; };
-		8FC3BD26F560A5A894B4F705 /* DesignConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715A515A1E02F6DDD515B57F /* DesignConstants.swift */; };
-		9231773F947DC0148F1C1B3D /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2993900ED27F21213C4079 /* CameraPreviewView.swift */; };
-		9516AD09239B4C0186D28288 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B73B7F348E65D3B9179261 /* LuxInterpreterTests.swift */; };
-		A69BF3E45E32359759DA0C67 /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F4D1A16B10F170A3766720 /* TemperatureView.swift */; };
-		BB433AAD1145863E00C84C8B /* InterpretationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EDBB228CB8DBD841F1EDB1 /* InterpretationResult.swift */; };
+		07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141E153718B1A66906CF6AA8 /* LuxCalculator.swift */; };
+		09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */; };
+		10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */; };
+		1242467572831488428302D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */; };
+		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
+		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
+		3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */; };
+		4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */; };
+		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
+		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
+		812876F0AE08889F28F29768 /* LuxRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A18F24B9F641399B19318EE /* LuxRange.swift */; };
+		839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */; };
+		8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */; };
+		947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */; };
+		9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791FD5DC633AA4927A763E7D /* MeasurementView.swift */; };
+		A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */; };
+		B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */; };
+		B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */; };
 		BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9D9057780326CEC3398958 /* ContentView.swift */; };
-		C739BF2C2E94FBFB8A9F85DA /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F19EDB2FEED4C44DF0BFCC /* ColorTemperatureCalculator.swift */; };
-		CA97CD19BDFA8F3C24196A71 /* ColorTemperatureCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663AE249FD92BFCB0C0D102D /* ColorTemperatureCalculatorTests.swift */; };
-		D2651DE769D315049FA08B18 /* ComparisonGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B947A3A0DA0144946939E2E7 /* ComparisonGeneratorTests.swift */; };
-		DE2FD56039BAF0385E6FAFA2 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378E52F1591BF0FD80AE9A8 /* LuxInterpreter.swift */; };
-		E161E93B47E5077DBA9DAE59 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A42C395CE450C7090673D0 /* CameraViewModel.swift */; };
+		C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */; };
+		CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */; };
+		D8287656B2497407BF3354EA /* CameraStateOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */; };
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
-		E2D33D370C0FE58AD9D5159F /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6D7B2FDFACC29B69EB29 /* CameraFrameProvider.swift */; };
-		E7D09D43EB907526CEE4AC04 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC900E0F99BE43B5174126A4 /* PlaceholderView.swift */; };
-		EF90B2A90B4FD002ED55E24A /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */; };
+		E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */; };
+		E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */; };
+		ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE078BD017B4B9258C10AED6 /* TemperatureView.swift */; };
+		EF016392DE99310E0D6A8CC7 /* CameraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346B9CCF989412C63E75D854 /* CameraSessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,37 +48,102 @@
 
 /* Begin PBXFileReference section */
 		05CC5449066C71C1FEB3A67E /* LightMeter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LightMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		10B60DBF4F724A5E02D46679 /* CameraStateOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStateOverlay.swift; sourceTree = "<group>"; };
-		222C28FBBB1B3F7F8B70D46E /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
-		226A6D7B2FDFACC29B69EB29 /* CameraFrameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFrameProvider.swift; sourceTree = "<group>"; };
-		2A2993900ED27F21213C4079 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
-		36A42C395CE450C7090673D0 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
-		3973EA48E143A8AE4AA53521 /* LuxCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculatorTests.swift; sourceTree = "<group>"; };
-		43C1E441B6ED7B091C25BF3C /* LuxRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRange.swift; sourceTree = "<group>"; };
-		4687E039089D16FCEB4F5019 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
+		0A18F24B9F641399B19318EE /* LuxRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRange.swift; sourceTree = "<group>"; };
+		141E153718B1A66906CF6AA8 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
+		16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
+		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		346B9CCF989412C63E75D854 /* CameraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionManager.swift; sourceTree = "<group>"; };
+		4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculator.swift; sourceTree = "<group>"; };
 		4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMeterApp.swift; sourceTree = "<group>"; };
-		5A8F8C8E9DC2706EAE6ECCF6 /* CameraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionManager.swift; sourceTree = "<group>"; };
+		503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStateOverlay.swift; sourceTree = "<group>"; };
+		522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGenerator.swift; sourceTree = "<group>"; };
 		62BF30A70BBBF1C7BEB3CCDF /* LightMeterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LightMeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		63B73B7F348E65D3B9179261 /* LuxInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreterTests.swift; sourceTree = "<group>"; };
-		663AE249FD92BFCB0C0D102D /* ColorTemperatureCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculatorTests.swift; sourceTree = "<group>"; };
-		715A515A1E02F6DDD515B57F /* DesignConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConstants.swift; sourceTree = "<group>"; };
-		7378E52F1591BF0FD80AE9A8 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
-		76A95717E970ECB0AF732459 /* NumberFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormattingTests.swift; sourceTree = "<group>"; };
-		9379FC22EAF8708260EA989C /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
-		9BBA789FCB7FD8998F10FA69 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
-		A5F4D1A16B10F170A3766720 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
-		B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGenerator.swift; sourceTree = "<group>"; };
-		B947A3A0DA0144946939E2E7 /* ComparisonGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGeneratorTests.swift; sourceTree = "<group>"; };
-		B9F19EDB2FEED4C44DF0BFCC /* ColorTemperatureCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculator.swift; sourceTree = "<group>"; };
-		BE1BE82D8135B3A3D5F03D0B /* KelvinInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreter.swift; sourceTree = "<group>"; };
-		C4C2293E6CE9B726313AD7BF /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
+		6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGeneratorTests.swift; sourceTree = "<group>"; };
+		743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreter.swift; sourceTree = "<group>"; };
+		746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculatorTests.swift; sourceTree = "<group>"; };
+		751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormattingTests.swift; sourceTree = "<group>"; };
+		791FD5DC633AA4927A763E7D /* MeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementView.swift; sourceTree = "<group>"; };
+		85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
+		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
+		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
+		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
+		AE078BD017B4B9258C10AED6 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		E022296FD140A31589953D77 /* MeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementView.swift; sourceTree = "<group>"; };
-		EC900E0F99BE43B5174126A4 /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
-		F8EDBB228CB8DBD841F1EDB1 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
+		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
+		D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConstants.swift; sourceTree = "<group>"; };
+		D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
+		E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFrameProvider.swift; sourceTree = "<group>"; };
+		F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculatorTests.swift; sourceTree = "<group>"; };
+		F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		32974A5A9A5D3E12B3ECA87F /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */,
+				346B9CCF989412C63E75D854 /* CameraSessionManager.swift */,
+				2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		38436FC0864DE3039C6C2F9C /* SharedViews */ = {
+			isa = PBXGroup;
+			children = (
+				522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */,
+				503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */,
+				16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */,
+			);
+			path = SharedViews;
+			sourceTree = "<group>";
+		};
+		45614BB61731F5487CD71B3C /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */,
+				6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */,
+				D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */,
+				746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */,
+				F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */,
+				D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */,
+			);
+			path = Logic;
+			sourceTree = "<group>";
+		};
+		624F3B22565E9E78DA1D7F34 /* Measurement */ = {
+			isa = PBXGroup;
+			children = (
+				9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */,
+				791FD5DC633AA4927A763E7D /* MeasurementView.swift */,
+			);
+			path = Measurement;
+			sourceTree = "<group>";
+		};
+		639E81B2142A4BC9BA6C21C0 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */,
+				593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */,
+				8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */,
+				743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */,
+				141E153718B1A66906CF6AA8 /* LuxCalculator.swift */,
+				85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */,
+				0A18F24B9F641399B19318EE /* LuxRange.swift */,
+			);
+			path = Logic;
+			sourceTree = "<group>";
+		};
+		67954F2B2EE86C256D1ECF80 /* Temperature */ = {
+			isa = PBXGroup;
+			children = (
+				97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */,
+				AE078BD017B4B9258C10AED6 /* TemperatureView.swift */,
+			);
+			path = Temperature;
+			sourceTree = "<group>";
+		};
 		8B80E2A29F15E5BA8ABE2342 = {
 			isa = PBXGroup;
 			children = (
@@ -97,45 +162,52 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		942721F7AC411A115597C565 /* Formatting */ = {
+			isa = PBXGroup;
+			children = (
+				751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */,
+			);
+			path = Formatting;
+			sourceTree = "<group>";
+		};
 		A01057C35C248096046CD8A8 /* LightMeter */ = {
 			isa = PBXGroup;
 			children = (
-				226A6D7B2FDFACC29B69EB29 /* CameraFrameProvider.swift */,
-				2A2993900ED27F21213C4079 /* CameraPreviewView.swift */,
-				5A8F8C8E9DC2706EAE6ECCF6 /* CameraSessionManager.swift */,
-				10B60DBF4F724A5E02D46679 /* CameraStateOverlay.swift */,
-				36A42C395CE450C7090673D0 /* CameraViewModel.swift */,
-				B9F19EDB2FEED4C44DF0BFCC /* ColorTemperatureCalculator.swift */,
-				B638BAE43F2554CE69D05F45 /* ComparisonGenerator.swift */,
 				CB9D9057780326CEC3398958 /* ContentView.swift */,
-				715A515A1E02F6DDD515B57F /* DesignConstants.swift */,
-				F8EDBB228CB8DBD841F1EDB1 /* InterpretationResult.swift */,
-				BE1BE82D8135B3A3D5F03D0B /* KelvinInterpreter.swift */,
 				4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */,
-				4687E039089D16FCEB4F5019 /* LuxCalculator.swift */,
-				7378E52F1591BF0FD80AE9A8 /* LuxInterpreter.swift */,
-				43C1E441B6ED7B091C25BF3C /* LuxRange.swift */,
-				9BBA789FCB7FD8998F10FA69 /* MeasurementCardView.swift */,
-				E022296FD140A31589953D77 /* MeasurementView.swift */,
-				EC900E0F99BE43B5174126A4 /* PlaceholderView.swift */,
-				9379FC22EAF8708260EA989C /* TemperatureCardView.swift */,
-				A5F4D1A16B10F170A3766720 /* TemperatureView.swift */,
+				32974A5A9A5D3E12B3ECA87F /* Camera */,
+				A7DBF172D43D691786A561E4 /* Design */,
+				F067EEC0AA233D4F9BAF7E50 /* Features */,
+				639E81B2142A4BC9BA6C21C0 /* Logic */,
+				38436FC0864DE3039C6C2F9C /* SharedViews */,
 			);
 			path = LightMeter;
+			sourceTree = "<group>";
+		};
+		A7DBF172D43D691786A561E4 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 		CD1D012EECEBAE3B7ACBEE87 /* LightMeterTests */ = {
 			isa = PBXGroup;
 			children = (
-				663AE249FD92BFCB0C0D102D /* ColorTemperatureCalculatorTests.swift */,
-				B947A3A0DA0144946939E2E7 /* ComparisonGeneratorTests.swift */,
-				C4C2293E6CE9B726313AD7BF /* KelvinInterpreterTests.swift */,
-				3973EA48E143A8AE4AA53521 /* LuxCalculatorTests.swift */,
-				63B73B7F348E65D3B9179261 /* LuxInterpreterTests.swift */,
-				222C28FBBB1B3F7F8B70D46E /* LuxRangeTests.swift */,
-				76A95717E970ECB0AF732459 /* NumberFormattingTests.swift */,
+				942721F7AC411A115597C565 /* Formatting */,
+				45614BB61731F5487CD71B3C /* Logic */,
 			);
 			path = LightMeterTests;
+			sourceTree = "<group>";
+		};
+		F067EEC0AA233D4F9BAF7E50 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				624F3B22565E9E78DA1D7F34 /* Measurement */,
+				67954F2B2EE86C256D1ECF80 /* Temperature */,
+			);
+			path = Features;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,13 +288,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA97CD19BDFA8F3C24196A71 /* ColorTemperatureCalculatorTests.swift in Sources */,
-				D2651DE769D315049FA08B18 /* ComparisonGeneratorTests.swift in Sources */,
-				63EC2228ABE45A534BA86BC1 /* KelvinInterpreterTests.swift in Sources */,
-				41D25DEB496225D5B5473416 /* LuxCalculatorTests.swift in Sources */,
-				9516AD09239B4C0186D28288 /* LuxInterpreterTests.swift in Sources */,
-				37C5890FED9F37B88D1D87D0 /* LuxRangeTests.swift in Sources */,
-				3C9237B341D00E92C8708ED7 /* NumberFormattingTests.swift in Sources */,
+				09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */,
+				B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */,
+				839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */,
+				947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */,
+				61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */,
+				1242467572831488428302D0 /* LuxRangeTests.swift in Sources */,
+				E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,26 +302,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2D33D370C0FE58AD9D5159F /* CameraFrameProvider.swift in Sources */,
-				9231773F947DC0148F1C1B3D /* CameraPreviewView.swift in Sources */,
-				3779241FE6C85E05EA1F0F88 /* CameraSessionManager.swift in Sources */,
-				0ACBBDBFD5BB91CFAD55BE98 /* CameraStateOverlay.swift in Sources */,
-				E161E93B47E5077DBA9DAE59 /* CameraViewModel.swift in Sources */,
-				C739BF2C2E94FBFB8A9F85DA /* ColorTemperatureCalculator.swift in Sources */,
-				EF90B2A90B4FD002ED55E24A /* ComparisonGenerator.swift in Sources */,
+				70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */,
+				B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */,
+				EF016392DE99310E0D6A8CC7 /* CameraSessionManager.swift in Sources */,
+				D8287656B2497407BF3354EA /* CameraStateOverlay.swift in Sources */,
+				14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */,
+				E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */,
+				10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */,
 				BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */,
-				8FC3BD26F560A5A894B4F705 /* DesignConstants.swift in Sources */,
-				BB433AAD1145863E00C84C8B /* InterpretationResult.swift in Sources */,
-				0D21BCAEA1FD76CDC693B9BD /* KelvinInterpreter.swift in Sources */,
+				C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */,
+				CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */,
+				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
-				3C687C72B159D630C3B222D7 /* LuxCalculator.swift in Sources */,
-				DE2FD56039BAF0385E6FAFA2 /* LuxInterpreter.swift in Sources */,
-				78A11B8586BF7D7106E38400 /* LuxRange.swift in Sources */,
-				84D974D581009B23E9D446EC /* MeasurementCardView.swift in Sources */,
-				644FC996462B69769FDF56C7 /* MeasurementView.swift in Sources */,
-				E7D09D43EB907526CEE4AC04 /* PlaceholderView.swift in Sources */,
-				2253A1E71F6ADA45EB0C0B6A /* TemperatureCardView.swift in Sources */,
-				A69BF3E45E32359759DA0C67 /* TemperatureView.swift in Sources */,
+				07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */,
+				A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */,
+				812876F0AE08889F28F29768 /* LuxRange.swift in Sources */,
+				4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */,
+				9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */,
+				8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */,
+				1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */,
+				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -442,6 +515,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
