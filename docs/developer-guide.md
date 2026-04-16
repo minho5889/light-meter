@@ -31,11 +31,11 @@ The app has four tabs:
 | Tab | What it does | Status |
 |-----|-------------|--------|
 | LUX | Live lux + Kelvin measurement, capture to freeze and interpret | Built |
-| Temperature | Live Kelvin reading with color tone label | Built |
+| Temperature | Live Kelvin reading with color tone label and environment tip | Built |
 | Check | Flicker detection (light safety analysis) | Placeholder |
 | Records | Saved measurement history | Placeholder |
 
-When the user taps the capture button on the LUX tab, the camera frame freezes and the card expands to show a human-readable interpretation: what kind of environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room."
+When the user taps the capture button on the LUX tab, the camera frame freezes and the card expands to show a human-readable interpretation: what kind of environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." A close button (×) appears in the top-left to return to live mode.
 
 ### Lux interpretation ranges
 
@@ -63,9 +63,9 @@ When the user taps the capture button on the LUX tab, the camera frame freezes a
 
 ### Capture flow
 
-1. User taps the capture button → camera frame freezes (like taking a photo)
+1. User taps the capture button → camera frame freezes (captured as a UIImage from the sample buffer)
 2. Measurement card expands to show: environment description, user guide tip, comparison sentence
-3. Back arrow appears → tap to return to live mode
+3. Close button (× icon + "Close" label) appears top-left → tap to return to live mode
 4. Tab bar hides during captured mode
 
 ---
@@ -175,12 +175,12 @@ LightMeterTests/
 | Module | What it does | Key function | Input | Output |
 |--------|-------------|-------------|-------|--------|
 | `LuxCalculator` | Computes lux from camera exposure metadata | `calculateLux(iso:exposureDurationInSeconds:)` | ISO (Float), exposure (Double) | Lux (Double), 0.0 for invalid inputs |
-| `LuxRange` | Maps a lux value to one of 8 range indices | `rangeIndex(for:)` | Lux (Double) | Index 0–7 (Int) |
+| `LuxRange` | Maps a lux value to one of 8 range indices; exposes canonical `thresholds` array | `rangeIndex(for:)` | Lux (Double) | Index 0–7 (Int) |
 | `LuxInterpreter` | Maps lux to a human-readable description and tip | `interpret(lux:)` | Lux (Double) | `InterpretationResult` |
 | `KelvinInterpreter` | Maps Kelvin to a color tone label and tip | `interpret(kelvin:)` | Kelvin (Double) | `InterpretationResult` |
-| `ColorTemperatureCalculator` | Clamps raw Kelvin to display range [1000, 15000] | `calculateColorTemperature(rawKelvin:)` | Raw Kelvin (Double) | Clamped Kelvin (Double) |
+| `ColorTemperatureCalculator` | Clamps raw Kelvin to display range [1000, 15000] | `calculateColorTemperature(rawKelvin:)` and `clamp(_:)` | Raw Kelvin (Double) | Clamped Kelvin (Double) |
 | `ComparisonGenerator` | Generates contextual comparison sentences | `generate(lux:)` | Lux (Double) | String like "Brighter than X but darker than Y" |
-| `InterpretationResult` | Data type holding description + tip | — | — | `{ description: String, tip: String }` |
+| `InterpretationResult` | Data type holding description + tip, conforms to `Equatable` and `Sendable` | — | — | `{ description: String, tip: String }` |
 
 `LuxRange` is the shared dependency — both `LuxInterpreter` and `ComparisonGenerator` use `LuxRange.rangeIndex(for:)` to avoid duplicating threshold logic.
 
@@ -188,19 +188,19 @@ LightMeterTests/
 
 | Module | What it does | Key responsibilities |
 |--------|-------------|---------------------|
-| `CameraSessionManager` | Manages AVCaptureSession lifecycle | Setup, start, stop, camera toggling, error reporting |
-| `CameraFrameProvider` | Receives each camera frame and extracts metadata | Reads ISO, exposure duration, white balance gains from the device; calls pure logic calculators; stores latest frame for capture |
+| `CameraSessionManager` | Manages AVCaptureSession lifecycle | Setup (with completion callback), start, stop, camera toggling, error reporting; exposes `device` for metadata access |
+| `CameraFrameProvider` | Receives each camera frame and extracts metadata | Reads ISO, exposure duration, white balance gains from the device; calls pure logic calculators; stores latest sample buffer; provides `captureFrame()` to convert the buffer to a UIImage |
 
 ### Glue (Camera/, Features/, SharedViews/)
 
 | Module | What it does | Key responsibilities |
 |--------|-------------|---------------------|
-| `CameraViewModel` | Single source of truth for all camera state | Holds `@Published` properties (lux, Kelvin, permission, error); wires SessionManager and FrameProvider together |
+| `CameraViewModel` | Single source of truth for all camera state | Holds `@Published` properties (lux, Kelvin, permission, error, camera position, sessionReady); wires SessionManager and FrameProvider together; provides `captureFrameAsync()` for async frame capture and `toggleCamera()` for front/rear switching |
 | `ContentView` | Tab navigation and camera lifecycle | 4-tab layout; starts/stops camera based on active tab and app foreground/background state |
-| `MeasurementView` | LUX tab — live and captured modes | Live mode shows real-time card; capture freezes frame and expands card with interpretation |
-| `MeasurementCardView` | Display component for lux + Kelvin readings | Pure display — receives pre-computed strings, no business logic |
-| `TemperatureView` | Temperature tab — live mode only | Shows Kelvin reading with color tone label |
-| `TemperatureCardView` | Display component for Kelvin reading | Pure display with interpretation text |
+| `MeasurementView` | LUX tab — live and captured modes | Live mode shows real-time card with capture and camera toggle buttons; capture freezes frame (as UIImage) and expands card with interpretation; close button returns to live mode |
+| `MeasurementCardView` | Display component for lux + Kelvin readings | Pure display — receives pre-computed strings, no business logic; includes `formatValue()` for locale-aware number formatting with thousands separators |
+| `TemperatureView` | Temperature tab — live mode only | Shows Kelvin reading with color tone label and recommended environment tip |
+| `TemperatureCardView` | Display component for Kelvin reading | Pure display with Kelvin value, color tone label, and recommended environment tip |
 | `CameraStateOverlay` | Shared wrapper for camera-backed screens | Handles three states: permission denied, error, live preview |
 | `CameraPreviewView` | UIKit bridge for camera preview | Wraps `AVCaptureVideoPreviewLayer` in a `UIViewRepresentable` |
 | `PlaceholderView` | Stub for unbuilt tabs | Shows title + "Coming Soon" subtitle |
@@ -209,7 +209,7 @@ LightMeterTests/
 
 | Module | What it does |
 |--------|-------------|
-| `DesignConstants` | Centralized font sizes, spacing values, and component dimensions used across all views |
+| `DesignConstants` | Centralized font sizes, spacing values, and component dimensions used across all views. Included in the SPM target alongside pure logic. |
 
 ---
 
@@ -259,14 +259,14 @@ All tests target the pure logic layer. The effects and glue layers require a rea
 
 | Test file | Tests for | Test count | What it validates |
 |-----------|----------|------------|-------------------|
-| `LuxCalculatorTests` | `LuxCalculator` | 6 | Formula correctness, edge cases (zero/negative ISO, zero exposure), non-negativity invariant |
-| `LuxInterpreterTests` | `LuxInterpreter` | 22 | All 8 range mappings, boundary values at every threshold, negative value fallback |
+| `LuxCalculatorTests` | `LuxCalculator` | 7 | Formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant |
+| `LuxInterpreterTests` | `LuxInterpreter` | 26 | All 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence |
 | `LuxRangeTests` | `LuxRange` | 17 | Range index at every boundary, negative lux handling, equivalence with oracle |
 | `KelvinInterpreterTests` | `KelvinInterpreter` | 20 | All 6 color tone ranges, boundary values, below-1000K fallback, determinism |
-| `ColorTemperatureCalculatorTests` | `ColorTemperatureCalculator` | 9 | Clamping at min/max, identity for in-range values, invariant across random inputs |
-| `ComparisonGeneratorTests` | `ComparisonGenerator` | 22 | Sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter |
+| `ColorTemperatureCalculatorTests` | `ColorTemperatureCalculator` | 10 | Clamping at min/max via both `clamp` and `calculateColorTemperature`, identity for in-range values, invariant across random inputs |
+| `ComparisonGeneratorTests` | `ComparisonGenerator` | 27 | Sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties |
 | `NumberFormattingTests` | `NumberFormatter` | 1 | Round-trip: format a number → parse it back → same value |
-| | | **Total: 97 unit + 16 property = 113** | |
+| | | **Total: 94 unit + 14 property = 108** | |
 
 ---
 
@@ -341,12 +341,12 @@ graph LR
 
     subgraph TESTS["Test Files"]
         direction TB
-        LCT["LuxCalculatorTests<br/>6 tests"]
+        LCT["LuxCalculatorTests<br/>7 tests"]
         LRT["LuxRangeTests<br/>17 tests"]
-        LIT["LuxInterpreterTests<br/>22 tests"]
+        LIT["LuxInterpreterTests<br/>26 tests"]
         KIT["KelvinInterpreterTests<br/>20 tests"]
-        CTCT["ColorTemperatureCalculatorTests<br/>9 tests"]
-        CGT["ComparisonGeneratorTests<br/>22 tests"]
+        CTCT["ColorTemperatureCalculatorTests<br/>10 tests"]
+        CGT["ComparisonGeneratorTests<br/>27 tests"]
         NFT["NumberFormattingTests<br/>1 test"]
     end
 
@@ -393,6 +393,6 @@ The project uses two build systems for different purposes:
 | Swift Package Manager | `swift build` / `swift test` | Pure logic layer + tests only | Fast iteration on logic, CI pipelines |
 | Xcode (via XcodeGen) | `xcodegen generate` then Cmd+R | Full app including camera, UI, device deployment | Running on iPhone, testing camera features |
 
-`Package.swift` explicitly lists only the pure logic files — it excludes all camera and UI code since those depend on iOS frameworks that SPM cannot build in isolation.
+`Package.swift` explicitly lists only the pure logic files and `DesignConstants.swift` — it excludes all camera and UI code since those depend on iOS frameworks that SPM cannot build in isolation.
 
 `project.yml` (XcodeGen config) sources entire directories recursively, so adding new files to any folder is automatically picked up after running `xcodegen generate`.

@@ -107,7 +107,7 @@ LightMeter/
     └── DesignConstants.swift
 
 LightMeterTests/
-├── Logic/                           # 113 tests covering all pure logic
+├── Logic/                           # 108 tests covering all pure logic
 └── Formatting/
 ```
 

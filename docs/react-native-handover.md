@@ -58,7 +58,7 @@ LightMeter/
 ├── Camera/                          # EFFECTS LAYER — rewrite for Android
 │   ├── CameraSessionManager.swift   # AVCaptureSession lifecycle
 │   ├── CameraFrameProvider.swift    # Frame buffer delegate, metadata extraction
-│   └── CameraViewModel.swift        # Glue: wires camera → logic → UI state
+│   └── CameraViewModel.swift        # Glue: wires camera → logic → UI state; holds sessionReady, captureFrameAsync()
 ├── Features/                        # VIEWS — rebuild in React Native
 │   ├── Measurement/
 │   │   ├── MeasurementView.swift    # LUX tab (live + captured modes)
@@ -142,7 +142,7 @@ Files to port:
 4. `KelvinInterpreter` — maps Kelvin to one of 6 ranges, returns `{ description, tip }`
 5. `ComparisonGenerator` — generates "Brighter than X but darker than Y" sentences
 6. `LuxRange` — shared `rangeIndex(lux)` function returning 0–7
-7. `InterpretationResult` — TypeScript type/interface `{ description: string, tip: string }`
+7. `InterpretationResult` — TypeScript type/interface `{ description: string, tip: string }` (Swift version conforms to `Equatable` and `Sendable`)
 
 Test expectations:
 - Port the boundary value tests (every threshold crossing)
@@ -158,12 +158,12 @@ Live mode:
 - Full-screen camera preview as background
 - Frosted/translucent card overlay showing real-time lux and Kelvin
 - Capture button (circle) and camera toggle button at bottom
-- Settings gear icon (top-right, navigates to placeholder)
+- No settings gear icon in the current iOS build (was planned but not implemented)
 
 Captured mode:
-- Freeze the camera frame (display last captured image)
+- Freeze the camera frame (display last captured image as UIImage)
 - Expand the card to show: interpretation description, tip, comparison sentence
-- Back arrow to return to live mode
+- Close button (× icon + "Close" label) top-left to return to live mode
 - Hide the bottom tab bar while in captured mode
 
 Reference: `MeasurementView.swift`, `MeasurementCardView.swift`
@@ -173,8 +173,8 @@ Reference: `MeasurementView.swift`, `MeasurementCardView.swift`
 Simpler than the LUX tab — live mode only, no capture.
 
 - Full-screen camera preview background
-- Card showing Kelvin value, color tone label, recommended environment
-- Settings gear icon (top-right, navigates to placeholder)
+- Card showing Kelvin value, color tone label, recommended environment tip
+- No settings gear icon in the current iOS build (was planned but not implemented)
 
 Reference: `TemperatureView.swift`, `TemperatureCardView.swift`
 
@@ -282,7 +282,7 @@ Reference: `CameraStateOverlay.swift`
 
 #### P2.4 — Settings placeholder
 
-Gear icon in top-right of LUX and Temperature tabs, navigating to a placeholder screen showing "Settings — Coming Soon."
+Gear icon in top-right of LUX and Temperature tabs, navigating to a placeholder screen showing "Settings — Coming Soon." Note: this is not implemented in the current iOS build — it was planned but deferred. If you implement it in React Native, use `PlaceholderView.swift` as a reference for the placeholder pattern.
 
 Reference: `PlaceholderView.swift`
 
@@ -375,7 +375,7 @@ These are identical between the two platforms — same algorithms, same threshol
 - Number formatting approach (locale-aware, thousands separators)
 - Tab structure (4 tabs, same icons and labels)
 - Measurement card layout (lux + Kelvin + interpretation)
-- Capture flow (freeze frame → show interpretation → back to live)
+- Capture flow (freeze frame → show interpretation → close button to return to live)
 
 ---
 
