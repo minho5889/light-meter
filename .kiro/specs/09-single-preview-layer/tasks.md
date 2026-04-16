@@ -17,7 +17,7 @@
   - Verify the `liveModeContent` and `capturedModeContent` still render correctly
   - _Requirements: 2.2, 2.5, 3.5, 3.9_
 
-- [~] 3. Remove CameraPreviewView from TemperatureView
+- [x] 3. Remove CameraPreviewView from TemperatureView
   - In `LightMeter/Features/Temperature/TemperatureView.swift`, remove the `CameraPreviewView(session:)` line
   - Make the root background transparent so the shared preview is visible
   - Keep the TemperatureCardView overlay unchanged

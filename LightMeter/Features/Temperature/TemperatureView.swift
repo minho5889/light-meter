@@ -5,9 +5,7 @@ struct TemperatureView: View {
 
     var body: some View {
         ZStack {
-            // Camera preview — always in the view tree
-            CameraPreviewView(session: cameraViewModel.session)
-                .ignoresSafeArea()
+            Color.clear
 
             // Content overlay
             VStack {
