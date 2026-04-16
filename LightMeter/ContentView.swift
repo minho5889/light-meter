@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var cameraViewModel = CameraViewModel()
     @State private var selectedTab: Int = 0
+    @State private var previousTab: Int = 0
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -38,11 +39,15 @@ struct ContentView: View {
             cameraViewModel.requestPermission()
         }
         .onChange(of: selectedTab) { _, newTab in
-            if newTab == 0 || newTab == 1 {
+            switch TabTransitionAction.resolve(from: previousTab, to: newTab) {
+            case .startSession:
                 cameraViewModel.startSession()
-            } else {
+            case .stopSession:
                 cameraViewModel.stopSession()
+            case .none:
+                break
             }
+            previousTab = newTab
         }
         .onReceive(
             NotificationCenter.default.publisher(

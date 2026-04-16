@@ -1,7 +1,6 @@
 /// Pure function that determines the camera session action for a tab transition.
-/// This encodes the CURRENT (buggy) onChange logic: it only looks at `newTab`,
-/// ignoring `previousTab` entirely — returning `.startSession` for any camera
-/// tab and `.stopSession` for any non-camera tab.
+/// Camera↔camera transitions return `.none` (session already running).
+/// Camera→non-camera returns `.stopSession`. Non-camera→camera returns `.startSession`.
 struct TabTransitionAction {
     enum Action: Equatable, CustomStringConvertible {
         case startSession
@@ -17,13 +16,24 @@ struct TabTransitionAction {
         }
     }
 
+    /// Returns true if the given tab index requires the camera.
+    static func isCameraTab(_ tab: Int) -> Bool {
+        tab == 0 || tab == 1
+    }
+
     /// Resolves the session action for a tab transition.
-    /// Current (buggy) logic: only considers `newTab`, ignores `previousTab`.
     static func resolve(from previousTab: Int, to newTab: Int) -> Action {
-        if newTab == 0 || newTab == 1 {
+        guard previousTab != newTab else { return .none }
+
+        let prevIsCamera = isCameraTab(previousTab)
+        let newIsCamera = isCameraTab(newTab)
+
+        if prevIsCamera && !newIsCamera {
+            return .stopSession
+        } else if !prevIsCamera && newIsCamera {
             return .startSession
         } else {
-            return .stopSession
+            return .none
         }
     }
 }

@@ -16,7 +16,7 @@
   - Mark task complete when test is written, run, and failure is documented
   - _Requirements: 1.1, 1.4, 2.1, 2.4_
 
-- [~] 2. Write preservation property tests (BEFORE implementing fix)
+- [x] 2. Write preservation property tests (BEFORE implementing fix)
   - **Property 2: Preservation** — Non-Bug-Condition Transitions Unchanged
   - **IMPORTANT**: Follow observation-first methodology
   - Observe behavior on UNFIXED `TabTransitionAction` for non-bug-condition inputs:
@@ -34,9 +34,9 @@
   - Mark task complete when tests are written, run, and passing on unfixed code
   - _Requirements: 3.1, 3.2_
 
-- [ ] 3. Fix for camera session black screen on tab transitions
+- [x] 3. Fix for camera session black screen on tab transitions
 
-  - [ ] 3.1 Implement the pure `TabTransitionAction` fix
+  - [x] 3.1 Implement the pure `TabTransitionAction` fix
     - Update `LightMeter/Logic/TabTransitionAction.swift` to implement the correct transition logic:
       - If both `previousTab` and `newTab` are camera tabs (`{0, 1}`) and differ → return `.none`
       - If `previousTab` is a camera tab and `newTab` is not → return `.stopSession`
@@ -48,7 +48,7 @@
     - _Preservation: Non-bug-condition transitions return same actions as before_
     - _Requirements: 2.1, 2.4, 3.1, 3.2_
 
-  - [ ] 3.2 Update `ContentView.swift` onChange handler
+  - [x] 3.2 Update `ContentView.swift` onChange handler
     - Add `@State private var previousTab: Int = 0` to `ContentView`
     - Replace the current `onChange(of: selectedTab)` body with:
       - Call `TabTransitionAction.resolve(from: previousTab, to: newTab)`
@@ -59,12 +59,12 @@
     - _Preservation: Non-camera transitions still stop/start as before_
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 3.1, 3.2_
 
-  - [ ] 3.3 Add `isRunning` guard to `CameraSessionManager.startSession()`
+  - [x] 3.3 Add `isRunning` guard to `CameraSessionManager.startSession()`
     - In `LightMeter/Camera/CameraSessionManager.swift`, update the public `startSession()` method to check `captureSession.isRunning` before dispatching to the session queue
     - This is defense-in-depth — prevents redundant async dispatches from any call site (foreground handler, etc.)
     - _Requirements: 2.4_
 
-  - [ ] 3.4 Verify bug condition exploration test now passes
+  - [x] 3.4 Verify bug condition exploration test now passes
     - **Property 1: Expected Behavior** — Camera↔Camera Tab Transition Triggers No Session Calls
     - **IMPORTANT**: Re-run the SAME test from task 1 — do NOT write a new test
     - The test from task 1 encodes the expected behavior
@@ -73,7 +73,7 @@
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
     - _Requirements: 2.1, 2.4_
 
-  - [ ] 3.5 Verify preservation tests still pass
+  - [x] 3.5 Verify preservation tests still pass
     - **Property 2: Preservation** — Non-Bug-Condition Transitions Unchanged
     - **IMPORTANT**: Re-run the SAME tests from task 2 — do NOT write new tests
     - Run preservation property tests from step 2

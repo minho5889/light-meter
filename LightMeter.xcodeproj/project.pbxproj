@@ -14,6 +14,7 @@
 		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
 		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
 		3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */; };
+		4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34737E8E6769616196B553 /* TabTransitionAction.swift */; };
 		4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */; };
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
@@ -29,6 +30,7 @@
 		C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */; };
 		CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */; };
 		D8287656B2497407BF3354EA /* CameraStateOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */; };
+		DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */; };
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
 		E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */; };
 		E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */; };
@@ -51,6 +53,7 @@
 		0A18F24B9F641399B19318EE /* LuxRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRange.swift; sourceTree = "<group>"; };
 		141E153718B1A66906CF6AA8 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
 		16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
+		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		346B9CCF989412C63E75D854 /* CameraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionManager.swift; sourceTree = "<group>"; };
 		4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculator.swift; sourceTree = "<group>"; };
@@ -59,6 +62,7 @@
 		522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGenerator.swift; sourceTree = "<group>"; };
 		62BF30A70BBBF1C7BEB3CCDF /* LightMeterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LightMeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A34737E8E6769616196B553 /* TabTransitionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionAction.swift; sourceTree = "<group>"; };
 		6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGeneratorTests.swift; sourceTree = "<group>"; };
 		743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreter.swift; sourceTree = "<group>"; };
 		746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculatorTests.swift; sourceTree = "<group>"; };
@@ -108,6 +112,7 @@
 				746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */,
 				F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */,
 				D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */,
+				2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -131,6 +136,7 @@
 				141E153718B1A66906CF6AA8 /* LuxCalculator.swift */,
 				85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */,
 				0A18F24B9F641399B19318EE /* LuxRange.swift */,
+				6A34737E8E6769616196B553 /* TabTransitionAction.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -295,6 +301,7 @@
 				61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */,
 				1242467572831488428302D0 /* LuxRangeTests.swift in Sources */,
 				E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */,
+				DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +327,7 @@
 				4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */,
 				9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */,
 				8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */,
+				4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */,
 				1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */,
 				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
 			);

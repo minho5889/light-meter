@@ -69,7 +69,9 @@ final class CameraSessionManager: @unchecked Sendable {
     }
 
     /// Starts the capture session on the session queue.
+    /// Guards against redundant dispatches when the session is already running.
     func startSession() {
+        guard !captureSession.isRunning else { return }
         sessionQueue.async { [weak self] in
             self?.startSessionOnQueue()
         }
