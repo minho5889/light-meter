@@ -8,6 +8,16 @@ An iOS app that turns your iPhone camera into a real-time light measurement tool
 
 Built for anyone curious about their lighting: photographers checking exposure, parents evaluating nursery lighting, office workers wondering if their desk lamp is bright enough, or plant owners checking sunlight levels.
 
+<p align="center">
+  <img src="screenshots/lux-live-low.png" width="200" alt="Live mode — low light" />
+  &nbsp;&nbsp;
+  <img src="screenshots/lux-live-bright.png" width="200" alt="Live mode — bright light" />
+  &nbsp;&nbsp;
+  <img src="screenshots/lux-captured-dim.png" width="200" alt="Captured mode — dim scene" />
+  &nbsp;&nbsp;
+  <img src="screenshots/lux-captured-bright.png" width="200" alt="Captured mode — bright scene" />
+</p>
+
 ---
 
 <a id="table-of-contents"></a>
@@ -110,7 +120,7 @@ The pure logic layer is 100% unit testable without mocks or devices, and it's wh
 
 ## [5. Documentation](#table-of-contents)
 
-Three docs, each with a clear job. Read them in this order:
+Three root-level docs cover everything you need. We strongly recommend reading all three before diving into the code.
 
 ### 1. [Light Science Primer](docs/light-science-primer.md)
 
@@ -124,7 +134,14 @@ The codebase map. What each module does, how data flows from camera hardware thr
 
 The Android port plan. Team structure, what to build, suggested pace, and the key technical differences between iOS and Android camera APIs. Read this only if you're working on the React Native build.
 
-There's also a [Troubleshooting Guide](docs/debugging/troubleshooting.md) if you run into build or device issues.
+### Optional: [Debugging](docs/debugging/)
+
+The `docs/debugging/` folder contains reference material for when things go wrong or you want to understand the project's history:
+
+- [Troubleshooting](docs/debugging/troubleshooting.md) — quick Q&A for build, device, and runtime issues
+- [Swift 6 Crash Post-Mortem](docs/debugging/swift6-crash-post-mortem.md) — the launch crash caused by `@MainActor` closure isolation
+- [Black Screen Post-Mortem](docs/debugging/black-screen-post-mortem.md) — the preview layer bug caused by multiple `AVCaptureVideoPreviewLayer` instances
+- [Conventions and Workflow](docs/debugging/conventions-and-workflow.md) — commit message format, naming rules, and spec-driven development with Kiro
 
 ---
 

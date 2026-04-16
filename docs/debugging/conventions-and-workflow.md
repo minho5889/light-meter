@@ -179,7 +179,7 @@ Example: the black screen bug.
 - `NT_docs` commits documented the root cause analysis (multiple competing `AVCaptureVideoPreviewLayer` instances)
 - `S09` commits fixed the root cause (moved to a single shared preview layer in `ContentView`)
 
-The full investigation is documented in [troubleshooting.md](troubleshooting.md), section 8.
+The full investigation is documented in the [Black Screen Post-Mortem](black-screen-post-mortem.md).
 
 ### Quick reference
 
