@@ -180,7 +180,7 @@ For the full iOS codebase map, module reference, data flow diagrams, and test su
 
 All 7 files in `Logic/`. The algorithms are identical — you're translating syntax, not logic.
 
-- `LuxCalculator` — `lux = (12.5 × aperture²) / (ISO × exposure)`. Returns 0 for invalid inputs.
+- `LuxCalculator` — `lux = (250 × aperture²) / (ISO × exposure)`. Returns 0 for invalid inputs.
 - `ColorTemperatureCalculator` — clamps raw Kelvin to [1000, 15000]
 - `LuxInterpreter` — lux → 1 of 8 ranges → `{ description, tip }`
 - `KelvinInterpreter` — Kelvin → 1 of 6 ranges → `{ description, tip }`

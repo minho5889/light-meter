@@ -6,10 +6,10 @@ struct LuxCalculatorTests {
     // MARK: - Known input/output tests
 
     @Test func knownValues() {
-        // ISO=100, exposure=1/125s (0.008), aperture=1.6, calibration=12.5
-        // Expected: (12.5 * 1.6²) / (100 * 0.008) = 32.0 / 0.8 = 40.0
+        // ISO=100, exposure=1/125s (0.008), aperture=1.6, calibration=250
+        // Expected: (250 * 1.6²) / (100 * 0.008) = 640.0 / 0.8 = 800.0
         let result = LuxCalculator.calculateLux(iso: 100, exposureDurationInSeconds: 0.008)
-        #expect(abs(result - 40.0) < 0.1)
+        #expect(abs(result - 800.0) < 0.1)
     }
 
     // MARK: - Edge cases

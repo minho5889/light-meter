@@ -1,9 +1,13 @@
 struct LuxCalculator {
-    static let defaultCalibrationConstant: Double = 12.5
-    static let defaultAperture: Double = 1.6  // iPhone 13 mini wide camera f-number
+    static let defaultCalibrationConstant: Double = 250
+    static let defaultAperture: Double = 1.6  // Fallback; prefer device.lensAperture at runtime
 
-    /// Computes lux from ISO and exposure duration.
-    /// Formula: lux = (calibrationConstant * aperture²) / (ISO * exposureDurationInSeconds)
+    /// Computes lux (illuminance) from ISO and exposure duration.
+    /// Formula: lux = (C * aperture²) / (ISO * exposureDurationInSeconds)
+    ///
+    /// Uses the ISO 2720 incident-light equation (C = 250 for a flat receptor)
+    /// rather than the reflected-light equation (K = 12.5), because we want
+    /// illuminance in lux, not luminance in cd/m².
     /// Returns 0.0 if inputs would cause division by zero or negative results.
     static func calculateLux(
         iso: Float,

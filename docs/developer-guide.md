@@ -188,14 +188,14 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 108 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 113 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
 - **LuxInterpreterTests** (26) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence
 - **LuxRangeTests** (17) — range index at every boundary, negative lux handling, equivalence with oracle
-- **KelvinInterpreterTests** (20) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism
+- **KelvinInterpreterTests** (22) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism
 - **ColorTemperatureCalculatorTests** (10) — clamping at min/max, identity for in-range values, invariant across random inputs
-- **ComparisonGeneratorTests** (27) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
+- **ComparisonGeneratorTests** (30) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
 - **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 
 The suite uses two styles: unit tests (specific input → expected output) and property-based tests (random inputs → invariant rules like "lux is never negative"). Every module has both. When you port to TypeScript, replicate the boundary tests and representative value tests. For property-based tests, `fast-check` is a good equivalent.

@@ -68,19 +68,21 @@ The camera doesn't have a lux sensor. But its auto-exposure algorithm has alread
 lux = (C × A²) / (ISO × T)
 ```
 
-- `C` = 12.5 — calibration constant from the ISO 2720 standard [[5]](#source-5)
+- `C` = 250 — incident-light calibration constant from the ISO 2720 standard (flat receptor) [[5]](#source-5)
 - `A` = lens aperture f-number (f/1.6 on iPhone 13 mini, f/1.7 on Galaxy S24)
 - `ISO` = sensor sensitivity
 - `T` = exposure duration in seconds
 
 The intuition is straightforward: if the camera cranks up ISO and uses a long exposure, the scene is dark. If it uses low ISO and a fast shutter, the scene is bright. The formula makes that relationship precise.
 
+Note: ISO 2720 defines two calibration constants. K (10.6–13.4, typically 12.5) is for reflected-light meters and computes luminance in cd/m². C (240–400, typically 250 for a flat receptor) is for incident-light meters and computes illuminance in lux. Since we want lux, we use C=250.
+
 ### Implementation notes
 
 - You compute lux from metadata, not pixels. Never look at pixel brightness for this — it's been mangled by white balance, tone mapping, and HDR processing.
 - The camera must be in auto-exposure mode. Locked exposure gives you the brightness the camera is *calibrated for*, not the actual scene brightness.
 - Aperture is a physical constant of the lens hardware. It doesn't change. You hardcode it per device or make it configurable.
-- The 12.5 calibration constant assumes the average scene reflects ~12.5% of incident light (the "middle gray" assumption from photography) [[5]](#source-5). It works well for general scenes. Less accurate for uniform dark or bright surfaces, but more than adequate for a consumer light meter.
+- The 250 calibration constant is the ISO 2720 incident-light value for a flat receptor. It gives illuminance in lux directly. The older value of 12.5 is the reflected-light constant (K), which computes luminance in cd/m² — a different physical quantity. Using K=12.5 in a lux meter produces readings roughly 20x too low [[5]](#source-5).
 
 ---
 
@@ -272,7 +274,7 @@ The lux and Kelvin branches are already implemented in the iOS app and port dire
 
 Lux:
 ```
-lux = (12.5 × aperture²) / (ISO × exposureSeconds)
+lux = (250 × aperture²) / (ISO × exposureSeconds)
 // Returns 0 if ISO ≤ 0 or exposureSeconds ≤ 0
 ```
 
@@ -291,7 +293,7 @@ flicker% = (Lmax - Lmin) / (Lmax + Lmin) × 100
 
 | Constant | Value | Source |
 |----------|-------|--------|
-| Calibration constant (C) | 12.5 | ISO 2720 standard [[5]](#source-5) |
+| Calibration constant (C) | 250 | ISO 2720 standard, incident-light flat receptor [[5]](#source-5) |
 | iPhone 13 mini aperture | f/1.6 | Apple hardware spec |
 | Samsung Galaxy S24 aperture | f/1.7 | Samsung hardware spec |
 | Samsung Galaxy S25 aperture | f/1.9 | Samsung hardware spec |

@@ -92,7 +92,7 @@ LightMeter/
 └── Design/                 # Font sizes, spacing, dimensions
 
 LightMeterTests/
-├── Logic/                  # 108 tests covering all pure logic
+├── Logic/                  # 113 tests covering all pure logic
 └── Formatting/
 ```
 
@@ -118,13 +118,13 @@ Start here. Covers how a phone camera becomes a light meter — the three things
 
 ### 2. [Developer Guide](docs/developer-guide.md)
 
-The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 108-test suite covers it. Read this before you start porting anything.
+The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 113-test suite covers it. Read this before you start porting anything.
 
 ### 3. [React Native Handover](docs/react-native-handover.md)
 
 The Android port plan. Team structure, what to build, suggested pace, and the key technical differences between iOS and Android camera APIs. Read this only if you're working on the React Native build.
 
-There's also a [GitHub Guide](docs/github-guide.md) covering branching, commit conventions, and pull requests — skim it before your first commit.
+There's also a [Troubleshooting Guide](docs/troubleshooting.md) if you run into build or device issues.
 
 ---
 

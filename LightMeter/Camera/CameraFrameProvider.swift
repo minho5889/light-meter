@@ -28,12 +28,14 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
 
         let iso = device.iso
         let exposureDurationInSeconds = CMTimeGetSeconds(device.exposureDuration)
+        let aperture = Double(device.lensAperture)
         let gains = device.deviceWhiteBalanceGains
         let rawKelvin = Double(device.temperatureAndTintValues(for: gains).temperature)
 
         let luxValue = LuxCalculator.calculateLux(
             iso: iso,
-            exposureDurationInSeconds: exposureDurationInSeconds
+            exposureDurationInSeconds: exposureDurationInSeconds,
+            aperture: aperture
         )
 
         let kelvinValue = ColorTemperatureCalculator.calculateColorTemperature(
