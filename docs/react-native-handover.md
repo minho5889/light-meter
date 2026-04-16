@@ -78,11 +78,11 @@ Roughly in priority order. The first group is the core — the app doesn't reall
 - [ ] React Native project setup with camera access on Android [[4]](#source-4)
 - [ ] Live camera preview on screen
 - [ ] Per-frame metadata extraction (ISO, exposure, white balance) via native plugin [[5]](#source-5)
-- [ ] Port the 7 pure logic files from `Logic/` to TypeScript (see appendix for the list)
+- [ ] Port the 8 pure logic files from `Logic/` to TypeScript (see appendix for the list)
 - [ ] Unit tests for the ported logic — boundary values, representative values, ideally property-based tests with something like `fast-check` [[7]](#source-7)
 - [ ] **LUX tab** — live mode with camera preview and a translucent card showing real-time lux and Kelvin. Capture mode that freezes the frame and expands the card to show interpretation, tip, and comparison sentence. Close button to return to live mode
 - [ ] **Temperature tab** — live mode only. Camera preview with a card showing Kelvin, color tone, and environment tip
-- [ ] **Tab navigation** — four tabs (LUX, Temperature, Check, Records) using `@react-navigation/bottom-tabs` [[8]](#source-8). Camera runs on the first two tabs, stops on the other two. Camera pauses when the app goes to background
+- [ ] **Tab navigation** — four tabs (LUX, Temperature, Check, Records) using `@react-navigation/bottom-tabs` [[8]](#source-8). Camera runs on the first two tabs, stops on the other two. Switching between two camera tabs should not stop/start the session — use the `TabTransitionAction` logic to skip redundant cycles. Camera pauses when the app goes to background
 
 ### Should get done (week 2–3)
 
@@ -178,7 +178,7 @@ For the full iOS codebase map, module reference, data flow diagrams, and test su
 
 ### Files to port (pure logic → TypeScript)
 
-All 7 files in `Logic/`. The algorithms are identical — you're translating syntax, not logic.
+All 8 files in `Logic/`. The algorithms are identical — you're translating syntax, not logic.
 
 - `LuxCalculator` — `lux = (250 × aperture²) / (ISO × exposure)`. Returns 0 for invalid inputs.
 - `ColorTemperatureCalculator` — clamps raw Kelvin to [1000, 15000]
@@ -187,6 +187,7 @@ All 7 files in `Logic/`. The algorithms are identical — you're translating syn
 - `ComparisonGenerator` — "Brighter than X but darker than Y"
 - `LuxRange` — `rangeIndex(lux)` → 0–7, shared by interpreter and comparison generator
 - `InterpretationResult` — TypeScript interface: `{ description: string, tip: string }`
+- `TabTransitionAction` — `resolve(from, to)` → `.startSession`, `.stopSession`, or `.none`. Determines camera session action for tab transitions — camera↔camera transitions return `.none` to avoid unnecessary stop/start cycles. Also provides `isCameraTab(tab)` helper.
 
 ### Platform differences
 

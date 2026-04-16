@@ -263,7 +263,7 @@ A: iPhone Settings → General → VPN & Device Management → tap your develope
 A: The developer profile only appears after the first install from Xcode. If it's not there, the app may already be trusted — just try opening it.
 
 **Q: The camera preview is black but lux/kelvin values are updating.**
-A: The preview layer might not have connected yet. Give it a second. If it stays black, check that no other app is using the camera (FaceTime, other camera apps). Kill those apps and retry.
+A: The most common cause — unnecessary session stop/start cycles when switching between camera tabs — was fixed in spec 08. If you're still seeing this, the preview layer might not have connected yet. Give it a second. If it stays black, check that no other app is using the camera (FaceTime, other camera apps). Kill those apps and retry.
 
 ---
 
@@ -282,7 +282,7 @@ The crash message is identical for both. Only the stack frames tell you which.
 A: `captureFrame()` accesses the latest sample buffer and does `CIContext` image processing. If the buffer has been invalidated by the time the capture runs, it can crash. This is a known area for improvement — the frame capture needs to copy the pixel buffer synchronously on the session queue before processing.
 
 **Q: The app crashes after switching between tabs rapidly.**
-A: The `startSession()` / `stopSession()` calls in `ContentView.onChange(of: selectedTab)` may overlap if you switch tabs faster than the session queue can process. The `sessionReady` guard helps, but rapid toggling can still cause issues. Avoid switching tabs while the session is starting up.
+A: This was largely addressed in spec 08. The `onChange` handler now uses `TabTransitionAction.resolve(from:to:)` with `previousTab` tracking, so camera↔camera transitions (LUX ↔ Temperature) skip the stop/start cycle entirely. Additionally, `CameraSessionManager.startSession()` guards against redundant calls when the session is already running. If you still see issues, it may be from rapid non-camera↔camera transitions overlapping on the session queue — avoid switching tabs while the session is starting up.
 
 ---
 

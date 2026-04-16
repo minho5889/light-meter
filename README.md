@@ -92,7 +92,7 @@ LightMeter/
 └── Design/                 # Font sizes, spacing, dimensions
 
 LightMeterTests/
-├── Logic/                  # 113 tests covering all pure logic
+├── Logic/                  # 121 tests covering all pure logic
 └── Formatting/
 ```
 
@@ -118,7 +118,7 @@ Start here. Covers how a phone camera becomes a light meter — the three things
 
 ### 2. [Developer Guide](docs/developer-guide.md)
 
-The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 113-test suite covers it. Read this before you start porting anything.
+The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 121-test suite covers it. Read this before you start porting anything.
 
 ### 3. [React Native Handover](docs/react-native-handover.md)
 
@@ -141,6 +141,7 @@ Feature specs document the incremental development history of the app. Each spec
 | 05 | Deterministic Split Refactor | ✅ Done |
 | 06 | UI Architecture Cleanup | ✅ Done |
 | 07 | Code Review Polish | ✅ Done |
+| 08 | Camera Session Black Screen | ✅ Done |
 
 ---
 

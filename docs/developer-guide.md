@@ -80,7 +80,8 @@ LightMeter/
 │   ├── KelvinInterpreter.swift
 │   ├── ColorTemperatureCalculator.swift
 │   ├── ComparisonGenerator.swift
-│   └── InterpretationResult.swift
+│   ├── InterpretationResult.swift
+│   └── TabTransitionAction.swift
 ├── Camera/                          # 🟡 Effects + 🔵 Glue
 │   ├── CameraSessionManager.swift   # 🟡 AVCaptureSession lifecycle
 │   ├── CameraFrameProvider.swift    # 🟡 Frame metadata extraction
@@ -106,7 +107,8 @@ LightMeterTests/
 │   ├── LuxRangeTests.swift
 │   ├── KelvinInterpreterTests.swift
 │   ├── ColorTemperatureCalculatorTests.swift
-│   └── ComparisonGeneratorTests.swift
+│   ├── ComparisonGeneratorTests.swift
+│   └── TabTransitionActionTests.swift
 └── Formatting/
     └── NumberFormattingTests.swift
 ```
@@ -126,12 +128,13 @@ These are the files you'll port to TypeScript. No platform imports, no side effe
 - **ColorTemperatureCalculator** — `calculateColorTemperature(rawKelvin:)` and `clamp(_:)` → Kelvin clamped to [1000, 15000].
 - **ComparisonGenerator** — `generate(lux:)` → a sentence like "Brighter than a movie theater but darker than a living room." Uses `LuxRange` internally.
 - **InterpretationResult** — `{ description: String, tip: String }`. Conforms to `Equatable` and `Sendable`.
+- **TabTransitionAction** — `resolve(from:to:)` → `.startSession`, `.stopSession`, or `.none`. Determines the camera session action for a tab transition. Camera↔camera transitions return `.none` (session already running). Also provides `isCameraTab(_:)` helper.
 
 ### Effects (Camera/)
 
 These talk to the hardware. You'll rewrite these for Android — the logic layer stays the same.
 
-- **CameraSessionManager** — manages the AVCaptureSession lifecycle: setup, start, stop, camera toggling, error reporting. Exposes the `device` for metadata access.
+- **CameraSessionManager** — manages the AVCaptureSession lifecycle: setup, start, stop, camera toggling, error reporting. Exposes the `device` for metadata access. `startSession()` guards against redundant calls when the session is already running.
 - **CameraFrameProvider** — receives each camera frame and reads ISO, exposure duration, and white balance gains from the device. Calls the pure logic calculators. Stores the latest sample buffer and provides `captureFrame()` to convert it to a UIImage.
 
 ### Glue (Camera/, Features/, SharedViews/)
@@ -139,7 +142,7 @@ These talk to the hardware. You'll rewrite these for Android — the logic layer
 These wire everything together. No business logic lives here.
 
 - **CameraViewModel** — the single source of truth for camera state. Holds `@Published` properties (lux, Kelvin, permission, error, camera position, sessionReady). Wires SessionManager and FrameProvider together. Provides `captureFrameAsync()` and `toggleCamera()`.
-- **ContentView** — four-tab layout. Starts/stops camera based on active tab and foreground/background state.
+- **ContentView** — four-tab layout. Uses `TabTransitionAction.resolve(from:to:)` with `previousTab` tracking to manage camera lifecycle on tab switches — camera↔camera transitions skip the stop/start cycle. Also handles foreground/background state.
 - **MeasurementView** — LUX tab with live and captured modes. Live mode shows a compact card with capture and camera toggle buttons. Captured mode freezes the frame, expands the card, hides the tab bar.
 - **MeasurementCardView** — pure display component. Receives pre-computed strings, no logic. Includes `formatValue()` for locale-aware number formatting.
 - **TemperatureView / TemperatureCardView** — same pattern as the LUX tab but simpler. Live mode only, no capture.
@@ -188,7 +191,7 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 113 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 121 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
 - **LuxInterpreterTests** (26) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence
@@ -196,6 +199,7 @@ All 113 tests target the pure logic layer. The effects and glue layers require r
 - **KelvinInterpreterTests** (22) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism
 - **ColorTemperatureCalculatorTests** (10) — clamping at min/max, identity for in-range values, invariant across random inputs
 - **ComparisonGeneratorTests** (30) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
+- **TabTransitionActionTests** (8) — bug condition exploration (camera↔camera returns `.none`), preservation properties (camera→non-camera, non-camera→camera, non-camera→non-camera, same-tab), randomized verification
 - **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 
 The suite uses two styles: unit tests (specific input → expected output) and property-based tests (random inputs → invariant rules like "lux is never negative"). Every module has both. When you port to TypeScript, replicate the boundary tests and representative value tests. For property-based tests, `fast-check` is a good equivalent.
