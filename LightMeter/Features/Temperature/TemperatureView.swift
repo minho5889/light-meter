@@ -6,6 +6,7 @@ struct TemperatureView: View {
     var body: some View {
         ZStack {
             Color.clear
+                .background(TransparentBackground())
 
             // Content overlay
             VStack {

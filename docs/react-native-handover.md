@@ -80,7 +80,7 @@ Roughly in priority order. The first group is the core — the app doesn't reall
 - [ ] Per-frame metadata extraction (ISO, exposure, white balance) via native plugin [[5]](#source-5)
 - [ ] Port the 8 pure logic files from `Logic/` to TypeScript (see appendix for the list)
 - [ ] Unit tests for the ported logic — boundary values, representative values, ideally property-based tests with something like `fast-check` [[7]](#source-7)
-- [ ] **LUX tab** — live mode with camera preview and a translucent card showing real-time lux and Kelvin. Capture mode that freezes the frame and expands the card to show interpretation, tip, and comparison sentence. Close button to return to live mode
+- [ ] **LUX tab** — live mode with camera preview and a translucent card showing real-time lux and Kelvin, plus a camera toggle button for switching front/rear cameras. Capture mode that freezes the frame and expands the card to show interpretation, tip, and comparison sentence. Close button to return to live mode
 - [ ] **Temperature tab** — live mode only. Camera preview with a card showing Kelvin, color tone, and environment tip
 - [ ] **Tab navigation** — four tabs (LUX, Temperature, Check, Records) using `@react-navigation/bottom-tabs` [[8]](#source-8). Camera runs on the first two tabs, stops on the other two. Switching between two camera tabs should not stop/start the session — use the `TabTransitionAction` logic to skip redundant cycles. Camera pauses when the app goes to background
 

@@ -142,6 +142,7 @@ Feature specs document the incremental development history of the app. Each spec
 | 06 | UI Architecture Cleanup | ✅ Done |
 | 07 | Code Review Polish | ✅ Done |
 | 08 | Camera Session Black Screen | ✅ Done |
+| 09 | Single Preview Layer | ✅ Done |
 
 ---
 

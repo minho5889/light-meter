@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141E153718B1A66906CF6AA8 /* LuxCalculator.swift */; };
+		08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */; };
 		09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */; };
 		10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */; };
 		1242467572831488428302D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */; };
@@ -72,6 +73,7 @@
 		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
 		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
 		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
+		A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		AE078BD017B4B9258C10AED6 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */,
 				503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */,
 				16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */,
+				A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */,
 			);
 			path = SharedViews;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */,
 				1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */,
 				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
+				08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

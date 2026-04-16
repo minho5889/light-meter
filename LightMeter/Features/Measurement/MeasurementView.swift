@@ -13,8 +13,10 @@ struct MeasurementView: View {
 
     var body: some View {
         ZStack {
-            // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView
+            // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView.
+            // TransparentBackground clears the UIKit hosting view's opaque background so the preview shows through.
             Color.clear.ignoresSafeArea()
+                .background(TransparentBackground())
 
             // Live mode overlay — always present, hidden when captured
             liveModeContent

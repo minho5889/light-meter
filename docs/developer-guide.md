@@ -23,7 +23,7 @@ LightMeter turns an iPhone camera into a real-time light measurement tool. Open 
 
 Four tabs:
 
-- **LUX** — live lux + Kelvin measurement with a capture button. Tap capture to freeze the frame and see a human-readable interpretation: what environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." Close button returns to live mode. Tab bar hides during capture.
+- **LUX** — live lux + Kelvin measurement with a capture button and camera toggle button. Tap capture to freeze the frame and see a human-readable interpretation: what environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." Close button returns to live mode. Tab bar hides during capture.
 - **Temperature** — live Kelvin reading with color tone label and environment tip. No capture mode.
 - **Check** — placeholder for flicker detection (the React Native team builds this).
 - **Records** — placeholder for saved measurement history.
@@ -66,11 +66,11 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 
 | File | Role |
 |------|------|
-| [`CameraViewModel`](../LightMeter/Camera/CameraViewModel.swift) | Single source of truth: `@Published` lux, Kelvin, permission, error, camera position. Wires SessionManager + FrameProvider. |
-| [`ContentView`](../LightMeter/ContentView.swift) | Four-tab layout. Uses `TabTransitionAction.resolve` for camera lifecycle on tab switches. Handles foreground/background. |
-| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — live mode (compact card + capture button) and captured mode (frozen frame, expanded card, hidden tab bar). |
-| [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with color tone label. No capture mode. |
-| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs). |
+| [`CameraViewModel`](../LightMeter/Camera/CameraViewModel.swift) | Single source of truth: `@Published` lux, Kelvin, permission, error, camera position, session readiness. Wires SessionManager + FrameProvider. |
+| [`ContentView`](../LightMeter/ContentView.swift) | Four-tab layout with a shared single `CameraPreviewView` in a `ZStack` behind the `TabView`. Uses `TabTransitionAction.resolve` for camera lifecycle on tab switches. Handles foreground/background. |
+| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — live mode (compact card + capture button + camera toggle) and captured mode (frozen frame, expanded card, hidden tab bar). Background is transparent so the shared preview shows through. |
+| [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with color tone label. No capture mode. Background is transparent so the shared preview shows through. |
+| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs), `TransparentBackground` (clears UIKit hosting view backgrounds so the shared preview shows through the `TabView`). |
 | [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
 
 Tests live in `LightMeterTests/` — 121 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
