@@ -9,7 +9,7 @@
   - Verify the `onChange`, `onAppear`, `onReceive` handlers are unaffected
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4, 3.8_
 
-- [ ] 2. Remove CameraPreviewView from MeasurementView
+- [x] 2. Remove CameraPreviewView from MeasurementView
   - In `LightMeter/Features/Measurement/MeasurementView.swift`, remove the `CameraPreviewView(session:)` line
   - Make the root background transparent (`Color.clear` or remove the opaque background) so the shared preview behind the `TabView` is visible
   - Keep all overlay content (MeasurementCardView, capture button, camera toggle button) unchanged
@@ -17,7 +17,7 @@
   - Verify the `liveModeContent` and `capturedModeContent` still render correctly
   - _Requirements: 2.2, 2.5, 3.5, 3.9_
 
-- [ ] 3. Remove CameraPreviewView from TemperatureView
+- [~] 3. Remove CameraPreviewView from TemperatureView
   - In `LightMeter/Features/Temperature/TemperatureView.swift`, remove the `CameraPreviewView(session:)` line
   - Make the root background transparent so the shared preview is visible
   - Keep the TemperatureCardView overlay unchanged

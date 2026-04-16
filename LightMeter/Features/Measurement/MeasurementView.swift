@@ -13,9 +13,8 @@ struct MeasurementView: View {
 
     var body: some View {
         ZStack {
-            // Camera preview — ALWAYS in the view tree, never conditionally removed
-            CameraPreviewView(session: cameraViewModel.session)
-                .ignoresSafeArea()
+            // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView
+            Color.clear.ignoresSafeArea()
 
             // Live mode overlay — always present, hidden when captured
             liveModeContent
