@@ -23,7 +23,7 @@
   - Keep the TemperatureCardView overlay unchanged
   - _Requirements: 2.3, 2.5, 3.9_
 
-- [ ] 4. Run existing test suite and verify no regressions
+- [x] 4. Run existing test suite and verify no regressions
   - Run the full `LightMeterTests` test suite
   - All `TabTransitionActionTests` from spec 08 must pass
   - All `LuxCalculatorTests`, `LuxInterpreterTests`, `KelvinInterpreterTests`, `ColorTemperatureCalculatorTests`, `ComparisonGeneratorTests`, `LuxRangeTests`, `NumberFormattingTests` must pass
