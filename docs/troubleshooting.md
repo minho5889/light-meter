@@ -14,6 +14,7 @@ A record of the launch crash we hit when deploying to a physical iPhone, how we 
 5. [How We Found It — Investigation Log](#5-how-we-found-it--investigation-log)
 6. [Rules for Future Development](#6-rules-for-future-development)
 7. [Q&A — Common Issues](#7-qa--common-issues)
+8. [Black Screen — Persistent After Spec 08](#8-black-screen--persistent-after-spec-08)
 
 ---
 
@@ -263,7 +264,7 @@ A: iPhone Settings → General → VPN & Device Management → tap your develope
 A: The developer profile only appears after the first install from Xcode. If it's not there, the app may already be trusted — just try opening it.
 
 **Q: The camera preview is black but lux/kelvin values are updating.**
-A: The most common cause — unnecessary session stop/start cycles when switching between camera tabs — was fixed in spec 08. If you're still seeing this, the preview layer might not have connected yet. Give it a second. If it stays black, check that no other app is using the camera (FaceTime, other camera apps). Kill those apps and retry.
+A: Spec 08 fixed unnecessary session stop/start cycles on tab switches, but the black screen persists. The root cause is deeper — see [Section 8](#8-black-screen--persistent-after-spec-08) for the full analysis. The short version: multiple `AVCaptureVideoPreviewLayer` instances are competing for the same session because both `MeasurementView` and `TemperatureView` each create their own `CameraPreviewView`, and SwiftUI's `TabView` keeps all tab bodies alive simultaneously.
 
 ---
 
@@ -318,3 +319,170 @@ A: Yes, if the session is already created (even if not yet configured). Apple's 
 
 **Q: The camera preview freezes when the app goes to background and comes back.**
 A: The app handles this via `willEnterForegroundNotification` and `didEnterBackgroundNotification` in `ContentView`. If the preview still freezes, the session may have been interrupted. Check for `AVCaptureSessionWasInterruptedNotification` and restart the session when `AVCaptureSessionInterruptionEndedNotification` fires.
+
+
+---
+
+## [8. Black Screen — Persistent After Spec 08](#table-of-contents)
+
+### Status
+
+**OPEN — NOT FIXED.** Spec 08 correctly eliminated unnecessary session stop/start cycles on camera↔camera tab transitions, but the black screen persists on device. The session is running, frames are being delivered to `CameraFrameProvider` (lux/kelvin values update), but the `AVCaptureVideoPreviewLayer` renders nothing.
+
+### What spec 08 fixed vs. what remains
+
+Spec 08 addressed the `onChange(of: selectedTab)` handler — it now uses `TabTransitionAction.resolve(from:to:)` with `previousTab` tracking so camera↔camera transitions skip the stop/start cycle. It also added an `isRunning` guard to `CameraSessionManager.startSession()`. These were correct improvements. But the black screen was never caused by the session lifecycle in the first place.
+
+### Symptoms on device
+
+- App launches, permission granted, session starts running
+- Camera preview is black from the very first frame — not just on tab switches
+- Lux and kelvin values update in real time (proving frames reach `CameraFrameProvider`)
+- No crash, no error, no console warning
+- The session is running (`isRunning == true`)
+- The problem is the preview layer, not the session
+
+### Hypothesized root cause — multiple competing preview layers
+
+This is the deep-dive analysis based on code review and research into AVFoundation's documented behavior.
+
+#### The architecture problem
+
+Both `MeasurementView` and `TemperatureView` create their own `CameraPreviewView` instance:
+
+```swift
+// MeasurementView.swift
+CameraPreviewView(session: cameraViewModel.session)
+    .ignoresSafeArea()
+
+// TemperatureView.swift
+CameraPreviewView(session: cameraViewModel.session)
+    .ignoresSafeArea()
+```
+
+Each `CameraPreviewView` is a `UIViewRepresentable` that creates a `VideoPreviewUIView` whose `layerClass` is `AVCaptureVideoPreviewLayer`. In `makeUIView`, the session is assigned:
+
+```swift
+func makeUIView(context: Context) -> VideoPreviewUIView {
+    let view = VideoPreviewUIView()
+    view.videoPreviewLayer.videoGravity = .resizeAspectFill
+    view.videoPreviewLayer.session = session  // ← assigns session to THIS layer
+    return view
+}
+```
+
+#### Why this is fatal
+
+`AVCaptureVideoPreviewLayer` has a documented constraint: **only the most recently connected preview layer renders frames for a given session**. When you set `.session` on a second `AVCaptureVideoPreviewLayer` pointing to the same `AVCaptureSession`, the first layer goes black. This is confirmed by multiple sources:
+
+- Stack Overflow: "If I init a new AVCaptureVideoPreviewLayer with the same session as another one, the other AVCaptureVideoPreviewLayer stops displaying the camera feed." [[1]](#source-1)
+- Stack Overflow: "I need to display one AVCapture session in two different views. The first AVCapture View works and displays the video okay, but the second one displays for a few milliseconds and then freezes." [[2]](#source-2)
+- The workaround documented in these threads is to use `CAReplicatorLayer` or render frames manually via `AVCaptureVideoDataOutput` — you cannot have two independent `AVCaptureVideoPreviewLayer` instances rendering from the same session.
+
+#### How SwiftUI's TabView makes this worse
+
+SwiftUI's `TabView` eagerly creates all tab content views and keeps them alive in the view hierarchy — it does not lazily load or destroy tab bodies when switching. This means:
+
+1. On app launch, `ContentView` body is evaluated
+2. `TabView` creates `MeasurementView` (tab 0) and `TemperatureView` (tab 1) simultaneously
+3. Both views' bodies are evaluated, creating two `CameraPreviewView` instances
+4. SwiftUI calls `makeUIView` on both `UIViewRepresentable` wrappers
+5. Two separate `VideoPreviewUIView` instances are created, each with its own `AVCaptureVideoPreviewLayer`
+6. Both layers have `.session = cameraViewModel.session` set
+7. The second layer to connect "wins" — the first goes permanently black
+8. Which layer "wins" depends on SwiftUI's internal view creation order, which is non-deterministic
+
+This explains why:
+- The black screen appears from the very first frame (both layers are created at launch)
+- Lux/kelvin values still update (the `AVCaptureVideoDataOutput` delegate is unaffected by preview layer conflicts)
+- The session is running and healthy
+- No error or crash occurs (this is "working as designed" from AVFoundation's perspective)
+
+#### Why spec 08's fix didn't help
+
+Spec 08 fixed the session lifecycle (stop/start cycles). But the black screen was never caused by the session stopping. It was caused by two preview layers competing for the same session's rendering pipeline. Even with the session running continuously, if two layers are connected, one will be black.
+
+#### Why `CameraStateOverlay` adds a third layer (sometimes)
+
+`CameraStateOverlay` in `SharedViews/CameraStateOverlay.swift` also creates a `CameraPreviewView`:
+
+```swift
+if permissionGranted {
+    CameraPreviewView(session: session)
+        .ignoresSafeArea()
+}
+```
+
+However, `CameraStateOverlay` is not currently used in `MeasurementView` or `TemperatureView` — they embed `CameraPreviewView` directly. If `CameraStateOverlay` were reintroduced, it would create yet another competing layer.
+
+### Proposed fix direction
+
+The fix requires an architectural change: **there must be exactly one `AVCaptureVideoPreviewLayer` connected to the session at any time.**
+
+#### Option A — Single preview at the `ContentView` level
+
+Move the `CameraPreviewView` out of individual tab views and into `ContentView`, behind the `TabView`. Both `MeasurementView` and `TemperatureView` would overlay their UI on top of a shared, single preview. This is the cleanest approach because:
+
+- One `CameraPreviewView` instance, one `AVCaptureVideoPreviewLayer`, one session connection
+- The preview stays alive across tab switches (no black flash)
+- Tab content views become pure overlays with no camera concerns
+
+```swift
+// ContentView.swift — conceptual structure
+ZStack {
+    // Single preview layer, always present
+    if cameraViewModel.permissionGranted {
+        CameraPreviewView(session: cameraViewModel.session)
+            .ignoresSafeArea()
+    }
+
+    // Tab content overlays on top
+    TabView(selection: $selectedTab) {
+        MeasurementOverlay(cameraViewModel: cameraViewModel)  // no CameraPreviewView inside
+            .tabItem { ... }
+            .tag(0)
+        TemperatureOverlay(cameraViewModel: cameraViewModel)  // no CameraPreviewView inside
+            .tabItem { ... }
+            .tag(1)
+        // ...
+    }
+}
+```
+
+#### Option B — Render frames manually instead of using preview layer
+
+Replace `AVCaptureVideoPreviewLayer` entirely. Use the `CMSampleBuffer` frames already being delivered to `CameraFrameProvider.captureOutput` and render them into a `UIImageView` or Metal view. This avoids the one-layer-per-session constraint entirely, since `AVCaptureVideoDataOutput` can deliver frames regardless of how many views consume them.
+
+Downside: higher CPU/GPU cost and more latency than the hardware-accelerated preview layer.
+
+#### Option C — Disconnect/reconnect the layer on tab switch
+
+Set `previewLayer.session = nil` on the layer that's going offscreen and `previewLayer.session = session` on the one coming onscreen. This requires coordination between tab switches and the `UIViewRepresentable` lifecycle, which is fragile in SwiftUI.
+
+### Recommendation
+
+Option A is the correct fix. It aligns with how camera apps are typically structured — one preview, multiple UI overlays. It eliminates the competing-layers problem entirely and is the simplest to implement.
+
+### Investigation log for this issue
+
+#### What we tried (spec 08)
+
+1. **TabTransitionAction pure function** — correctly classifies tab transitions and skips stop/start for camera↔camera switches. Verified with property-based tests. Does not fix the black screen.
+2. **`isRunning` guard on `startSession()`** — prevents redundant `startRunning()` dispatches. Defense-in-depth. Does not fix the black screen.
+3. **`previousTab` tracking in `ContentView`** — enables the transition classification. Correct improvement. Does not fix the black screen.
+
+#### What we did NOT try
+
+4. **Checking how many `AVCaptureVideoPreviewLayer` instances exist** — this is the actual problem. We never instrumented or logged layer creation to see that two (or more) layers were being created and connected to the same session.
+5. **Moving the preview to a single shared location** — the architectural fix described above.
+6. **Adding `AVCaptureSessionWasInterruptedNotification` / `AVCaptureSessionInterruptionEndedNotification` observers** — would help diagnose session-level issues but would not reveal the competing-layers problem since the session itself is healthy.
+
+---
+
+<a id="source-1"></a>
+**[1]** [Multiple AVCaptureVideoPreviewLayers — stackoverflow.com](https://stackoverflow.com/questions/11513704/multiple-avcapturevideopreviewlayers)
+<br>Confirms that connecting a second preview layer to the same session causes the first to stop rendering.
+
+<a id="source-2"></a>
+**[2]** [Why can't I duplicate AVCapture Sessions? — stackoverflow.com](https://stackoverflow.com/questions/11230432/why-cant-i-duplicate-avcapture-sessions)
+<br>Documents the behavior where the second preview layer renders briefly then freezes, while the first goes black.

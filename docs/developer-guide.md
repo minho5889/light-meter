@@ -11,10 +11,9 @@ For the physics behind lux, Kelvin, and flicker, see the [Light Science Primer](
 
 1. [What the App Does](#what-the-app-does)
 2. [How the Code Is Organized](#how-the-code-is-organized)
-3. [The Modules](#the-modules)
-4. [How Data Flows](#how-data-flows)
-5. [The Test Suite](#the-test-suite)
-6. [Building and Running](#building-and-running)
+3. [How Data Flows](#how-data-flows)
+4. [The Test Suite](#the-test-suite)
+5. [Building and Running](#building-and-running)
 
 ---
 
@@ -31,33 +30,11 @@ Four tabs:
 
 ### Lux ranges
 
-These are the 8 ranges the app uses to interpret brightness. Each maps to an environment description and a tip — see the `LuxInterpreter` module for the exact strings.
-
-| Lux | Environment |
-|-----|------------|
-| 0–10 | Very dark outdoors, full moon night |
-| 11–100 | Hallways, bathrooms, movie theaters |
-| 101–200 | Living room relaxation, dining, hotel rooms |
-| 201–500 | General office work, kitchen cooking |
-| 501–1,000 | Focused studying, precision handwork |
-| 1,001–2,000 | Bright window indoors, broadcast studios |
-| 2,001–10,000 | Cloudy day outdoors, sunset outdoors |
-| 10,001+ | Direct sunlight, noon on a clear day |
+The app uses 8 brightness ranges, each mapping to an environment description and a practical tip. The thresholds are defined in [`LuxRange.swift`](../LightMeter/Logic/LuxRange.swift) and the descriptions/tips live in [`LuxInterpreter.swift`](../LightMeter/Logic/LuxInterpreter.swift). See the [Light Science Primer](docs/light-science-primer.md) for the scale table and the science behind the spacing.
 
 ### Kelvin ranges
 
-6 ranges for color temperature classification. See `KelvinInterpreter` for the exact strings.
-
-| Kelvin | Color tone |
-|--------|-----------|
-| Below 2,000K | Candlelight / Sunset 🔥 |
-| 2,000–3,499K | Warm White 💡 |
-| 3,500–4,999K | Natural White 🌤 |
-| 5,000–6,499K | Daylight 📖 |
-| 6,500–9,999K | Cool White ❄ |
-| 10,000K+ | Blue Sky 🧊 |
-
-For the science behind these ranges — why they're spaced the way they are and what the numbers mean physically — see the [Light Science Primer](docs/light-science-primer.md).
+6 color temperature ranges, each with a color tone label and environment tip. The classification logic and exact strings are in [`KelvinInterpreter.swift`](../LightMeter/Logic/KelvinInterpreter.swift). See the [Light Science Primer](docs/light-science-primer.md) for the scale table and the physics behind warm vs. cool light.
 
 ---
 
@@ -65,91 +42,38 @@ For the science behind these ranges — why they're spaced the way they are and 
 
 The codebase follows a "functional core, imperative shell" pattern (you'll see it called the "deterministic split" in the steering docs and spec files). Every file belongs to one of three layers:
 
-- 🟢 **Pure logic** — deterministic functions. Same inputs, same outputs. No hardware, no frameworks, no side effects. This is where all the formulas and interpretation logic live. 100% unit testable without mocks or devices. Portable to any platform.
-- 🟡 **Effects** — thin wrappers around camera hardware. Reads metadata, manages the capture session. No business logic.
-- 🔵 **Glue** — wires the other two together. SwiftUI views, the view model, tab navigation. No business logic, no direct hardware calls.
+**Logic** — pure, deterministic, portable. These are the files you'll port to TypeScript.
 
-```
-LightMeter/
-├── LightMeterApp.swift              # App entry point
-├── ContentView.swift                # 🔵 Tab navigation, camera lifecycle
-├── Logic/                           # 🟢 Pure logic
-│   ├── LuxCalculator.swift
-│   ├── LuxInterpreter.swift
-│   ├── LuxRange.swift
-│   ├── KelvinInterpreter.swift
-│   ├── ColorTemperatureCalculator.swift
-│   ├── ComparisonGenerator.swift
-│   ├── InterpretationResult.swift
-│   └── TabTransitionAction.swift
-├── Camera/                          # 🟡 Effects + 🔵 Glue
-│   ├── CameraSessionManager.swift   # 🟡 AVCaptureSession lifecycle
-│   ├── CameraFrameProvider.swift    # 🟡 Frame metadata extraction
-│   └── CameraViewModel.swift        # 🔵 Wires camera → logic → UI state
-├── Features/                        # 🔵 Feature screens
-│   ├── Measurement/
-│   │   ├── MeasurementView.swift
-│   │   └── MeasurementCardView.swift
-│   └── Temperature/
-│       ├── TemperatureView.swift
-│       └── TemperatureCardView.swift
-├── SharedViews/                     # 🔵 Reusable view components
-│   ├── CameraPreviewView.swift
-│   ├── CameraStateOverlay.swift
-│   └── PlaceholderView.swift
-└── Design/
-    └── DesignConstants.swift
+| File | Role |
+|------|------|
+| [`LuxCalculator`](../LightMeter/Logic/LuxCalculator.swift) | `calculateLux(iso:exposureDurationInSeconds:)` → lux as Double. Returns 0.0 for invalid inputs (zero/negative). |
+| [`LuxRange`](../LightMeter/Logic/LuxRange.swift) | `rangeIndex(for:)` → index 0–7. Shared by `LuxInterpreter` and `ComparisonGenerator` so thresholds aren't duplicated. |
+| [`LuxInterpreter`](../LightMeter/Logic/LuxInterpreter.swift) | `interpret(lux:)` → `InterpretationResult` with environment description + tip. Uses `LuxRange` internally. |
+| [`KelvinInterpreter`](../LightMeter/Logic/KelvinInterpreter.swift) | `interpret(kelvin:)` → `InterpretationResult` with color tone + environment tip. |
+| [`ColorTemperatureCalculator`](../LightMeter/Logic/ColorTemperatureCalculator.swift) | `calculateColorTemperature(rawKelvin:)` → Kelvin clamped to [1 000, 15 000]. |
+| [`ComparisonGenerator`](../LightMeter/Logic/ComparisonGenerator.swift) | `generate(lux:)` → "Brighter than X but darker than Y." Uses `LuxRange` internally. |
+| [`InterpretationResult`](../LightMeter/Logic/InterpretationResult.swift) | `{ description, tip }` — conforms to `Equatable` and `Sendable`. |
+| [`TabTransitionAction`](../LightMeter/Logic/TabTransitionAction.swift) | `resolve(from:to:)` → `.startSession`, `.stopSession`, or `.none`. Camera↔camera returns `.none`. |
 
-LightMeterTests/
-├── Logic/                           # Tests for pure logic only
-│   ├── LuxCalculatorTests.swift
-│   ├── LuxInterpreterTests.swift
-│   ├── LuxRangeTests.swift
-│   ├── KelvinInterpreterTests.swift
-│   ├── ColorTemperatureCalculatorTests.swift
-│   ├── ComparisonGeneratorTests.swift
-│   └── TabTransitionActionTests.swift
-└── Formatting/
-    └── NumberFormattingTests.swift
-```
+**Effects** — thin hardware wrappers. Rewrite these per platform; the logic layer stays the same.
 
----
+| File | Role |
+|------|------|
+| [`CameraSessionManager`](../LightMeter/Camera/CameraSessionManager.swift) | AVCaptureSession lifecycle: setup, start, stop, camera toggle. Guards against redundant `startSession()` calls. |
+| [`CameraFrameProvider`](../LightMeter/Camera/CameraFrameProvider.swift) | Reads ISO, exposure, white balance from each frame. Calls pure logic calculators. Provides `captureFrame()` → UIImage. |
 
-## [The Modules](#table-of-contents)
+**Glue** — views, view model, wiring. No business logic lives here.
 
-### Pure logic (Logic/)
+| File | Role |
+|------|------|
+| [`CameraViewModel`](../LightMeter/Camera/CameraViewModel.swift) | Single source of truth: `@Published` lux, Kelvin, permission, error, camera position. Wires SessionManager + FrameProvider. |
+| [`ContentView`](../LightMeter/ContentView.swift) | Four-tab layout. Uses `TabTransitionAction.resolve` for camera lifecycle on tab switches. Handles foreground/background. |
+| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — live mode (compact card + capture button) and captured mode (frozen frame, expanded card, hidden tab bar). |
+| [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with color tone label. No capture mode. |
+| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs). |
+| [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
 
-These are the files you'll port to TypeScript. No platform imports, no side effects — just input → output.
-
-- **LuxCalculator** — `calculateLux(iso:exposureDurationInSeconds:)` → lux as a Double. Returns 0.0 for invalid inputs (zero or negative ISO/exposure).
-- **LuxRange** — `rangeIndex(for:)` → index 0–7. Shared by both `LuxInterpreter` and `ComparisonGenerator` so threshold logic isn't duplicated.
-- **LuxInterpreter** — `interpret(lux:)` → `InterpretationResult` with description and tip. Uses `LuxRange` internally.
-- **KelvinInterpreter** — `interpret(kelvin:)` → `InterpretationResult` with color tone and environment tip.
-- **ColorTemperatureCalculator** — `calculateColorTemperature(rawKelvin:)` and `clamp(_:)` → Kelvin clamped to [1000, 15000].
-- **ComparisonGenerator** — `generate(lux:)` → a sentence like "Brighter than a movie theater but darker than a living room." Uses `LuxRange` internally.
-- **InterpretationResult** — `{ description: String, tip: String }`. Conforms to `Equatable` and `Sendable`.
-- **TabTransitionAction** — `resolve(from:to:)` → `.startSession`, `.stopSession`, or `.none`. Determines the camera session action for a tab transition. Camera↔camera transitions return `.none` (session already running). Also provides `isCameraTab(_:)` helper.
-
-### Effects (Camera/)
-
-These talk to the hardware. You'll rewrite these for Android — the logic layer stays the same.
-
-- **CameraSessionManager** — manages the AVCaptureSession lifecycle: setup, start, stop, camera toggling, error reporting. Exposes the `device` for metadata access. `startSession()` guards against redundant calls when the session is already running.
-- **CameraFrameProvider** — receives each camera frame and reads ISO, exposure duration, and white balance gains from the device. Calls the pure logic calculators. Stores the latest sample buffer and provides `captureFrame()` to convert it to a UIImage.
-
-### Glue (Camera/, Features/, SharedViews/)
-
-These wire everything together. No business logic lives here.
-
-- **CameraViewModel** — the single source of truth for camera state. Holds `@Published` properties (lux, Kelvin, permission, error, camera position, sessionReady). Wires SessionManager and FrameProvider together. Provides `captureFrameAsync()` and `toggleCamera()`.
-- **ContentView** — four-tab layout. Uses `TabTransitionAction.resolve(from:to:)` with `previousTab` tracking to manage camera lifecycle on tab switches — camera↔camera transitions skip the stop/start cycle. Also handles foreground/background state.
-- **MeasurementView** — LUX tab with live and captured modes. Live mode shows a compact card with capture and camera toggle buttons. Captured mode freezes the frame, expands the card, hides the tab bar.
-- **MeasurementCardView** — pure display component. Receives pre-computed strings, no logic. Includes `formatValue()` for locale-aware number formatting.
-- **TemperatureView / TemperatureCardView** — same pattern as the LUX tab but simpler. Live mode only, no capture.
-- **CameraStateOverlay** — shared wrapper handling three states: permission denied, error, live preview.
-- **CameraPreviewView** — UIKit bridge wrapping `AVCaptureVideoPreviewLayer` in a `UIViewRepresentable`.
-- **PlaceholderView** — stub for unbuilt tabs. Title + "Coming Soon."
-- **DesignConstants** — centralized font sizes, spacing, and dimensions.
+Tests live in `LightMeterTests/` — 121 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
 
 ---
 
