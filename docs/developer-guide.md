@@ -1,134 +1,79 @@
-# Developer Guide — LightMeter iOS App
+# How the LightMeter Codebase Works
 
-This document explains how the codebase is structured, what each module does, and how the test suite covers it. It is written for the PM and two developers working on this project.
+This is your map to the iOS codebase. It covers what the app does, how the code is organized, where each module lives, and how the tests cover it. Read this before you start porting anything — it'll save you from guessing what a file does or why it's structured the way it is.
+
+For the physics behind lux, Kelvin, and flicker, see the [Light Science Primer](docs/light-science-primer.md). For the React Native port plan, see the [Handover Guide](docs/react-native-handover.md).
 
 ---
 
 <a id="table-of-contents"></a>
 ## Table of Contents
 
-1. [How the App Works](#1-how-the-app-works)
-2. [Architecture — The Three Layers](#2-architecture--the-three-layers)
-3. [Project Structure](#3-project-structure)
-4. [Module Reference](#4-module-reference)
-5. [Data Flow](#5-data-flow)
-6. [Test Suite](#6-test-suite)
-7. [Unit Tests vs Property-Based Tests](#7-unit-tests-vs-property-based-tests)
-8. [Test Coverage Map](#8-test-coverage-map)
-9. [Build Systems](#9-build-systems)
+1. [What the App Does](#what-the-app-does)
+2. [How the Code Is Organized](#how-the-code-is-organized)
+3. [The Modules](#the-modules)
+4. [How Data Flows](#how-data-flows)
+5. [The Test Suite](#the-test-suite)
+6. [Building and Running](#building-and-running)
 
 ---
 
-## [1. How the App Works](#table-of-contents)
+## [What the App Does](#table-of-contents)
 
-LightMeter turns an iPhone camera into a real-time light measurement tool. When you open the app, the camera feed fills the screen and a translucent card overlays two live readings:
+LightMeter turns an iPhone camera into a real-time light measurement tool. Open the app, point it at a scene, and a translucent card overlays two live readings: lux (brightness) and Kelvin (color temperature).
 
-- Lux (brightness) — how much light is hitting the camera
-- Kelvin (color temperature) — what color the light is (warm orange vs cool blue)
+Four tabs:
 
-The app has four tabs:
+- **LUX** — live lux + Kelvin measurement with a capture button. Tap capture to freeze the frame and see a human-readable interpretation: what environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." Close button returns to live mode. Tab bar hides during capture.
+- **Temperature** — live Kelvin reading with color tone label and environment tip. No capture mode.
+- **Check** — placeholder for flicker detection (the React Native team builds this).
+- **Records** — placeholder for saved measurement history.
 
-| Tab | What it does | Status |
-|-----|-------------|--------|
-| LUX | Live lux + Kelvin measurement, capture to freeze and interpret | Built |
-| Temperature | Live Kelvin reading with color tone label and environment tip | Built |
-| Check | Flicker detection (light safety analysis) | Placeholder |
-| Records | Saved measurement history | Placeholder |
+### Lux ranges
 
-When the user taps the capture button on the LUX tab, the camera frame freezes and the card expands to show a human-readable interpretation: what kind of environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." A close button (×) appears in the top-left to return to live mode.
+These are the 8 ranges the app uses to interpret brightness. Each maps to an environment description and a tip — see the `LuxInterpreter` module for the exact strings.
 
-### Lux interpretation ranges
+| Lux | Environment |
+|-----|------------|
+| 0–10 | Very dark outdoors, full moon night |
+| 11–100 | Hallways, bathrooms, movie theaters |
+| 101–200 | Living room relaxation, dining, hotel rooms |
+| 201–500 | General office work, kitchen cooking |
+| 501–1,000 | Focused studying, precision handwork |
+| 1,001–2,000 | Bright window indoors, broadcast studios |
+| 2,001–10,000 | Cloudy day outdoors, sunset outdoors |
+| 10,001+ | Direct sunlight, noon on a clear day |
 
-| Lux | Environment | Tip |
-|-----|------------|-----|
-| 0–10 | Very dark outdoors, full moon night | Pre-sleep conditions |
-| 11–100 | Hallways, bathrooms, movie theaters | Suitable for passing through |
-| 101–200 | Living room relaxation, dining, hotel rooms | Optimal for comfortable rest |
-| 201–500 | General office work, kitchen cooking | Standard brightness for daily activities |
-| 501–1,000 | Focused studying, precision handwork | Recommended for detailed tasks |
-| 1,001–2,000 | Bright window indoors, broadcast studios | Suitable for video production |
-| 2,001–10,000 | Cloudy day outdoors, sunset outdoors | Good for outdoor activities |
-| 10,001+ | Direct sunlight, noon on a clear day | Protect your eyes |
+### Kelvin ranges
 
-### Kelvin interpretation ranges
+6 ranges for color temperature classification. See `KelvinInterpreter` for the exact strings.
 
-| Kelvin | Color tone | Recommended environment |
-|--------|-----------|------------------------|
-| Below 2,000K | Candlelight / Sunset 🔥 | Pre-sleep, atmospheric cafes |
-| 2,000–3,499K | Warm White 💡 | Bedrooms, living rooms |
-| 3,500–4,999K | Natural White 🌤 | Kitchens, bathrooms |
-| 5,000–6,499K | Daylight 📖 | Study rooms, offices |
-| 6,500–9,999K | Cool White ❄ | Hospitals, factories |
-| 10,000K+ | Blue Sky 🧊 | Clear day shade, labs |
+| Kelvin | Color tone |
+|--------|-----------|
+| Below 2,000K | Candlelight / Sunset 🔥 |
+| 2,000–3,499K | Warm White 💡 |
+| 3,500–4,999K | Natural White 🌤 |
+| 5,000–6,499K | Daylight 📖 |
+| 6,500–9,999K | Cool White ❄ |
+| 10,000K+ | Blue Sky 🧊 |
 
-### Capture flow
-
-1. User taps the capture button → camera frame freezes (captured as a UIImage from the sample buffer)
-2. Measurement card expands to show: environment description, user guide tip, comparison sentence
-3. Close button (× icon + "Close" label) appears top-left → tap to return to live mode
-4. Tab bar hides during captured mode
+For the science behind these ranges — why they're spaced the way they are and what the numbers mean physically — see the [Light Science Primer](docs/light-science-primer.md).
 
 ---
 
-## [2. Architecture — The Three Layers](#table-of-contents)
+## [How the Code Is Organized](#table-of-contents)
 
-The codebase follows a strict separation called the "deterministic split." Every file belongs to exactly one of three layers:
+The codebase follows a "functional core, imperative shell" pattern (you'll see it called the "deterministic split" in the steering docs and spec files). Every file belongs to one of three layers:
 
-```mermaid
-graph TB
-    subgraph PURE["Pure Logic"]
-        direction LR
-        LC["LuxCalculator"]
-        LI["LuxInterpreter"]
-        LR_["LuxRange"]
-        KI["KelvinInterpreter"]
-        CTC["ColorTemperatureCalculator"]
-        CG["ComparisonGenerator"]
-        IR["InterpretationResult"]
-    end
-
-    subgraph EFFECTS["Effects"]
-        direction LR
-        CSM["CameraSessionManager"]
-        CFP["CameraFrameProvider"]
-    end
-
-    subgraph GLUE["Glue"]
-        direction LR
-        CVM["CameraViewModel"]
-        CV["ContentView"]
-        MV["MeasurementView"]
-        TV["TemperatureView"]
-    end
-
-    EFFECTS -->|"raw values"| PURE
-    PURE -->|"results"| GLUE
-    EFFECTS -->|"camera state"| GLUE
-
-    style PURE fill:#10b981,stroke:#059669,color:#fff
-    style EFFECTS fill:#f59e0b,stroke:#d97706,color:#fff
-    style GLUE fill:#3b82f6,stroke:#2563eb,color:#fff
-```
-
-> 🟢 Pure Logic &nbsp;&nbsp; 🟡 Effects &nbsp;&nbsp; 🔵 Glue
-
-| Layer | Rule | What lives here |
-|-------|------|----------------|
-| Pure Logic | Same inputs always produce same outputs. No hardware, no frameworks, no side effects. | Calculators, interpreters, generators |
-| Effects | Thin wrappers around hardware APIs. Minimal logic. | Camera session, frame buffer, device metadata |
-| Glue | Wires pure logic to effects. No business logic allowed. | View models, SwiftUI views, navigation |
-
-Why this matters: the pure logic layer is 100% unit testable without mocks, simulators, or devices. It is also portable — the same algorithms can be rewritten in any language for any platform.
-
----
-
-## [3. Project Structure](#table-of-contents)
+- 🟢 **Pure logic** — deterministic functions. Same inputs, same outputs. No hardware, no frameworks, no side effects. This is where all the formulas and interpretation logic live. 100% unit testable without mocks or devices. Portable to any platform.
+- 🟡 **Effects** — thin wrappers around camera hardware. Reads metadata, manages the capture session. No business logic.
+- 🔵 **Glue** — wires the other two together. SwiftUI views, the view model, tab navigation. No business logic, no direct hardware calls.
 
 ```
 LightMeter/
 ├── LightMeterApp.swift              # App entry point
-├── ContentView.swift                # Tab navigation, camera lifecycle
-├── Logic/                           # 🟢 Pure Logic layer
+├── ContentView.swift                # 🔵 Tab navigation, camera lifecycle
+├── Logic/                           # 🟢 Pure logic
 │   ├── LuxCalculator.swift
 │   ├── LuxInterpreter.swift
 │   ├── LuxRange.swift
@@ -136,26 +81,26 @@ LightMeter/
 │   ├── ColorTemperatureCalculator.swift
 │   ├── ComparisonGenerator.swift
 │   └── InterpretationResult.swift
-├── Camera/                          # 🟡 Effects layer
-│   ├── CameraSessionManager.swift
-│   ├── CameraFrameProvider.swift
-│   └── CameraViewModel.swift        # 🔵 Glue (lives here because tightly coupled)
-├── Features/                        # 🔵 Glue — feature screens
+├── Camera/                          # 🟡 Effects + 🔵 Glue
+│   ├── CameraSessionManager.swift   # 🟡 AVCaptureSession lifecycle
+│   ├── CameraFrameProvider.swift    # 🟡 Frame metadata extraction
+│   └── CameraViewModel.swift        # 🔵 Wires camera → logic → UI state
+├── Features/                        # 🔵 Feature screens
 │   ├── Measurement/
 │   │   ├── MeasurementView.swift
 │   │   └── MeasurementCardView.swift
 │   └── Temperature/
 │       ├── TemperatureView.swift
 │       └── TemperatureCardView.swift
-├── SharedViews/                     # 🔵 Glue — reusable view components
+├── SharedViews/                     # 🔵 Reusable view components
 │   ├── CameraPreviewView.swift
 │   ├── CameraStateOverlay.swift
 │   └── PlaceholderView.swift
 └── Design/
-    └── DesignConstants.swift         # Font sizes, spacing, dimensions
+    └── DesignConstants.swift
 
 LightMeterTests/
-├── Logic/                           # Tests for pure logic layer
+├── Logic/                           # Tests for pure logic only
 │   ├── LuxCalculatorTests.swift
 │   ├── LuxInterpreterTests.swift
 │   ├── LuxRangeTests.swift
@@ -163,236 +108,109 @@ LightMeterTests/
 │   ├── ColorTemperatureCalculatorTests.swift
 │   └── ComparisonGeneratorTests.swift
 └── Formatting/
-    └── NumberFormattingTests.swift   # Tests for locale-aware number display
+    └── NumberFormattingTests.swift
 ```
 
 ---
 
-## [4. Module Reference](#table-of-contents)
+## [The Modules](#table-of-contents)
 
-### Pure Logic (Logic/)
+### Pure logic (Logic/)
 
-| Module | What it does | Key function | Input | Output |
-|--------|-------------|-------------|-------|--------|
-| `LuxCalculator` | Computes lux from camera exposure metadata | `calculateLux(iso:exposureDurationInSeconds:)` | ISO (Float), exposure (Double) | Lux (Double), 0.0 for invalid inputs |
-| `LuxRange` | Maps a lux value to one of 8 range indices; exposes canonical `thresholds` array | `rangeIndex(for:)` | Lux (Double) | Index 0–7 (Int) |
-| `LuxInterpreter` | Maps lux to a human-readable description and tip | `interpret(lux:)` | Lux (Double) | `InterpretationResult` |
-| `KelvinInterpreter` | Maps Kelvin to a color tone label and tip | `interpret(kelvin:)` | Kelvin (Double) | `InterpretationResult` |
-| `ColorTemperatureCalculator` | Clamps raw Kelvin to display range [1000, 15000] | `calculateColorTemperature(rawKelvin:)` and `clamp(_:)` | Raw Kelvin (Double) | Clamped Kelvin (Double) |
-| `ComparisonGenerator` | Generates contextual comparison sentences | `generate(lux:)` | Lux (Double) | String like "Brighter than X but darker than Y" |
-| `InterpretationResult` | Data type holding description + tip, conforms to `Equatable` and `Sendable` | — | — | `{ description: String, tip: String }` |
+These are the files you'll port to TypeScript. No platform imports, no side effects — just input → output.
 
-`LuxRange` is the shared dependency — both `LuxInterpreter` and `ComparisonGenerator` use `LuxRange.rangeIndex(for:)` to avoid duplicating threshold logic.
+- **LuxCalculator** — `calculateLux(iso:exposureDurationInSeconds:)` → lux as a Double. Returns 0.0 for invalid inputs (zero or negative ISO/exposure).
+- **LuxRange** — `rangeIndex(for:)` → index 0–7. Shared by both `LuxInterpreter` and `ComparisonGenerator` so threshold logic isn't duplicated.
+- **LuxInterpreter** — `interpret(lux:)` → `InterpretationResult` with description and tip. Uses `LuxRange` internally.
+- **KelvinInterpreter** — `interpret(kelvin:)` → `InterpretationResult` with color tone and environment tip.
+- **ColorTemperatureCalculator** — `calculateColorTemperature(rawKelvin:)` and `clamp(_:)` → Kelvin clamped to [1000, 15000].
+- **ComparisonGenerator** — `generate(lux:)` → a sentence like "Brighter than a movie theater but darker than a living room." Uses `LuxRange` internally.
+- **InterpretationResult** — `{ description: String, tip: String }`. Conforms to `Equatable` and `Sendable`.
 
 ### Effects (Camera/)
 
-| Module | What it does | Key responsibilities |
-|--------|-------------|---------------------|
-| `CameraSessionManager` | Manages AVCaptureSession lifecycle | Setup (with completion callback), start, stop, camera toggling, error reporting; exposes `device` for metadata access |
-| `CameraFrameProvider` | Receives each camera frame and extracts metadata | Reads ISO, exposure duration, white balance gains from the device; calls pure logic calculators; stores latest sample buffer; provides `captureFrame()` to convert the buffer to a UIImage |
+These talk to the hardware. You'll rewrite these for Android — the logic layer stays the same.
+
+- **CameraSessionManager** — manages the AVCaptureSession lifecycle: setup, start, stop, camera toggling, error reporting. Exposes the `device` for metadata access.
+- **CameraFrameProvider** — receives each camera frame and reads ISO, exposure duration, and white balance gains from the device. Calls the pure logic calculators. Stores the latest sample buffer and provides `captureFrame()` to convert it to a UIImage.
 
 ### Glue (Camera/, Features/, SharedViews/)
 
-| Module | What it does | Key responsibilities |
-|--------|-------------|---------------------|
-| `CameraViewModel` | Single source of truth for all camera state | Holds `@Published` properties (lux, Kelvin, permission, error, camera position, sessionReady); wires SessionManager and FrameProvider together; provides `captureFrameAsync()` for async frame capture and `toggleCamera()` for front/rear switching |
-| `ContentView` | Tab navigation and camera lifecycle | 4-tab layout; starts/stops camera based on active tab and app foreground/background state |
-| `MeasurementView` | LUX tab — live and captured modes | Live mode shows real-time card with capture and camera toggle buttons; capture freezes frame (as UIImage) and expands card with interpretation; close button returns to live mode |
-| `MeasurementCardView` | Display component for lux + Kelvin readings | Pure display — receives pre-computed strings, no business logic; includes `formatValue()` for locale-aware number formatting with thousands separators |
-| `TemperatureView` | Temperature tab — live mode only | Shows Kelvin reading with color tone label and recommended environment tip |
-| `TemperatureCardView` | Display component for Kelvin reading | Pure display with Kelvin value, color tone label, and recommended environment tip |
-| `CameraStateOverlay` | Shared wrapper for camera-backed screens | Handles three states: permission denied, error, live preview |
-| `CameraPreviewView` | UIKit bridge for camera preview | Wraps `AVCaptureVideoPreviewLayer` in a `UIViewRepresentable` |
-| `PlaceholderView` | Stub for unbuilt tabs | Shows title + "Coming Soon" subtitle |
+These wire everything together. No business logic lives here.
 
-### Design
-
-| Module | What it does |
-|--------|-------------|
-| `DesignConstants` | Centralized font sizes, spacing values, and component dimensions used across all views. Included in the SPM target alongside pure logic. |
+- **CameraViewModel** — the single source of truth for camera state. Holds `@Published` properties (lux, Kelvin, permission, error, camera position, sessionReady). Wires SessionManager and FrameProvider together. Provides `captureFrameAsync()` and `toggleCamera()`.
+- **ContentView** — four-tab layout. Starts/stops camera based on active tab and foreground/background state.
+- **MeasurementView** — LUX tab with live and captured modes. Live mode shows a compact card with capture and camera toggle buttons. Captured mode freezes the frame, expands the card, hides the tab bar.
+- **MeasurementCardView** — pure display component. Receives pre-computed strings, no logic. Includes `formatValue()` for locale-aware number formatting.
+- **TemperatureView / TemperatureCardView** — same pattern as the LUX tab but simpler. Live mode only, no capture.
+- **CameraStateOverlay** — shared wrapper handling three states: permission denied, error, live preview.
+- **CameraPreviewView** — UIKit bridge wrapping `AVCaptureVideoPreviewLayer` in a `UIViewRepresentable`.
+- **PlaceholderView** — stub for unbuilt tabs. Title + "Coming Soon."
+- **DesignConstants** — centralized font sizes, spacing, and dimensions.
 
 ---
 
-## [5. Data Flow](#table-of-contents)
+## [How Data Flows](#table-of-contents)
 
-This diagram shows how data moves from the camera hardware through all three layers to the screen on every frame:
+Every frame follows the same path: hardware → effects → pure logic → glue → screen.
 
 ```mermaid
 graph LR
-    CAM["📷 Camera Hardware"]
+    CAM["📷 Camera"]
+    CSM["CameraSessionManager"]
+    CFP["CameraFrameProvider"]
+    LC["LuxCalculator"]
+    CTC["ColorTemperatureCalculator"]
+    CVM["CameraViewModel"]
+    VIEWS["SwiftUI Views"]
 
-    CAM --> CSM["CameraSessionManager<br/>session lifecycle"]
-    CSM --> CFP["CameraFrameProvider<br/>reads device metadata"]
-
-    CFP --> LC["LuxCalculator<br/>ISO + exposure → lux"]
-    CFP --> CTC["ColorTemperatureCalculator<br/>raw Kelvin → clamped"]
-
-    LC --> LI["LuxInterpreter<br/>lux → description + tip"]
-    LC --> CG["ComparisonGenerator<br/>lux → comparison sentence"]
-    CTC --> KI["KelvinInterpreter<br/>Kelvin → color tone + tip"]
-
-    LC --> CVM["CameraViewModel<br/>@Published lux"]
-    CTC --> CVM
-    CVM --> VIEWS["SwiftUI Views<br/>MeasurementView, TemperatureView"]
+    CAM --> CSM --> CFP
+    CFP --> LC --> CVM
+    CFP --> CTC --> CVM
+    CVM --> VIEWS
 
     style CAM fill:#6b7280,stroke:#374151,color:#fff
     style CSM fill:#f59e0b,stroke:#d97706,color:#fff
     style CFP fill:#f59e0b,stroke:#d97706,color:#fff
     style LC fill:#10b981,stroke:#059669,color:#fff
     style CTC fill:#10b981,stroke:#059669,color:#fff
-    style LI fill:#10b981,stroke:#059669,color:#fff
-    style CG fill:#10b981,stroke:#059669,color:#fff
-    style KI fill:#10b981,stroke:#059669,color:#fff
     style CVM fill:#3b82f6,stroke:#2563eb,color:#fff
     style VIEWS fill:#3b82f6,stroke:#2563eb,color:#fff
 ```
 
-> 🟢 Pure Logic &nbsp;&nbsp; 🟡 Effects &nbsp;&nbsp; 🔵 Glue &nbsp;&nbsp; ⚫ Hardware
+> 🟢 Pure logic &nbsp;&nbsp; 🟡 Effects &nbsp;&nbsp; 🔵 Glue &nbsp;&nbsp; ⚫ Hardware
 
-The key insight: `CameraFrameProvider` (effects) reads raw values from the hardware and passes them to `LuxCalculator` and `ColorTemperatureCalculator` (pure logic). The pure logic never touches the camera. The `CameraViewModel` (glue) publishes the results so SwiftUI views can observe them.
+`CameraFrameProvider` reads raw values from the device and passes them to `LuxCalculator` and `ColorTemperatureCalculator`. The pure logic never touches the camera. `CameraViewModel` publishes the results so SwiftUI views can observe them.
 
----
-
-## [6. Test Suite](#table-of-contents)
-
-All tests target the pure logic layer. The effects and glue layers require a real device or simulator and are not unit tested.
-
-| Test file | Tests for | Test count | What it validates |
-|-----------|----------|------------|-------------------|
-| `LuxCalculatorTests` | `LuxCalculator` | 7 | Formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant |
-| `LuxInterpreterTests` | `LuxInterpreter` | 26 | All 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence |
-| `LuxRangeTests` | `LuxRange` | 17 | Range index at every boundary, negative lux handling, equivalence with oracle |
-| `KelvinInterpreterTests` | `KelvinInterpreter` | 20 | All 6 color tone ranges, boundary values, below-1000K fallback, determinism |
-| `ColorTemperatureCalculatorTests` | `ColorTemperatureCalculator` | 10 | Clamping at min/max via both `clamp` and `calculateColorTemperature`, identity for in-range values, invariant across random inputs |
-| `ComparisonGeneratorTests` | `ComparisonGenerator` | 27 | Sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties |
-| `NumberFormattingTests` | `NumberFormatter` | 1 | Round-trip: format a number → parse it back → same value |
-| | | **Total: 94 unit + 14 property = 108** | |
+The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerator` are called at display time — they take the computed lux/Kelvin values and return human-readable strings.
 
 ---
 
-## [7. Unit Tests vs Property-Based Tests](#table-of-contents)
+## [The Test Suite](#table-of-contents)
 
-The test suite uses two complementary testing approaches. Understanding the difference helps when reading or modifying tests.
+All 108 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
-### Unit tests — specific inputs, specific outputs
+- **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
+- **LuxInterpreterTests** (26) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence
+- **LuxRangeTests** (17) — range index at every boundary, negative lux handling, equivalence with oracle
+- **KelvinInterpreterTests** (20) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism
+- **ColorTemperatureCalculatorTests** (10) — clamping at min/max, identity for in-range values, invariant across random inputs
+- **ComparisonGeneratorTests** (27) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
+- **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 
-A unit test picks one concrete input and checks that the output matches an expected value. It is precise and easy to read.
+The suite uses two styles: unit tests (specific input → expected output) and property-based tests (random inputs → invariant rules like "lux is never negative"). Every module has both. When you port to TypeScript, replicate the boundary tests and representative value tests. For property-based tests, `fast-check` is a good equivalent.
 
-```swift
-// "If lux is 350, the description should be about office work"
-@Test func range_office() {
-    let r = LuxInterpreter.interpret(lux: 350)
-    #expect(r.description == "General office work, kitchen cooking, light reading")
-}
-```
-
-Strengths: easy to understand, pinpoints exact failures, documents expected behavior.
-Weakness: only tests the specific values the developer thought of.
-
-### Property-based tests — random inputs, invariant rules
-
-A property-based test generates many random inputs and checks that a general rule (a "property") always holds. It does not check specific outputs — it checks structural invariants.
-
-```swift
-// "For ANY random lux value, the result should never be negative"
-@Test func property_luxNonNegativity() {
-    for _ in 0..<100 {
-        let iso = Float.random(in: -1000...10000)
-        let exposure = Double.random(in: -10.0...30.0)
-        let result = LuxCalculator.calculateLux(iso: iso, exposureDurationInSeconds: exposure)
-        #expect(result >= 0.0)
-    }
-}
-```
-
-Strengths: finds edge cases the developer did not think of, tests hundreds of inputs in one test.
-Weakness: harder to debug when they fail (which random input caused it?), invariants must be carefully chosen.
-
-### How they work together
-
-| Aspect | Unit tests | Property-based tests |
-|--------|-----------|---------------------|
-| Input | Hand-picked specific values | Randomly generated |
-| Assertion | Exact expected output | General rule that must always hold |
-| Quantity | One input per test | 100–200 inputs per test |
-| Reads like | "This input produces this output" | "For all inputs, this rule is true" |
-| Best for | Boundary values, regression cases | Invariants, formula correctness, edge case discovery |
-
-In this codebase, every module has both: unit tests for specific boundary values and representative values, plus property-based tests for invariants like "lux is never negative" and "clamped Kelvin is always in [1000, 15000]."
+Notable cross-module coverage: `ComparisonGeneratorTests` cross-checks against `LuxInterpreter` to verify both agree on range boundaries. Both `LuxInterpreterTests` and `ComparisonGeneratorTests` exercise `LuxRange` indirectly since they depend on it.
 
 ---
 
-## [8. Test Coverage Map](#table-of-contents)
+## [Building and Running](#table-of-contents)
 
-This diagram shows which test files cover which source modules:
+Two build systems, different purposes:
 
-```mermaid
-graph LR
-    subgraph SOURCE["Source Modules"]
-        direction TB
-        LC["LuxCalculator"]
-        LR_["LuxRange"]
-        LI["LuxInterpreter"]
-        KI["KelvinInterpreter"]
-        CTC["ColorTemperatureCalculator"]
-        CG["ComparisonGenerator"]
-        FMT["NumberFormatter<br/>(in card views)"]
-    end
+- **Swift Package Manager** (`swift build` / `swift test`) — builds and tests the pure logic layer only. Fast, no Xcode needed. Good for iterating on logic and CI pipelines.
+- **Xcode via XcodeGen** (`xcodegen generate` then Cmd+R) — builds the full app including camera, UI, and device deployment. Required for running on an iPhone.
 
-    subgraph TESTS["Test Files"]
-        direction TB
-        LCT["LuxCalculatorTests<br/>7 tests"]
-        LRT["LuxRangeTests<br/>17 tests"]
-        LIT["LuxInterpreterTests<br/>26 tests"]
-        KIT["KelvinInterpreterTests<br/>20 tests"]
-        CTCT["ColorTemperatureCalculatorTests<br/>10 tests"]
-        CGT["ComparisonGeneratorTests<br/>27 tests"]
-        NFT["NumberFormattingTests<br/>1 test"]
-    end
+`Package.swift` lists only the pure logic files and `DesignConstants.swift` — it excludes camera and UI code since those depend on iOS frameworks SPM can't build in isolation.
 
-    LCT --> LC
-    LRT --> LR_
-    LIT --> LI
-    LIT -.->|"also exercises"| LR_
-    KIT --> KI
-    CTCT --> CTC
-    CGT --> CG
-    CGT -.->|"also exercises"| LR_
-    CGT -.->|"cross-checks"| LI
-    NFT --> FMT
-
-    style SOURCE fill:#10b981,stroke:#059669,color:#fff
-    style TESTS fill:#8b5cf6,stroke:#7c3aed,color:#fff
-```
-
-> 🟢 Source modules &nbsp;&nbsp; 🟣 Test files &nbsp;&nbsp; Solid arrows — direct coverage &nbsp;&nbsp; Dashed arrows — indirect coverage
-
-Notable cross-module coverage:
-- `ComparisonGeneratorTests` cross-checks its output against `LuxInterpreter` to verify both modules agree on range boundaries
-- Both `LuxInterpreterTests` and `ComparisonGeneratorTests` exercise `LuxRange` indirectly since both modules depend on it
-
-### What is not tested
-
-| Module | Why |
-|--------|-----|
-| `CameraSessionManager` | Requires real camera hardware (effects layer) |
-| `CameraFrameProvider` | Requires real camera hardware (effects layer) |
-| `CameraViewModel` | Glue layer, depends on effects |
-| All SwiftUI views | UI layer, would require UI tests or snapshot tests |
-
-This is by design. The architecture pushes all testable logic into the pure layer, keeping the untested surface area as thin as possible.
-
----
-
-## [9. Build Systems](#table-of-contents)
-
-The project uses two build systems for different purposes:
-
-| Build system | Command | What it builds | When to use |
-|-------------|---------|---------------|-------------|
-| Swift Package Manager | `swift build` / `swift test` | Pure logic layer + tests only | Fast iteration on logic, CI pipelines |
-| Xcode (via XcodeGen) | `xcodegen generate` then Cmd+R | Full app including camera, UI, device deployment | Running on iPhone, testing camera features |
-
-`Package.swift` explicitly lists only the pure logic files and `DesignConstants.swift` — it excludes all camera and UI code since those depend on iOS frameworks that SPM cannot build in isolation.
-
-`project.yml` (XcodeGen config) sources entire directories recursively, so adding new files to any folder is automatically picked up after running `xcodegen generate`.
+`project.yml` (XcodeGen config) sources directories recursively, so new files are picked up automatically after running `xcodegen generate`.

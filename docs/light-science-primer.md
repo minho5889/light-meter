@@ -1,36 +1,51 @@
-# Light Science Primer — What You Need to Know to Build This App
+# Turning a Phone Camera Into a Light Meter
 
-This document explains the three physical quantities the LightMeter app measures: lux (brightness), color temperature (Kelvin), and flicker. It is written for developers, not physicists. The goal is to give you enough understanding to know why the formulas work, what the numbers mean, and where the tricky parts are when implementing on a phone.
+Your phone doesn't have a light sensor. Well, it does — the ambient light sensor that adjusts screen brightness — but that's a single crude number you can't access from app code. What your phone *does* have is a camera. And a camera, it turns out, is a surprisingly good light meter if you know how to read its metadata.
+
+This guide covers the three things we measure — brightness, color, and flicker — and exactly how to pull each one from a camera frame. It's written for developers building the app, not for anyone studying optics. You need just enough physics to understand why the code works.
 
 ---
 
 <a id="table-of-contents"></a>
 ## Table of Contents
 
-1. [Lux — How Bright Is It?](#1-lux--how-bright-is-it)
-2. [Color Temperature (Kelvin) — What Color Is the Light?](#2-color-temperature-kelvin--what-color-is-the-light)
-3. [Flicker — Is the Light Steady?](#3-flicker--is-the-light-steady)
-4. [How the Camera Gives Us These Numbers](#4-how-the-camera-gives-us-these-numbers)
-5. [Quick Reference for Developers](#5-quick-reference-for-developers)
-6. [Sources](#sources)
+1. [One Frame, Three Numbers](#one-frame-three-numbers)
+2. [Brightness (Lux): Reading the Camera's Homework](#brightness-lux-reading-the-cameras-homework)
+3. [Color Temperature (Kelvin): What White Looks Like](#color-temperature-kelvin-what-white-looks-like)
+4. [Flicker: The Hard One](#flicker-the-hard-one)
+5. [Where to Go From Here](#where-to-go-from-here)
+6. [Appendix: Pipeline & Reference](#appendix-pipeline--reference)
+7. [Sources](#sources)
 
 ---
 
-## [1. Lux — How Bright Is It?](#table-of-contents)
+## [One Frame, Three Numbers](#table-of-contents)
 
-### What it is
+Every time the camera captures a frame, it hands you two things: metadata and pixels.
 
-Lux is the standard unit for measuring how much light hits a surface [[1]](#source-1). One lux equals one lumen per square meter. It is an SI unit, meaning it is internationally standardized and used everywhere from architecture to agriculture.
+The metadata is the interesting part. Before the camera even saves an image, its auto-exposure system has already solved a physics problem: "How bright is this scene, and what color is the light?" It records the answer as ISO, exposure duration, and white balance gains. We just read those values and run them through simple formulas.
 
-The key thing to understand: lux measures light arriving at a point, not light leaving a source. A 1000-lumen bulb produces the same lumens whether you are standing next to it or across the room, but the lux you experience drops dramatically with distance. Lux is what your eyes actually receive.
+| What we get | Where it lives | What we compute |
+|-------------|---------------|-----------------|
+| ISO + exposure duration | Auto-exposure metadata | Brightness (lux) |
+| White balance gains | Auto white balance metadata | Color temperature (Kelvin) |
+| Raw pixel data | The actual image | Flicker percentage |
 
-### Why it matters to people
+Lux and Kelvin come entirely from metadata — zero pixel processing, zero performance cost. Flicker is the exception. It needs actual pixel data across multiple frames. More on that later.
 
-Humans are surprisingly bad at judging brightness by feel. A living room at 150 lux feels "well lit" to most people, but it is actually 600x dimmer than a cloudy day outdoors (around 10,000 lux) and 700x dimmer than direct sunlight (around 100,000 lux). Our eyes adapt so seamlessly that we do not notice these enormous differences.
+The three measurements are independent. A light can be bright and warm and flickering. Or dim and cool and perfectly steady. Each number tells you something different, and together they give a complete picture of any lighting environment.
 
-This is why a light meter is useful. It gives an objective number where human perception is unreliable. Parents checking nursery lighting, office workers evaluating desk lamps, plant owners checking sunlight levels — they all benefit from knowing the actual number.
+---
 
-### The scale in our app
+## [Brightness (Lux): Reading the Camera's Homework](#table-of-contents)
+
+### The idea
+
+Lux is the SI unit for illuminance — how much light is hitting a surface [[1]](#source-1). One lux is one lumen per square meter. It measures light *arriving*, not light *leaving*. A lamp produces the same lumens whether you're next to it or across the room, but the lux you experience drops with distance.
+
+Here's why a light meter matters: humans are terrible at judging brightness. Your living room at 150 lux feels "well lit," but it's 600x dimmer than a cloudy day outdoors (~10,000 lux) and 700x dimmer than direct sunlight (~100,000 lux). Your eyes adapt so smoothly you never notice.
+
+### The scale
 
 | Lux | What it looks like |
 |-----|-------------------|
@@ -43,61 +58,43 @@ This is why a light meter is useful. It gives an objective number where human pe
 | 2,001–10,000 | Cloudy day outdoors, open shade |
 | 10,001+ | Direct sunlight, noon on a clear day |
 
-Notice the ranges are not evenly spaced. They roughly follow a logarithmic pattern because human perception of brightness is logarithmic — doubling the lux does not feel twice as bright.
+These ranges aren't evenly spaced — they're roughly logarithmic, because that's how human brightness perception works. Doubling the lux doesn't feel twice as bright.
 
-### How a phone camera measures lux
+### How we get it from the camera
 
-A phone camera does not have a dedicated lux sensor. Instead, we reverse-engineer lux from the camera's auto-exposure settings [[6]](#source-6). Here is the chain:
-
-1. The camera's auto-exposure algorithm looks at the scene and decides how to expose the image
-2. It picks an ISO (sensor sensitivity) and an exposure duration (how long the sensor collects light)
-3. These two values, combined with the lens aperture (a fixed physical property of the camera), tell us how bright the scene must be
-
-The formula:
+The camera doesn't have a lux sensor. But its auto-exposure algorithm has already figured out how bright the scene is — it had to, in order to choose the right ISO and shutter speed. We just reverse-engineer its decision [[6]](#source-6).
 
 ```
 lux = (C × A²) / (ISO × T)
 ```
 
-Where:
-- `C` = calibration constant (12.5, from the ISO 2720 standard for reflected light metering [[5]](#source-5))
-- `A` = lens aperture f-number (e.g., 1.6 for iPhone, 1.7 for Samsung Galaxy S24)
-- `ISO` = sensor sensitivity (higher ISO = more sensitive = less light needed)
-- `T` = exposure duration in seconds (longer exposure = more light collected)
+- `C` = 12.5 — calibration constant from the ISO 2720 standard [[5]](#source-5)
+- `A` = lens aperture f-number (f/1.6 on iPhone 13 mini, f/1.7 on Galaxy S24)
+- `ISO` = sensor sensitivity
+- `T` = exposure duration in seconds
 
-The intuition: if the camera needs high ISO and long exposure, the scene is dark (low lux). If it uses low ISO and short exposure, the scene is bright (high lux). The formula just makes this relationship precise.
+The intuition is straightforward: if the camera cranks up ISO and uses a long exposure, the scene is dark. If it uses low ISO and a fast shutter, the scene is bright. The formula makes that relationship precise.
 
-### What this means for implementation
+### Implementation notes
 
-- You do not compute lux from pixel values. You compute it from camera metadata (ISO and exposure duration).
-- The camera must be in auto-exposure mode. If you lock exposure manually, the formula gives you the brightness the camera is calibrated for, not the actual scene brightness.
-- The aperture is a physical constant of the lens. It does not change. iPhone 13 mini is f/1.6. Samsung Galaxy S24 main camera is f/1.7. Samsung Galaxy S25 main camera is f/1.9. You hardcode this per device (or make it configurable).
-- The calibration constant (12.5) is an industry standard [[5]](#source-5). It comes from the assumption that the average scene reflects about 12.5% of incident light (the "middle gray" assumption in photography). It works well for general scenes. It is less accurate for very dark or very bright uniform surfaces, but for a consumer light meter it is more than adequate.
+- You compute lux from metadata, not pixels. Never look at pixel brightness for this — it's been mangled by white balance, tone mapping, and HDR processing.
+- The camera must be in auto-exposure mode. Locked exposure gives you the brightness the camera is *calibrated for*, not the actual scene brightness.
+- Aperture is a physical constant of the lens hardware. It doesn't change. You hardcode it per device or make it configurable.
+- The 12.5 calibration constant assumes the average scene reflects ~12.5% of incident light (the "middle gray" assumption from photography) [[5]](#source-5). It works well for general scenes. Less accurate for uniform dark or bright surfaces, but more than adequate for a consumer light meter.
 
 ---
 
-## [2. Color Temperature (Kelvin) — What Color Is the Light?](#table-of-contents)
+## [Color Temperature (Kelvin): What White Looks Like](#table-of-contents)
 
-### What it is
+### The idea
 
-Color temperature describes the color appearance of light, measured in Kelvin (K) [[2]](#source-2). It tells you whether light looks warm (orange/yellow) or cool (blue/white).
+Color temperature tells you whether light looks warm (orange) or cool (blue), measured in Kelvin [[2]](#source-2).
 
-The name comes from physics: if you heat a theoretical "black body" (a perfect absorber of light), it glows different colors at different temperatures. At around 1,800K it glows orange-red (like a candle flame). At 5,500K it glows white (like noon sunlight). At 10,000K+ it glows blue-white (like a clear blue sky in shade).
+The naming is counterintuitive: higher Kelvin means *cooler-looking* (bluer) light, even though the physical temperature is higher. A candle flame is ~1,800K (warm orange). Noon sunlight is ~5,500K (neutral white). A clear blue sky in shade is 10,000K+ (blue-white). We say "warm" and "cool" based on how colors feel psychologically, not their actual temperature.
 
-This is counterintuitive at first: higher Kelvin means cooler-looking (bluer) light, even though the physical temperature is higher. We call orange light "warm" and blue light "cool" because of how they feel psychologically, not because of their actual temperature.
+Why it matters: color temperature affects mood, focus, and even sleep. Warm light (2,000–3,000K) promotes relaxation — bedrooms and restaurants. Neutral light (3,500–5,000K) keeps you alert — kitchens and offices. Cool light (5,000K+) sharpens focus — study rooms and hospitals. A reading lamp at 2,700K is great for a bedroom but terrible for a study desk.
 
-### Why it matters to people
-
-Color temperature affects mood, productivity, and health:
-
-- Warm light (2,000–3,000K) promotes relaxation and sleep. Bedrooms and restaurants use it.
-- Neutral light (3,500–5,000K) is balanced and alert. Kitchens and offices use it.
-- Cool light (5,000–6,500K) promotes focus and alertness. Study rooms and hospitals use it.
-- Very cool light (6,500K+) can feel harsh and clinical. Warehouses and factories use it.
-
-People choosing light bulbs, setting up workspaces, or evaluating environments benefit from knowing the color temperature. A reading lamp at 2,700K is great for a bedroom but terrible for a study desk.
-
-### The scale in our app
+### The scale
 
 | Kelvin | Color tone | Feels like |
 |--------|-----------|------------|
@@ -108,72 +105,55 @@ People choosing light bulbs, setting up workspaces, or evaluating environments b
 | 6,500–9,999K | Cool White ❄ | Blue-white, clinical |
 | 10,000K+ | Blue Sky 🧊 | Very blue, like open shade |
 
-### How a phone camera measures color temperature
+### How we get it from the camera
 
-The camera's auto white balance system is constantly analyzing the scene to figure out what "white" looks like under the current lighting. It does this by adjusting gain values for the red, green, and blue channels of the sensor.
+The camera's auto white balance is constantly solving: "What does white look like under this light?" It adjusts red, green, and blue channel gains until whites look neutral.
 
-On iOS, the system provides a convenient method that converts these gain values directly to a Kelvin number. On Android, you get the raw gain values and need to compute the Kelvin yourself.
+Those gain values *are* the measurement. If the camera boosts blue and reduces red to neutralize the scene, the light source is warm (low Kelvin). If it boosts red and reduces blue, the light is cool (high Kelvin).
 
-The key insight: if the camera has to boost the blue channel and reduce the red channel to make whites look neutral, the light source must be warm (low Kelvin). If it boosts red and reduces blue, the light source must be cool (high Kelvin). The white balance gains are essentially the camera's measurement of the light's color.
+- On iOS, there's a convenience method: `device.temperatureAndTintValues(for: gains).temperature` gives you Kelvin directly.
+- On Android, you get `COLOR_CORRECTION_GAINS` (four floats: R, G_even, G_odd, B) from `CaptureResult`. You compute the red/blue gain ratio and map it to Kelvin — a lookup table or simplified McCamy's formula works fine.
 
-### What this means for implementation
+The raw value is an approximation. Different cameras give slightly different readings for the same light. That's fine — we clamp to [1,000, 15,000] and classify into six broad ranges.
 
-- On iOS: `device.temperatureAndTintValues(for: gains).temperature` gives you Kelvin directly. Easy.
-- On Android: you get `COLOR_CORRECTION_GAINS` (red, green_even, green_odd, blue gain values) from `CaptureResult`. You need to convert these to an approximate Kelvin value.
-- A practical approach for Android: compute the ratio of red gain to blue gain. A higher red/blue ratio means cooler light (camera is compensating by boosting red). Map this ratio to Kelvin using a lookup table or a simplified version of McCamy's formula. The mapping does not need to be precise — our app clamps to [1,000, 15,000] and classifies into just 6 broad ranges.
-- The raw Kelvin value from the camera is an approximation, not a laboratory measurement. Different cameras will give slightly different readings for the same light source. This is fine for a consumer app.
+### How lux and Kelvin relate
 
-### The relationship between lux and Kelvin
+They don't, really. Lux is quantity (how much light). Kelvin is quality (what color). A candle and a fluorescent tube can both produce 100 lux, but the candle is ~1,800K while the fluorescent is ~4,000K.
 
-Lux and Kelvin measure completely different things. Lux measures how much light there is (quantity). Kelvin measures what color the light is (quality). A candle and a fluorescent tube can both produce 100 lux, but the candle is around 1,800K (warm orange) while the fluorescent is around 4,000K (neutral white).
+There's a loose correlation in natural light — sunrise is both dim and warm, noon is both bright and cool. But indoors with artificial lighting, the correlation breaks down completely. A bright warm-white LED can be 500 lux at 2,700K. A dim cool-white fluorescent can be 100 lux at 6,500K.
 
-In practice, there is a loose correlation in natural light: sunrise/sunset light is both dim and warm (low lux, low Kelvin), while noon sunlight is both bright and neutral-cool (high lux, higher Kelvin). But indoors, with artificial lighting, the correlation breaks down completely. A bright warm-white LED can be 500 lux at 2,700K, while a dim cool-white fluorescent can be 100 lux at 6,500K.
-
-Our app displays both values simultaneously because together they give a complete picture of the lighting environment that neither value provides alone.
+We show both values together because neither tells the full story alone.
 
 ---
 
-## [3. Flicker — Is the Light Steady?](#table-of-contents)
+## [Flicker: The Hard One](#table-of-contents)
 
-### What it is
+### The idea
 
-Flicker is the rapid, repeated variation in the intensity of a light source over time [[3]](#source-3). Most artificial lights flicker because they are powered by alternating current (AC), which cycles on and off. In regions with 50Hz mains power (Europe, Asia, most of the world), lights flicker at 100Hz (twice per cycle). In regions with 60Hz mains (North America, parts of Asia), lights flicker at 120Hz.
+Most artificial lights flicker [[3]](#source-3). Not on-off-on-off — more like bright-dim-bright-dim, many times per second. AC power cycles at 50Hz (Europe, Asia) or 60Hz (North America), so lights oscillate at 100Hz or 120Hz (twice per cycle).
 
-"Flicker" does not mean the light turns completely off and on. It means the brightness oscillates — it gets slightly brighter and slightly dimmer many times per second. The amount of oscillation varies enormously between light sources.
+You can't see it consciously, but your visual system still responds. The effects are well-documented: headaches, eye strain, reduced concentration, nausea. Some people are far more sensitive than others — children, migraine sufferers, and people with autism spectrum conditions tend to be more affected [[3]](#source-3).
 
-### Why it matters to people
+The severity depends entirely on the light source:
 
-Even when flicker is too fast to consciously see, the human visual system still responds to it [[3]](#source-3). Documented effects include:
+- Old incandescent bulbs: flicker at 100–120Hz, but less than 10% intensity variation. Generally fine.
+- Cheap LED bulbs: flicker at 100–120Hz with 30–100% intensity variation. Problematic.
+- Quality LED bulbs: good driver electronics reduce flicker to under 3%.
+- Sunlight: zero flicker.
 
-- Headaches and migraines
-- Eye strain and fatigue
-- Reduced concentration and reading performance
-- Dizziness and nausea
-- In extreme cases, seizures in photosensitive individuals
+There's also a nasty real-world interaction with dimming. When LEDs are dimmed using PWM (pulse-width modulation), flicker percentage often spikes. A bulb at 5% flicker on full brightness might hit 40% flicker at half brightness. Your users will encounter this.
 
-Some people are much more sensitive to flicker than others. Children, people with migraines, and people with autism spectrum conditions tend to be more affected.
+### How we measure it
 
-The quality of the light source matters enormously:
-- Old incandescent bulbs flicker at 100–120Hz but with less than 10% intensity variation — generally not problematic
-- Cheap LED bulbs can flicker at 100–120Hz with 30–100% intensity variation — very problematic
-- High-quality LED bulbs use better driver electronics to reduce flicker to under 3%
-- Natural sunlight has zero flicker
-
-### How we measure flicker
-
-The standard metric is flicker percentage, which measures how much the light intensity varies within each cycle:
+Flicker percentage captures how much the intensity oscillates within each cycle:
 
 ```
 flicker% = (Lmax - Lmin) / (Lmax + Lmin) × 100
 ```
 
-Where:
-- `Lmax` = peak brightness within a flicker cycle
-- `Lmin` = minimum brightness within a flicker cycle
+A light oscillating between 90 and 110 brightness units: `(110 - 90) / (110 + 90) × 100 = 10%`. Between 10 and 100: `(100 - 10) / (100 + 10) × 100 = 82%`. The first is barely noticeable. The second is severe.
 
-If a light oscillates between 90 and 110 units of brightness: `(110 - 90) / (110 + 90) × 100 = 10%`. If it oscillates between 10 and 100: `(100 - 10) / (100 + 10) × 100 = 82%`. The first is barely noticeable; the second is severe.
-
-### The scale in our app
+### The scale
 
 | Flicker % | Safety level | What it means |
 |-----------|-------------|---------------|
@@ -183,22 +163,22 @@ If a light oscillates between 90 and 110 units of brightness: `(110 - 90) / (110
 | 30–60% | Dangerous | Severe eye fatigue, migraines, dizziness |
 | 60%+ | Very Dangerous | Visible flickering, risk of seizures for sensitive individuals |
 
-These thresholds are informed by IEEE 1789 recommended practices [[4]](#source-4) and general industry guidance. The IEEE suggests a limit of about 8–10% flicker at 100–120Hz for comfortable viewing.
+These thresholds are informed by IEEE 1789 recommended practices [[4]](#source-4), which suggest a limit of ~8–10% flicker at 100–120Hz for comfortable viewing.
 
-### How a phone camera detects flicker
+### How we detect it from the camera
 
-This is the most technically challenging measurement in the app. Unlike lux and Kelvin, which come from camera metadata, flicker requires analyzing the actual image data across multiple frames.
+This is where it gets interesting. Unlike lux and Kelvin (metadata lookups), flicker requires analyzing actual pixel data across multiple frames.
 
 The approach:
 
-1. Capture frames at a consistent rate (30fps minimum, 60fps preferred for better frequency resolution)
-2. For each frame, compute the mean luminance — the average brightness across all pixels (or a center-weighted region)
-3. Store these luminance values in a rolling buffer (128 or 256 samples gives good FFT resolution)
-4. Apply a Fast Fourier Transform (FFT) to the buffer to convert from the time domain to the frequency domain
-5. Look for peaks at 100Hz and 120Hz in the frequency spectrum — these are the telltale signatures of AC-powered light flicker
-6. If a peak is found, compute the flicker percentage from the amplitude of the oscillation
+1. Capture frames at a consistent rate (30fps minimum, 60fps preferred)
+2. For each frame, compute mean luminance — average brightness across all pixels (or a center-weighted region)
+3. Store values in a rolling buffer (128–256 samples for good FFT resolution)
+4. Run a Fast Fourier Transform to convert from time domain to frequency domain
+5. Look for peaks at 100Hz and 120Hz — the signatures of AC-powered flicker
+6. If a peak exists, compute flicker percentage from the oscillation amplitude
 
-Here is what that looks like conceptually:
+Conceptually:
 
 ```
 Frame 1: avg brightness = 142
@@ -213,55 +193,41 @@ FFT reveals: peak at 120Hz with amplitude X
 → flicker% = amplitude-based calculation
 ```
 
-### Why this is hard on a phone
+### Why this is tricky on a phone
 
-Several challenges make phone-based flicker detection tricky:
+Four things make phone-based flicker detection harder than it sounds:
 
-1. Frame rate limitation: most phone cameras capture at 30 or 60fps. By the Nyquist theorem, you can only detect frequencies up to half your sample rate. At 30fps, you can detect up to 15Hz — not enough for 100/120Hz flicker. At 60fps, you can detect up to 30Hz — still not enough.
+1. **Frame rate vs flicker frequency.** Most cameras capture at 30 or 60fps. Nyquist theorem says you can only detect frequencies up to half your sample rate — 15Hz at 30fps, 30Hz at 60fps. Neither reaches 100/120Hz directly. The workaround: flicker at those frequencies creates aliased patterns at lower frequencies. A 120Hz flicker sampled at 60fps aliases to ~0Hz. A 100Hz flicker at 30fps aliases to 10Hz. You detect the aliases, not the original frequency. Some phones support 120/240fps, which resolves this directly.
 
-   The workaround: flicker at 100/120Hz creates aliased patterns at lower frequencies when sampled at 30/60fps. A 120Hz flicker sampled at 60fps appears as a 0Hz (DC) or very low frequency beat pattern. A 100Hz flicker sampled at 30fps aliases to 10Hz. You can detect these aliased signatures, but it requires careful analysis.
+2. **Auto-exposure interference.** The camera constantly adjusts ISO and exposure, changing brightness between frames for reasons unrelated to flicker. You need to lock exposure during measurement or compensate for the changes.
 
-   Alternatively, some phones support higher frame rates (120fps, 240fps) which can directly resolve 100/120Hz.
+3. **Rolling shutter.** Phone cameras expose different pixel rows at slightly different times. This can actually *help* (it creates visible banding from flicker), but it complicates the luminance averaging approach.
 
-2. Auto-exposure interference: the camera's auto-exposure is constantly adjusting ISO and exposure duration, which changes the overall brightness between frames for reasons unrelated to flicker. You need to either lock exposure during measurement or compensate for auto-exposure changes.
-
-3. Rolling shutter: most phone cameras use a rolling shutter, meaning different rows of pixels are exposed at slightly different times. This can actually help detect flicker (it creates visible banding patterns in the image), but it complicates the luminance averaging approach.
-
-4. Processing speed: computing mean luminance and FFT on every frame needs to happen in real time. This is why the flicker detection should run in a native module (Java/Kotlin), not in JavaScript.
-
-### The relationship between flicker and the other measurements
-
-Flicker is independent of both lux and Kelvin. A light can be bright (high lux), warm (low Kelvin), and flickering badly (high flicker%). Or it can be dim, cool, and perfectly steady. The three measurements are orthogonal — they each tell you something different about the light.
-
-However, there is one practical interaction: dimming. When LED lights are dimmed using PWM (pulse-width modulation), the flicker percentage often increases dramatically. A bulb that has 5% flicker at full brightness might have 40% flicker at 50% brightness. This is a real-world scenario your users will encounter.
-
-Together, the three measurements give a complete picture:
-- Lux tells you: "Is there enough light for what I am doing?"
-- Kelvin tells you: "Is the light the right color for this activity?"
-- Flicker tells you: "Is this light safe for my eyes over extended periods?"
+4. **Processing budget.** Mean luminance + FFT on every frame needs to run in real time. This should live in a native module, not JavaScript.
 
 ---
 
-## [4. How the Camera Gives Us These Numbers](#table-of-contents)
+## [Where to Go From Here](#table-of-contents)
 
-This section ties together how a single camera frame provides all three measurements. Understanding this data flow is essential for implementation.
+That's the entire physics model behind the app — and honestly, it's not that much physics. The camera already did the hard work of metering the scene. We're just reading its answers and running them through a few formulas.
 
-### One frame, three measurements
+Here's what that means in practice: two of the three pipelines (lux and Kelvin) are pure metadata reads. No pixel processing, no buffers, no FFT. You can have a working brightness and color temperature meter in an afternoon. Flicker is the one that takes real engineering effort — the aliasing workarounds, the rolling buffer, the real-time FFT — but it's also the feature that makes this app genuinely useful rather than a novelty.
 
-When the camera captures a frame, the following data is available:
+If you're picking up this codebase for the first time, start with the lux pipeline. It's the simplest end-to-end path: read two numbers from camera metadata, plug them into a formula, classify the result. Once that's working, Kelvin is almost the same pattern with a different data source. Flicker comes last — by then you'll already understand the camera frame lifecycle and the pure-logic-vs-effects split that the architecture is built around.
 
-| Data point | Where it comes from | What we compute |
-|-----------|-------------------|-----------------|
-| ISO | Camera auto-exposure metadata | Used in lux formula |
-| Exposure duration | Camera auto-exposure metadata | Used in lux formula |
-| White balance gains | Camera auto white balance metadata | Converted to Kelvin |
-| Pixel data | The actual image | Used for flicker detection (mean luminance) |
+The pure logic layer ports across platforms without changes. The calculators, interpreters, and classifiers don't know or care whether they're running on iOS or Android. Only the thin effects layer — the part that actually talks to the camera — needs to be rewritten per platform. For how this maps to the actual codebase, see the [Developer Guide](docs/developer-guide.md).
 
-For lux and Kelvin, we only need metadata — we never look at the actual pixels. This is why those measurements are cheap and can run at full frame rate with no performance concern.
+Point your camera at a lamp and see what comes back. That's the best way to build intuition for what these numbers actually mean.
 
-For flicker, we need the actual pixel data to compute mean luminance. This is more expensive but still feasible at 30–60fps in a native module.
+---
 
-### The data flow in the app
+## [Appendix: Pipeline & Reference](#table-of-contents)
+
+Everything above is the narrative. Everything below is the stuff you'll `Cmd+F` for later.
+
+### The full pipeline
+
+One camera frame feeds three independent pipelines:
 
 ```mermaid
 graph LR
@@ -298,40 +264,27 @@ graph LR
 
 > 🟡 Lux pipeline &nbsp;&nbsp; 🔵 Kelvin pipeline &nbsp;&nbsp; 🟢 Flicker pipeline &nbsp;&nbsp; ⚫ Shared origin
 
-The first two branches (lux and Kelvin) are implemented in the iOS app and should be ported directly. The third branch (flicker) is new work for the React Native team.
+The lux and Kelvin pipelines are metadata-only — cheap and fast. The flicker pipeline touches pixels and needs a rolling buffer + FFT — heavier, but still real-time in a native module.
 
-### iOS vs Android: where the data comes from
+The lux and Kelvin branches are already implemented in the iOS app and port directly. Flicker is new work for the React Native team.
 
-| Data point | iOS API | Android API |
-|-----------|---------|-------------|
-| ISO | `device.iso` (Float) | `CaptureResult.SENSOR_SENSITIVITY` (Integer) |
-| Exposure duration | `device.exposureDuration` (CMTime) | `CaptureResult.SENSOR_EXPOSURE_TIME` (Long, nanoseconds) |
-| White balance | `device.deviceWhiteBalanceGains` → `temperatureAndTintValues(for:)` | `CaptureResult.COLOR_CORRECTION_GAINS` (4 floats: R, G_even, G_odd, B) |
-| Pixel data | `CMSampleBuffer` → `CVPixelBuffer` | `Image` from `ImageReader` or VisionCamera frame |
+### Formulas
 
-The pure logic layer (calculators, interpreters, generators) is identical on both platforms. Only the effects layer — how you read the data from the camera — changes.
-
----
-
-## [5. Quick Reference for Developers](#table-of-contents)
-
-### Formulas you will implement
-
-Lux calculation:
+Lux:
 ```
 lux = (12.5 × aperture²) / (ISO × exposureSeconds)
 // Returns 0 if ISO ≤ 0 or exposureSeconds ≤ 0
 ```
 
-Color temperature clamping:
+Color temperature:
 ```
 kelvin = clamp(rawKelvin, 1000, 15000)
 ```
 
-Flicker percentage:
+Flicker:
 ```
 flicker% = (Lmax - Lmin) / (Lmax + Lmin) × 100
-// Where Lmax and Lmin are from the dominant flicker cycle detected by FFT
+// Lmax and Lmin from the dominant flicker cycle detected by FFT
 ```
 
 ### Constants
@@ -347,17 +300,17 @@ flicker% = (Lmax - Lmin) / (Lmax + Lmin) × 100
 | AC mains frequency (Americas) | 60Hz → 120Hz flicker | Electrical standard |
 | AC mains frequency (Europe/Asia) | 50Hz → 100Hz flicker | Electrical standard |
 
-### Common misconceptions to avoid
+### Things that trip people up
 
-1. "Lux comes from pixel brightness" — No. Lux comes from camera exposure metadata (ISO and shutter speed). Pixel brightness is affected by white balance, tone mapping, and other processing that makes it unreliable for absolute brightness measurement.
+1. **"Lux comes from pixel brightness."** No. Lux comes from camera exposure metadata (ISO and shutter speed). Pixel brightness has been processed by white balance, tone mapping, and HDR — it's unreliable for absolute measurement.
 
-2. "Higher Kelvin means warmer light" — No. It is the opposite. Higher Kelvin means cooler (bluer) light. This is the most common confusion because "warm" and "cool" refer to psychological perception, not physical temperature.
+2. **"Higher Kelvin = warmer light."** Opposite. Higher Kelvin = cooler (bluer) light. "Warm" and "cool" describe psychological perception, not physical temperature.
 
-3. "Flicker is just the light turning on and off" — Not exactly. Flicker is the variation in intensity. Even a light that never fully turns off can have severe flicker if its brightness oscillates significantly.
+3. **"Flicker means the light turns on and off."** Not quite. Flicker is intensity *variation*. A light that never fully turns off can still have severe flicker if its brightness oscillates significantly.
 
-4. "All LED lights flicker" — Not true. High-quality LED lights with good driver electronics can have flicker below 1%. The problem is cheap LEDs with poor drivers.
+4. **"All LEDs flicker."** Quality LEDs with good driver electronics can be under 1% flicker. The problem is cheap LEDs with poor drivers.
 
-5. "The camera measures flicker directly" — No. The camera captures frames at 30–60fps. Flicker at 100–120Hz is faster than the frame rate. We detect flicker through its aliased effects on frame-to-frame brightness variation, or by using higher frame rates where available.
+5. **"The camera measures flicker directly."** The camera captures at 30–60fps. Flicker at 100–120Hz is faster than the frame rate. We detect it through aliased patterns in frame-to-frame brightness, or by using higher frame rates where available.
 
 ---
 

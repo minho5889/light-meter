@@ -85,67 +85,46 @@ swift test
 
 ```
 LightMeter/
-├── LightMeterApp.swift              # App entry point
-├── ContentView.swift                # Tab navigation, camera lifecycle
-├── Logic/                           # Pure logic — no side effects, fully testable
-│   ├── LuxCalculator.swift
-│   ├── LuxInterpreter.swift
-│   ├── LuxRange.swift
-│   ├── KelvinInterpreter.swift
-│   ├── ColorTemperatureCalculator.swift
-│   ├── ComparisonGenerator.swift
-│   └── InterpretationResult.swift
-├── Camera/                          # Effects — thin hardware wrappers
-│   ├── CameraSessionManager.swift
-│   ├── CameraFrameProvider.swift
-│   └── CameraViewModel.swift
-├── Features/                        # Feature screens
-│   ├── Measurement/
-│   └── Temperature/
-├── SharedViews/                     # Reusable view components
-└── Design/
-    └── DesignConstants.swift
+├── Logic/                  # 🟢 Pure logic — formulas, interpreters, generators
+├── Camera/                 # 🟡 Effects — camera session, frame metadata
+├── Features/               # 🔵 Glue — LUX and Temperature tab screens
+├── SharedViews/            # 🔵 Glue — reusable view components
+└── Design/                 # Font sizes, spacing, dimensions
 
 LightMeterTests/
-├── Logic/                           # 108 tests covering all pure logic
+├── Logic/                  # 108 tests covering all pure logic
 └── Formatting/
 ```
+
+For the full file-by-file breakdown with module descriptions, see the [Developer Guide](docs/developer-guide.md).
 
 ---
 
 ## [4. Architecture](#table-of-contents)
 
-The app follows a three-layer deterministic split:
+The app follows a "functional core, imperative shell" pattern (called the "deterministic split" in the codebase). Pure logic is deterministic and portable — same inputs, same outputs, no hardware dependencies. Effects are thin camera wrappers. Glue wires them together in SwiftUI with no business logic.
 
-| Layer | Rule | Examples |
-|-------|------|---------|
-| Pure Logic | Same inputs → same outputs. No hardware, no frameworks. | `LuxCalculator`, `LuxInterpreter`, `KelvinInterpreter` |
-| Effects | Thin wrappers around camera APIs. Minimal logic. | `CameraSessionManager`, `CameraFrameProvider` |
-| Glue | Wires logic to effects. No business logic. | `CameraViewModel`, SwiftUI views |
-
-The pure logic layer is 100% unit testable without mocks or devices, and portable to other platforms. See the [Developer Guide](docs/developer-guide.md) for the full module reference and data flow diagrams.
+The pure logic layer is 100% unit testable without mocks or devices, and it's what the React Native team ports to TypeScript. See the [Developer Guide](docs/developer-guide.md) for the full architecture breakdown and data flow diagram.
 
 ---
 
 ## [5. Documentation](#table-of-contents)
 
-Four documents cover everything you need to know. Read them in this order:
+Three docs, each with a clear job. Read them in this order:
 
 ### 1. [Light Science Primer](docs/light-science-primer.md)
 
-Start here. Before touching any code, understand what the app actually measures. This doc explains lux, Kelvin, and flicker in plain language — what they are physically, why people care about them, and how a phone camera captures them. It takes 15 minutes and saves hours of confusion later when you encounter the formulas and range tables in the code.
+Start here. Covers how a phone camera becomes a light meter — the three things we measure (lux, Kelvin, flicker), how each one comes from a camera frame, and the formulas behind them. Written for developers, not physicists. ~15 minutes.
 
 ### 2. [Developer Guide](docs/developer-guide.md)
 
-Read this second. It maps the science to the code — which module implements which formula, how data flows from the camera hardware through three layers to the screen, and how the test suite covers each module. It includes the product requirements (lux/Kelvin range tables, capture flow) so you know what the app is supposed to do, and architecture diagrams so you know how it does it.
+The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 108-test suite covers it. Read this before you start porting anything.
 
-### 3. [GitHub Guide](docs/github-guide.md)
+### 3. [React Native Handover](docs/react-native-handover.md)
 
-Read this before making your first commit. It covers the Git workflow for this project — branching, commit message conventions, and pull request process. If you already know Git well, skim the common commands table at the bottom and move on.
+The Android port plan. Team structure, what to build, suggested pace, and the key technical differences between iOS and Android camera APIs. Read this only if you're working on the React Native build.
 
-### 4. [React Native Handover](docs/react-native-handover.md)
-
-Read this only if you are working on the Android port. It defines the scope, three-tier priorities, week-by-week timeline, and the key technical differences between the iOS camera pipeline and Android's Camera2 API. It assumes you have already read the primer and developer guide.
+There's also a [GitHub Guide](docs/github-guide.md) covering branching, commit conventions, and pull requests — skim it before your first commit.
 
 ---
 

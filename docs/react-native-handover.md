@@ -1,472 +1,268 @@
-# React Native Handover — LightMeter Android App
+# Building LightMeter for Android
+
+Welcome to the project. You're building an Android version of a light meter app using React Native. The iOS version in this repo is your reference — same features, same logic, just adapted for Android and React Native.
+
+The app points the camera at a scene and tells you how bright the light is (lux), what color it is (Kelvin), and whether it flickers. Don't worry if that sounds like a lot — the first two are surprisingly simple once the camera is set up, and the science is covered in the [Light Science Primer](docs/light-science-primer.md) whenever you need it.
+
+This guide is a map, not a script. It's here to help you find your way through the codebase and make good decisions. Feel free to adapt the approach to whatever works best for you.
+
+---
 
 <a id="table-of-contents"></a>
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Team Structure](#team-structure)
-3. [Reference Codebase Map](#reference-codebase-map)
-4. [Three-Layer Architecture](#three-layer-architecture-must-preserve)
-5. [Priority Breakdown](#priority-breakdown)
-6. [Camera Pipeline — Key Technical Details](#camera-pipeline--key-technical-details)
-7. [Key Differences: Swift/iOS vs React Native/Android](#key-differences-swiftios-vs-react-nativeandroid)
-8. [What Ports Directly](#what-ports-directly-common-ground)
-9. [Week-by-Week Suggested Timeline](#week-by-week-suggested-timeline)
-10. [Testing Requirements](#testing-requirements)
-11. [Out of Scope](#out-of-scope)
-12. [Reference Files to Read First](#reference-files-to-read-first)
+1. [Team Overview](#team-overview)
+2. [The Architecture (Worth Understanding Early)](#the-architecture-worth-understanding-early)
+3. [Getting Camera Data — The Trickiest Part](#getting-camera-data--the-trickiest-part)
+4. [What to Build](#what-to-build)
+5. [Suggested Pace](#suggested-pace)
+6. [Not in Scope](#not-in-scope)
+7. [Appendix: React Native Reference](#appendix-react-native-reference)
+8. [Sources](#sources)
 
 ---
 
-## [Overview](#table-of-contents)
+## [Team Overview](#table-of-contents)
 
-You are building an Android version of the LightMeter iOS app using React Native. The iOS codebase in this repo is your reference implementation. Your target is flagship Samsung phones (Galaxy S24/S25 series). The engagement is three weeks with two developers: a lead and a support developer.
+Two developers, roughly three weeks.
 
-The iOS app is a real-time light measurement tool that uses the camera to display lux (brightness), color temperature (Kelvin), and will eventually detect light flicker. The React Native version should be functionally equivalent — same features, same measurement logic, but adapted to Android's camera APIs and React Native's UI paradigm.
+- **Lead developer** — project setup, camera pipeline, the main tabs (LUX and Temperature), records shell, and general integration
+- **Support developer** — flicker detection, which is a self-contained feature involving a native module and its own UI tab
 
----
-
-## [Team Structure](#table-of-contents)
-
-| Role | Focus | Weeks |
-|------|-------|-------|
-| Lead developer | Project setup, camera pipeline, lux/temperature tabs, records shell, integration | All 3 weeks |
-| Support developer | Flicker detection feature (research, native module, UI) | All 3 weeks |
-
-Both developers should coordinate on the camera pipeline early (week 1) since flicker detection depends on frame-level access.
+The one shared dependency is the camera pipeline. The lead sets it up, and the support developer builds on top of it for flicker analysis. It's worth syncing on this early so you're not blocked later.
 
 ---
 
-## [Reference Codebase Map](#table-of-contents)
+## [The Architecture (Worth Understanding Early)](#table-of-contents)
 
-The iOS project follows a strict three-layer architecture called the "deterministic split." Understanding this is critical because the pure logic layer ports directly to TypeScript with zero changes to the algorithms.
+The iOS codebase follows a pattern called "functional core, imperative shell" [[1]](#source-1) [[2]](#source-2) — you'll see it called the "deterministic split" in the codebase and steering docs. The full breakdown of how this maps to the file tree is in the [Developer Guide](docs/developer-guide.md), but here's the short version:
 
-### Source structure
+- **Pure logic** — deterministic functions with no side effects. Same input always gives the same output. In React Native, these become TypeScript modules in something like `src/logic/`.
+- **Effects** — thin wrappers around hardware (camera, sensors). No business logic here. In React Native, this is your native modules or library wrappers.
+- **Glue** — wires the other two together. React components, hooks, context. No business logic, no direct platform calls.
 
-```
-LightMeter/
-├── LightMeterApp.swift              # App entry point
-├── ContentView.swift                # Tab navigation (4 tabs)
-├── Logic/                           # PURE LAYER — port this to TypeScript
-│   ├── LuxCalculator.swift          # Lux formula: (C × A²) / (ISO × exposure)
-│   ├── LuxInterpreter.swift         # Maps lux → description + tip (8 ranges)
-│   ├── LuxRange.swift               # Shared range index function
-│   ├── KelvinInterpreter.swift      # Maps Kelvin → color tone + tip (6 ranges)
-│   ├── ColorTemperatureCalculator.swift  # Clamps Kelvin to [1000, 15000]
-│   ├── ComparisonGenerator.swift    # "Brighter than X but darker than Y"
-│   └── InterpretationResult.swift   # { description, tip } data type
-├── Camera/                          # EFFECTS LAYER — rewrite for Android
-│   ├── CameraSessionManager.swift   # AVCaptureSession lifecycle
-│   ├── CameraFrameProvider.swift    # Frame buffer delegate, metadata extraction
-│   └── CameraViewModel.swift        # Glue: wires camera → logic → UI state; holds sessionReady, captureFrameAsync()
-├── Features/                        # VIEWS — rebuild in React Native
-│   ├── Measurement/
-│   │   ├── MeasurementView.swift    # LUX tab (live + captured modes)
-│   │   └── MeasurementCardView.swift
-│   └── Temperature/
-│       ├── TemperatureView.swift    # Temperature tab
-│       └── TemperatureCardView.swift
-├── SharedViews/
-│   ├── CameraPreviewView.swift      # Camera preview (UIViewRepresentable)
-│   ├── CameraStateOverlay.swift     # Permission/error/live state wrapper
-│   └── PlaceholderView.swift        # Placeholder for unbuilt tabs
-└── Design/
-    └── DesignConstants.swift         # Font sizes, spacing, dimensions
-```
-
-### Test structure
-
-```
-LightMeterTests/
-├── Logic/
-│   ├── LuxCalculatorTests.swift
-│   ├── LuxInterpreterTests.swift
-│   ├── LuxRangeTests.swift
-│   ├── KelvinInterpreterTests.swift
-│   ├── ColorTemperatureCalculatorTests.swift
-│   └── ComparisonGeneratorTests.swift
-└── Formatting/
-    └── NumberFormattingTests.swift
-```
+The reason this matters for you: the entire pure logic layer ports from Swift to TypeScript with zero changes to the algorithms. Same formulas, same thresholds, same output strings. You're only rewriting the camera access code and the UI.
 
 ---
 
-## [Three-Layer Architecture (Must Preserve)](#table-of-contents)
+## [Getting Camera Data — The Trickiest Part](#table-of-contents)
 
-This is the most important architectural constraint. The iOS codebase enforces it and the React Native version must too.
+This is probably the most challenging piece of the project, so it's worth understanding upfront. Everything else builds on top of it.
 
-| Layer | What it does | iOS example | React Native equivalent |
-|-------|-------------|-------------|------------------------|
-| Pure Logic | Deterministic functions, no side effects, same input → same output | `Logic/*.swift` | TypeScript modules in `src/logic/` |
-| Effects | Thin wrappers around hardware/platform APIs | `Camera/*.swift` | Native modules or library wrappers |
-| Glue | Wires logic to effects, no business logic | `ContentView.swift`, `CameraViewModel.swift` | React components, hooks, context |
+The app needs three values from the camera on every frame:
 
-Rules:
-- Business logic lives only in the pure layer
-- The pure layer must not import any platform-specific modules
-- Effects must not contain business logic
-- Glue must not contain business logic or direct platform calls
+- **ISO** — sensor sensitivity, used to calculate lux
+- **Exposure duration** — how long the sensor was open, also used for lux
+- **White balance gains** — used to estimate color temperature (Kelvin)
 
-This split exists so the pure logic is portable. You are proving that right now by porting it from Swift to TypeScript.
+On iOS, these are just properties you read from the camera device. On Android, they come from `CaptureResult` metadata attached to each frame [[3]](#source-3).
 
----
+The catch: `react-native-vision-camera` [[4]](#source-4) doesn't expose this metadata to JavaScript out of the box. The recommended approach is to write a small Kotlin frame processor plugin [[5]](#source-5) that reads the metadata and passes it back to JavaScript. It's a focused piece of native code — not a huge lift, but it is the part most likely to take longer than expected.
 
-## [Priority Breakdown](#table-of-contents)
+A few things that might help:
 
-### P0 — Must complete (week 1–2)
+- Samsung Galaxy S24/S25 flagships support full Camera2 metadata [[3]](#source-3), so you won't hit capability issues on the target devices
+- For color temperature, Android doesn't have a built-in conversion like iOS does. You'll compute an approximate Kelvin from the red/blue gain ratio — a lookup table or McCamy's formula [[6]](#source-6) works fine. It doesn't need to be precise since the app classifies into broad ranges
+- The lux formula uses the lens aperture as a constant. iPhone is f/1.6, Galaxy S24 is f/1.7, Galaxy S25 is f/1.9. The calculator already accepts this as a parameter
 
-These are blocking. Nothing else works without them.
-
-#### P0.1 — Project scaffolding and camera pipeline
-
-Set up the React Native project with camera access on Android. This is the foundation everything else builds on.
-
-- Initialize React Native project (Expo or bare — your choice)
-- Install and configure `react-native-vision-camera` (recommended) or equivalent
-- Request camera permission on Android
-- Display live camera preview full-screen
-- Extract per-frame metadata from Android's Camera2 API:
-  - ISO sensitivity (`SENSOR_SENSITIVITY`)
-  - Exposure duration in seconds (`SENSOR_EXPOSURE_TIME`, convert from nanoseconds)
-  - White balance / color temperature (`COLOR_CORRECTION_GAINS` or `SENSOR_NEUTRAL_COLOR_POINT`)
-- This is the hardest part of the project. See the "Camera Pipeline" section below for details.
-
-#### P0.2 — Pure logic layer port + unit tests
-
-Port all 7 files from `Logic/` to TypeScript. Write equivalent unit tests. This is a hard requirement.
-
-Files to port:
-1. `LuxCalculator` — formula: `lux = (calibrationConstant × aperture²) / (ISO × exposureDurationInSeconds)`, defaults: calibration=12.5, aperture=1.6. Returns 0 for invalid inputs.
-2. `ColorTemperatureCalculator` — clamps raw Kelvin to [1000, 15000]
-3. `LuxInterpreter` — maps lux to one of 8 ranges, returns `{ description, tip }`
-4. `KelvinInterpreter` — maps Kelvin to one of 6 ranges, returns `{ description, tip }`
-5. `ComparisonGenerator` — generates "Brighter than X but darker than Y" sentences
-6. `LuxRange` — shared `rangeIndex(lux)` function returning 0–7
-7. `InterpretationResult` — TypeScript type/interface `{ description: string, tip: string }` (Swift version conforms to `Equatable` and `Sendable`)
-
-Test expectations:
-- Port the boundary value tests (every threshold crossing)
-- Port the representative value tests (one value per range)
-- Port the property-based tests or convert them to equivalent randomized tests using a library like `fast-check`
-- All tests must pass in CI via `jest` or `vitest`
-
-#### P0.3 — LUX tab (live measurement + capture)
-
-Build the main measurement screen with two modes:
-
-Live mode:
-- Full-screen camera preview as background
-- Frosted/translucent card overlay showing real-time lux and Kelvin
-- Capture button (circle) and camera toggle button at bottom
-- No settings gear icon in the current iOS build (was planned but not implemented)
-
-Captured mode:
-- Freeze the camera frame (display last captured image as UIImage)
-- Expand the card to show: interpretation description, tip, comparison sentence
-- Close button (× icon + "Close" label) top-left to return to live mode
-- Hide the bottom tab bar while in captured mode
-
-Reference: `MeasurementView.swift`, `MeasurementCardView.swift`
-
-#### P0.4 — Temperature tab
-
-Simpler than the LUX tab — live mode only, no capture.
-
-- Full-screen camera preview background
-- Card showing Kelvin value, color tone label, recommended environment tip
-- No settings gear icon in the current iOS build (was planned but not implemented)
-
-Reference: `TemperatureView.swift`, `TemperatureCardView.swift`
-
-#### P0.5 — Tab navigation
-
-Four-tab bottom navigation:
-
-| Tab | Icon | Label |
-|-----|------|-------|
-| 1 | sun icon | LUX |
-| 2 | thermometer icon | Temperature |
-| 3 | shield/check icon | Check |
-| 4 | clipboard icon | Records |
-
-- Camera session starts when on tab 1 or 2, stops on tab 3 or 4
-- Camera stops when app goes to background, restarts on foreground (only if on tab 1 or 2)
-
-Reference: `ContentView.swift`
+If this part feels stuck, that's a good time to reach out. It's the highest-risk item and it's better to surface problems early.
 
 ---
 
-### P1 — Should complete (week 2–3)
+## [What to Build](#table-of-contents)
 
-#### P1.1 — Flicker detection (support developer)
+Roughly in priority order. The first group is the core — the app doesn't really work without it. The second group rounds it out. The third is stretch goals if things go smoothly.
 
-This is the main new feature not yet implemented in the iOS version. The goal is to analyze light flicker from the camera feed and classify it by safety level.
+### Core (aim for week 1–2)
 
-Recommended approach — FFT-based luminance analysis:
-1. Capture frames at a consistent rate (30fps minimum, 60fps preferred)
-2. For each frame, compute the mean luminance (average pixel brightness across the frame or a center-weighted region)
-3. Maintain a rolling buffer of N luminance samples (e.g., 128 or 256 frames for good FFT resolution)
-4. Apply a Fast Fourier Transform (FFT) to the luminance buffer
-5. Look for peaks at 100Hz and 120Hz (these are the doubled frequencies of 50Hz and 60Hz AC power — lights flicker at double the mains frequency)
-6. Compute flicker percentage: `flicker% = (Lmax - Lmin) / (Lmax + Lmin) × 100` over the detected periodic component, where Lmax and Lmin are the peak and trough luminance values within the dominant flicker cycle
+- [ ] React Native project setup with camera access on Android [[4]](#source-4)
+- [ ] Live camera preview on screen
+- [ ] Per-frame metadata extraction (ISO, exposure, white balance) via native plugin [[5]](#source-5)
+- [ ] Port the 7 pure logic files from `Logic/` to TypeScript (see appendix for the list)
+- [ ] Unit tests for the ported logic — boundary values, representative values, ideally property-based tests with something like `fast-check` [[7]](#source-7)
+- [ ] **LUX tab** — live mode with camera preview and a translucent card showing real-time lux and Kelvin. Capture mode that freezes the frame and expands the card to show interpretation, tip, and comparison sentence. Close button to return to live mode
+- [ ] **Temperature tab** — live mode only. Camera preview with a card showing Kelvin, color tone, and environment tip
+- [ ] **Tab navigation** — four tabs (LUX, Temperature, Check, Records) using `@react-navigation/bottom-tabs` [[8]](#source-8). Camera runs on the first two tabs, stops on the other two. Camera pauses when the app goes to background
 
-Flicker classification table (from the spec):
+### Should get done (week 2–3)
 
-| Flicker % | Safety Level | Description |
-|-----------|-------------|-------------|
-| 0–3% | Very Safe | Minimal eye fatigue even with prolonged use |
-| 3–10% | Safe | Sensitive individuals may feel mild dryness or fatigue |
-| 10–30% | Caution | Noticeable eye pain, blurred focus, discomfort |
-| 30–60% | Dangerous | Severe eye fatigue, migraines, dizziness |
-| 60%+ | Very Dangerous | Visible flickering, risk of seizures for sensitive individuals |
+- [ ] **Flicker detection** *(support developer)* — analyze light flicker from the camera feed using FFT-based luminance analysis. The native module computes the raw flicker percentage; the classification into safety levels happens in TypeScript. The Check tab shows flicker %, safety level, description, and a color-coded indicator
+- [ ] **Records tab** — UI shell with in-memory data (no persistence). List of saved measurements, swipe-to-delete, tap for detail view, empty state
+- [ ] **Number formatting** — locale-aware with thousands separators (`Intl.NumberFormat`)
 
-Implementation notes:
-- This will likely require a native frame processor plugin (Java/Kotlin) for performance — doing FFT in JavaScript on every frame will be too slow
-- `react-native-vision-camera` supports custom frame processor plugins that run on the native thread
-- Consider using Android's `RenderScript` or a lightweight FFT library (e.g., Apache Commons Math, or JTransforms) on the native side
-- The flicker detection logic itself (classification from percentage) should live in the pure TypeScript logic layer
-- The native module only computes the raw flicker percentage; classification happens in TypeScript
-- Write unit tests for the classification function
+### Stretch goals
 
-UI for the Check tab:
-- Full-screen camera preview background
-- Card showing: flicker percentage, safety level label, description
-- Color-coded indicator (green/yellow/orange/red based on safety level)
-- Real-time updates as the analysis runs
+- [ ] Camera toggle (front/rear)
+- [ ] Permission and error state UI (shared component for camera tabs)
+- [ ] Design polish — blur effects [[9]](#source-9), consistent spacing, accessibility labels
+- [ ] Settings placeholder (gear icon → "Coming Soon" screen)
 
-#### P1.2 — Records tab (UI shell)
+### A note on flicker detection
 
-Build the Records tab as a UI shell. No real persistence — use in-memory state or a simple array.
+This is the most technically interesting part of the project and it's entirely new — not in the iOS version yet. The science and detection approach are covered in detail in the [Light Science Primer](docs/light-science-primer.md) (the "Flicker: The Hard One" section). Here's what matters for implementation:
 
-- Display a list of record cards (newest first)
-- Each card shows: date/time, brightness (lux), color temperature (Kelvin)
-- Swipe left to reveal delete button
-- Tapping a card opens a detail view with the captured photo and interpretations
-- Close button returns to the list
-- If no records exist, show an empty state
+This will almost certainly need to run in a native module (Kotlin) for performance. `react-native-vision-camera` supports custom frame processor plugins [[10]](#source-10) for exactly this kind of thing. On the native side, JTransforms [[11]](#source-11) is a good FFT library option.
 
-This is a UI shell only. Data does not persist across app restarts. Real persistence (SQLite, AsyncStorage) is out of scope.
+The flicker safety thresholds in the app are informed by IEEE 1789 [[12]](#source-12), which recommends a limit of ~8–10% flicker at 100–120Hz for comfortable viewing. The classification logic (flicker % → safety level like "Safe" or "Dangerous") is pure logic and belongs in TypeScript with unit tests.
 
-Reference: the handover doc's P1.2 section above describes the card layout and detail view design.
-
-#### P1.3 — Number formatting
-
-Use locale-aware number formatting with thousands separators for all displayed values. `120000` should display as `120,000`. Use `Intl.NumberFormat` in JavaScript.
-
-Reference: `MeasurementCardView.formatValue()`, `TemperatureCardView.formatValue()`
+Take your time with this one. It's research-heavy at first, and that's expected.
 
 ---
 
-### P2 — Nice to have (if time permits)
+## [Suggested Pace](#table-of-contents)
 
-#### P2.1 — Camera toggle (front/rear)
+This is a rough guide, not a deadline. Adjust based on what you're learning as you go.
 
-Toggle button to switch between front and rear cameras. The iOS app supports this.
+### Week 1 — Get numbers on screen
 
-Reference: `CameraViewModel.toggleCamera()`, `CameraSessionManager.toggleCamera()`
+The goal is to point the phone at a lamp and see a lux value update in real time. If you get there by end of week 1, everything else is manageable.
 
-#### P2.2 — Permission and error state handling
+**Lead developer:**
+- [ ] Project setup and dependencies
+- [ ] Camera preview running on a Samsung device
+- [ ] Frame metadata extraction working — this is the risky part, start here
+- [ ] Pure logic ported to TypeScript with passing tests
+- [ ] Basic LUX tab showing live values
 
-Proper UI states for:
-- Camera permission not granted → show explanation text
-- Camera error → show error message
-- These should be shared components used by all camera-backed tabs
+**Support developer:**
+- [ ] Research flicker detection approaches [[12]](#source-12) [[13]](#source-13)
+- [ ] Native module skeleton for the frame processor plugin [[5]](#source-5)
+- [ ] Mean luminance computation working per frame
+- [ ] Start building the rolling buffer + FFT pipeline [[11]](#source-11)
 
-Reference: `CameraStateOverlay.swift`
+### Week 2 — Build out the tabs
 
-#### P2.3 — Design polish
+**Lead developer:**
+- [ ] Capture mode on the LUX tab
+- [ ] Temperature tab
+- [ ] Tab navigation with camera lifecycle
+- [ ] Number formatting
+- [ ] Records tab shell
 
-- Frosted glass / blur effect on measurement cards (Android equivalent of iOS `.ultraThinMaterial`)
-- Consistent spacing and font sizes (reference `DesignConstants.swift`)
-- Accessibility labels on interactive elements
+**Support developer:**
+- [ ] End-to-end flicker percentage computation
+- [ ] Classification logic in TypeScript with tests
+- [ ] Check tab UI
 
-#### P2.4 — Settings placeholder
+### Week 3 — Polish and wrap up
 
-Gear icon in top-right of LUX and Temperature tabs, navigating to a placeholder screen showing "Settings — Coming Soon." Note: this is not implemented in the current iOS build — it was planned but deferred. If you implement it in React Native, use `PlaceholderView.swift` as a reference for the placeholder pattern.
+**Lead developer:**
+- [ ] Camera toggle, permission states, design polish
+- [ ] Integration testing on Samsung device
+- [ ] Any remaining items from week 2
 
-Reference: `PlaceholderView.swift`
-
----
-
-## [Camera Pipeline — Key Technical Details](#table-of-contents)
-
-This is the most significant technical challenge. The iOS app reads camera metadata directly from `AVCaptureDevice` properties on every frame. Android requires a different approach.
-
-### What the iOS app reads per frame
-
-```
-ISO          ← device.iso (Float)
-Exposure     ← device.exposureDuration (CMTime → converted to seconds)
-White balance← device.deviceWhiteBalanceGains → device.temperatureAndTintValues(for:) → .temperature
-```
-
-These are read from the hardware while auto-exposure is running. The app does not set manual exposure — it reads whatever the camera's auto-exposure algorithm decides.
-
-### Android equivalent (Camera2 API)
-
-On Android, you read these from `CaptureResult` metadata attached to each frame:
-
-```
-ISO          ← CaptureResult.get(CaptureResult.SENSOR_SENSITIVITY)        // Integer
-Exposure     ← CaptureResult.get(CaptureResult.SENSOR_EXPOSURE_TIME)      // Long, in nanoseconds
-                → divide by 1_000_000_000.0 to get seconds
-Color temp   ← Requires computation from CaptureResult.get(CaptureResult.SENSOR_NEUTRAL_COLOR_POINT)
-                or from COLOR_CORRECTION_GAINS
-```
-
-Samsung Galaxy S24/S25 flagships support `MANUAL_SENSOR` capability and expose full Camera2 metadata. This is not guaranteed on budget phones, but for flagships it works.
-
-### How to access this in React Native
-
-`react-native-vision-camera` does not expose per-frame ISO/exposure/white-balance metadata to JavaScript out of the box. You have two options:
-
-Option A — Custom frame processor plugin (recommended):
-- Write a small Kotlin native module that implements a VisionCamera frame processor plugin
-- In the plugin, access the frame's `CaptureResult` metadata to read ISO, exposure time, and color correction gains
-- Return the computed values (or raw values) to JavaScript
-- The pure logic layer in TypeScript then computes lux and Kelvin
-
-Option B — Standalone native module:
-- Write a Kotlin module that opens its own Camera2 session
-- Stream metadata values to JavaScript via events
-- More control but more code, and you lose VisionCamera's preview/capture features
-
-Option A is strongly recommended. It keeps the camera preview, capture, and metadata extraction in one pipeline.
-
-### Color temperature on Android
-
-iOS provides a convenient `temperatureAndTintValues(for:)` method. Android does not. You will need to compute color temperature from the white balance gains or the neutral color point.
-
-A common approach: use the red/blue ratio from `COLOR_CORRECTION_GAINS` and map it to an approximate Kelvin value using McCamy's formula or a lookup table. This does not need to be exact — the iOS app clamps to [1000, 15000] and maps to 6 broad ranges, so approximate values are fine.
-
-### Aperture constant
-
-The lux formula uses `aperture = 1.6` (iPhone wide camera f/1.6). Samsung Galaxy S24 main camera is f/1.7, S25 is f/1.9. Update the default aperture constant accordingly, or make it configurable. The `LuxCalculator` already accepts aperture as a parameter.
+**Support developer:**
+- [ ] Flicker accuracy tuning on real lights
+- [ ] Edge cases (no flicker, camera switching, background/foreground)
+- [ ] Document the flicker detection approach
 
 ---
 
-## [Key Differences: Swift/iOS vs React Native/Android](#table-of-contents)
+## [Not in Scope](#table-of-contents)
 
-| Aspect | iOS (this repo) | React Native Android |
-|--------|----------------|---------------------|
-| Camera API | AVFoundation (AVCaptureSession, AVCaptureDevice) | Camera2 API via native module or react-native-vision-camera |
-| Frame metadata | `device.iso`, `device.exposureDuration`, `device.deviceWhiteBalanceGains` — read directly from device object | `CaptureResult.SENSOR_SENSITIVITY`, `SENSOR_EXPOSURE_TIME`, `COLOR_CORRECTION_GAINS` — read from capture result metadata |
-| Color temperature | `device.temperatureAndTintValues(for:).temperature` — built-in conversion | Must compute from white balance gains manually (McCamy's formula or gain ratio mapping) |
-| UI framework | SwiftUI (declarative, native) | React Native (declarative, bridge to native views) |
-| Blur/material effects | `.ultraThinMaterial` (one line) | Requires `@react-native-community/blur` or similar library, or a semi-transparent overlay |
-| Tab navigation | SwiftUI `TabView` | `@react-navigation/bottom-tabs` |
-| State management | `@StateObject`, `@ObservedObject`, `@Published` | React hooks (`useState`, `useContext`), or Zustand/Jotai |
-| Concurrency | Swift concurrency (`async/await`, `@MainActor`, `DispatchQueue`) | JavaScript single thread + native module threads |
-| Testing | Swift Testing framework (`@Test`, `#expect`) | Jest or Vitest with TypeScript |
-| Build system | Xcode + XcodeGen | Metro bundler + Gradle |
-| Permissions | `NSCameraUsageDescription` in Info.plist | `<uses-permission android:name="android.permission.CAMERA"/>` in AndroidManifest.xml |
+Just so it's clear — these are explicitly off the table for this engagement:
 
-## [What Ports Directly (Common Ground)](#table-of-contents)
-
-These are identical between the two platforms — same algorithms, same thresholds, same output:
-
-- Lux calculation formula
-- Lux interpretation ranges and text (all 8 ranges)
-- Kelvin interpretation ranges and text (all 6 ranges)
-- Comparison sentence generation logic
-- Kelvin clamping logic [1000, 15000]
-- LuxRange index function
-- Flicker percentage classification table
-- Number formatting approach (locale-aware, thousands separators)
-- Tab structure (4 tabs, same icons and labels)
-- Measurement card layout (lux + Kelvin + interpretation)
-- Capture flow (freeze frame → show interpretation → close button to return to live)
+- iOS support (Android only)
+- Real data persistence (in-memory only for Records)
+- Play Store submission
+- Settings screen (placeholder only)
+- Localization
+- Background processing
+- Cloud sync or accounts
 
 ---
 
-## [Week-by-Week Suggested Timeline](#table-of-contents)
+## [Appendix: React Native Reference](#table-of-contents)
 
-### Week 1 — Foundation
+For the full iOS codebase map, module reference, data flow diagrams, and test suite details, see the [Developer Guide](docs/developer-guide.md). This section only covers what's specific to the React Native port.
 
-Lead developer:
-- Project setup, dependencies, build pipeline
-- Camera preview working on Samsung device
-- Frame metadata extraction (ISO, exposure, white balance) — this is the risky item, spike early
-- Port pure logic layer to TypeScript with full test coverage
-- Basic LUX tab with live lux/Kelvin display
+### Files to port (pure logic → TypeScript)
 
-Support developer:
-- Research flicker detection approaches, prototype FFT analysis
-- Set up native module skeleton for frame processor plugin
-- Get mean luminance computation working per frame
-- Build rolling buffer + FFT pipeline (native side)
+All 7 files in `Logic/`. The algorithms are identical — you're translating syntax, not logic.
 
-### Week 2 — Features
+- `LuxCalculator` — `lux = (12.5 × aperture²) / (ISO × exposure)`. Returns 0 for invalid inputs.
+- `ColorTemperatureCalculator` — clamps raw Kelvin to [1000, 15000]
+- `LuxInterpreter` — lux → 1 of 8 ranges → `{ description, tip }`
+- `KelvinInterpreter` — Kelvin → 1 of 6 ranges → `{ description, tip }`
+- `ComparisonGenerator` — "Brighter than X but darker than Y"
+- `LuxRange` — `rangeIndex(lux)` → 0–7, shared by interpreter and comparison generator
+- `InterpretationResult` — TypeScript interface: `{ description: string, tip: string }`
 
-Lead developer:
-- Capture mode (freeze frame, expanded card, back button)
-- Temperature tab
-- Tab navigation with camera lifecycle management
-- Number formatting
-- Records tab UI shell
+### Platform differences
 
-Support developer:
-- Flicker percentage computation working end-to-end
-- Classification logic in TypeScript with unit tests
-- Check tab UI (card with flicker %, safety level, description)
-- Color-coded safety indicator
-
-### Week 3 — Polish and integration
-
-Lead developer:
-- Camera toggle (front/rear)
-- Permission/error state handling
-- Design polish (blur effects, spacing, accessibility)
-- Settings placeholder
-- Integration testing on Samsung device
-
-Support developer:
-- Flicker detection accuracy tuning on real lights
-- Edge case handling (no flicker detected, camera switching, background/foreground)
-- Unit tests for flicker classification
-- Documentation of the flicker detection approach
+- **Camera API:** iOS uses AVFoundation; Android uses Camera2 [[3]](#source-3) via react-native-vision-camera [[4]](#source-4)
+- **Color temperature:** iOS has a built-in conversion; Android requires manual computation from white balance gains [[6]](#source-6)
+- **Blur effects:** iOS is one line (`.ultraThinMaterial`); Android needs `@react-native-community/blur` [[9]](#source-9) or a semi-transparent overlay
+- **Tab navigation:** `@react-navigation/bottom-tabs` [[8]](#source-8)
+- **State management:** React hooks work fine; Zustand or Jotai if you want something more structured
+- **Testing:** Jest or Vitest [[14]](#source-14) for unit tests; `fast-check` [[7]](#source-7) for property-based tests
 
 ---
 
-## [Testing Requirements](#table-of-contents)
-
-| What | Required | Tool |
-|------|----------|------|
-| Pure logic unit tests | Yes, hard requirement | Jest or Vitest |
-| Flicker classification unit tests | Yes | Jest or Vitest |
-| Property-based tests for logic layer | Recommended | fast-check |
-| On-device manual testing | Yes, on Samsung flagship | Physical device |
-| UI/integration tests | Nice to have | Detox or Maestro |
+If anything here is unclear or you run into a wall — especially with the camera metadata extraction — please reach out. It's genuinely the hardest part of the project, and it's much better to surface issues early than to push through alone.
 
 ---
 
-## [Out of Scope](#table-of-contents)
+## [Sources](#table-of-contents)
 
-- iOS support (this is Android-only for now)
-- Real data persistence for Records (in-memory only)
-- App Store / Play Store submission
-- Settings screen implementation (placeholder only)
-- Localization / internationalization
-- Offline mode or background processing
-- Cloud sync or user accounts
+<a id="source-1"></a>
+**[1]** [Boundaries — destroyallsoftware.com](https://www.destroyallsoftware.com/talks/boundaries)
+<br>Gary Bernhardt's talk introducing the "functional core, imperative shell" pattern — the architectural foundation for this project (referred to as the "deterministic split" in the codebase).
 
----
+<a id="source-2"></a>
+**[2]** [Functional Core, Imperative Shell — functional-architecture.org](https://functional-architecture.org/functional_core_imperative_shell)
+<br>Written reference for the pattern. Covers how the pure core handles logic while the imperative shell orchestrates side effects.
 
-## [Reference Files to Read First](#table-of-contents)
+<a id="source-3"></a>
+**[3]** [CaptureResult — Android Developers](https://developer.android.com/reference/android/hardware/camera2/CaptureResult)
+<br>Android API reference for per-frame camera metadata including `SENSOR_SENSITIVITY`, `SENSOR_EXPOSURE_TIME`, and `COLOR_CORRECTION_GAINS`.
 
-If you are short on time, read these files in this order to understand the app:
+<a id="source-4"></a>
+**[4]** [React Native Vision Camera — Getting Started — react-native-vision-camera.com](https://react-native-vision-camera.com/docs/guides)
+<br>The main camera library for this project. Covers setup, permissions, and basic usage on Android.
 
-1. `docs/developer-guide.md` — how the codebase works, module reference, architecture diagrams
-2. `LightMeter/Logic/LuxCalculator.swift` — the core formula (15 lines)
-3. `LightMeter/Logic/LuxInterpreter.swift` — how lux maps to descriptions
-4. `LightMeter/Logic/KelvinInterpreter.swift` — how Kelvin maps to color tones
-5. `LightMeter/Camera/CameraFrameProvider.swift` — how iOS reads camera metadata per frame
-6. `LightMeter/Features/Measurement/MeasurementView.swift` — the main screen with live/captured modes
-7. `LightMeter/ContentView.swift` — tab navigation and camera lifecycle
-8. `LightMeterTests/Logic/LuxCalculatorTests.swift` — test patterns to replicate
+<a id="source-5"></a>
+**[5]** [Creating Frame Processor Plugins (Android/Kotlin) — react-native-vision-camera.com](https://react-native-vision-camera.com/docs/guides/frame-processors-plugins-android)
+<br>Step-by-step guide for writing a native Kotlin plugin that reads frame data and returns values to JavaScript.
 
----
+<a id="source-6"></a>
+**[6]** [Correlated Color Temperature — Wikipedia](https://en.wikipedia.org/wiki/Correlated_color_temperature)
+<br>Background on McCamy's formula for computing Kelvin from chromaticity coordinates, relevant to the Android color temperature conversion.
 
-## [Questions? Contact](#table-of-contents)
+<a id="source-7"></a>
+**[7]** [fast-check — GitHub](https://github.com/dubzzz/fast-check)
+<br>Property-based testing framework for TypeScript and JavaScript. Generates random inputs to verify properties that should always hold true.
 
-If anything in this document is unclear or you hit a blocker with the Camera2 API metadata extraction, escalate early. The camera pipeline is the highest-risk item — if it slips past week 1, the whole timeline is at risk.
+<a id="source-8"></a>
+**[8]** [Bottom Tabs Navigator — reactnavigation.org](https://reactnavigation.org/docs/bottom-tab-navigator/)
+<br>The standard React Native library for bottom tab navigation. Covers setup, customization, and hiding tabs.
+
+<a id="source-9"></a>
+**[9]** [@react-native-community/blur — GitHub](https://github.com/Kureev/react-native-blur)
+<br>Blur and vibrancy effects for Android and iOS. Useful for frosted card overlays on measurement screens.
+
+<a id="source-10"></a>
+**[10]** [Frame Processors — react-native-vision-camera.com](https://react-native-vision-camera.com/docs/guides/frame-processors)
+<br>How VisionCamera lets you run JavaScript or native code on every camera frame in real time.
+
+<a id="source-11"></a>
+**[11]** [JTransforms — GitHub](https://github.com/wendykierp/JTransforms)
+<br>Open source, multithreaded FFT library written in pure Java. Works on Android for the flicker detection native module.
+
+<a id="source-12"></a>
+**[12]** [IEEE 1789-2015 — ieee.org](https://standards.ieee.org/standard/1789-2015.html)
+<br>Industry standard for recommended practices on modulating current in LED lighting to limit flicker health risks.
+
+<a id="source-13"></a>
+**[13]** [Lighting Ergonomics: Flicker — CCOHS](https://www.ccohs.ca/oshanswers/ergonomics/lighting_flicker.html)
+<br>Plain-language overview of flicker causes, health effects, and frequency thresholds from the Canadian occupational health authority.
+
+<a id="source-14"></a>
+**[14]** [Vitest — vitest.dev](https://vitest.dev/)
+<br>A fast, modern test runner that works well with TypeScript projects. A good alternative to Jest.
+
+<a id="source-15"></a>
+**[15]** [VisionCamera GitHub Repository — github.com](https://github.com/mrousavy/react-native-vision-camera)
+<br>Source code, issues, and community examples for the VisionCamera library. Useful when the official docs don't cover an edge case.
+
+Content was rephrased for compliance with licensing restrictions.
