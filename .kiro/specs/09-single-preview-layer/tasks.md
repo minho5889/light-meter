@@ -1,6 +1,6 @@
 # Implementation Plan
 
-- [~] 1. Move CameraPreviewView to ContentView as a shared single instance
+- [x] 1. Move CameraPreviewView to ContentView as a shared single instance
   - In `LightMeter/ContentView.swift`, wrap the existing `TabView` in a `ZStack`
   - Add a single `CameraPreviewView(session: cameraViewModel.session)` behind the `TabView`, gated on `cameraViewModel.permissionGranted` and `selectedTab` being a camera tab (0 or 1)
   - Ensure the `TabView` background is transparent so the preview shows through on camera tabs
