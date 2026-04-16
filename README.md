@@ -124,7 +124,7 @@ The codebase map. What each module does, how data flows from camera hardware thr
 
 The Android port plan. Team structure, what to build, suggested pace, and the key technical differences between iOS and Android camera APIs. Read this only if you're working on the React Native build.
 
-There's also a [Troubleshooting Guide](docs/troubleshooting.md) if you run into build or device issues.
+There's also a [Troubleshooting Guide](docs/debugging/troubleshooting.md) if you run into build or device issues.
 
 ---
 
