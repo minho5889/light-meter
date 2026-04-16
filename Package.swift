@@ -17,6 +17,7 @@ let package = Package(
                 "Logic/KelvinInterpreter.swift",
                 "Logic/ComparisonGenerator.swift",
                 "Logic/LuxRange.swift",
+                "Logic/TabTransitionAction.swift",
                 "Design/DesignConstants.swift"
             ]
         ),
@@ -31,6 +32,7 @@ let package = Package(
                 "Logic/KelvinInterpreterTests.swift",
                 "Logic/ComparisonGeneratorTests.swift",
                 "Logic/LuxRangeTests.swift",
+                "Logic/TabTransitionActionTests.swift",
                 "Formatting/NumberFormattingTests.swift"
             ]
         )
