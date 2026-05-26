@@ -2,7 +2,7 @@
 import SwiftUI
 
 /// Glue-layer view model that holds all published camera state.
-/// Coordinates between CameraSessionManager and CameraFrameProvider.
+/// Coordinates between CameraSessionActor and CameraFrameProvider.
 /// Views observe this single source of truth.
 @MainActor
 final class CameraViewModel: ObservableObject {
@@ -13,26 +13,59 @@ final class CameraViewModel: ObservableObject {
     @Published var currentCameraPosition: AVCaptureDevice.Position = .back
     @Published var sessionReady: Bool = false
 
-    private let sessionManager = CameraSessionManager()
-    private let frameProvider = CameraFrameProvider()
+    // MARK: - Flicker Detection Published State
+    @Published var flickerPercentage: Double = 0.0
+    @Published var flickerFrequency: Double = 0.0
+    @Published var flickerSafetyLevel: String = "Safe"
+    @Published var flickerDescription: String = "Tap start check to analyze."
+    @Published var isCheckingFlicker: Bool = false
+    @Published var waveData: [Float] = []
+
+    private let sessionActor = CameraSessionActor()
+    private var frameProvider: CameraFrameProvider!
 
     /// Exposes the AVCaptureSession for CameraPreviewView.
-    nonisolated var session: AVCaptureSession { sessionManager.session }
+    nonisolated var session: AVCaptureSession { sessionActor.session }
 
     /// Exposes the session queue so the preview layer can safely connect.
-    nonisolated var sessionQueue: DispatchQueue { sessionManager.sessionQueue }
+    nonisolated var sessionQueue: DispatchQueue { sessionActor.sessionQueue }
 
     init() {
-        sessionManager.onError = { [weak self] message in
-            DispatchQueue.main.async {
-                self?.cameraError = message
+        let actor = self.sessionActor
+        
+        // Phase 1: Initialize frameProvider with a dummy callback that has no self captures
+        // to satisfy Swift's initialization checks.
+        self.frameProvider = CameraFrameProvider(sessionActor: actor, onFrameUpdate: { _, _ in }, onFlickerUpdate: { _, _ in })
+        
+        // Phase 2: Now that self is fully initialized, re-assign the real frameProvider
+        // capturing self safely.
+        self.frameProvider = CameraFrameProvider(
+            sessionActor: actor,
+            onFrameUpdate: { [weak self] luxValue, kelvinValue in
+                Task { @MainActor [weak self] in
+                    self?.lux = luxValue
+                    self?.colorTemperature = kelvinValue
+                }
+            },
+            onFlickerUpdate: { [weak self] result, waveSamples in
+                Task { @MainActor [weak self] in
+                    guard let self = self, self.isCheckingFlicker else { return }
+                    self.flickerPercentage = result.percentage
+                    self.flickerFrequency = result.frequency
+                    self.flickerSafetyLevel = result.safetyLevel
+                    self.flickerDescription = result.description
+                    self.waveData = waveSamples
+                }
             }
-        }
+        )
 
-        frameProvider.onFrameUpdate = { [weak self] luxValue, kelvinValue in
-            DispatchQueue.main.async {
-                self?.lux = luxValue
-                self?.colorTemperature = kelvinValue
+        // Register the error callback asynchronously on the actor.
+        Task { [weak self, actor] in
+            let viewModel = self
+            await actor.setOnError { message in
+                Task { @MainActor in
+                    viewModel?.cameraError = message
+                }
             }
         }
     }
@@ -50,33 +83,60 @@ final class CameraViewModel: ObservableObject {
 
     /// Starts the capture session.
     func startSession() {
-        sessionManager.startSession()
+        Task {
+            await sessionActor.startSession()
+        }
     }
 
     /// Stops the capture session.
     func stopSession() {
-        sessionManager.stopSession()
+        Task {
+            await sessionActor.stopSession()
+        }
     }
 
     /// Toggles between front and rear cameras.
     func toggleCamera() {
-        sessionManager.toggleCamera { [weak self] newPosition in
-            DispatchQueue.main.async {
-                self?.currentCameraPosition = newPosition
-                // Update frame provider with the new device so lux/kelvin reads
-                // come from the correct camera after switching
-                self?.frameProvider.captureDevice = self?.sessionManager.device
+        Task {
+            if let newPosition = await sessionActor.toggleCamera() {
+                self.currentCameraPosition = newPosition
             }
         }
     }
 
     /// Captures the current frame as a UIImage asynchronously.
     func captureFrameAsync() async -> UIImage? {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async { [frameProvider] in
-                let image = frameProvider.captureFrame()
-                continuation.resume(returning: image)
-            }
+        await sessionActor.captureFrame()
+    }
+
+    // MARK: - Flicker Control Triggers
+
+    /// Starts the real-time light safety check (high-speed sampling & exposure lock).
+    func startFlickerCheck() {
+        isCheckingFlicker = true
+        flickerPercentage = 0.0
+        flickerFrequency = 0.0
+        flickerSafetyLevel = "Safe"
+        flickerDescription = "Calibrating sensor..."
+        waveData = []
+
+        Task { [sessionActor] in
+            // Lock camera exposure to prevent auto-gain from smoothing oscillations
+            await sessionActor.lockCameraExposure(locked: true)
+            // Configure highest supported frame rate format (120 or 240 fps)
+            await sessionActor.enableHighFrameRateMode(active: true)
+        }
+    }
+
+    /// Stops the flicker check and returns the camera device to standard 30fps auto mode.
+    func stopFlickerCheck() {
+        isCheckingFlicker = false
+        waveData = []
+
+        Task { [sessionActor] in
+            // Unlock exposure and restore auto frame rate
+            await sessionActor.lockCameraExposure(locked: false)
+            await sessionActor.enableHighFrameRateMode(active: false)
         }
     }
 
@@ -84,11 +144,11 @@ final class CameraViewModel: ObservableObject {
 
     private func setupSession() {
         let position = currentCameraPosition
-        sessionManager.setupSession(position: position, delegate: frameProvider) { [weak self] in
-            DispatchQueue.main.async {
-                self?.frameProvider.captureDevice = self?.sessionManager.device
-                self?.sessionReady = true
-            }
+        guard let provider = frameProvider else { return }
+        
+        Task {
+            await sessionActor.setupSession(position: position, delegate: provider)
+            self.sessionReady = true
         }
     }
 }

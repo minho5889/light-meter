@@ -7,7 +7,7 @@ struct TabTransitionActionTests {
 
     /// Returns true when both tabs are camera tabs and differ — the bug condition.
     private func isBugCondition(previousTab: Int, newTab: Int) -> Bool {
-        let cameraTabs: Set<Int> = [0, 1]
+        let cameraTabs: Set<Int> = [0, 1, 2]
         return cameraTabs.contains(previousTab)
             && cameraTabs.contains(newTab)
             && previousTab != newTab
@@ -15,18 +15,13 @@ struct TabTransitionActionTests {
 
     // MARK: - Property 1: Bug Condition Exploration
     // Camera↔Camera Tab Transition Triggers Redundant Session Calls
-    //
-    // For all (previousTab, newTab) where isBugCondition holds,
-    // the EXPECTED behavior is .none — the session should keep running.
-    //
-    // On UNFIXED code this test MUST FAIL because the buggy resolve()
-    // returns .startSession for any camera tab, ignoring previousTab.
 
     @Test func property_bugCondition_cameraToCamera_shouldBeNone() {
-        // Enumerate all bug-condition pairs: (0→1) and (1→0)
+        // Enumerate all bug-condition pairs: (0↔1), (0↔2), (1↔2)
         let bugConditionPairs: [(Int, Int)] = [
-            (0, 1),
-            (1, 0),
+            (0, 1), (1, 0),
+            (0, 2), (2, 0),
+            (1, 2), (2, 1)
         ]
 
         for (prev, new) in bugConditionPairs {
@@ -44,12 +39,11 @@ struct TabTransitionActionTests {
 
     @Test func property_bugCondition_randomized() {
         var rng = SystemRandomNumberGenerator()
-        let cameraTabs = [0, 1]
+        let cameraTabs = [0, 1, 2]
 
         for _ in 0..<100 {
             let prev = cameraTabs.randomElement(using: &rng)!
             var new = cameraTabs.randomElement(using: &rng)!
-            // Ensure previousTab != newTab so isBugCondition holds
             while new == prev {
                 new = cameraTabs.randomElement(using: &rng)!
             }
@@ -64,15 +58,11 @@ struct TabTransitionActionTests {
 
     // MARK: - Property 2: Preservation
     // Non-Bug-Condition Transitions Unchanged
-    //
-    // These tests capture the CORRECT baseline behavior for all transitions
-    // where the bug condition does NOT hold. They must pass on UNFIXED code
-    // and continue to pass after the fix is applied (no regressions).
 
     // 2a: Camera → Non-camera → .stopSession
     @Test func property_preservation_cameraToNonCamera_shouldStopSession() {
-        let cameraTabs = [0, 1]
-        let nonCameraTabs = [2, 3]
+        let cameraTabs = [0, 1, 2]
+        let nonCameraTabs = [3]
 
         for prev in cameraTabs {
             for new in nonCameraTabs {
@@ -88,8 +78,8 @@ struct TabTransitionActionTests {
 
     // 2b: Non-camera → Camera → .startSession
     @Test func property_preservation_nonCameraToCamera_shouldStartSession() {
-        let cameraTabs = [0, 1]
-        let nonCameraTabs = [2, 3]
+        let cameraTabs = [0, 1, 2]
+        let nonCameraTabs = [3]
 
         for prev in nonCameraTabs {
             for new in cameraTabs {
@@ -105,7 +95,7 @@ struct TabTransitionActionTests {
 
     // 2c: Non-camera → Non-camera → .none
     @Test func property_preservation_nonCameraToNonCamera_shouldBeNone() {
-        let nonCameraTabs = [2, 3]
+        let nonCameraTabs = [3]
 
         for prev in nonCameraTabs {
             for new in nonCameraTabs {
@@ -131,7 +121,6 @@ struct TabTransitionActionTests {
     }
 
     // 2e: Randomized preservation — generates random non-bug-condition pairs
-    // and verifies the correct action for each category.
     @Test func property_preservation_randomized() {
         var rng = SystemRandomNumberGenerator()
         let allTabs = [0, 1, 2, 3]
@@ -140,11 +129,10 @@ struct TabTransitionActionTests {
             let prev = allTabs.randomElement(using: &rng)!
             let new = allTabs.randomElement(using: &rng)!
 
-            // Skip bug-condition pairs — those are covered by Property 1
             guard !isBugCondition(previousTab: prev, newTab: new) else { continue }
 
-            let prevIsCamera = (prev == 0 || prev == 1)
-            let newIsCamera = (new == 0 || new == 1)
+            let prevIsCamera = (prev == 0 || prev == 1 || prev == 2)
+            let newIsCamera = (new == 0 || new == 1 || new == 2)
             let result = TabTransitionAction.resolve(from: prev, to: new)
 
             if prev == new {

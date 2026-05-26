@@ -6,7 +6,7 @@ struct ContentView: View {
     @State private var previousTab: Int = 0
 
     /// Camera tabs show the shared preview; non-camera tabs don't.
-    private var isCameraTab: Bool { selectedTab == 0 || selectedTab == 1 }
+    private var isCameraTab: Bool { selectedTab == 0 || selectedTab == 1 || selectedTab == 2 }
 
     var body: some View {
         ZStack {
@@ -35,7 +35,7 @@ struct ContentView: View {
                     }
                     .tag(1)
 
-                PlaceholderView(title: "Flicker Detection", subtitle: "Coming Soon")
+                FlickerCheckView(viewModel: cameraViewModel)
                     .tabItem {
                         Image(systemName: "checkmark.shield")
                         Text("Check")

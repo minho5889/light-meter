@@ -18,7 +18,7 @@ struct TabTransitionAction {
 
     /// Returns true if the given tab index requires the camera.
     static func isCameraTab(_ tab: Int) -> Bool {
-        tab == 0 || tab == 1
+        tab == 0 || tab == 1 || tab == 2
     }
 
     /// Resolves the session action for a tab transition.

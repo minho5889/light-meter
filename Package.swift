@@ -18,6 +18,7 @@ let package = Package(
                 "Logic/ComparisonGenerator.swift",
                 "Logic/LuxRange.swift",
                 "Logic/TabTransitionAction.swift",
+                "Logic/FlickerAnalyzer.swift",
                 "Design/DesignConstants.swift"
             ]
         ),
@@ -33,6 +34,7 @@ let package = Package(
                 "Logic/ComparisonGeneratorTests.swift",
                 "Logic/LuxRangeTests.swift",
                 "Logic/TabTransitionActionTests.swift",
+                "Logic/FlickerAnalyzerTests.swift",
                 "Formatting/NumberFormattingTests.swift"
             ]
         )

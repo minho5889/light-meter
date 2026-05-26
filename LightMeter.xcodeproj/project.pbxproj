@@ -15,8 +15,10 @@
 		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
 		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
 		3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */; };
+		362E472CE38C282A5070C287 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */; };
 		4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34737E8E6769616196B553 /* TabTransitionAction.swift */; };
 		4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */; };
+		4C80E8F81CB4267206F8BCC9 /* FlickerAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */; };
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
 		812876F0AE08889F28F29768 /* LuxRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A18F24B9F641399B19318EE /* LuxRange.swift */; };
@@ -25,7 +27,9 @@
 		947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */; };
 		9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791FD5DC633AA4927A763E7D /* MeasurementView.swift */; };
 		A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */; };
+		ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */; };
 		B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */; };
+		B5987DCB478F3C327B9A57DA /* FlickerCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269857D946F301075B6B5E73 /* FlickerCheckView.swift */; };
 		B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */; };
 		BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9D9057780326CEC3398958 /* ContentView.swift */; };
 		C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */; };
@@ -36,7 +40,7 @@
 		E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */; };
 		E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */; };
 		ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE078BD017B4B9258C10AED6 /* TemperatureView.swift */; };
-		EF016392DE99310E0D6A8CC7 /* CameraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346B9CCF989412C63E75D854 /* CameraSessionManager.swift */; };
+		F99DF0F94565431FDA4E5DD4 /* FlickerAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,13 +54,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05CC5449066C71C1FEB3A67E /* LightMeter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LightMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		05CC5449066C71C1FEB3A67E /* LightMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A18F24B9F641399B19318EE /* LuxRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRange.swift; sourceTree = "<group>"; };
+		0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerAnalyzerTests.swift; sourceTree = "<group>"; };
 		141E153718B1A66906CF6AA8 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
 		16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
+		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
+		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
-		346B9CCF989412C63E75D854 /* CameraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionManager.swift; sourceTree = "<group>"; };
+		4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerAnalyzer.swift; sourceTree = "<group>"; };
 		4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculator.swift; sourceTree = "<group>"; };
 		4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMeterApp.swift; sourceTree = "<group>"; };
 		503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStateOverlay.swift; sourceTree = "<group>"; };
@@ -73,6 +80,7 @@
 		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
 		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
 		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
+		A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		AE078BD017B4B9258C10AED6 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -89,8 +97,9 @@
 			isa = PBXGroup;
 			children = (
 				E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */,
-				346B9CCF989412C63E75D854 /* CameraSessionManager.swift */,
+				2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */,
 				2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */,
+				A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -111,6 +120,7 @@
 			children = (
 				F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */,
 				6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */,
+				0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */,
 				D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */,
 				746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */,
 				F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */,
@@ -134,6 +144,7 @@
 			children = (
 				4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */,
 				593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */,
+				4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */,
 				8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */,
 				743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */,
 				141E153718B1A66906CF6AA8 /* LuxCalculator.swift */,
@@ -201,6 +212,14 @@
 			path = Design;
 			sourceTree = "<group>";
 		};
+		BBA3D90779EDFA740A623A13 /* Check */ = {
+			isa = PBXGroup;
+			children = (
+				269857D946F301075B6B5E73 /* FlickerCheckView.swift */,
+			);
+			path = Check;
+			sourceTree = "<group>";
+		};
 		CD1D012EECEBAE3B7ACBEE87 /* LightMeterTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +232,7 @@
 		F067EEC0AA233D4F9BAF7E50 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				BBA3D90779EDFA740A623A13 /* Check */,
 				624F3B22565E9E78DA1D7F34 /* Measurement */,
 				67954F2B2EE86C256D1ECF80 /* Temperature */,
 			);
@@ -267,7 +287,6 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					1F1B09C7A53B6D056F21B656 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -299,6 +318,7 @@
 			files = (
 				09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */,
 				B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */,
+				F99DF0F94565431FDA4E5DD4 /* FlickerAnalyzerTests.swift in Sources */,
 				839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */,
 				947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */,
 				61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */,
@@ -314,13 +334,16 @@
 			files = (
 				70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */,
 				B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */,
-				EF016392DE99310E0D6A8CC7 /* CameraSessionManager.swift in Sources */,
+				ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */,
 				D8287656B2497407BF3354EA /* CameraStateOverlay.swift in Sources */,
 				14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */,
 				E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */,
 				10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */,
 				BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */,
 				C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */,
+				4C80E8F81CB4267206F8BCC9 /* FlickerAnalyzer.swift in Sources */,
+				B5987DCB478F3C327B9A57DA /* FlickerCheckView.swift in Sources */,
+				362E472CE38C282A5070C287 /* ImageProcessor.swift in Sources */,
 				CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */,
 				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
@@ -354,7 +377,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C7KAGA6JZB;
 				INFOPLIST_FILE = LightMeter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,7 +533,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C7KAGA6JZB;
 				INFOPLIST_FILE = LightMeter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
