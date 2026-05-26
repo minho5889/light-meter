@@ -39,7 +39,7 @@ Built for anyone curious about their lighting: photographers checking exposure, 
 |---------|-----|--------|-------------|
 | Live Lux + Kelvin | LUX | ✅ Built | Real-time brightness and color temperature with capture-to-interpret |
 | Color Temperature | Temperature | ✅ Built | Live Kelvin reading with color tone label and environment tip |
-| Flicker Detection | Check | 🔲 Placeholder | Light safety analysis — planned for React Native Android build |
+| Flicker Detection | Check | ✅ Built | Light safety analysis using Accelerate vDSP FFT |
 | Records | Records | 🔲 Placeholder | Saved measurement history — UI shell planned |
 
 ---
@@ -160,6 +160,7 @@ Feature specs document the incremental development history of the app. Each spec
 | 07 | Code Review Polish | ✅ Done |
 | 08 | Camera Session Black Screen | ✅ Done |
 | 09 | Single Preview Layer | ✅ Done |
+| 10 | iOS Flicker Detection | ✅ Done |
 
 ---
 

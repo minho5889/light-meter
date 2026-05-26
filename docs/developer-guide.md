@@ -25,7 +25,7 @@ Four tabs:
 
 - **LUX** — live lux + Kelvin measurement with a capture button and camera toggle button. Tap capture to freeze the frame and see a human-readable interpretation: what environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." Close button returns to live mode. Tab bar hides during capture.
 - **Temperature** — live Kelvin reading with color tone label and environment tip. No capture mode.
-- **Check** — placeholder for flicker detection (the React Native team builds this).
+- **Check** — live light safety check using real-time Accelerate-based FFT flicker analysis.
 - **Records** — placeholder for saved measurement history.
 
 ### Lux ranges
@@ -54,13 +54,15 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 | [`ComparisonGenerator`](../LightMeter/Logic/ComparisonGenerator.swift) | `generate(lux:)` → "Brighter than X but darker than Y." Uses `LuxRange` internally. |
 | [`InterpretationResult`](../LightMeter/Logic/InterpretationResult.swift) | `{ description, tip }` — conforms to `Equatable` and `Sendable`. |
 | [`TabTransitionAction`](../LightMeter/Logic/TabTransitionAction.swift) | `resolve(from:to:)` → `.startSession`, `.stopSession`, or `.none`. Camera↔camera returns `.none`. |
+| [`FlickerAnalyzer`](../LightMeter/Logic/FlickerAnalyzer.swift) | `analyze(samples:sampleRate:)` → `FlickerResult` representing the light safety calculations using Accelerate framework vDSP FFT. |
 
 **Effects** — thin hardware wrappers. Rewrite these per platform; the logic layer stays the same.
 
 | File | Role |
 |------|------|
-| [`CameraSessionManager`](../LightMeter/Camera/CameraSessionManager.swift) | AVCaptureSession lifecycle: setup, start, stop, camera toggle. Guards against redundant `startSession()` calls. |
-| [`CameraFrameProvider`](../LightMeter/Camera/CameraFrameProvider.swift) | Reads ISO, exposure, white balance from each frame. Calls pure logic calculators. Provides `captureFrame()` → UIImage. |
+| [`CameraSessionActor`](../LightMeter/Camera/CameraSessionActor.swift) | Actor managing AVCaptureSession lifecycle: configuration, high-frame-rate formats (120/240 fps), locking exposure, toggling, and safe frame buffering. Exposes session non-isolatedly. |
+| [`ImageProcessor`](../LightMeter/Camera/ImageProcessor.swift) | Thread-safe utility holding a single, persistent CIContext for high-performance pixel buffer conversion. |
+| [`CameraFrameProvider`](../LightMeter/Camera/CameraFrameProvider.swift) | AVCaptureVideoDataOutputSampleBufferDelegate. Extracts standard frame metadata for Lux/Kelvin, Y-plane luminance for flicker checks, and transfers CVPixelBuffer safely to CameraSessionActor. |
 
 **Glue** — views, view model, wiring. No business logic lives here.
 
@@ -70,6 +72,7 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 | [`ContentView`](../LightMeter/ContentView.swift) | Four-tab layout with a shared single `CameraPreviewView` in a `ZStack` behind the `TabView`. Uses `TabTransitionAction.resolve` for camera lifecycle on tab switches. Handles foreground/background. |
 | [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — live mode (compact card + capture button + camera toggle) and captured mode (frozen frame, expanded card, hidden tab bar). Background is transparent so the shared preview shows through. |
 | [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with color tone label. No capture mode. Background is transparent so the shared preview shows through. |
+| [`Features/Check/`](../LightMeter/Features/Check/) | Check tab — live flicker check UI with an angular-gradient safety gauge, live oscilloscope wave scope, and health report card. |
 | [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs), `TransparentBackground` (clears UIKit hosting view backgrounds so the shared preview shows through the `TabView`). |
 | [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
 
@@ -84,23 +87,26 @@ Every frame follows the same path: hardware → effects → pure logic → glue 
 ```mermaid
 graph LR
     CAM["📷 Camera"]
-    CSM["CameraSessionManager"]
+    CSA["CameraSessionActor"]
     CFP["CameraFrameProvider"]
     LC["LuxCalculator"]
     CTC["ColorTemperatureCalculator"]
+    FA["FlickerAnalyzer"]
     CVM["CameraViewModel"]
     VIEWS["SwiftUI Views"]
 
-    CAM --> CSM --> CFP
+    CAM --> CSA --> CFP
     CFP --> LC --> CVM
     CFP --> CTC --> CVM
+    CFP --> FA --> CVM
     CVM --> VIEWS
 
     style CAM fill:#6b7280,stroke:#374151,color:#fff
-    style CSM fill:#f59e0b,stroke:#d97706,color:#fff
+    style CSA fill:#f59e0b,stroke:#d97706,color:#fff
     style CFP fill:#f59e0b,stroke:#d97706,color:#fff
     style LC fill:#10b981,stroke:#059669,color:#fff
     style CTC fill:#10b981,stroke:#059669,color:#fff
+    style FA fill:#10b981,stroke:#059669,color:#fff
     style CVM fill:#3b82f6,stroke:#2563eb,color:#fff
     style VIEWS fill:#3b82f6,stroke:#2563eb,color:#fff
 ```
@@ -115,7 +121,7 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 121 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 126 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
 - **LuxInterpreterTests** (26) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence
@@ -124,6 +130,7 @@ All 121 tests target the pure logic layer. The effects and glue layers require r
 - **ColorTemperatureCalculatorTests** (10) — clamping at min/max, identity for in-range values, invariant across random inputs
 - **ComparisonGeneratorTests** (30) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
 - **TabTransitionActionTests** (8) — bug condition exploration (camera↔camera returns `.none`), preservation properties (camera→non-camera, non-camera→camera, non-camera→non-camera, same-tab), randomized verification
+- **FlickerAnalyzerTests** (5) — mathematical accuracy against synthesized 50Hz, 100Hz, and 120Hz waves under different sampling rates, zero/low signal fallbacks, safety level classifications.
 - **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 
 The suite uses two styles: unit tests (specific input → expected output) and property-based tests (random inputs → invariant rules like "lux is never negative"). Every module has both. When you port to TypeScript, replicate the boundary tests and representative value tests. For property-based tests, `fast-check` is a good equivalent.

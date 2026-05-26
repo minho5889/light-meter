@@ -99,7 +99,7 @@ Roughly in priority order. The first group is the core — the app doesn't reall
 
 ### A note on flicker detection
 
-This is the most technically interesting part of the project and it's entirely new — not in the iOS version yet. The science and detection approach are covered in detail in the [Light Science Primer](docs/light-science-primer.md) (the "Flicker: The Hard One" section). Here's what matters for implementation:
+This is the most technically interesting part of the project. It is fully implemented in the iOS reference application in this repository, which provides a high-performance native blueprint utilizing 240fps capture and Apple's Accelerate framework vDSP FFT. The science and detection approach are covered in detail in the [Light Science Primer](docs/light-science-primer.md) (the "Flicker: The Hard One" section). Here's what matters for your Android implementation:
 
 This will almost certainly need to run in a native module (Kotlin) for performance. `react-native-vision-camera` supports custom frame processor plugins [[10]](#source-10) for exactly this kind of thing. On the native side, JTransforms [[11]](#source-11) is a good FFT library option.
 

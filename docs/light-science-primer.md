@@ -266,9 +266,7 @@ graph LR
 
 > 🟡 Lux pipeline &nbsp;&nbsp; 🔵 Kelvin pipeline &nbsp;&nbsp; 🟢 Flicker pipeline &nbsp;&nbsp; ⚫ Shared origin
 
-The lux and Kelvin pipelines are metadata-only — cheap and fast. The flicker pipeline touches pixels and needs a rolling buffer + FFT — heavier, but still real-time in a native module.
-
-The lux and Kelvin branches are already implemented in the iOS app and port directly. Flicker is new work for the React Native team.
+The lux, Kelvin, and flicker branches are now fully implemented in the iOS app. The flicker analysis uses Accelerate framework vDSP FFT on iOS and serves as a high-performance native reference for the Android React Native team.
 
 ### Formulas
 
