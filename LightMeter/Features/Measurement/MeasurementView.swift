@@ -12,20 +12,22 @@ struct MeasurementView: View {
     @State private var capturedComparisonText: String = ""
 
     var body: some View {
-        ZStack {
-            // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView.
-            // TransparentBackground clears the UIKit hosting view's opaque background so the preview shows through.
-            Color.clear.ignoresSafeArea()
-                .background(TransparentBackground())
+        GeometryReader { geometry in
+            ZStack {
+                // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView.
+                // TransparentBackground clears the UIKit hosting view's opaque background so the preview shows through.
+                Color.clear.ignoresSafeArea()
+                    .background(TransparentBackground())
 
-            // Live mode overlay — always present, hidden when captured
-            liveModeContent
-                .opacity(isCaptured ? 0 : 1)
-                .allowsHitTesting(!isCaptured)
+                // Live mode overlay — always present, hidden when captured
+                liveModeContent(safeAreaTop: geometry.safeAreaInsets.top)
+                    .opacity(isCaptured ? 0 : 1)
+                    .allowsHitTesting(!isCaptured)
 
-            // Captured mode overlay — shown on top when captured
-            if isCaptured, let frame = frozenFrame {
-                capturedModeContent(frame: frame)
+                // Captured mode overlay — shown on top when captured
+                if isCaptured, let frame = frozenFrame {
+                    capturedModeContent(frame: frame, safeAreaTop: geometry.safeAreaInsets.top)
+                }
             }
         }
         .toolbar(isCaptured ? .hidden : .visible, for: .tabBar)
@@ -33,9 +35,9 @@ struct MeasurementView: View {
 
     // MARK: - Live Mode
 
-    private var liveModeContent: some View {
+    private func liveModeContent(safeAreaTop: CGFloat) -> some View {
         VStack {
-            Spacer().frame(height: 8)
+            Spacer().frame(height: max(8, safeAreaTop))
 
             MeasurementCardView(
                 lux: cameraViewModel.lux,
@@ -76,7 +78,7 @@ struct MeasurementView: View {
 
     // MARK: - Captured Mode
 
-    private func capturedModeContent(frame: UIImage) -> some View {
+    private func capturedModeContent(frame: UIImage, safeAreaTop: CGFloat) -> some View {
         ZStack {
             Image(uiImage: frame)
                 .resizable()
@@ -102,10 +104,11 @@ struct MeasurementView: View {
                         .clipShape(Capsule())
                         .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
                     }
+                    .accessibilityLabel("Back to live mode")
                     Spacer()
                 }
                 .padding(.horizontal)
-                .padding(.top, 12)
+                .padding(.top, max(12, safeAreaTop))
 
                 MeasurementCardView(
                     lux: capturedLux,

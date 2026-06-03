@@ -28,22 +28,23 @@ struct RecordsView: View {
     }
 
     var body: some View {
-        ZStack {
-            // Dark elegant background theme for records history
-            Color.black.ignoresSafeArea()
+        GeometryReader { geometry in
+            ZStack {
+                // Dark elegant background theme for records history
+                Color.black.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                // Header Title Section
-                HStack {
-                    Text(LocalizedStrings.translate(key: "tab_records", language: cameraViewModel.appLanguage).uppercased())
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .tracking(1.5)
-                    Spacer()
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
-                .padding(.bottom, 12)
+                VStack(spacing: 0) {
+                    // Header Title Section
+                    HStack {
+                        Text(LocalizedStrings.translate(key: "tab_records", language: cameraViewModel.appLanguage).uppercased())
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .tracking(1.5)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, max(16, geometry.safeAreaInsets.top))
+                    .padding(.bottom, 12)
 
                 if cameraViewModel.records.isEmpty {
                     emptyStateView
@@ -53,6 +54,7 @@ struct RecordsView: View {
             }
         }
     }
+}
 
     // MARK: - Subviews
 

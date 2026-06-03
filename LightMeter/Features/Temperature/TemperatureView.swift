@@ -4,29 +4,31 @@ struct TemperatureView: View {
     @ObservedObject var cameraViewModel: CameraViewModel
 
     var body: some View {
-        ZStack {
-            Color.clear
-                .background(TransparentBackground())
+        GeometryReader { geometry in
+            ZStack {
+                Color.clear
+                    .background(TransparentBackground())
 
-            VStack {
-                Spacer().frame(height: 8)
+                VStack {
+                    Spacer().frame(height: max(8, geometry.safeAreaInsets.top))
 
-                TemperatureCardView(
-                    kelvin: cameraViewModel.colorTemperature,
-                    interpretationDescription: KelvinInterpreter.interpret(
+                    TemperatureCardView(
                         kelvin: cameraViewModel.colorTemperature,
-                        language: cameraViewModel.appLanguage
-                    ).description,
-                    interpretationTip: KelvinInterpreter.interpret(
-                        kelvin: cameraViewModel.colorTemperature,
-                        language: cameraViewModel.appLanguage
-                    ).tip
-                )
-                .padding(.horizontal)
+                        interpretationDescription: KelvinInterpreter.interpret(
+                            kelvin: cameraViewModel.colorTemperature,
+                            language: cameraViewModel.appLanguage
+                        ).description,
+                        interpretationTip: KelvinInterpreter.interpret(
+                            kelvin: cameraViewModel.colorTemperature,
+                            language: cameraViewModel.appLanguage
+                        ).tip
+                    )
+                    .padding(.horizontal)
 
-                Spacer()
+                    Spacer()
+                }
+                .padding(.bottom, 96) // Clear bottom tab bar capsule
             }
-            .padding(.bottom, 96) // Clear bottom tab bar capsule
         }
     }
 }
