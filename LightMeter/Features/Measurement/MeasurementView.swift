@@ -79,7 +79,7 @@ struct MeasurementView: View {
     // MARK: - Captured Mode
 
     private func capturedModeContent(frame: UIImage, safeAreaTop: CGFloat) -> some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Image(uiImage: frame)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -110,18 +110,19 @@ struct MeasurementView: View {
                 .padding(.horizontal)
                 .padding(.top, max(12, safeAreaTop))
 
-                MeasurementCardView(
-                    lux: capturedLux,
-                    kelvin: capturedKelvin,
-                    isCaptured: true,
-                    language: cameraViewModel.appLanguage,
-                    interpretationDescription: capturedInterpretationDescription,
-                    interpretationTip: capturedInterpretationTip,
-                    comparisonText: capturedComparisonText
-                )
-                .padding(.horizontal)
-
-                Spacer()
+                ScrollView(.vertical, showsIndicators: false) {
+                    MeasurementCardView(
+                        lux: capturedLux,
+                        kelvin: capturedKelvin,
+                        isCaptured: true,
+                        language: cameraViewModel.appLanguage,
+                        interpretationDescription: capturedInterpretationDescription,
+                        interpretationTip: capturedInterpretationTip,
+                        comparisonText: capturedComparisonText
+                    )
+                    .padding(.horizontal)
+                    .padding(.bottom, 24)
+                }
             }
         }
     }
