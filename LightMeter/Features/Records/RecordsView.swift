@@ -27,24 +27,33 @@ struct RecordsView: View {
         return numberFormatter.string(from: NSNumber(value: value)) ?? "\(Int(value))"
     }
 
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Dark elegant background theme for records history
-                Color.black.ignoresSafeArea()
+    private var safeAreaTop: CGFloat {
+        let keyWindow = UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+            .first?.windows
+            .filter { $0.isKeyWindow }
+            .first
+        return keyWindow?.safeAreaInsets.top ?? 47
+    }
 
-                VStack(spacing: 0) {
-                    // Header Title Section
-                    HStack {
-                        Text(LocalizedStrings.translate(key: "tab_records", language: cameraViewModel.appLanguage).uppercased())
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .tracking(1.5)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, max(16, geometry.safeAreaInsets.top))
-                    .padding(.bottom, 12)
+    var body: some View {
+        ZStack {
+            // Dark elegant background theme for records history
+            Color.black.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Header Title Section
+                HStack {
+                    Text(LocalizedStrings.translate(key: "tab_records", language: cameraViewModel.appLanguage).uppercased())
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                        .tracking(1.5)
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, max(16, safeAreaTop + 12))
+                .padding(.bottom, 12)
 
                 if cameraViewModel.records.isEmpty {
                     emptyStateView
@@ -54,7 +63,6 @@ struct RecordsView: View {
             }
         }
     }
-}
 
     // MARK: - Subviews
 

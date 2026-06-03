@@ -11,23 +11,31 @@ struct MeasurementView: View {
     @State private var capturedInterpretationTip: String = ""
     @State private var capturedComparisonText: String = ""
 
+    private var safeAreaTop: CGFloat {
+        let keyWindow = UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+            .first?.windows
+            .filter { $0.isKeyWindow }
+            .first
+        return keyWindow?.safeAreaInsets.top ?? 47
+    }
+
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView.
-                // TransparentBackground clears the UIKit hosting view's opaque background so the preview shows through.
-                Color.clear.ignoresSafeArea()
-                    .background(TransparentBackground())
+        ZStack {
+            // Transparent background — shared CameraPreviewView lives behind the TabView in ContentView.
+            // TransparentBackground clears the UIKit hosting view's opaque background so the preview shows through.
+            Color.clear.ignoresSafeArea()
+                .background(TransparentBackground())
 
-                // Live mode overlay — always present, hidden when captured
-                liveModeContent(safeAreaTop: geometry.safeAreaInsets.top)
-                    .opacity(isCaptured ? 0 : 1)
-                    .allowsHitTesting(!isCaptured)
+            // Live mode overlay — always present, hidden when captured
+            liveModeContent(safeAreaTop: safeAreaTop)
+                .opacity(isCaptured ? 0 : 1)
+                .allowsHitTesting(!isCaptured)
 
-                // Captured mode overlay — shown on top when captured
-                if isCaptured, let frame = frozenFrame {
-                    capturedModeContent(frame: frame, safeAreaTop: geometry.safeAreaInsets.top)
-                }
+            // Captured mode overlay — shown on top when captured
+            if isCaptured, let frame = frozenFrame {
+                capturedModeContent(frame: frame, safeAreaTop: safeAreaTop)
             }
         }
         .toolbar(isCaptured ? .hidden : .visible, for: .tabBar)
@@ -37,7 +45,7 @@ struct MeasurementView: View {
 
     private func liveModeContent(safeAreaTop: CGFloat) -> some View {
         VStack {
-            Spacer().frame(height: max(8, safeAreaTop))
+            Spacer().frame(height: max(8, safeAreaTop + 12))
 
             MeasurementCardView(
                 lux: cameraViewModel.lux,
@@ -108,7 +116,7 @@ struct MeasurementView: View {
                     Spacer()
                 }
                 .padding(.horizontal)
-                .padding(.top, max(12, safeAreaTop))
+                .padding(.top, safeAreaTop + 16)
 
                 ScrollView(.vertical, showsIndicators: false) {
                     MeasurementCardView(
