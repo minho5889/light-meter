@@ -33,7 +33,7 @@ final class FlickerAnalyzerTests: XCTestCase {
         var samples = [Float](repeating: 0, count: FlickerAnalyzer.bufferSize)
         for i in 0..<FlickerAnalyzer.bufferSize {
             let time = Float(i) / sampleRate
-            samples[i] = dcOffset + amplitude * sin(2.0 * .pi * frequency * time)
+            samples[i] = dcOffset + amplitude * cos(2.0 * .pi * frequency * time)
         }
         
         guard let result = FlickerAnalyzer.analyze(samples: samples, sampleRate: sampleRate) else {

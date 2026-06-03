@@ -41,9 +41,7 @@ struct MeasurementView: View {
                 lux: cameraViewModel.lux,
                 kelvin: cameraViewModel.colorTemperature,
                 isCaptured: false,
-                interpretationDescription: "",
-                interpretationTip: "",
-                comparisonText: ""
+                language: cameraViewModel.appLanguage
             )
             .padding(.horizontal)
 
@@ -72,7 +70,7 @@ struct MeasurementView: View {
                 }
                 .accessibilityLabel("Switch Camera")
             }
-            .padding(.bottom, DesignConstants.spacingLG)
+            .padding(.bottom, 96) // Padded up to clear the custom capsule floating tab bar
         }
     }
 
@@ -80,35 +78,40 @@ struct MeasurementView: View {
 
     private func capturedModeContent(frame: UIImage) -> some View {
         ZStack {
-            Color.black.ignoresSafeArea()
-
             Image(uiImage: frame)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .aspectRatio(contentMode: .fill)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .clipped()
+                .ignoresSafeArea()
 
-            VStack {
+            VStack(spacing: 12) {
+                // Top control: Figma-style Back chevron button
                 HStack {
                     Button(action: returnToLiveMode) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "xmark")
-                            Text("Close")
+                        HStack(spacing: 8) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 16, weight: .bold))
+                            Text(LocalizedStrings.translate(key: "ui_back", language: cameraViewModel.appLanguage))
+                                .font(.system(size: 16, weight: .semibold, design: .rounded))
                         }
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Color.black.opacity(0.6))
-                        .cornerRadius(20)
+                        .foregroundColor(.black)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.9))
+                        .clipShape(Capsule())
+                        .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
                     }
                     Spacer()
                 }
                 .padding(.horizontal)
-                .padding(.top, 8)
+                .padding(.top, 12)
 
                 MeasurementCardView(
                     lux: capturedLux,
                     kelvin: capturedKelvin,
                     isCaptured: true,
+                    language: cameraViewModel.appLanguage,
                     interpretationDescription: capturedInterpretationDescription,
                     interpretationTip: capturedInterpretationTip,
                     comparisonText: capturedComparisonText
@@ -131,10 +134,14 @@ struct MeasurementView: View {
             frozenFrame = frame
             capturedLux = currentLux
             capturedKelvin = currentKelvin
-            let interpretation = LuxInterpreter.interpret(lux: currentLux)
+            let interpretation = LuxInterpreter.interpret(lux: currentLux, language: cameraViewModel.appLanguage)
             capturedInterpretationDescription = interpretation.description
             capturedInterpretationTip = interpretation.tip
             capturedComparisonText = ComparisonGenerator.generate(lux: currentLux)
+            
+            // Automatically save to Records history
+            cameraViewModel.saveRecord(lux: currentLux, kelvin: currentKelvin)
+            
             isCaptured = true
         }
     }

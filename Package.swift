@@ -19,7 +19,11 @@ let package = Package(
                 "Logic/LuxRange.swift",
                 "Logic/TabTransitionAction.swift",
                 "Logic/FlickerAnalyzer.swift",
-                "Design/DesignConstants.swift"
+                "Design/DesignConstants.swift",
+                "Logic/AppLanguage.swift",
+                "Logic/LocalizedStrings.swift",
+                "Logic/FlickerInterpreter.swift",
+                "Logic/ActivityChip.swift"
             ]
         ),
         .testTarget(
@@ -35,7 +39,9 @@ let package = Package(
                 "Logic/LuxRangeTests.swift",
                 "Logic/TabTransitionActionTests.swift",
                 "Logic/FlickerAnalyzerTests.swift",
-                "Formatting/NumberFormattingTests.swift"
+                "Formatting/NumberFormattingTests.swift",
+                "Logic/FlickerInterpreterTests.swift",
+                "Logic/LocalizationTests.swift"
             ]
         )
     ]

@@ -1,4 +1,9 @@
-struct InterpretationResult: Equatable, Sendable {
-    let description: String
-    let tip: String
+public struct InterpretationResult: Equatable, Sendable {
+    public let description: String
+    public let tip: String
+
+    public init(description: String, tip: String) {
+        self.description = description
+        self.tip = tip
+    }
 }

@@ -80,14 +80,14 @@ Roughly in priority order. The first group is the core — the app doesn't reall
 - [ ] Per-frame metadata extraction (ISO, exposure, white balance) via native plugin [[5]](#source-5)
 - [ ] Port the 8 pure logic files from `Logic/` to TypeScript (see appendix for the list)
 - [ ] Unit tests for the ported logic — boundary values, representative values, ideally property-based tests with something like `fast-check` [[7]](#source-7)
-- [ ] **LUX tab** — live mode with camera preview and a translucent card showing real-time lux and Kelvin, plus a camera toggle button for switching front/rear cameras. Capture mode that freezes the frame and expands the card to show interpretation, tip, and comparison sentence. Close button to return to live mode
+- [ ] **LUX tab** — live mode with camera preview and a translucent card showing real-time lux and Kelvin, plus a camera toggle button for switching front/rear cameras. Capture mode that freezes the frame, autosaves the record, and expands the card to show interpretation, tip, a 2-column activity grid, and comparison sentence. Close button to return to live mode
 - [ ] **Temperature tab** — live mode only. Camera preview with a card showing Kelvin, color tone, and environment tip
-- [ ] **Tab navigation** — four tabs (LUX, Temperature, Check, Records) using `@react-navigation/bottom-tabs` [[8]](#source-8). Camera runs on the first two tabs, stops on the other two. Switching between two camera tabs should not stop/start the session — use the `TabTransitionAction` logic to skip redundant cycles. Camera pauses when the app goes to background
+- [ ] **Tab navigation** — four tabs (LUX, Temperature, Check, Records) using a custom floating capsule segmented tab switcher. Camera runs on the first two tabs, stops on the other two. Switching between two camera tabs should not stop/start the session — use the `TabTransitionAction` logic to skip redundant cycles. Camera pauses when the app goes to background
 
 ### Should get done (week 2–3)
 
 - [ ] **Flicker detection** *(support developer)* — analyze light flicker from the camera feed using FFT-based luminance analysis. The native module computes the raw flicker percentage; the classification into safety levels happens in TypeScript. The Check tab shows flicker %, safety level, description, and a color-coded indicator
-- [ ] **Records tab** — UI shell with in-memory data (no persistence). List of saved measurements, swipe-to-delete, tap for detail view, empty state
+- [ ] **Records tab** — persistent captured records. List of saved measurements, swipe-to-delete, tap for detail view, empty state
 - [ ] **Number formatting** — locale-aware with thousands separators (`Intl.NumberFormat`)
 
 ### Stretch goals
@@ -163,10 +163,10 @@ The goal is to point the phone at a lamp and see a lux value update in real time
 Just so it's clear — these are explicitly off the table for this engagement:
 
 - iOS support (Android only)
-- Real data persistence (in-memory only for Records)
+- Real data persistence [Implemented in iOS reference app using UserDefaults]
 - Play Store submission
 - Settings screen (placeholder only)
-- Localization
+- Localization [Implemented in iOS reference app using AppLanguage/LocalizedStrings]
 - Background processing
 - Cloud sync or accounts
 
@@ -178,16 +178,20 @@ For the full iOS codebase map, module reference, data flow diagrams, and test su
 
 ### Files to port (pure logic → TypeScript)
 
-All 8 files in `Logic/`. The algorithms are identical — you're translating syntax, not logic.
+All 12 files in `Logic/`. The algorithms are identical — you're translating syntax, not logic.
 
 - `LuxCalculator` — `lux = (250 × aperture²) / (ISO × exposure)`. Returns 0 for invalid inputs.
 - `ColorTemperatureCalculator` — clamps raw Kelvin to [1000, 15000]
-- `LuxInterpreter` — lux → 1 of 8 ranges → `{ description, tip }`
-- `KelvinInterpreter` — Kelvin → 1 of 6 ranges → `{ description, tip }`
+- `LuxInterpreter` — lux → 1 of 8 ranges → `{ description, tip }` (with localization parameters)
+- `KelvinInterpreter` — Kelvin → 1 of 6 ranges → `{ description, tip }` (with localization parameters)
 - `ComparisonGenerator` — "Brighter than X but darker than Y"
 - `LuxRange` — `rangeIndex(lux)` → 0–7, shared by interpreter and comparison generator
 - `InterpretationResult` — TypeScript interface: `{ description: string, tip: string }`
 - `TabTransitionAction` — `resolve(from, to)` → `.startSession`, `.stopSession`, or `.none`. Determines camera session action for tab transitions — camera↔camera transitions return `.none` to avoid unnecessary stop/start cycles. Also provides `isCameraTab(tab)` helper.
+- `AppLanguage` — maps locales (`en`, `ko`, `fr`) and handles system language detection.
+- `LocalizedStrings` — dictionary mapping UI keys to translations for English, Korean, and French.
+- `FlickerInterpreter` — maps raw safety level strings to localized titles.
+- `ActivityChip` — defines standard activities and matches active ones per Lux range.
 
 ### Platform differences
 

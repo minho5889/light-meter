@@ -20,5 +20,7 @@
 	<string>1</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to measure light levels (lux and color temperature) in your environment.</string>
+	<key>UILaunchScreen</key>
+	<dict/>
 </dict>
 </plist>

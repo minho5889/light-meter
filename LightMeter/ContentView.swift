@@ -10,46 +10,57 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            // Shared single CameraPreviewView — behind the TabView.
+            // Shared single CameraPreviewView — behind our custom View Switched layers.
             // Only present when permission is granted AND on a camera tab.
             if cameraViewModel.permissionGranted, isCameraTab {
                 CameraPreviewView(session: cameraViewModel.session)
                     .ignoresSafeArea()
             } else if !cameraViewModel.permissionGranted {
-                // Permission-denied background + overlay
+                // Permission-denied background
                 Color.black.ignoresSafeArea()
             }
 
-            TabView(selection: $selectedTab) {
-                MeasurementView(cameraViewModel: cameraViewModel)
-                    .tabItem {
-                        Image(systemName: "sun.max")
-                        Text("LUX")
-                    }
-                    .tag(0)
-
-                TemperatureView(cameraViewModel: cameraViewModel)
-                    .tabItem {
-                        Image(systemName: "thermometer.medium")
-                        Text("Temperature")
-                    }
-                    .tag(1)
-
-                FlickerCheckView(viewModel: cameraViewModel)
-                    .tabItem {
-                        Image(systemName: "checkmark.shield")
-                        Text("Check")
-                    }
-                    .tag(2)
-
-                PlaceholderView(title: "Records", subtitle: "Coming Soon")
-                    .tabItem {
-                        Image(systemName: "list.clipboard")
-                        Text("Records")
-                    }
-                    .tag(3)
+            // Tab content view switcher (replacing native TabView entirely for pixel-perfect overlays)
+            Group {
+                switch selectedTab {
+                case 0:
+                    MeasurementView(cameraViewModel: cameraViewModel)
+                case 1:
+                    TemperatureView(cameraViewModel: cameraViewModel)
+                case 2:
+                    FlickerCheckView(viewModel: cameraViewModel)
+                case 3:
+                    RecordsView(cameraViewModel: cameraViewModel)
+                default:
+                    MeasurementView(cameraViewModel: cameraViewModel)
+                }
             }
-            .toolbarBackground(.hidden, for: .tabBar)
+            .ignoresSafeArea(.all, edges: .top)
+
+            // Custom Floating Capsule Segmented Tab Bar Overlay
+            if cameraViewModel.permissionGranted {
+                VStack {
+                    Spacer()
+                    
+                    HStack(spacing: 0) {
+                        tabItemButton(index: 0, systemIcon: "sun.max.fill", key: "tab_brightness")
+                        tabItemButton(index: 1, systemIcon: "thermometer.medium", key: "tab_temperature")
+                        tabItemButton(index: 2, systemIcon: "checkmark.shield.fill", key: "tab_check")
+                        tabItemButton(index: 3, systemIcon: "list.clipboard.fill", key: "tab_records")
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 8)
+                    .background(.ultraThinMaterial)
+                    .clipShape(Capsule())
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                    )
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12) // Float slightly above safety guide
+                }
+            }
 
             // Permission-denied overlay — shown on top when camera access is missing
             if !cameraViewModel.permissionGranted {
@@ -91,6 +102,36 @@ struct ContentView: View {
             )
         ) { _ in
             cameraViewModel.stopSession()
+        }
+    }
+
+    // MARK: - Custom Tab Button Helper
+
+    private func tabItemButton(index: Int, systemIcon: String, key: String) -> some View {
+        let isSelected = selectedTab == index
+        let label = LocalizedStrings.translate(key: key, language: cameraViewModel.appLanguage)
+        
+        return Button(action: {
+            withAnimation(.interactiveSpring(response: 0.25, dampingFraction: 0.8)) {
+                selectedTab = index
+            }
+        }) {
+            VStack(spacing: 3) {
+                Image(systemName: systemIcon)
+                    .font(.system(size: 16, weight: isSelected ? .bold : .medium))
+                    .frame(height: 22)
+                
+                Text(label)
+                    .font(.system(size: 9, weight: isSelected ? .bold : .medium, design: .rounded))
+            }
+            .foregroundColor(isSelected ? .black : .white.opacity(0.6))
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .background(
+                Capsule()
+                    .fill(isSelected ? Color.white : Color.clear)
+            )
+            .animation(.easeIn(duration: 0.15), value: isSelected)
         }
     }
 }

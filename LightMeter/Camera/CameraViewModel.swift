@@ -21,8 +21,14 @@ final class CameraViewModel: ObservableObject {
     @Published var isCheckingFlicker: Bool = false
     @Published var waveData: [Float] = []
 
+    // MARK: - Localization & Records State
+    @Published var appLanguage: AppLanguage = .systemLanguage
+    @Published var records: [LightRecord] = []
+
     private let sessionActor = CameraSessionActor()
     private var frameProvider: CameraFrameProvider!
+    
+    private static let recordsKey = "light_meter_records"
 
     /// Exposes the AVCaptureSession for CameraPreviewView.
     nonisolated var session: AVCaptureSession { sessionActor.session }
@@ -68,6 +74,9 @@ final class CameraViewModel: ObservableObject {
                 }
             }
         }
+        
+        // Load records
+        loadRecords()
     }
 
     /// Requests camera permission. On grant, sets up the session.
@@ -117,7 +126,7 @@ final class CameraViewModel: ObservableObject {
         flickerPercentage = 0.0
         flickerFrequency = 0.0
         flickerSafetyLevel = "Safe"
-        flickerDescription = "Calibrating sensor..."
+        flickerDescription = LocalizedStrings.translate(key: "ui_flicker_calibrating", language: appLanguage)
         waveData = []
 
         Task { [sessionActor] in
@@ -137,6 +146,42 @@ final class CameraViewModel: ObservableObject {
             // Unlock exposure and restore auto frame rate
             await sessionActor.lockCameraExposure(locked: false)
             await sessionActor.enableHighFrameRateMode(active: false)
+        }
+    }
+
+    // MARK: - Records Management
+
+    /// Persists a new light measurement record based on current values and app language.
+    func saveRecord(lux: Double, kelvin: Double) {
+        let index = LuxRange.rangeIndex(for: lux)
+        let chips = Array(ActivityChip.activeChips(for: index))
+        let newRecord = LightRecord(lux: lux, kelvin: kelvin, timestamp: Date(), activeChips: chips)
+        
+        records.insert(newRecord, at: 0)
+        saveRecordsToDisk()
+    }
+
+    /// Deletes a saved record.
+    func deleteRecord(id: UUID) {
+        records.removeAll { $0.id == id }
+        saveRecordsToDisk()
+    }
+
+    private func saveRecordsToDisk() {
+        do {
+            let data = try JSONEncoder().encode(records)
+            UserDefaults.standard.set(data, forKey: Self.recordsKey)
+        } catch {
+            print("Failed to save records: \(error)")
+        }
+    }
+
+    private func loadRecords() {
+        guard let data = UserDefaults.standard.data(forKey: Self.recordsKey) else { return }
+        do {
+            records = try JSONDecoder().decode([LightRecord].self, from: data)
+        } catch {
+            print("Failed to load records: \(error)")
         }
     }
 

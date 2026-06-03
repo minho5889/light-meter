@@ -23,10 +23,11 @@ LightMeter turns an iPhone camera into a real-time light measurement tool. Open 
 
 Four tabs:
 
-- **LUX** — live lux + Kelvin measurement with a capture button and camera toggle button. Tap capture to freeze the frame and see a human-readable interpretation: what environment matches that brightness, a practical tip, and a comparison sentence like "Brighter than a movie theater but darker than a living room." Close button returns to live mode. Tab bar hides during capture.
+- **LUX** — live lux + Kelvin measurement with a capture button and camera toggle button. Tap capture to freeze the frame and see a human-readable interpretation: what environment matches that brightness, a practical tip, a 2-column activity grid highlighting matching activities, and a comparison sentence. Close button returns to live mode. Tab bar hides during capture.
 - **Temperature** — live Kelvin reading with color tone label and environment tip. No capture mode.
 - **Check** — live light safety check using real-time Accelerate-based FFT flicker analysis.
-- **Records** — placeholder for saved measurement history.
+- **Records** — fully functional saved measurement history screen with persistent storage, index numbers (`#3`, `#2`, `#1`), active activity chips, timestamps, and swipe-to-delete.
+- **Multilingual Localization** — dynamic system-locale-based translation covering English, Korean, and French across all tabs, environment tips, descriptions, and activity chips.
 
 ### Lux ranges
 
@@ -48,13 +49,17 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 |------|------|
 | [`LuxCalculator`](../LightMeter/Logic/LuxCalculator.swift) | `calculateLux(iso:exposureDurationInSeconds:)` → lux as Double. Returns 0.0 for invalid inputs (zero/negative). |
 | [`LuxRange`](../LightMeter/Logic/LuxRange.swift) | `rangeIndex(for:)` → index 0–7. Shared by `LuxInterpreter` and `ComparisonGenerator` so thresholds aren't duplicated. |
-| [`LuxInterpreter`](../LightMeter/Logic/LuxInterpreter.swift) | `interpret(lux:)` → `InterpretationResult` with environment description + tip. Uses `LuxRange` internally. |
-| [`KelvinInterpreter`](../LightMeter/Logic/KelvinInterpreter.swift) | `interpret(kelvin:)` → `InterpretationResult` with color tone + environment tip. |
+| [`LuxInterpreter`](../LightMeter/Logic/LuxInterpreter.swift) | `interpret(lux:language:)` → `InterpretationResult` with environment description + tip, localized based on system locale. |
+| [`KelvinInterpreter`](../LightMeter/Logic/KelvinInterpreter.swift) | `interpret(kelvin:language:)` → `InterpretationResult` with color tone + environment tip, localized. |
 | [`ColorTemperatureCalculator`](../LightMeter/Logic/ColorTemperatureCalculator.swift) | `calculateColorTemperature(rawKelvin:)` → Kelvin clamped to [1 000, 15 000]. |
 | [`ComparisonGenerator`](../LightMeter/Logic/ComparisonGenerator.swift) | `generate(lux:)` → "Brighter than X but darker than Y." Uses `LuxRange` internally. |
 | [`InterpretationResult`](../LightMeter/Logic/InterpretationResult.swift) | `{ description, tip }` — conforms to `Equatable` and `Sendable`. |
 | [`TabTransitionAction`](../LightMeter/Logic/TabTransitionAction.swift) | `resolve(from:to:)` → `.startSession`, `.stopSession`, or `.none`. Camera↔camera returns `.none`. |
 | [`FlickerAnalyzer`](../LightMeter/Logic/FlickerAnalyzer.swift) | `analyze(samples:sampleRate:)` → `FlickerResult` representing the light safety calculations using Accelerate framework vDSP FFT. |
+| [`AppLanguage`](../LightMeter/Logic/AppLanguage.swift) | Enum representing supported locales (`.english`, `.korean`, `.french`) and system locale detection. |
+| [`LocalizedStrings`](../LightMeter/Logic/LocalizedStrings.swift) | Static translation lookup dictionary supplying all localized UI headers, tabs, and guide labels. |
+| [`FlickerInterpreter`](../LightMeter/Logic/FlickerInterpreter.swift) | Static translator mapping raw safety level strings into localized descriptors. |
+| [`ActivityChip`](../LightMeter/Logic/ActivityChip.swift) | Enum defining the 8 standard activities and mapping them to corresponding active Lux ranges. |
 
 **Effects** — thin hardware wrappers. Rewrite these per platform; the logic layer stays the same.
 
@@ -68,13 +73,15 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 
 | File | Role |
 |------|------|
-| [`CameraViewModel`](../LightMeter/Camera/CameraViewModel.swift) | Single source of truth: `@Published` lux, Kelvin, permission, error, camera position, session readiness. Wires SessionManager + FrameProvider. |
-| [`ContentView`](../LightMeter/ContentView.swift) | Four-tab layout with a shared single `CameraPreviewView` in a `ZStack` behind the `TabView`. Uses `TabTransitionAction.resolve` for camera lifecycle on tab switches. Handles foreground/background. |
-| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — live mode (compact card + capture button + camera toggle) and captured mode (frozen frame, expanded card, hidden tab bar). Background is transparent so the shared preview shows through. |
-| [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with color tone label. No capture mode. Background is transparent so the shared preview shows through. |
-| [`Features/Check/`](../LightMeter/Features/Check/) | Check tab — live flicker check UI with an angular-gradient safety gauge, live oscilloscope wave scope, and health report card. |
-| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs), `TransparentBackground` (clears UIKit hosting view backgrounds so the shared preview shows through the `TabView`). |
+| [`CameraViewModel`](../LightMeter/Camera/CameraViewModel.swift) | Single source of truth: `@Published` lux, Kelvin, permission, error, camera position, session readiness, records persistent array (saves and loads to `UserDefaults` as JSON), and selected locale. |
+| [`ContentView`](../LightMeter/ContentView.swift) | App container utilizing a custom floating capsule bottom tab bar overlay and shared single `CameraPreviewView` behind the views. Pause/resume camera session using `TabTransitionAction` logic. |
+| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — compact measurement card left-aligned style, and captured mode (expanded card, 8-activity grid overlay, and back chevron button). |
+| [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with left-aligned color tone label. |
+| [`Features/Check/`](../LightMeter/Features/Check/) | Check tab — live flicker check UI with safety gauge, real-time wave scope oscilloscope, and health report card. |
+| [`Features/Records/`](../LightMeter/Features/Records/) | Records tab — list of persistent captured records chronologically ordered with swipe-to-delete gesture. |
+| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs). |
 | [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
+| [`Camera/LightRecord.swift`](../LightMeter/Camera/LightRecord.swift) | Codable model for saved records representing lux, Kelvin, timestamp, and active chips at time of capture. |
 
 Tests live in `LightMeterTests/` — 121 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
 
@@ -121,16 +128,18 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 126 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 133 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
-- **LuxInterpreterTests** (26) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence
+- **LuxInterpreterTests** (28) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence, Korean and French translation assertions
 - **LuxRangeTests** (17) — range index at every boundary, negative lux handling, equivalence with oracle
-- **KelvinInterpreterTests** (22) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism
+- **KelvinInterpreterTests** (24) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism, Korean and French translation assertions
 - **ColorTemperatureCalculatorTests** (10) — clamping at min/max, identity for in-range values, invariant across random inputs
 - **ComparisonGeneratorTests** (30) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
 - **TabTransitionActionTests** (8) — bug condition exploration (camera↔camera returns `.none`), preservation properties (camera→non-camera, non-camera→camera, non-camera→non-camera, same-tab), randomized verification
-- **FlickerAnalyzerTests** (5) — mathematical accuracy against synthesized 50Hz, 100Hz, and 120Hz waves under different sampling rates, zero/low signal fallbacks, safety level classifications.
+- **FlickerAnalyzerTests** (5) — mathematical accuracy against synthesized 50Hz, 100Hz, and 120Hz waves under different sampling rates, zero/low signal fallbacks, safety level classifications, verified with real-FFT unzipping algorithms.
+- **FlickerInterpreterTests** (3) — translates raw safety levels into Korean, English, and French titles.
+- **LocalizationTests** (5) — checks localization keys translate dynamically and maps activity chips accurately.
 - **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 
 The suite uses two styles: unit tests (specific input → expected output) and property-based tests (random inputs → invariant rules like "lux is never negative"). Every module has both. When you port to TypeScript, replicate the boundary tests and representative value tests. For property-based tests, `fast-check` is a good equivalent.

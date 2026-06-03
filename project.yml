@@ -25,6 +25,7 @@ targets:
       path: LightMeter/Info.plist
       properties:
         NSCameraUsageDescription: "This app needs camera access to measure light levels (lux and color temperature) in your environment."
+        UILaunchScreen: {}
 
   LightMeterTests:
     type: bundle.unit-test

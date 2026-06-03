@@ -8,19 +8,25 @@ struct TemperatureView: View {
             Color.clear
                 .background(TransparentBackground())
 
-            // Content overlay
             VStack {
                 Spacer().frame(height: 8)
 
                 TemperatureCardView(
                     kelvin: cameraViewModel.colorTemperature,
-                    interpretationDescription: KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature).description,
-                    interpretationTip: KelvinInterpreter.interpret(kelvin: cameraViewModel.colorTemperature).tip
+                    interpretationDescription: KelvinInterpreter.interpret(
+                        kelvin: cameraViewModel.colorTemperature,
+                        language: cameraViewModel.appLanguage
+                    ).description,
+                    interpretationTip: KelvinInterpreter.interpret(
+                        kelvin: cameraViewModel.colorTemperature,
+                        language: cameraViewModel.appLanguage
+                    ).tip
                 )
                 .padding(.horizontal)
 
                 Spacer()
             }
+            .padding(.bottom, 96) // Clear bottom tab bar capsule
         }
     }
 }

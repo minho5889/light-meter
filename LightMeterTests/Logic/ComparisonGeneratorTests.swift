@@ -92,7 +92,7 @@ struct ComparisonGeneratorTests {
         for _ in 0..<150 {
             let lux = Double.random(in: -1000...200000, using: &rng)
             let sentence = ComparisonGenerator.generate(lux: lux)
-            let interpreterResult = LuxInterpreter.interpret(lux: lux)
+            let interpreterResult = LuxInterpreter.interpret(lux: lux, language: .english)
             let interpreterIndex = interpreterDescriptionToIndex(interpreterResult.description)
 
             #expect(interpreterIndex >= 0, "Unknown interpreter description for lux=\(lux)")
