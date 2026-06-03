@@ -75,13 +75,13 @@ The crash message is identical for both. Only the stack frames tell you which.
 ## [4. Camera Preview](#table-of-contents)
 
 **Q: The camera preview is black but lux/Kelvin values are updating.**
-<br>A: This was fixed in spec 09. The root cause was multiple `AVCaptureVideoPreviewLayer` instances competing for the same session — AVFoundation only renders to the last-connected layer. The fix moved to a single shared `CameraPreviewView` in `ContentView`, behind the `TabView`. If you're seeing this after spec 09, check that `MeasurementView` and `TemperatureView` do not create their own `CameraPreviewView` — there should be exactly one instance in the entire app, in `ContentView`. Full details in the [Black Screen Post-Mortem](black-screen-post-mortem.md).
+<br>A: This was fixed in spec 09. The root cause was multiple `AVCaptureVideoPreviewLayer` instances competing for the same session — AVFoundation only renders to the last-connected layer. The fix moved to a single shared `CameraPreviewView` in `ContentView`, behind the custom tab content switcher. If you're seeing this after spec 09, check that `MeasurementView` and `TemperatureView` do not create their own `CameraPreviewView` — there should be exactly one instance in the entire app, in `ContentView`. Full details in the [Black Screen Post-Mortem](black-screen-post-mortem.md).
 
 **Q: The camera preview freezes when the app goes to background and comes back.**
 <br>A: The app handles this via `willEnterForegroundNotification` and `didEnterBackgroundNotification` in `ContentView`. If the preview still freezes, the session may have been interrupted. Check for `AVCaptureSessionWasInterruptedNotification` and restart the session when `AVCaptureSessionInterruptionEndedNotification` fires.
 
 **Q: The preview shows on the LUX tab but not on the Temperature tab (or vice versa).**
-<br>A: Both tabs should be transparent overlays on top of the shared preview in `ContentView`. Check that the tab view's background uses `TransparentBackground()` — this `UIViewRepresentable` clears the opaque `UIHostingController` backgrounds that SwiftUI's `TabView` inserts. Without it, the tab content is opaque and hides the preview behind it.
+<br>A: Both tabs should be transparent overlays on top of the shared preview in `ContentView`. Check that the tab view's background uses `TransparentBackground()` — this `UIViewRepresentable` clears the opaque `UIHostingController` backgrounds that SwiftUI wrappers insert. Without it, the tab content is opaque and hides the preview behind it.
 
 ---
 

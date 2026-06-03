@@ -68,7 +68,7 @@ The one-liner is followed by a blank line and bullet points describing what chan
 ```
 [S09_T01_fix]: move CameraPreviewView to ContentView as shared single instance
 
-- Wrap TabView in ZStack with single CameraPreviewView behind it
+- Wrap the custom switcher in ZStack with single CameraPreviewView behind it
 - Gate preview on permissionGranted and isCameraTab
 - Non-camera tabs show opaque placeholder backgrounds
 ```

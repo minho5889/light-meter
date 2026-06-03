@@ -112,14 +112,14 @@ graph TD
     subgraph After["After — fixed"]
         CV2["ContentView"]
         CPV3["CameraPreviewView (shared)"]
-        TV2["TabView"]
+        CS["Custom Switcher / Tab Bar"]
         MV2["MeasurementView (transparent)"]
         TEV2["TemperatureView (transparent)"]
 
         CV2 --> CPV3
-        CV2 --> TV2
-        TV2 --> MV2
-        TV2 --> TEV2
+        CV2 --> CS
+        CS --> MV2
+        CS --> TEV2
     end
 
     style CPV1 fill:#fff3e0,stroke:#f57c00
@@ -128,7 +128,7 @@ graph TD
     style CV1 fill:#e3f2fd,stroke:#1976d2
     style CV2 fill:#e3f2fd,stroke:#1976d2
     style TV1 fill:#e3f2fd,stroke:#1976d2
-    style TV2 fill:#e3f2fd,stroke:#1976d2
+    style CS fill:#e3f2fd,stroke:#1976d2
     style MV1 fill:#e3f2fd,stroke:#1976d2
     style MV2 fill:#e3f2fd,stroke:#1976d2
     style TEV1 fill:#e3f2fd,stroke:#1976d2
@@ -139,10 +139,10 @@ graph TD
 
 | File | Change |
 |------|--------|
-| `ContentView.swift` | Added single `CameraPreviewView` in a `ZStack` behind the `TabView`. Gated on `permissionGranted` and `isCameraTab`. |
+| `ContentView.swift` | Added single `CameraPreviewView` in a `ZStack` behind the custom switcher. Gated on `permissionGranted` and `isCameraTab`. |
 | `MeasurementView.swift` | Removed `CameraPreviewView`. Root background is now `Color.clear` with `TransparentBackground()` so the shared preview shows through. |
 | `TemperatureView.swift` | Same — removed `CameraPreviewView`, transparent background. |
-| `TransparentBackground.swift` | New `UIViewRepresentable` that walks the UIKit superview chain and clears background colors. Needed because SwiftUI's `TabView` wraps each tab in a `UIHostingController` with an opaque system background. |
+| `TransparentBackground.swift` | New `UIViewRepresentable` that walks the UIKit superview chain and clears background colors. Needed because SwiftUI wrappers insert opaque system backgrounds. |
 
 ### What didn't change
 
