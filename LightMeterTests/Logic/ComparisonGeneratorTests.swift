@@ -33,7 +33,7 @@ struct ComparisonGeneratorTests {
     private func interpreterDescriptionToIndex(_ description: String) -> Int {
         switch description {
         case "Very dark outdoors, full moon night": return 0
-        case "Hallways, bathrooms, storage rooms, movie theaters": return 1
+        case "Hallways, bathrooms, movie theaters": return 1
         case "Living room relaxation, dining, hotel rooms": return 2
         case "General office work, kitchen cooking, light reading": return 3
         case "Focused studying, precision handwork, store displays": return 4

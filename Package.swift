@@ -23,7 +23,8 @@ let package = Package(
                 "Logic/AppLanguage.swift",
                 "Logic/LocalizedStrings.swift",
                 "Logic/FlickerInterpreter.swift",
-                "Logic/ActivityChip.swift"
+                "Logic/ActivityChip.swift",
+                "Logic/SignalSmoother.swift"
             ]
         ),
         .testTarget(
@@ -41,7 +42,8 @@ let package = Package(
                 "Logic/FlickerAnalyzerTests.swift",
                 "Formatting/NumberFormattingTests.swift",
                 "Logic/FlickerInterpreterTests.swift",
-                "Logic/LocalizationTests.swift"
+                "Logic/LocalizationTests.swift",
+                "Logic/SignalSmootherTests.swift"
             ]
         )
     ]

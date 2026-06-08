@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		044650C676618FA8908A4118 /* SignalSmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F292B5CCA00B82FC232868D /* SignalSmoother.swift */; };
 		07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141E153718B1A66906CF6AA8 /* LuxCalculator.swift */; };
 		08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */; };
 		09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */; };
@@ -23,6 +24,7 @@
 		4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */; };
 		4C80E8F81CB4267206F8BCC9 /* FlickerAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */; };
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
+		6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */; };
 		62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
 		77D76C7BC802A14BC11BED7A /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAB4538FA9C995543411E8 /* AppLanguage.swift */; };
@@ -62,7 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05CC5449066C71C1FEB3A67E /* LightMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		05CC5449066C71C1FEB3A67E /* LightMeter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LightMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A18F24B9F641399B19318EE /* LuxRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRange.swift; sourceTree = "<group>"; };
 		0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerAnalyzerTests.swift; sourceTree = "<group>"; };
 		141E153718B1A66906CF6AA8 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		62FD179DA1B6CA53048BECC1 /* ActivityChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChip.swift; sourceTree = "<group>"; };
 		6A34737E8E6769616196B553 /* TabTransitionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionAction.swift; sourceTree = "<group>"; };
 		6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGeneratorTests.swift; sourceTree = "<group>"; };
+		6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalSmootherTests.swift; sourceTree = "<group>"; };
 		743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreter.swift; sourceTree = "<group>"; };
 		746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculatorTests.swift; sourceTree = "<group>"; };
 		751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormattingTests.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 		85A64F06C8F54E7EB52BD803 /* LightRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecord.swift; sourceTree = "<group>"; };
 		85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
 		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
+		8F292B5CCA00B82FC232868D /* SignalSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalSmoother.swift; sourceTree = "<group>"; };
 		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
 		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
 		A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 				746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */,
 				F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */,
 				D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */,
+				6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */,
 				2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */,
 			);
 			path = Logic;
@@ -173,6 +178,7 @@
 				141E153718B1A66906CF6AA8 /* LuxCalculator.swift */,
 				85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */,
 				0A18F24B9F641399B19318EE /* LuxRange.swift */,
+				8F292B5CCA00B82FC232868D /* SignalSmoother.swift */,
 				6A34737E8E6769616196B553 /* TabTransitionAction.swift */,
 			);
 			path = Logic;
@@ -319,6 +325,7 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					1F1B09C7A53B6D056F21B656 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -358,6 +365,7 @@
 				61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */,
 				1242467572831488428302D0 /* LuxRangeTests.swift in Sources */,
 				E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */,
+				6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */,
 				DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,6 +401,7 @@
 				9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */,
 				8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */,
 				7E76B6F795E249E5A140198A /* RecordsView.swift in Sources */,
+				044650C676618FA8908A4118 /* SignalSmoother.swift in Sources */,
 				4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */,
 				1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */,
 				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
@@ -417,7 +426,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C7KAGA6JZB;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LightMeter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -573,7 +582,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C7KAGA6JZB;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LightMeter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

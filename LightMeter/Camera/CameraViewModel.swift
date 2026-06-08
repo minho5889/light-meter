@@ -27,6 +27,8 @@ final class CameraViewModel: ObservableObject {
 
     private let sessionActor = CameraSessionActor()
     private var frameProvider: CameraFrameProvider!
+    private var luxSmoother = SignalSmoother(alpha: 0.15)
+    private var kelvinSmoother = SignalSmoother(alpha: 0.15)
     
     private static let recordsKey = "light_meter_records"
 
@@ -49,8 +51,10 @@ final class CameraViewModel: ObservableObject {
             sessionActor: actor,
             onFrameUpdate: { [weak self] luxValue, kelvinValue in
                 Task { @MainActor [weak self] in
-                    self?.lux = luxValue
-                    self?.colorTemperature = kelvinValue
+                    guard let self = self else { return }
+                    let smoothedLux = self.luxSmoother.update(luxValue)
+                    self.lux = SignalSmoother.roundToTwoSignificantFigures(smoothedLux)
+                    self.colorTemperature = self.kelvinSmoother.update(kelvinValue)
                 }
             },
             onFlickerUpdate: { [weak self] result, waveSamples in
@@ -92,6 +96,8 @@ final class CameraViewModel: ObservableObject {
 
     /// Starts the capture session.
     func startSession() {
+        luxSmoother.reset()
+        kelvinSmoother.reset()
         Task {
             await sessionActor.startSession()
         }
@@ -109,6 +115,8 @@ final class CameraViewModel: ObservableObject {
         Task {
             if let newPosition = await sessionActor.toggleCamera() {
                 self.currentCameraPosition = newPosition
+                self.luxSmoother.reset()
+                self.kelvinSmoother.reset()
             }
         }
     }
