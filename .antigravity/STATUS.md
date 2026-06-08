@@ -11,7 +11,7 @@ Legend: `PENDING` · `IN_PROGRESS` · `AWAITING_REVIEW` · `CHANGES_REQUESTED` �
 | Task | Title | State | Merge |
 |------|-------|-------|-------|
 | C1 | Lux/Kelvin smoothing & honest readout | DONE | 6c4d0e7 |
-| C2 | Color temperature tint / Duv | PENDING | — |
+| C2 | Color temperature tint / Duv | DONE | 1c016d8 |
 | C3 | Flicker honesty (no medical claims) | PENDING | — |
 | C4 | Reflected-light disclosure & calibration | PENDING | — |
 
