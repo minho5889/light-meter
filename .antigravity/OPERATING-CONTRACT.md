@@ -53,8 +53,12 @@ and pick any available iPhone simulator.
 
 ## Definition of Done (every task)
 
-- Builds with **zero warnings**. All existing **133 tests** still pass. New logic
-  ships with new tests.
+- Builds with **no new warnings**. There are two KNOWN pre-existing Swift 6
+  `sending`/data-race warnings in `CameraFrameProvider` (the per-frame pixel-buffer
+  Task) — these are accepted tech debt tracked to Plan 2 / P1 and must be GONE after
+  P1. Do not add any others; do not try to fix these before P1.
+- All existing tests still pass (count grows as tasks add tests). New logic ships
+  with new tests.
 - No new force-unwraps on the per-frame hot path (`CameraFrameProvider`).
 - **App Store posture:** no medical/health claims in any user-facing copy.
   Accessibility must not regress.

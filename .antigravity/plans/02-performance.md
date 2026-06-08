@@ -27,6 +27,9 @@ per frame — up to ~480 heap allocations/sec at 240 fps, plus invalidations.
 - No per-frame heap `Task` allocations on the capture path (explain how verified).
 - Lux still updates smoothly; no new frame drops; no data races (Swift 6 strict
   concurrency stays clean).
+- **The two known `CameraFrameProvider` `sending`/data-race warnings (lines ~37–38,
+  the per-frame pixel-buffer Task) are eliminated** — this task owns them. After
+  P1 the build must be truly zero-warning.
 - All existing tests pass; build clean.
 
 ---
