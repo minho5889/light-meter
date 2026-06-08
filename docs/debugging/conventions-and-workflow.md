@@ -1,6 +1,8 @@
 # Conventions and Workflow
 
-This document explains the naming conventions, commit message strategy, and spec-driven development workflow used in this project. If you're reading the git log and wondering what `[S09_T01_fix]` means or why there are numbered spec folders, this is the guide.
+This document explains the naming conventions and commit message strategy used in this project. If you're reading the git log and wondering what `[S09_T01_fix]` means, this is the guide.
+
+> **Note:** This project was originally developed in the Kiro IDE using spec-driven development, where each feature had a spec folder under `.kiro/specs/`. Those spec folders have since been removed, but their numbering lives on in the commit prefixes below — `S{XX}` is the spec number and `T{YY}` is the task number within it.
 
 ---
 
@@ -9,8 +11,7 @@ This document explains the naming conventions, commit message strategy, and spec
 
 1. [Commit Message Format](#1-commit-message-format)
 2. [Naming Conventions](#2-naming-conventions)
-3. [Spec-Driven Development with Kiro](#3-spec-driven-development-with-kiro)
-4. [Reading the Git History](#4-reading-the-git-history)
+3. [Reading the Git History](#3-reading-the-git-history)
 
 ---
 
@@ -93,72 +94,9 @@ The one-liner is followed by a blank line and bullet points describing what chan
 | Project directories | `kebab-case` | `docs/`, `screenshots/` |
 | Xcode/SPM targets | `PascalCase` (required by tooling) | `LightMeter/`, `LightMeterTests/` |
 
-### Spec folders
-
-Format: `{number}-{description}` — all lowercase, hyphen-separated, max 50 characters.
-
-Examples from this repo:
-
-```
-01-ios-light-meter-skeleton
-05-deterministic-split-refactor
-08-camera-session-black-screen
-09-single-preview-layer
-```
-
-Numbers are sequential and never reused. If a spec is revised, append `-v2`.
-
 ---
 
-## [3. Spec-Driven Development with Kiro](#table-of-contents)
-
-This project was built using Kiro, an AI-assisted IDE that supports spec-driven development. Here's what that means and how it shows up in the repo.
-
-### What is Kiro
-
-Kiro is an IDE (built on VS Code) with an integrated AI agent that can read, write, and reason about code. It has two key features relevant to this project:
-
-- **Specs** — structured documents that define requirements, design decisions, and implementation tasks for a feature. The agent works through tasks incrementally, with the developer reviewing and guiding each step.
-- **Steering files** — persistent instructions (in `.kiro/steering/`) that guide the agent's behavior across all interactions. Things like "use this commit format" or "follow the deterministic split architecture" live here so they don't need to be repeated.
-
-### How specs work
-
-Each spec lives in `.kiro/specs/{number}-{description}/` and contains three files:
-
-| File | Purpose |
-|------|---------|
-| `bugfix.md` or `requirements.md` | What needs to be built or fixed, with numbered requirements |
-| `design.md` | Technical design decisions and constraints |
-| `tasks.md` | Ordered implementation checklist with checkboxes |
-
-The agent works through `tasks.md` top to bottom. Each task references specific requirements from the requirements doc. When a task is done, it gets checked off. Commits are tagged with the spec and task number (`[S09_T01_fix]`).
-
-### How steering files work
-
-Steering files in `.kiro/steering/` are markdown documents that the agent loads automatically. They define project-wide rules:
-
-| File | What it controls |
-|------|-----------------|
-| `commit-conventions.md` | The commit message format described above |
-| `naming-conventions.md` | File and directory naming rules |
-| `deterministic-split.md` | The pure logic / effects / glue architecture |
-| `document-formatting.md` | TOC structure, source citations, section linking |
-
-These are the reason the git history is so consistent — the agent follows these rules on every commit.
-
-### Why this matters for reading the repo
-
-If you're looking at the git log and see patterns like `[S08_T03_fix]`, you can trace that commit back to:
-
-1. Spec folder: `.kiro/specs/08-camera-session-black-screen/`
-2. Task 3 in `tasks.md`
-3. The requirements it addresses (listed at the end of each task)
-
-This gives you full traceability from commit → task → requirement → design decision.
-
----
-
-## [4. Reading the Git History](#table-of-contents)
+## [3. Reading the Git History](#table-of-contents)
 
 Here's how to decode the commit log for this project.
 
@@ -185,8 +123,8 @@ The full investigation is documented in the [Black Screen Post-Mortem](black-scr
 
 | Prefix | Meaning |
 |--------|---------|
-| `S{XX}` | Spec number — maps to `.kiro/specs/{XX}-*/` |
-| `T{YY}` | Task number — maps to a checkbox in `tasks.md` |
+| `S{XX}` | Spec number (spec folders were removed when the project left Kiro; the numbers remain in history) |
+| `T{YY}` | Task number within that spec |
 | `NT` | Non-task — work outside any spec |
 | `feat` | New feature |
 | `fix` | Bug fix |

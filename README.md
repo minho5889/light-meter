@@ -28,8 +28,7 @@ Built for anyone curious about their lighting: photographers checking exposure, 
 3. [Project Structure](#3-project-structure)
 4. [Architecture](#4-architecture)
 5. [Documentation](#5-documentation)
-6. [Specs](#6-specs)
-7. [License](#7-license)
+6. [License](#6-license)
 
 ---
 
@@ -40,7 +39,7 @@ Built for anyone curious about their lighting: photographers checking exposure, 
 | Live Lux + Kelvin | LUX | ✅ Built | Real-time brightness and color temperature with capture-to-interpret |
 | Color Temperature | Temperature | ✅ Built | Live Kelvin reading with color tone label and environment tip |
 | Flicker Detection | Check | ✅ Built | Light safety analysis using Accelerate vDSP FFT |
-| Records | Records | 🔲 Placeholder | Saved measurement history — UI shell planned |
+| Records | Records | ✅ Built | Persistent saved measurement history with index numbers, activity chips, timestamps, and swipe-to-delete |
 
 ---
 
@@ -102,7 +101,7 @@ LightMeter/
 └── Design/                 # Font sizes, spacing, dimensions
 
 LightMeterTests/
-├── Logic/                  # 121 tests covering all pure logic
+├── Logic/                  # 133 tests covering all pure logic
 └── Formatting/
 ```
 
@@ -128,7 +127,7 @@ Start here. Covers how a phone camera becomes a light meter — the three things
 
 ### 2. [Developer Guide](docs/developer-guide.md)
 
-The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 121-test suite covers it. Read this before you start porting anything.
+The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 133-test suite covers it. Read this before you start porting anything.
 
 ### 3. [React Native Handover](docs/react-native-handover.md)
 
@@ -145,25 +144,6 @@ The `docs/debugging/` folder contains reference material for when things go wron
 
 ---
 
-## [6. Specs](#table-of-contents)
-
-Feature specs document the incremental development history of the app. Each spec contains requirements, design decisions, and implementation tasks:
-
-| # | Spec | Status |
-|---|------|--------|
-| 01 | iOS Light Meter Skeleton | ✅ Done |
-| 02 | Lux & Kelvin Interpretation | ✅ Done |
-| 03 | Capture Freeze | ✅ Done |
-| 04 | Tab Navigation | ✅ Done |
-| 05 | Deterministic Split Refactor | ✅ Done |
-| 06 | UI Architecture Cleanup | ✅ Done |
-| 07 | Code Review Polish | ✅ Done |
-| 08 | Camera Session Black Screen | ✅ Done |
-| 09 | Single Preview Layer | ✅ Done |
-| 10 | iOS Flicker Detection | ✅ Done |
-
----
-
-## [7. License](#table-of-contents)
+## [6. License](#table-of-contents)
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

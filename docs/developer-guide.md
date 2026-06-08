@@ -41,7 +41,7 @@ The app uses 8 brightness ranges, each mapping to an environment description and
 
 ## [How the Code Is Organized](#table-of-contents)
 
-The codebase follows a "functional core, imperative shell" pattern (you'll see it called the "deterministic split" in the steering docs and spec files). Every file belongs to one of three layers:
+The codebase follows a "functional core, imperative shell" pattern (you'll see it called the "deterministic split" throughout the codebase). Every file belongs to one of three layers:
 
 **Logic** — pure, deterministic, portable. These are the files you'll port to TypeScript.
 
@@ -79,11 +79,11 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 | [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with left-aligned color tone label. |
 | [`Features/Check/`](../LightMeter/Features/Check/) | Check tab — live flicker check UI with safety gauge, real-time wave scope oscilloscope, and health report card. |
 | [`Features/Records/`](../LightMeter/Features/Records/) | Records tab — list of persistent captured records chronologically ordered with swipe-to-delete gesture. |
-| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (stub tabs). |
+| [`SharedViews/`](../LightMeter/SharedViews/) | `CameraPreviewView` (UIKit bridge), `CameraStateOverlay` (permission/error/preview), `PlaceholderView` (unused stub component). |
 | [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
 | [`Camera/LightRecord.swift`](../LightMeter/Camera/LightRecord.swift) | Codable model for saved records representing lux, Kelvin, timestamp, and active chips at time of capture. |
 
-Tests live in `LightMeterTests/` — 121 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
+Tests live in `LightMeterTests/` — 133 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
 
 ---
 

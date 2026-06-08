@@ -35,7 +35,7 @@ The one shared dependency is the camera pipeline. The lead sets it up, and the s
 
 ## [The Architecture (Worth Understanding Early)](#table-of-contents)
 
-The iOS codebase follows a pattern called "functional core, imperative shell" [[1]](#source-1) [[2]](#source-2) — you'll see it called the "deterministic split" in the codebase and steering docs. The full breakdown of how this maps to the file tree is in the [Developer Guide](docs/developer-guide.md), but here's the short version:
+The iOS codebase follows a pattern called "functional core, imperative shell" [[1]](#source-1) [[2]](#source-2) — you'll see it called the "deterministic split" in the codebase. The full breakdown of how this maps to the file tree is in the [Developer Guide](docs/developer-guide.md), but here's the short version:
 
 - **Pure logic** — deterministic functions with no side effects. Same input always gives the same output. In React Native, these become TypeScript modules in something like `src/logic/`.
 - **Effects** — thin wrappers around hardware (camera, sensors). No business logic here. In React Native, this is your native modules or library wrappers.
