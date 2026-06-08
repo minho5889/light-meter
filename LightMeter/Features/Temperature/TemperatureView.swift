@@ -30,7 +30,16 @@ struct TemperatureView: View {
                     interpretationTip: KelvinInterpreter.interpret(
                         kelvin: cameraViewModel.colorTemperature,
                         language: cameraViewModel.appLanguage
-                    ).tip
+                    ).tip,
+                    tintDescription: TintInterpreter.interpret(
+                        tint: cameraViewModel.tint,
+                        language: cameraViewModel.appLanguage
+                    ).description,
+                    tintTip: TintInterpreter.interpret(
+                        tint: cameraViewModel.tint,
+                        language: cameraViewModel.appLanguage
+                    ).tip,
+                    language: cameraViewModel.appLanguage
                 )
                 .padding(.horizontal)
 

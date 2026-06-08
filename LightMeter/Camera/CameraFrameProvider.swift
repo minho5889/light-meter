@@ -6,7 +6,7 @@ import UIKit
 /// and coordination of real-time flicker and light calculations.
 final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, Sendable {
     private let sessionActor: CameraSessionActor
-    private let onFrameUpdate: @Sendable (Double, Double) -> Void
+    private let onFrameUpdate: @Sendable (Double, Double, Double) -> Void
     private let onFlickerUpdate: @Sendable (FlickerResult, [Float]) -> Void
 
     // Rolling sample buffer and frame counter, accessed strictly on the serial delegate queue.
@@ -15,7 +15,7 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
 
     init(
         sessionActor: CameraSessionActor,
-        onFrameUpdate: @escaping @Sendable (Double, Double) -> Void,
+        onFrameUpdate: @escaping @Sendable (Double, Double, Double) -> Void,
         onFlickerUpdate: @escaping @Sendable (FlickerResult, [Float]) -> Void
     ) {
         self.sessionActor = sessionActor
@@ -48,7 +48,9 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
         let exposureDurationInSeconds = CMTimeGetSeconds(device.exposureDuration)
         let aperture = Double(device.lensAperture)
         let gains = device.deviceWhiteBalanceGains
-        let rawKelvin = Double(device.temperatureAndTintValues(for: gains).temperature)
+        let tempAndTint = device.temperatureAndTintValues(for: gains)
+        let rawKelvin = Double(tempAndTint.temperature)
+        let rawTint = Double(tempAndTint.tint)
 
         let luxValue = LuxCalculator.calculateLux(
             iso: iso,
@@ -60,7 +62,7 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
             rawKelvin: rawKelvin
         )
 
-        onFrameUpdate(luxValue, kelvinValue)
+        onFrameUpdate(luxValue, kelvinValue, rawTint)
 
         // 3. Extract Y-plane (Luminance) of the central 128x128 window for real-time light flicker check
         guard CVPixelBufferIsPlanar(pixelBuffer) else { return }

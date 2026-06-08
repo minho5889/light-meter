@@ -8,6 +8,7 @@ import SwiftUI
 final class CameraViewModel: ObservableObject {
     @Published var lux: Double = 0.0
     @Published var colorTemperature: Double = 0.0
+    @Published var tint: Double = 0.0
     @Published var permissionGranted: Bool = false
     @Published var cameraError: String? = nil
     @Published var currentCameraPosition: AVCaptureDevice.Position = .back
@@ -29,6 +30,7 @@ final class CameraViewModel: ObservableObject {
     private var frameProvider: CameraFrameProvider!
     private var luxSmoother = SignalSmoother(alpha: 0.15)
     private var kelvinSmoother = SignalSmoother(alpha: 0.15)
+    private var tintSmoother = SignalSmoother(alpha: 0.15)
     
     private static let recordsKey = "light_meter_records"
 
@@ -43,18 +45,19 @@ final class CameraViewModel: ObservableObject {
         
         // Phase 1: Initialize frameProvider with a dummy callback that has no self captures
         // to satisfy Swift's initialization checks.
-        self.frameProvider = CameraFrameProvider(sessionActor: actor, onFrameUpdate: { _, _ in }, onFlickerUpdate: { _, _ in })
+        self.frameProvider = CameraFrameProvider(sessionActor: actor, onFrameUpdate: { _, _, _ in }, onFlickerUpdate: { _, _ in })
         
         // Phase 2: Now that self is fully initialized, re-assign the real frameProvider
         // capturing self safely.
         self.frameProvider = CameraFrameProvider(
             sessionActor: actor,
-            onFrameUpdate: { [weak self] luxValue, kelvinValue in
+            onFrameUpdate: { [weak self] luxValue, kelvinValue, tintValue in
                 Task { @MainActor [weak self] in
                     guard let self = self else { return }
                     let smoothedLux = self.luxSmoother.update(luxValue)
                     self.lux = SignalSmoother.roundToTwoSignificantFigures(smoothedLux)
                     self.colorTemperature = self.kelvinSmoother.update(kelvinValue)
+                    self.tint = self.tintSmoother.update(tintValue)
                 }
             },
             onFlickerUpdate: { [weak self] result, waveSamples in
@@ -98,6 +101,7 @@ final class CameraViewModel: ObservableObject {
     func startSession() {
         luxSmoother.reset()
         kelvinSmoother.reset()
+        tintSmoother.reset()
         Task {
             await sessionActor.startSession()
         }
@@ -117,6 +121,7 @@ final class CameraViewModel: ObservableObject {
                 self.currentCameraPosition = newPosition
                 self.luxSmoother.reset()
                 self.kelvinSmoother.reset()
+                self.tintSmoother.reset()
             }
         }
     }

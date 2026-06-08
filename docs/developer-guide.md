@@ -83,7 +83,7 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 | [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
 | [`Camera/LightRecord.swift`](../LightMeter/Camera/LightRecord.swift) | Codable model for saved records representing lux, Kelvin, timestamp, and active chips at time of capture. |
 
-Tests live in `LightMeterTests/` — 140 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
+Tests live in `LightMeterTests/` — 145 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
 
 ---
 
@@ -128,7 +128,7 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 140 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 145 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
 - **LuxInterpreterTests** (28) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence, Korean and French translation assertions
@@ -142,6 +142,7 @@ All 140 tests target the pure logic layer. The effects and glue layers require r
 - **LocalizationTests** (5) — checks localization keys translate dynamically and maps activity chips accurately.
 - **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 - **SignalSmootherTests** (7) — convergence to constant input, bounded output within range, correct step-response direction, edge values for alpha (0 and 1), state reset, and significant figures rounding
+- **TintInterpreterTests** (5) — green/neutral/magenta mappings, boundary thresholds, Korean/French/English translation assertions, consistency properties
 
 The suite uses two styles: unit tests (specific input → expected output) and property-based tests (random inputs → invariant rules like "lux is never negative"). Every module has both. When you port to TypeScript, replicate the boundary tests and representative value tests. For property-based tests, `fast-check` is a good equivalent.
 

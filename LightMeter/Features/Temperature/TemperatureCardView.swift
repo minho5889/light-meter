@@ -4,6 +4,9 @@ struct TemperatureCardView: View {
     let kelvin: Double
     let interpretationDescription: String
     let interpretationTip: String
+    let tintDescription: String
+    let tintTip: String
+    let language: AppLanguage
 
     private static let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -54,6 +57,37 @@ struct TemperatureCardView: View {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.white.opacity(0.06), lineWidth: 1)
             )
+
+            Divider()
+                .background(Color.white.opacity(0.12))
+
+            // Tint Section
+            VStack(alignment: .leading, spacing: 10) {
+                Text(LocalizedStrings.translate(key: "ui_tint", language: language))
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .foregroundColor(.white.opacity(0.5))
+                    .tracking(1.0)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(tintDescription)
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    
+                    Text(tintTip)
+                        .font(.system(size: 13, design: .rounded))
+                        .foregroundColor(.white.opacity(0.8))
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.white.opacity(0.04))
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                )
+            }
         }
         .foregroundColor(.white)
         .padding(20)
@@ -64,6 +98,6 @@ struct TemperatureCardView: View {
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
         )
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(Self.formatValue(kelvin)) Kelvin, \(interpretationDescription), \(interpretationTip)")
+        .accessibilityLabel("\(Self.formatValue(kelvin)) Kelvin, \(interpretationDescription), \(interpretationTip), \(LocalizedStrings.translate(key: "ui_tint", language: language)): \(tintDescription), \(tintTip)")
     }
 }

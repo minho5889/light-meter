@@ -18,6 +18,7 @@
 		215E4128299483333603D01E /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F8A654477FB9A001991C20 /* LocalizationTests.swift */; };
 		3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */; };
 		362E472CE38C282A5070C287 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */; };
+		3F23D6DD2E64E8D6BFCD0CD7 /* TintInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4508894EF1207B077AF446 /* TintInterpreter.swift */; };
 		43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A64F06C8F54E7EB52BD803 /* LightRecord.swift */; };
 		4A85FF8D4948BCA39D1FE91F /* ActivityChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FD179DA1B6CA53048BECC1 /* ActivityChip.swift */; };
 		4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34737E8E6769616196B553 /* TabTransitionAction.swift */; };
@@ -26,6 +27,7 @@
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
 		6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */; };
 		62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */; };
+		6AF688582A251DBCB4ECD15E /* TintInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
 		77D76C7BC802A14BC11BED7A /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAB4538FA9C995543411E8 /* AppLanguage.swift */; };
 		7E76B6F795E249E5A140198A /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0F44D6F9686E67479A6D05 /* RecordsView.swift */; };
@@ -100,12 +102,14 @@
 		A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreter.swift; sourceTree = "<group>"; };
 		A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		AE078BD017B4B9258C10AED6 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
+		B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TintInterpreterTests.swift; sourceTree = "<group>"; };
 		C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CDEAB4538FA9C995543411E8 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
 		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
 		D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConstants.swift; sourceTree = "<group>"; };
 		D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
+		DA4508894EF1207B077AF446 /* TintInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TintInterpreter.swift; sourceTree = "<group>"; };
 		E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFrameProvider.swift; sourceTree = "<group>"; };
 		ED0F44D6F9686E67479A6D05 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
 		F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculatorTests.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 				D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */,
 				6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */,
 				2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */,
+				B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				0A18F24B9F641399B19318EE /* LuxRange.swift */,
 				8F292B5CCA00B82FC232868D /* SignalSmoother.swift */,
 				6A34737E8E6769616196B553 /* TabTransitionAction.swift */,
+				DA4508894EF1207B077AF446 /* TintInterpreter.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -367,6 +373,7 @@
 				E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */,
 				6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */,
 				DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */,
+				6AF688582A251DBCB4ECD15E /* TintInterpreterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +412,7 @@
 				4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */,
 				1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */,
 				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
+				3F23D6DD2E64E8D6BFCD0CD7 /* TintInterpreter.swift in Sources */,
 				08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -14,6 +14,7 @@ public struct LocalizedStrings {
         "ui_user_guide": [.english: "User Guide", .korean: "사용자 가이드", .french: "Guide de l'utilisateur"],
         "ui_recommended_activities": [.english: "Recommended Activities", .korean: "권장 환경 및 활동", .french: "Activités Recommandées"],
         "ui_color_tone": [.english: "Color Tone", .korean: "색감", .french: "Teinte de Couleur"],
+        "ui_tint": [.english: "Color Tint", .korean: "색조 (Tint)", .french: "Teinte"],
         "ui_flicker": [.english: "Flicker", .korean: "플리커", .french: "Flicker"],
         "ui_back": [.english: "Back", .korean: "Back", .french: "Retour"],
         "ui_close": [.english: "Close", .korean: "닫기", .french: "Fermer"],
