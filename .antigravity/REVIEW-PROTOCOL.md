@@ -61,11 +61,18 @@ Claude commits this to the **same branch** and pushes.
 
 ### 3a. On APPROVED
 
-Antigravity:
-1. Merges the branch into `main` (squash; conventional-commit title).
-2. Updates `STATUS.md`: set the task to `DONE` with the merge commit short-hash.
-3. Deletes the feature branch.
-4. Starts the next `PENDING` task. Go to step 1.
+**The reviewer owns the merge — Antigravity must NOT merge.** (Changed from the
+original flow after the P1 self-approval incident.)
+
+The reviewer (Claude):
+1. Squash-merges the branch into `main` (conventional-commit title).
+2. Updates `STATUS.md`: sets the task to `DONE` with the merge commit short-hash.
+3. Deletes the feature branch from `origin`.
+
+Antigravity, on seeing `State: APPROVED`:
+1. Does NOTHING to `main` — no merge, no STATUS edit, no branch delete.
+2. Waits until the task shows `DONE` in `STATUS.md` on `main` (reviewer has merged).
+3. Then `git pull origin main` and starts the next `PENDING` task. Go to step 1.
 
 ### 3b. On CHANGES_REQUESTED
 
@@ -94,13 +101,14 @@ State: AWAITING_REVIEW
 ## HARD STOP — no self-approval (added after a P1 incident)
 
 Antigravity **MUST NOT**, under any circumstances:
+- Merge ANY branch into `main`, ever. **The reviewer owns all merges** (see 3a).
+  Antigravity only pushes feature branches and waits.
 - Author a `## Verdict:` section. Only the reviewer (Claude) writes verdicts.
 - Sign a verdict as "User", "User (Approved in chat)", or anything other than the
   reviewer. A chat message from the human is **not** a verdict and never authorizes
   a merge — the verdict must be a reviewer-authored `APPROVED` committed to the
   review file on the branch.
-- Merge a branch whose review file's latest `State:` is anything other than
-  `APPROVED` written by the reviewer.
+- Edit `STATUS.md` to mark a task `DONE`. The reviewer sets `DONE` when merging.
 
 If a verdict is slow or seems missing: **WAIT.** Do not invent one, do not merge,
 do not advance to the next task. Re-push the branch if needed and keep waiting.

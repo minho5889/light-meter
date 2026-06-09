@@ -34,7 +34,9 @@ pick next PENDING task in STATUS.md
   → commit, push branch, open PR
   → set task state to AWAITING_REVIEW in the review file
   → STOP. wait for the reviewer to append a Verdict.
-on APPROVED        → merge to main, mark DONE in STATUS.md, next task
+on APPROVED        → DO NOT MERGE. The reviewer owns merges. Wait until the
+                     reviewer has merged + marked the task DONE in STATUS.md,
+                     then `git pull origin main` and start the next task.
 on CHANGES_REQUESTED → fix on the SAME branch, append a Re-request, push, STOP
 ```
 
