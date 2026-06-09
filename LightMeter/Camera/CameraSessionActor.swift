@@ -1,5 +1,10 @@
 @preconcurrency import AVFoundation
 import UIKit
+import os
+
+struct SendablePixelBuffer: @unchecked Sendable {
+    let buffer: CVPixelBuffer
+}
 
 /// Effects-layer actor responsible for AVCaptureSession lifecycle:
 /// session configuration, input/output setup, start, stop, camera toggling, and frame storage.
@@ -9,10 +14,10 @@ actor CameraSessionActor {
     
     private var captureDevice: AVCaptureDevice?
     private var currentPosition: AVCaptureDevice.Position = .back
-    private var latestPixelBuffer: CVPixelBuffer?
+    private nonisolated let latestBufferLock = OSAllocatedUnfairLock<SendablePixelBuffer?>(initialState: nil)
     
     /// Reusable thread-safe ImageProcessor for converting buffer to UIImage.
-    private let imageProcessor = ImageProcessor()
+    private nonisolated let imageProcessor = ImageProcessor()
 
     /// Private serial dispatch queue for offloading blocking AVCaptureSession operations
     /// (startRunning, stopRunning) off the Swift cooperative pool to prevent deadlock.
@@ -203,13 +208,15 @@ actor CameraSessionActor {
     // MARK: - Safe Pixel Buffer Storage & Rendering
 
     /// Safely updates the latest pixel buffer.
-    func updateLatestPixelBuffer(_ buffer: CVPixelBuffer) {
-        self.latestPixelBuffer = buffer
+    nonisolated func updateLatestPixelBuffer(_ buffer: CVPixelBuffer) {
+        let wrapped = SendablePixelBuffer(buffer: buffer)
+        latestBufferLock.withLock { $0 = wrapped }
     }
 
     /// Safely converts the stored buffer to UIImage.
-    func captureFrame() -> UIImage? {
-        guard let buffer = latestPixelBuffer else { return nil }
+    nonisolated func captureFrame() -> UIImage? {
+        let sendable = latestBufferLock.withLock { $0 }
+        guard let buffer = sendable?.buffer else { return nil }
         return imageProcessor.convertToUIImage(pixelBuffer: buffer)
     }
 

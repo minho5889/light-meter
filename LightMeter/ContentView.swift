@@ -79,6 +79,7 @@ struct ContentView: View {
             cameraViewModel.requestPermission()
         }
         .onChange(of: selectedTab) { _, newTab in
+            cameraViewModel.activeTab = newTab
             switch TabTransitionAction.resolve(from: previousTab, to: newTab) {
             case .startSession:
                 cameraViewModel.startSession()

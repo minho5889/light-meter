@@ -1,6 +1,8 @@
 @preconcurrency import AVFoundation
 import CoreImage
 import UIKit
+import os
+import QuartzCore
 
 /// Effects-layer class responsible for sample buffer delegation, Y-plane luminance extraction,
 /// and coordination of real-time flicker and light calculations.
@@ -10,6 +12,9 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
     private let onFlickerUpdate: @Sendable (FlickerResult, [Float]) -> Void
 
     // Rolling sample buffer and frame counter, accessed strictly on the serial delegate queue.
+    private let activeTabLock = OSAllocatedUnfairLock<Int>(initialState: 0)
+    private nonisolated(unsafe) var lastUIUpdateTime: Double = 0.0
+
     private nonisolated(unsafe) var rollingSamples: [Float] = []
     private nonisolated(unsafe) var frameCounter = 0
 
@@ -24,6 +29,11 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
         super.init()
     }
 
+    /// Updates the current active tab index thread-safely.
+    func updateActiveTab(_ tab: Int) {
+        activeTabLock.withLock { $0 = tab }
+    }
+
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
     func captureOutput(
@@ -34,9 +44,7 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         // 1. Securely transfer ownership of the pixel buffer to the session actor for standard captures
-        Task { [sessionActor] in
-            await sessionActor.updateLatestPixelBuffer(pixelBuffer)
-        }
+        sessionActor.updateLatestPixelBuffer(pixelBuffer)
 
         // 2. Extract standard exposure metadata for Lux and Kelvin calculations
         guard let deviceInput = connection.inputPorts.first?.input as? AVCaptureDeviceInput else {
@@ -44,25 +52,33 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
         }
         let device = deviceInput.device
 
-        let iso = device.iso
-        let exposureDurationInSeconds = CMTimeGetSeconds(device.exposureDuration)
-        let aperture = Double(device.lensAperture)
-        let gains = device.deviceWhiteBalanceGains
-        let tempAndTint = device.temperatureAndTintValues(for: gains)
-        let rawKelvin = Double(tempAndTint.temperature)
-        let rawTint = Double(tempAndTint.tint)
+        let currentTab = activeTabLock.withLock { $0 }
+        if currentTab == 0 || currentTab == 1 {
+            let now = CACurrentMediaTime()
+            if now - lastUIUpdateTime >= 0.1 {
+                lastUIUpdateTime = now
 
-        let luxValue = LuxCalculator.calculateLux(
-            iso: iso,
-            exposureDurationInSeconds: exposureDurationInSeconds,
-            aperture: aperture
-        )
+                let iso = device.iso
+                let exposureDurationInSeconds = CMTimeGetSeconds(device.exposureDuration)
+                let aperture = Double(device.lensAperture)
+                let gains = device.deviceWhiteBalanceGains
+                let tempAndTint = device.temperatureAndTintValues(for: gains)
+                let rawKelvin = Double(tempAndTint.temperature)
+                let rawTint = Double(tempAndTint.tint)
 
-        let kelvinValue = ColorTemperatureCalculator.calculateColorTemperature(
-            rawKelvin: rawKelvin
-        )
+                let luxValue = LuxCalculator.calculateLux(
+                    iso: iso,
+                    exposureDurationInSeconds: exposureDurationInSeconds,
+                    aperture: aperture
+                )
 
-        onFrameUpdate(luxValue, kelvinValue, rawTint)
+                let kelvinValue = ColorTemperatureCalculator.calculateColorTemperature(
+                    rawKelvin: rawKelvin
+                )
+
+                onFrameUpdate(luxValue, kelvinValue, rawTint)
+            }
+        }
 
         // 3. Extract Y-plane (Luminance) of the central 128x128 window for real-time light flicker check
         guard CVPixelBufferIsPlanar(pixelBuffer) else { return }

@@ -13,6 +13,11 @@ final class CameraViewModel: ObservableObject {
     @Published var cameraError: String? = nil
     @Published var currentCameraPosition: AVCaptureDevice.Position = .back
     @Published var sessionReady: Bool = false
+    @Published var activeTab: Int = 0 {
+        didSet {
+            frameProvider?.updateActiveTab(activeTab)
+        }
+    }
 
     // MARK: - Flicker Detection Published State
     @Published var flickerPercentage: Double = 0.0
@@ -145,7 +150,7 @@ final class CameraViewModel: ObservableObject {
 
     /// Captures the current frame as a UIImage asynchronously.
     func captureFrameAsync() async -> UIImage? {
-        await sessionActor.captureFrame()
+        sessionActor.captureFrame()
     }
 
     // MARK: - Flicker Control Triggers
