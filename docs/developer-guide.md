@@ -128,7 +128,7 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 145 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 147 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
 - **LuxInterpreterTests** (28) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence, Korean and French translation assertions
@@ -138,7 +138,7 @@ All 145 tests target the pure logic layer. The effects and glue layers require r
 - **ComparisonGeneratorTests** (30) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
 - **TabTransitionActionTests** (8) — bug condition exploration (camera↔camera returns `.none`), preservation properties (camera→non-camera, non-camera→camera, non-camera→non-camera, same-tab), randomized verification
 - **FlickerAnalyzerTests** (5) — mathematical accuracy against synthesized 50Hz, 100Hz, and 120Hz waves under different sampling rates, zero/low signal fallbacks, safety level classifications, verified with real-FFT unzipping algorithms.
-- **FlickerInterpreterTests** (3) — translates raw safety levels into Korean, English, and French titles.
+- **FlickerInterpreterTests** (5) — translates raw safety levels into Korean, English, and French titles, formats dynamic Nyquist ceiling limits, and asserts safety descriptions contain no banned medical terms.
 - **LocalizationTests** (5) — checks localization keys translate dynamically and maps activity chips accurately.
 - **NumberFormattingTests** (1) — round-trip: format a number → parse it back → same value
 - **SignalSmootherTests** (7) — convergence to constant input, bounded output within range, correct step-response direction, edge values for alpha (0 and 1), state reset, and significant figures rounding

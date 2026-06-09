@@ -66,7 +66,15 @@ final class CameraViewModel: ObservableObject {
                     self.flickerPercentage = result.percentage
                     self.flickerFrequency = result.frequency
                     self.flickerSafetyLevel = result.safetyLevel
-                    self.flickerDescription = result.description
+                    if result.description == "No light detected." {
+                        self.flickerDescription = LocalizedStrings.translate(key: "ui_no_light", language: self.appLanguage)
+                    } else {
+                        self.flickerDescription = FlickerInterpreter.description(
+                            level: result.safetyLevel,
+                            nyquist: result.nyquist,
+                            language: self.appLanguage
+                        )
+                    }
                     self.waveData = waveSamples
                 }
             }

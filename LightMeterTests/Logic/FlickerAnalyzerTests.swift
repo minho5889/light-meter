@@ -45,8 +45,8 @@ final class FlickerAnalyzerTests: XCTestCase {
         // We expect frequency to be resolved very close to 120Hz.
         XCTAssertEqual(result.frequency, 120.0, accuracy: 1.5)
         
-        // We expect the calculated percentage to be close to our synthesized 35% amplitude.
-        XCTAssertEqual(result.percentage, 35.0, accuracy: 5.0)
+        // At Nyquist frequency, there is no spectral leakage, so the analytical amplitude is resolved exactly to 35.0%.
+        XCTAssertEqual(result.percentage, 35.0, accuracy: 0.1)
         XCTAssertEqual(result.safetyLevel, "Dangerous")
     }
 
@@ -69,7 +69,8 @@ final class FlickerAnalyzerTests: XCTestCase {
         }
         
         XCTAssertEqual(result.frequency, 100.0, accuracy: 1.5)
-        XCTAssertEqual(result.percentage, 15.0, accuracy: 3.0)
+        // Due to Hann window spectral leakage for off-bin frequencies, the peak amplitude is slightly attenuated to 13.95%.
+        XCTAssertEqual(result.percentage, 13.95, accuracy: 0.1)
         XCTAssertEqual(result.safetyLevel, "Caution")
     }
 
@@ -92,7 +93,8 @@ final class FlickerAnalyzerTests: XCTestCase {
         }
         
         XCTAssertEqual(result.frequency, 50.0, accuracy: 1.5)
-        XCTAssertEqual(result.percentage, 2.5, accuracy: 1.0)
+        // Due to Hann window spectral leakage for off-bin frequencies, the peak amplitude is slightly attenuated to 2.33%.
+        XCTAssertEqual(result.percentage, 2.33, accuracy: 0.05)
         XCTAssertEqual(result.safetyLevel, "Very Safe")
     }
 }

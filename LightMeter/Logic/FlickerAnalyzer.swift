@@ -7,12 +7,14 @@ public struct FlickerResult: Sendable, Equatable {
     public let frequency: Double
     public let safetyLevel: String
     public let description: String
+    public let nyquist: Double
 
-    public init(percentage: Double, frequency: Double, safetyLevel: String, description: String) {
+    public init(percentage: Double, frequency: Double, safetyLevel: String, description: String, nyquist: Double) {
         self.percentage = percentage
         self.frequency = frequency
         self.safetyLevel = safetyLevel
         self.description = description
+        self.nyquist = nyquist
     }
 }
 
@@ -37,7 +39,8 @@ public final class FlickerAnalyzer: Sendable {
                 percentage: 0.0,
                 frequency: 0.0,
                 safetyLevel: "Safe",
-                description: "No light detected."
+                description: "No light detected.",
+                nyquist: Double(sampleRate) / 2.0
             )
         }
 
@@ -107,10 +110,19 @@ public final class FlickerAnalyzer: Sendable {
 
         // Calculate amplitude of the peak.
         // Scale peak amplitude depending on whether it is Nyquist or a standard bin.
-        // The Hann window divides amplitude by 2, and real FFT scales positive bins by 2.
-        // Dividing standard bins by 3.0 * N matches the test oracle perfectly.
-        let scalingFactor = (maxIndex == bufferSize / 2) ? 2.0 : 4.0
-        let peakAmplitude = (Double(maxMagnitude) * scalingFactor) / (3.0 * Double(bufferSize))
+        // Analytical derivation of peak amplitude from real-FFT magnitude:
+        // 1. Accelerate's forward real FFT (vDSP_fft_zrip) scales output by 2.0 internally.
+        // 2. The normalized Hann window (vDSP_HANN_NORM) scales the signal gain by sqrt(2/3) ≈ 0.816496.
+        //    To recover original amplitude, we divide by this coherent gain, multiplying by 1 / sqrt(2/3) = sqrt(1.5) ≈ 1.22474.
+        // 3. Positive bin doubling applies a factor of 2.0 for standard bins (since positive and negative energy is combined),
+        //    whereas Nyquist has no separate negative counterpart, so its factor is 1.0.
+        // 4. Finally, normal DFT scaling divides by N.
+        // Combining these factors:
+        // - Standard bins: amplitude = (magnitude / 2.0) * 2.0 (doubling) * sqrt(1.5) (Hann) / N = magnitude * sqrt(1.5) / N
+        // - Nyquist bin: amplitude = (magnitude / 2.0) * 1.0 (no doubling) * sqrt(1.5) (Hann) / N = magnitude * sqrt(1.5) / (2.0 * N)
+        // We write this compactly using scalingFactor (2.0 for standard, 1.0 for Nyquist) multiplied by sqrt(1.5) / (2.0 * N).
+        let scalingFactor = (maxIndex == bufferSize / 2) ? 1.0 : 2.0
+        let peakAmplitude = (Double(maxMagnitude) * scalingFactor * sqrt(1.5)) / (2.0 * Double(bufferSize))
 
         // Compute Flicker Percentage (AC Amplitude / DC Component) * 100
         var flickerPercentage = (peakAmplitude / Double(dcComponent)) * 100.0
@@ -121,44 +133,51 @@ public final class FlickerAnalyzer: Sendable {
         }
 
         let clampedPercentage = max(0.0, min(100.0, flickerPercentage))
-        return mapSafety(percentage: clampedPercentage, frequency: frequency)
+        let nyquist = Double(sampleRate) / 2.0
+        return mapSafety(percentage: clampedPercentage, frequency: frequency, nyquist: nyquist)
     }
 
-    private static func mapSafety(percentage: Double, frequency: Double) -> FlickerResult {
+    private static func mapSafety(percentage: Double, frequency: Double, nyquist: Double) -> FlickerResult {
+        let hz = Int(nyquist)
         if percentage <= 3.0 {
             return FlickerResult(
                 percentage: percentage,
                 frequency: frequency,
                 safetyLevel: "Very Safe",
-                description: "Minimal eye fatigue. Sunlight level or high-quality lighting."
+                description: "No flicker detected up to \(hz) Hz. Note: high-frequency PWM/LED flicker above \(hz) Hz cannot be measured by frame-rate sampling. Informational only, not medical advice.",
+                nyquist: nyquist
             )
         } else if percentage <= 10.0 {
             return FlickerResult(
                 percentage: percentage,
                 frequency: frequency,
                 safetyLevel: "Safe",
-                description: "Safe for standard use. Sensitive individuals may feel mild dryness."
+                description: "Minimal relative flicker detected. Normal for high-quality lighting. High-frequency flicker above \(hz) Hz is unmeasurable. Informational only, not medical advice.",
+                nyquist: nyquist
             )
         } else if percentage <= 30.0 {
             return FlickerResult(
                 percentage: percentage,
                 frequency: frequency,
                 safetyLevel: "Caution",
-                description: "Moderate flicker. May cause mild eye strain or headaches over time."
+                description: "Moderate relative flicker intensity. Common in some LED lights or dimmed bulbs. Informational only, not medical advice.",
+                nyquist: nyquist
             )
         } else if percentage <= 60.0 {
             return FlickerResult(
                 percentage: percentage,
                 frequency: frequency,
                 safetyLevel: "Dangerous",
-                description: "Severe flicker. High risk of headaches, visual fatigue, and dizziness."
+                description: "High relative flicker intensity. Common in low-quality LED/fluorescent lights. Informational only, not medical advice.",
+                nyquist: nyquist
             )
         } else {
             return FlickerResult(
                 percentage: percentage,
                 frequency: frequency,
                 safetyLevel: "Very Dangerous",
-                description: "Critical flicker. Visible pulsation. Highly strenuous for eyes."
+                description: "Extreme relative flicker intensity. Visible pulsation or unstable power source detected. Informational only, not medical advice.",
+                nyquist: nyquist
             )
         }
     }

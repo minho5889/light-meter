@@ -134,16 +134,14 @@ We show both values together because neither tells the full story alone.
 
 Most artificial lights flicker [[3]](#source-3). Not on-off-on-off — more like bright-dim-bright-dim, many times per second. AC power cycles at 50Hz (Europe, Asia) or 60Hz (North America), so lights oscillate at 100Hz or 120Hz (twice per cycle).
 
-You can't see it consciously, but your visual system still responds. The effects are well-documented: headaches, eye strain, reduced concentration, nausea. Some people are far more sensitive than others — children, migraine sufferers, and people with autism spectrum conditions tend to be more affected [[3]](#source-3).
+The severity of the oscillation depends entirely on the light source:
 
-The severity depends entirely on the light source:
-
-- Old incandescent bulbs: flicker at 100–120Hz, but less than 10% intensity variation. Generally fine.
-- Cheap LED bulbs: flicker at 100–120Hz with 30–100% intensity variation. Problematic.
+- Old incandescent bulbs: flicker at 100–120Hz, but less than 10% intensity variation.
+- Cheap LED bulbs: flicker at 100–120Hz with 30–100% intensity variation.
 - Quality LED bulbs: good driver electronics reduce flicker to under 3%.
 - Sunlight: zero flicker.
 
-There's also a nasty real-world interaction with dimming. When LEDs are dimmed using PWM (pulse-width modulation), flicker percentage often spikes. A bulb at 5% flicker on full brightness might hit 40% flicker at half brightness. Your users will encounter this.
+There's also a real-world interaction with dimming. When LEDs are dimmed using PWM (pulse-width modulation), flicker percentage often spikes. A bulb at 5% flicker on full brightness might hit 40% flicker at half brightness. Your users will encounter this.
 
 ### How we measure it
 
@@ -153,19 +151,28 @@ Flicker percentage captures how much the intensity oscillates within each cycle:
 flicker% = (Lmax - Lmin) / (Lmax + Lmin) × 100
 ```
 
-A light oscillating between 90 and 110 brightness units: `(110 - 90) / (110 + 90) × 100 = 10%`. Between 10 and 100: `(100 - 10) / (100 + 10) × 100 = 82%`. The first is barely noticeable. The second is severe.
+A light oscillating between 90 and 110 brightness units: `(110 - 90) / (110 + 90) × 100 = 10%`. Between 10 and 100: `(100 - 10) / (100 + 10) × 100 = 82%`. The first is low relative flicker intensity. The second is extreme.
 
 ### The scale
 
+The app presents a relative evaluation scale based on the intensity of the detected oscillation:
+
 | Flicker % | Safety level | What it means |
 |-----------|-------------|---------------|
-| 0–3% | Very Safe | Minimal eye fatigue even with prolonged use |
-| 3–10% | Safe | Sensitive individuals may feel mild dryness or fatigue |
-| 10–30% | Caution | Noticeable eye pain, blurred focus, discomfort |
-| 30–60% | Dangerous | Severe eye fatigue, migraines, dizziness |
-| 60%+ | Very Dangerous | Visible flickering, risk of seizures for sensitive individuals |
+| 0–3% | Very Safe | No flicker detected. Note: high-frequency PWM/LED flicker above the Nyquist ceiling cannot be measured by frame-rate sampling. |
+| 3–10% | Safe | Minimal relative flicker detected. Normal for high-quality lighting. |
+| 10–30% | Caution | Moderate relative flicker intensity. Common in some LED lights or dimmed bulbs. |
+| 30–60% | Dangerous | High relative flicker intensity. Common in low-quality LED/fluorescent lights. |
+| 60%+ | Very Dangerous | Extreme relative flicker intensity. Visible pulsation or unstable power source detected. |
 
-These thresholds are informed by IEEE 1789 recommended practices [[4]](#source-4), which suggest a limit of ~8–10% flicker at 100–120Hz for comfortable viewing.
+*Note: All flicker evaluations are informational only and do not constitute medical advice.*
+
+### Frequency Ceiling (Nyquist Limit)
+
+Under the Nyquist theorem, a signal can only be resolved up to half of its sampling rate ($f_{Nyquist} = f_s / 2$).
+- At 240 fps high-speed sampling, flicker can be detected up to 120 Hz.
+- At 120 fps sampling, flicker can be resolved up to 60 Hz.
+- High-frequency flicker (such as kilohertz PWM dimming) exceeds these physical sampling limits and cannot be detected or measured via the camera's frame-rate sampling method.
 
 ### How we detect it from the camera
 
