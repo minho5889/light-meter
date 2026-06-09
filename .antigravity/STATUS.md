@@ -13,7 +13,7 @@ Legend: `PENDING` · `IN_PROGRESS` · `AWAITING_REVIEW` · `CHANGES_REQUESTED` �
 | C1 | Lux/Kelvin smoothing & honest readout | DONE | 6c4d0e7 |
 | C2 | Color temperature tint / Duv | DONE | 1c016d8 |
 | C3 | Flicker honesty (no medical claims) | DONE | 5359a89 |
-| C4 | Reflected-light disclosure & calibration | PENDING | — |
+| C4 | Reflected-light disclosure & calibration | DONE | 613cfd6 |
 
 ## Plan 2 — Performance & Architecture
 
