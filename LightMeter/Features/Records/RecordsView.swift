@@ -55,7 +55,7 @@ struct RecordsView: View {
                 .padding(.top, max(16, safeAreaTop + 12))
                 .padding(.bottom, 12)
 
-                if cameraViewModel.records.isEmpty {
+                if cameraViewModel.recordsStore.records.isEmpty {
                     emptyStateView
                 } else {
                     recordsListView
@@ -91,8 +91,8 @@ struct RecordsView: View {
     private var recordsListView: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                ForEach(Array(cameraViewModel.records.enumerated()), id: \.element.id) { index, record in
-                    let reverseIndex = cameraViewModel.records.count - index
+                ForEach(Array(cameraViewModel.recordsStore.records.enumerated()), id: \.element.id) { index, record in
+                    let reverseIndex = cameraViewModel.recordsStore.records.count - index
                     
                     HStack(spacing: 0) {
                         VStack(alignment: .leading, spacing: 12) {
@@ -151,7 +151,7 @@ struct RecordsView: View {
                         // Swipe-to-delete helper or explicit trash button
                         Button(action: {
                             withAnimation(.easeInOut) {
-                                cameraViewModel.deleteRecord(id: record.id)
+                                cameraViewModel.recordsStore.deleteRecord(id: record.id)
                             }
                         }) {
                             Image(systemName: "trash")

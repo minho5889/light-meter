@@ -54,8 +54,8 @@ struct MeasurementView: View {
             Spacer().frame(height: max(8, safeAreaTop + 12))
 
             MeasurementCardView(
-                lux: cameraViewModel.lux,
-                kelvin: cameraViewModel.colorTemperature,
+                lux: cameraViewModel.measurement.lux,
+                kelvin: cameraViewModel.measurement.colorTemperature,
                 isCaptured: false,
                 language: cameraViewModel.appLanguage
             )
@@ -203,8 +203,8 @@ struct MeasurementView: View {
     // MARK: - Actions
 
     private func capture() {
-        let currentLux = cameraViewModel.lux
-        let currentKelvin = cameraViewModel.colorTemperature
+        let currentLux = cameraViewModel.measurement.lux
+        let currentKelvin = cameraViewModel.measurement.colorTemperature
 
         Task {
             guard let frame = await cameraViewModel.captureFrameAsync() else { return }
@@ -217,7 +217,7 @@ struct MeasurementView: View {
             capturedComparisonText = ComparisonGenerator.generate(lux: currentLux)
             
             // Automatically save to Records history
-            cameraViewModel.saveRecord(lux: currentLux, kelvin: currentKelvin)
+            cameraViewModel.recordsStore.saveRecord(lux: currentLux, kelvin: currentKelvin)
             
             isCaptured = true
         }

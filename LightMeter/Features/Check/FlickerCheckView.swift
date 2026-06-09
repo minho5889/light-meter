@@ -32,7 +32,7 @@ struct FlickerCheckView: View {
         }
         .onDisappear {
             // Auto-safety reset on tab switch
-            if viewModel.isCheckingFlicker {
+            if viewModel.flicker.isCheckingFlicker {
                 viewModel.stopFlickerCheck()
             }
         }
@@ -55,13 +55,13 @@ struct FlickerCheckView: View {
             Spacer()
             
             // Active check pulsing dot
-            if viewModel.isCheckingFlicker {
+            if viewModel.flicker.isCheckingFlicker {
                 HStack(spacing: 6) {
                     Circle()
                         .fill(safetyColor)
                         .frame(width: 8, height: 8)
-                        .scaleEffect(viewModel.isCheckingFlicker ? 1.2 : 1.0)
-                        .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: viewModel.isCheckingFlicker)
+                        .scaleEffect(viewModel.flicker.isCheckingFlicker ? 1.2 : 1.0)
+                        .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: viewModel.flicker.isCheckingFlicker)
                     
                     Text(LocalizedStrings.translate(key: "ui_analyzing", language: viewModel.appLanguage))
                         .font(.system(size: 10, weight: .black, design: .rounded))
@@ -86,7 +86,7 @@ struct FlickerCheckView: View {
                     .frame(width: 130, height: 130)
 
                 Circle()
-                    .trim(from: 0.0, to: viewModel.isCheckingFlicker ? CGFloat(min(1.0, viewModel.flickerPercentage / 100.0)) : 0.0)
+                    .trim(from: 0.0, to: viewModel.flicker.isCheckingFlicker ? CGFloat(min(1.0, viewModel.flicker.flickerPercentage / 100.0)) : 0.0)
                     .stroke(
                         AngularGradient(
                             colors: [safetyColor.opacity(0.5), safetyColor],
@@ -98,14 +98,14 @@ struct FlickerCheckView: View {
                     )
                     .frame(width: 130, height: 130)
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeOut(duration: 0.5), value: viewModel.flickerPercentage)
-
+                    .animation(.easeOut(duration: 0.5), value: viewModel.flicker.flickerPercentage)
+ 
                 VStack(spacing: 2) {
-                    Text(viewModel.isCheckingFlicker ? String(format: "%.1f%%", viewModel.flickerPercentage) : "0.0%")
+                    Text(viewModel.flicker.isCheckingFlicker ? String(format: "%.1f%%", viewModel.flicker.flickerPercentage) : "0.0%")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(viewModel.isCheckingFlicker && viewModel.flickerFrequency > 5 ? String(format: "%.0f Hz", viewModel.flickerFrequency) : "-- Hz")
+                    Text(viewModel.flicker.isCheckingFlicker && viewModel.flicker.flickerFrequency > 5 ? String(format: "%.0f Hz", viewModel.flicker.flickerFrequency) : "-- Hz")
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundColor(.white.opacity(0.6))
                 }
@@ -125,7 +125,7 @@ struct FlickerCheckView: View {
                         .frame(height: 100)
                     
                     // Wave drawing
-                    WaveScopePath(waveData: viewModel.waveData)
+                    WaveScopePath(waveData: viewModel.flicker.waveData)
                         .stroke(
                             LinearGradient(
                                 colors: [safetyColor, safetyColor.opacity(0.3)],
@@ -136,7 +136,7 @@ struct FlickerCheckView: View {
                         )
                         .frame(height: 100)
                         .padding(.vertical, 8)
-                        .animation(.interactiveSpring(response: 0.15, dampingFraction: 0.8), value: viewModel.waveData)
+                        .animation(.interactiveSpring(response: 0.15, dampingFraction: 0.8), value: viewModel.flicker.waveData)
                 }
             }
         }
@@ -144,11 +144,11 @@ struct FlickerCheckView: View {
 
     private var safetyDescriptionCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(viewModel.isCheckingFlicker ? FlickerInterpreter.safetyLevelTitle(level: viewModel.flickerSafetyLevel, language: viewModel.appLanguage).uppercased() : "READY")
+            Text(viewModel.flicker.isCheckingFlicker ? FlickerInterpreter.safetyLevelTitle(level: viewModel.flicker.flickerSafetyLevel, language: viewModel.appLanguage).uppercased() : "READY")
                 .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundColor(viewModel.isCheckingFlicker ? safetyColor : .white.opacity(0.6))
+                .foregroundColor(viewModel.flicker.isCheckingFlicker ? safetyColor : .white.opacity(0.6))
                 
-            Text(viewModel.isCheckingFlicker ? viewModel.flickerDescription : LocalizedStrings.translate(key: "ui_flicker_ready_desc", language: viewModel.appLanguage))
+            Text(viewModel.flicker.isCheckingFlicker ? viewModel.flicker.flickerDescription : LocalizedStrings.translate(key: "ui_flicker_ready_desc", language: viewModel.appLanguage))
                 .font(.system(size: 13, design: .rounded))
                 .foregroundColor(.white.opacity(0.8))
                 .lineLimit(3)
@@ -166,33 +166,33 @@ struct FlickerCheckView: View {
 
     private var controlTriggerButton: some View {
         Button(action: {
-            if viewModel.isCheckingFlicker {
+            if viewModel.flicker.isCheckingFlicker {
                 viewModel.stopFlickerCheck()
             } else {
                 viewModel.startFlickerCheck()
             }
         }) {
             HStack(spacing: 12) {
-                Image(systemName: viewModel.isCheckingFlicker ? "stop.fill" : "bolt.shield.fill")
+                Image(systemName: viewModel.flicker.isCheckingFlicker ? "stop.fill" : "bolt.shield.fill")
                     .font(.system(size: 16, weight: .semibold))
                 
-                Text(viewModel.isCheckingFlicker ? LocalizedStrings.translate(key: "ui_stop_check", language: viewModel.appLanguage) : LocalizedStrings.translate(key: "ui_start_check", language: viewModel.appLanguage))
+                Text(viewModel.flicker.isCheckingFlicker ? LocalizedStrings.translate(key: "ui_stop_check", language: viewModel.appLanguage) : LocalizedStrings.translate(key: "ui_start_check", language: viewModel.appLanguage))
                     .font(.system(size: 16, weight: .semibold, design: .rounded))
             }
-            .foregroundColor(viewModel.isCheckingFlicker ? .white : .black)
+            .foregroundColor(viewModel.flicker.isCheckingFlicker ? .white : .black)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
-            .background(viewModel.isCheckingFlicker ? Color.red.opacity(0.8) : Color.white)
+            .background(viewModel.flicker.isCheckingFlicker ? Color.red.opacity(0.8) : Color.white)
             .cornerRadius(16)
-            .shadow(color: (viewModel.isCheckingFlicker ? Color.red : Color.white).opacity(0.2), radius: 10, x: 0, y: 5)
+            .shadow(color: (viewModel.flicker.isCheckingFlicker ? Color.red : Color.white).opacity(0.2), radius: 10, x: 0, y: 5)
         }
     }
 
     // MARK: - Helper UI Properties
 
     private var safetyColor: Color {
-        guard viewModel.isCheckingFlicker else { return .green }
-        switch viewModel.flickerSafetyLevel {
+        guard viewModel.flicker.isCheckingFlicker else { return .green }
+        switch viewModel.flicker.flickerSafetyLevel {
         case "Very Safe", "Safe":
             return .green
         case "Caution":

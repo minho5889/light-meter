@@ -26,7 +26,10 @@ let package = Package(
                 "Logic/ActivityChip.swift",
                 "Logic/SignalSmoother.swift",
                 "Logic/TintInterpreter.swift",
-                "Logic/CalibrationStore.swift"
+                "Logic/CalibrationStore.swift",
+                "Camera/LightRecord.swift",
+                "Camera/MeasurementModel.swift",
+                "Camera/RecordsStore.swift"
             ]
         ),
         .testTarget(
@@ -47,7 +50,8 @@ let package = Package(
                 "Logic/LocalizationTests.swift",
                 "Logic/SignalSmootherTests.swift",
                 "Logic/TintInterpreterTests.swift",
-                "Logic/CalibrationStoreTests.swift"
+                "Logic/CalibrationStoreTests.swift",
+                "Logic/CameraStateDecompositionTests.swift"
             ]
         )
     ]

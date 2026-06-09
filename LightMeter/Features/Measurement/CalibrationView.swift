@@ -19,7 +19,7 @@ struct CalibrationView: View {
                             .foregroundColor(.white.opacity(0.6))
                             .tracking(1.0)
                         
-                        Text("\(Int(viewModel.lux)) LUX")
+                        Text("\(Int(viewModel.measurement.lux)) LUX")
                             .font(.system(size: 44, weight: .black, design: .rounded))
                             .foregroundColor(.white)
                     }
@@ -64,7 +64,7 @@ struct CalibrationView: View {
                     
                     // Live multiplier preview
                     if let targetLux = Double(targetLuxString), targetLux > 0 {
-                        let computed = CalibrationStore.calculateMultiplier(measuredLux: viewModel.lux, targetLux: targetLux)
+                        let computed = CalibrationStore.calculateMultiplier(measuredLux: viewModel.measurement.lux, targetLux: targetLux)
                         VStack(spacing: 8) {
                             Text(LocalizedStrings.translate(key: "ui_calibrate_new_factor", language: viewModel.appLanguage))
                                 .font(.system(size: 13, weight: .semibold, design: .rounded))
@@ -91,7 +91,7 @@ struct CalibrationView: View {
                     VStack(spacing: 12) {
                         Button(action: {
                             if let targetLux = Double(targetLuxString), targetLux > 0 {
-                                viewModel.calibrate(to: targetLux)
+                                viewModel.measurement.calibrate(to: targetLux)
                                 dismiss()
                             }
                         }) {
@@ -106,7 +106,7 @@ struct CalibrationView: View {
                         .disabled(Double(targetLuxString) == nil || Double(targetLuxString)! <= 0)
                         
                         Button(action: {
-                            viewModel.resetCalibration()
+                            viewModel.measurement.resetCalibration()
                             dismiss()
                         }) {
                             Text(LocalizedStrings.translate(key: "ui_calibrate_reset", language: viewModel.appLanguage))

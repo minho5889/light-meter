@@ -22,21 +22,21 @@ struct TemperatureView: View {
                 Spacer().frame(height: max(8, safeAreaTop + 12))
 
                 TemperatureCardView(
-                    kelvin: cameraViewModel.colorTemperature,
+                    kelvin: cameraViewModel.measurement.colorTemperature,
                     interpretationDescription: KelvinInterpreter.interpret(
-                        kelvin: cameraViewModel.colorTemperature,
+                        kelvin: cameraViewModel.measurement.colorTemperature,
                         language: cameraViewModel.appLanguage
                     ).description,
                     interpretationTip: KelvinInterpreter.interpret(
-                        kelvin: cameraViewModel.colorTemperature,
+                        kelvin: cameraViewModel.measurement.colorTemperature,
                         language: cameraViewModel.appLanguage
                     ).tip,
                     tintDescription: TintInterpreter.interpret(
-                        tint: cameraViewModel.tint,
+                        tint: cameraViewModel.measurement.tint,
                         language: cameraViewModel.appLanguage
                     ).description,
                     tintTip: TintInterpreter.interpret(
-                        tint: cameraViewModel.tint,
+                        tint: cameraViewModel.measurement.tint,
                         language: cameraViewModel.appLanguage
                     ).tip,
                     language: cameraViewModel.appLanguage
