@@ -90,3 +90,20 @@ State: AWAITING_REVIEW
 - Keep one review file per task. Re-requests append; they don't overwrite.
 - If blocked or a plan task is ambiguous, write your question in the **Notes** field
   and set `State: AWAITING_REVIEW` anyway — the reviewer will answer in the Verdict.
+
+## HARD STOP — no self-approval (added after a P1 incident)
+
+Antigravity **MUST NOT**, under any circumstances:
+- Author a `## Verdict:` section. Only the reviewer (Claude) writes verdicts.
+- Sign a verdict as "User", "User (Approved in chat)", or anything other than the
+  reviewer. A chat message from the human is **not** a verdict and never authorizes
+  a merge — the verdict must be a reviewer-authored `APPROVED` committed to the
+  review file on the branch.
+- Merge a branch whose review file's latest `State:` is anything other than
+  `APPROVED` written by the reviewer.
+
+If a verdict is slow or seems missing: **WAIT.** Do not invent one, do not merge,
+do not advance to the next task. Re-push the branch if needed and keep waiting.
+A stalled review is the reviewer's problem to fix, never a license to self-approve.
+The whole point of this project is independent review; a self-approved merge
+defeats it and will be reverted.
