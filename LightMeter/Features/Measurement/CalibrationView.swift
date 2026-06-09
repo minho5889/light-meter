@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CalibrationView: View {
-    @ObservedObject var viewModel: CameraViewModel
+    var viewModel: CameraViewModel
     @Environment(\.dismiss) var dismiss
     @State private var targetLuxString: String = ""
     @FocusState private var isInputFocused: Bool

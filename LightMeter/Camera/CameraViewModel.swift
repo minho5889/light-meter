@@ -1,38 +1,40 @@
 @preconcurrency import AVFoundation
 import SwiftUI
+import Observation
 
 /// Glue-layer view model that holds all published camera state.
 /// Coordinates between CameraSessionActor and CameraFrameProvider.
 /// Views observe this single source of truth.
+@Observable
 @MainActor
-final class CameraViewModel: ObservableObject {
-    @Published var lux: Double = 0.0
-    @Published var colorTemperature: Double = 0.0
-    @Published var tint: Double = 0.0
-    @Published var permissionGranted: Bool = false
-    @Published var cameraError: String? = nil
-    @Published var currentCameraPosition: AVCaptureDevice.Position = .back
-    @Published var sessionReady: Bool = false
-    @Published var activeTab: Int = 0 {
+final class CameraViewModel {
+    var lux: Double = 0.0
+    var colorTemperature: Double = 0.0
+    var tint: Double = 0.0
+    var permissionGranted: Bool = false
+    var cameraError: String? = nil
+    var currentCameraPosition: AVCaptureDevice.Position = .back
+    var sessionReady: Bool = false
+    var activeTab: Int = 0 {
         didSet {
             frameProvider?.updateActiveTab(activeTab)
         }
     }
 
     // MARK: - Flicker Detection Published State
-    @Published var flickerPercentage: Double = 0.0
-    @Published var flickerFrequency: Double = 0.0
-    @Published var flickerSafetyLevel: String = "Safe"
-    @Published var flickerDescription: String = "Tap start check to analyze."
-    @Published var isCheckingFlicker: Bool = false
-    @Published var waveData: [Float] = []
+    var flickerPercentage: Double = 0.0
+    var flickerFrequency: Double = 0.0
+    var flickerSafetyLevel: String = "Safe"
+    var flickerDescription: String = "Tap start check to analyze."
+    var isCheckingFlicker: Bool = false
+    var waveData: [Float] = []
 
     // MARK: - Localization & Records State
-    @Published var appLanguage: AppLanguage = .systemLanguage
-    @Published var records: [LightRecord] = []
+    var appLanguage: AppLanguage = .systemLanguage
+    var records: [LightRecord] = []
 
     // MARK: - Calibration State
-    @Published var calibrationMultiplier: Double = 1.0
+    var calibrationMultiplier: Double = 1.0
     private var lastRawLux: Double = 0.0
 
     private let sessionActor = CameraSessionActor()

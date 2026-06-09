@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TemperatureView: View {
-    @ObservedObject var cameraViewModel: CameraViewModel
+    var cameraViewModel: CameraViewModel
 
     private var safeAreaTop: CGFloat {
         let keyWindow = UIApplication.shared.connectedScenes

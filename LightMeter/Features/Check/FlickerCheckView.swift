@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FlickerCheckView: View {
-    @ObservedObject var viewModel: CameraViewModel
+    var viewModel: CameraViewModel
 
     var body: some View {
         ZStack {

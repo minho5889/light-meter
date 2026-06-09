@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MeasurementView: View {
-    @ObservedObject var cameraViewModel: CameraViewModel
+    var cameraViewModel: CameraViewModel
 
     @State private var isCaptured: Bool = false
     @State private var frozenFrame: UIImage? = nil

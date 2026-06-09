@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct RecordsView: View {
-    @ObservedObject var cameraViewModel: CameraViewModel
+    var cameraViewModel: CameraViewModel
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

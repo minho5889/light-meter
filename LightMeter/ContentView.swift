@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var cameraViewModel = CameraViewModel()
+    @State private var cameraViewModel = CameraViewModel()
     @State private var selectedTab: Int = 0
     @State private var previousTab: Int = 0
 
