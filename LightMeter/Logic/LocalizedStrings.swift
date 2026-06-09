@@ -31,7 +31,23 @@ public struct LocalizedStrings {
         
         // Records Empty State
         "ui_no_records": [.english: "No records yet", .korean: "저장된 기록이 없습니다", .french: "Aucun historique"],
-        "ui_records_empty_desc": [.english: "Your captured light readings will automatically appear here.", .korean: "캡처한 밝기 측정 결과가 여기에 자동으로 저장됩니다.", .french: "Vos mesures capturées s'afficheront automatiquement ici."]
+        "ui_records_empty_desc": [.english: "Your captured light readings will automatically appear here.", .korean: "캡처한 밝기 측정 결과가 여기에 자동으로 저장됩니다.", .french: "Vos mesures capturées s'afficheront automatiquement ici."],
+        
+        // Reflected Light Disclosure
+        "ui_reflected_disclosure_title": [.english: "Reflected Light Estimate", .korean: "반사광 측정 정보", .french: "Estimation de la Lumière Réfléchie"],
+        "ui_reflected_disclosure_desc": [.english: "This camera measures reflected light from surfaces, which is an estimate. It is not an incident lux measurement.", .korean: "이 카메라는 표면에서 반사된 빛(반사광)을 측정하여 추정치를 제공합니다. 광원에서 직접 닿는 입사광 측정 방식이 아닙니다.", .french: "Cet appareil mesure la lumière réfléchie par les surfaces, ce qui est une estimation, et non une mesure de lux incident."],
+        
+        // Calibration UI
+        "ui_calibrate_title": [.english: "Lux Calibration", .korean: "조도 보정 (캘리브레이션)", .french: "Étalonnage du Lux"],
+        "ui_calibrate_current": [.english: "Current Reading", .korean: "현재 측정값", .french: "Lecture Actuelle"],
+        "ui_calibrate_known_placeholder": [.english: "e.g. 500", .korean: "예: 500", .french: "ex. 500"],
+        "ui_calibrate_enter_known": [.english: "Enter Known Reference Lux Value", .korean: "기준이 될 실제 조도 값 입력", .french: "Saisir la Valeur de Lux de Référence"],
+        "ui_calibrate_new_factor": [.english: "New Calibration Factor", .korean: "새로운 보정 배율", .french: "Nouveau Facteur d'Étalonnage"],
+        "ui_calibrate_multiplier_fmt": [.english: "%.2fx multiplier", .korean: "%.2f배 배율", .french: "Multiplicateur de %.2fx"],
+        "ui_calibrate_apply": [.english: "Apply Calibration", .korean: "보정값 적용", .french: "Appliquer l'Étalonnage"],
+        "ui_calibrate_reset": [.english: "Reset to Default (1.0x)", .korean: "기본값(1.0배)으로 초기화", .french: "Réinitialiser par Défaut (1.0x)"],
+        "ui_calibrate_cancel": [.english: "Cancel", .korean: "취소", .french: "Annuler"],
+        "ui_calibrate_button": [.english: "Calibrate", .korean: "보정하기", .french: "Étalonner"]
     ]
 
     /// Translates a given key into the selected language.

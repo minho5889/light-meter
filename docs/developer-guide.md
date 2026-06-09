@@ -60,6 +60,7 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 | [`LocalizedStrings`](../LightMeter/Logic/LocalizedStrings.swift) | Static translation lookup dictionary supplying all localized UI headers, tabs, and guide labels. |
 | [`FlickerInterpreter`](../LightMeter/Logic/FlickerInterpreter.swift) | Static translator mapping raw safety level strings into localized descriptors. |
 | [`ActivityChip`](../LightMeter/Logic/ActivityChip.swift) | Enum defining the 8 standard activities and mapping them to corresponding active Lux ranges. |
+| [`CalibrationStore`](../LightMeter/Logic/CalibrationStore.swift) | Pure store managing the calibration multiplier: calculates ratio from targets, safety-clamps, and persists to standard `UserDefaults`. |
 
 **Effects** — thin hardware wrappers. Rewrite these per platform; the logic layer stays the same.
 
@@ -75,7 +76,7 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 |------|------|
 | [`CameraViewModel`](../LightMeter/Camera/CameraViewModel.swift) | Single source of truth: `@Published` lux, Kelvin, permission, error, camera position, session readiness, records persistent array (saves and loads to `UserDefaults` as JSON), and selected locale. |
 | [`ContentView`](../LightMeter/ContentView.swift) | App container utilizing a custom floating capsule bottom tab bar overlay and shared single `CameraPreviewView` behind the views. Pause/resume camera session using `TabTransitionAction` logic. |
-| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — compact measurement card left-aligned style, and captured mode (expanded card, 8-activity grid overlay, and back chevron button). |
+| [`Features/Measurement/`](../LightMeter/Features/Measurement/) | LUX tab — compact measurement card, dismissible reflected-light disclosure, calibration sheet overlay, and captured mode (expanded card, 8-activity grid overlay, and back chevron button). |
 | [`Features/Temperature/`](../LightMeter/Features/Temperature/) | Temperature tab — live Kelvin reading with left-aligned color tone label. |
 | [`Features/Check/`](../LightMeter/Features/Check/) | Check tab — live flicker check UI with safety gauge, real-time wave scope oscilloscope, and health report card. |
 | [`Features/Records/`](../LightMeter/Features/Records/) | Records tab — list of persistent captured records chronologically ordered with swipe-to-delete gesture. |
@@ -83,7 +84,7 @@ The codebase follows a "functional core, imperative shell" pattern (you'll see i
 | [`DesignConstants`](../LightMeter/Design/DesignConstants.swift) | Centralized font sizes, spacing, dimensions. |
 | [`Camera/LightRecord.swift`](../LightMeter/Camera/LightRecord.swift) | Codable model for saved records representing lux, Kelvin, timestamp, and active chips at time of capture. |
 
-Tests live in `LightMeterTests/` — 145 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
+Tests live in `LightMeterTests/` — 151 tests covering the pure logic layer only. See [The Test Suite](#the-test-suite) for the breakdown.
 
 ---
 
@@ -128,13 +129,14 @@ The interpreters (`LuxInterpreter`, `KelvinInterpreter`) and `ComparisonGenerato
 
 ## [The Test Suite](#table-of-contents)
 
-All 147 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
+All 151 tests target the pure logic layer. The effects and glue layers require real hardware and aren't unit tested — that's by design. The architecture pushes all testable logic into the pure layer so the untested surface is as thin as possible.
 
 - **LuxCalculatorTests** (7) — formula correctness, edge cases (zero/negative ISO, zero exposure), large ISO, non-negativity invariant
 - **LuxInterpreterTests** (28) — all 8 range mappings, boundary values at every threshold, negative value fallback, oracle equivalence, Korean and French translation assertions
 - **LuxRangeTests** (17) — range index at every boundary, negative lux handling, equivalence with oracle
 - **KelvinInterpreterTests** (24) — all 6 color tone ranges, boundary values, below-1000K fallback, determinism, Korean and French translation assertions
 - **ColorTemperatureCalculatorTests** (10) — clamping at min/max, identity for in-range values, invariant across random inputs
+- **CalibrationStoreTests** (4) — default identity multiplier, correct ratio calculation from reference targets, storage persistence round-trip, and safety clamping constraints
 - **ComparisonGeneratorTests** (30) — sentence format for lowest/middle/highest ranges, boundary values, consistency with LuxInterpreter, completeness and correctness properties
 - **TabTransitionActionTests** (8) — bug condition exploration (camera↔camera returns `.none`), preservation properties (camera→non-camera, non-camera→camera, non-camera→non-camera, same-tab), randomized verification
 - **FlickerAnalyzerTests** (5) — mathematical accuracy against synthesized 50Hz, 100Hz, and 120Hz waves under different sampling rates, zero/low signal fallbacks, safety level classifications, verified with real-FFT unzipping algorithms.

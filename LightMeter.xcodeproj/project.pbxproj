@@ -38,6 +38,7 @@
 		8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */; };
 		947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */; };
 		9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791FD5DC633AA4927A763E7D /* MeasurementView.swift */; };
+		A182CF4B3A6D6FA724DC5696 /* CalibrationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */; };
 		A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */; };
 		ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */; };
 		B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */; };
@@ -45,11 +46,13 @@
 		B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */; };
 		BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9D9057780326CEC3398958 /* ContentView.swift */; };
 		C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */; };
+		C48F515E26CEA8B6B15CC3EF /* CalibrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA478C98177BF80E25C1D1C /* CalibrationStore.swift */; };
 		CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */; };
 		D8287656B2497407BF3354EA /* CameraStateOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */; };
 		DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */; };
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
 		E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */; };
+		E56A97D88FE11681E64FB07F /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */; };
 		E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */; };
 		ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE078BD017B4B9258C10AED6 /* TemperatureView.swift */; };
 		F99DF0F94565431FDA4E5DD4 /* FlickerAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */; };
@@ -72,12 +75,14 @@
 		141E153718B1A66906CF6AA8 /* LuxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculator.swift; sourceTree = "<group>"; };
 		14F8A654477FB9A001991C20 /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
+		18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
 		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreterTests.swift; sourceTree = "<group>"; };
 		4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerAnalyzer.swift; sourceTree = "<group>"; };
+		4CA478C98177BF80E25C1D1C /* CalibrationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStore.swift; sourceTree = "<group>"; };
 		4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculator.swift; sourceTree = "<group>"; };
 		4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMeterApp.swift; sourceTree = "<group>"; };
 		503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStateOverlay.swift; sourceTree = "<group>"; };
@@ -104,6 +109,7 @@
 		AE078BD017B4B9258C10AED6 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TintInterpreterTests.swift; sourceTree = "<group>"; };
 		C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
+		CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStoreTests.swift; sourceTree = "<group>"; };
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CDEAB4538FA9C995543411E8 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
 		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
@@ -143,6 +149,7 @@
 		45614BB61731F5487CD71B3C /* Logic */ = {
 			isa = PBXGroup;
 			children = (
+				CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */,
 				F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */,
 				6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */,
 				0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */,
@@ -162,6 +169,7 @@
 		624F3B22565E9E78DA1D7F34 /* Measurement */ = {
 			isa = PBXGroup;
 			children = (
+				18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */,
 				9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */,
 				791FD5DC633AA4927A763E7D /* MeasurementView.swift */,
 			);
@@ -173,6 +181,7 @@
 			children = (
 				62FD179DA1B6CA53048BECC1 /* ActivityChip.swift */,
 				CDEAB4538FA9C995543411E8 /* AppLanguage.swift */,
+				4CA478C98177BF80E25C1D1C /* CalibrationStore.swift */,
 				4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */,
 				593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */,
 				4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */,
@@ -361,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A182CF4B3A6D6FA724DC5696 /* CalibrationStoreTests.swift in Sources */,
 				09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */,
 				B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */,
 				F99DF0F94565431FDA4E5DD4 /* FlickerAnalyzerTests.swift in Sources */,
@@ -383,6 +393,8 @@
 			files = (
 				4A85FF8D4948BCA39D1FE91F /* ActivityChip.swift in Sources */,
 				77D76C7BC802A14BC11BED7A /* AppLanguage.swift in Sources */,
+				C48F515E26CEA8B6B15CC3EF /* CalibrationStore.swift in Sources */,
+				E56A97D88FE11681E64FB07F /* CalibrationView.swift in Sources */,
 				70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */,
 				B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */,
 				ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */,

@@ -9,6 +9,8 @@ struct LocalizationTests {
         #expect(LocalizedStrings.translate(key: "ui_user_guide", language: .english) == "User Guide")
         #expect(LocalizedStrings.translate(key: "ui_no_records", language: .english) == "No records yet")
         #expect(LocalizedStrings.translate(key: "ui_tint", language: .english) == "Color Tint")
+        #expect(LocalizedStrings.translate(key: "ui_reflected_disclosure_title", language: .english) == "Reflected Light Estimate")
+        #expect(LocalizedStrings.translate(key: "ui_calibrate_button", language: .english) == "Calibrate")
     }
 
     @Test func translations_korean() {
@@ -17,6 +19,8 @@ struct LocalizationTests {
         #expect(LocalizedStrings.translate(key: "ui_user_guide", language: .korean) == "사용자 가이드")
         #expect(LocalizedStrings.translate(key: "ui_no_records", language: .korean) == "저장된 기록이 없습니다")
         #expect(LocalizedStrings.translate(key: "ui_tint", language: .korean) == "색조 (Tint)")
+        #expect(LocalizedStrings.translate(key: "ui_reflected_disclosure_title", language: .korean) == "반사광 측정 정보")
+        #expect(LocalizedStrings.translate(key: "ui_calibrate_button", language: .korean) == "보정하기")
     }
 
     @Test func translations_french() {
@@ -25,6 +29,8 @@ struct LocalizationTests {
         #expect(LocalizedStrings.translate(key: "ui_user_guide", language: .french) == "Guide de l'utilisateur")
         #expect(LocalizedStrings.translate(key: "ui_no_records", language: .french) == "Aucun historique")
         #expect(LocalizedStrings.translate(key: "ui_tint", language: .french) == "Teinte")
+        #expect(LocalizedStrings.translate(key: "ui_reflected_disclosure_title", language: .french) == "Estimation de la Lumière Réfléchie")
+        #expect(LocalizedStrings.translate(key: "ui_calibrate_button", language: .french) == "Étalonner")
     }
 
     @Test func fallback_returnsKey() {

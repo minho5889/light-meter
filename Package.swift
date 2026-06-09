@@ -25,7 +25,8 @@ let package = Package(
                 "Logic/FlickerInterpreter.swift",
                 "Logic/ActivityChip.swift",
                 "Logic/SignalSmoother.swift",
-                "Logic/TintInterpreter.swift"
+                "Logic/TintInterpreter.swift",
+                "Logic/CalibrationStore.swift"
             ]
         ),
         .testTarget(
@@ -45,7 +46,8 @@ let package = Package(
                 "Logic/FlickerInterpreterTests.swift",
                 "Logic/LocalizationTests.swift",
                 "Logic/SignalSmootherTests.swift",
-                "Logic/TintInterpreterTests.swift"
+                "Logic/TintInterpreterTests.swift",
+                "Logic/CalibrationStoreTests.swift"
             ]
         )
     ]

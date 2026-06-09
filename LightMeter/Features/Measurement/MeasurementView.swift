@@ -11,6 +11,9 @@ struct MeasurementView: View {
     @State private var capturedInterpretationTip: String = ""
     @State private var capturedComparisonText: String = ""
 
+    @AppStorage("showReflectedLightDisclosure") private var showDisclosure = true
+    @State private var isShowingCalibration = false
+
     private var safeAreaTop: CGFloat {
         let keyWindow = UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }
@@ -39,6 +42,9 @@ struct MeasurementView: View {
             }
         }
         .toolbar(isCaptured ? .hidden : .visible, for: .tabBar)
+        .sheet(isPresented: $isShowingCalibration) {
+            CalibrationView(viewModel: cameraViewModel)
+        }
     }
 
     // MARK: - Live Mode
@@ -54,6 +60,65 @@ struct MeasurementView: View {
                 language: cameraViewModel.appLanguage
             )
             .padding(.horizontal)
+
+            VStack(spacing: 12) {
+                // Calibrate button
+                Button(action: { isShowingCalibration = true }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "slider.horizontal.3")
+                        Text(LocalizedStrings.translate(key: "ui_calibrate_button", language: cameraViewModel.appLanguage))
+                    }
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.15))
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+                }
+                
+                // Disclosure Card
+                if showDisclosure {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Image(systemName: "info.circle.fill")
+                                .foregroundColor(.orange)
+                            Text(LocalizedStrings.translate(key: "ui_reflected_disclosure_title", language: cameraViewModel.appLanguage))
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                            Spacer()
+                            Button(action: {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                    showDisclosure = false
+                                }
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.white.opacity(0.6))
+                                    .font(.system(size: 16))
+                            }
+                            .accessibilityLabel("Dismiss disclosure")
+                        }
+                        
+                        Text(LocalizedStrings.translate(key: "ui_reflected_disclosure_desc", language: cameraViewModel.appLanguage))
+                            .font(.system(size: 12, design: .rounded))
+                            .foregroundColor(.white.opacity(0.8))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(14)
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+                    .transition(.opacity.combined(with: .scale))
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
 
             Spacer()
 

@@ -26,6 +26,10 @@ final class CameraViewModel: ObservableObject {
     @Published var appLanguage: AppLanguage = .systemLanguage
     @Published var records: [LightRecord] = []
 
+    // MARK: - Calibration State
+    @Published var calibrationMultiplier: Double = 1.0
+    private var lastRawLux: Double = 0.0
+
     private let sessionActor = CameraSessionActor()
     private var frameProvider: CameraFrameProvider!
     private var luxSmoother = SignalSmoother(alpha: 0.15)
@@ -47,6 +51,9 @@ final class CameraViewModel: ObservableObject {
         // to satisfy Swift's initialization checks.
         self.frameProvider = CameraFrameProvider(sessionActor: actor, onFrameUpdate: { _, _, _ in }, onFlickerUpdate: { _, _ in })
         
+        // Load calibration multiplier before frame updates start
+        self.calibrationMultiplier = CalibrationStore.loadMultiplier()
+        
         // Phase 2: Now that self is fully initialized, re-assign the real frameProvider
         // capturing self safely.
         self.frameProvider = CameraFrameProvider(
@@ -54,7 +61,9 @@ final class CameraViewModel: ObservableObject {
             onFrameUpdate: { [weak self] luxValue, kelvinValue, tintValue in
                 Task { @MainActor [weak self] in
                     guard let self = self else { return }
-                    let smoothedLux = self.luxSmoother.update(luxValue)
+                    self.lastRawLux = luxValue
+                    let calibratedLux = luxValue * self.calibrationMultiplier
+                    let smoothedLux = self.luxSmoother.update(calibratedLux)
                     self.lux = SignalSmoother.roundToTwoSignificantFigures(smoothedLux)
                     self.colorTemperature = self.kelvinSmoother.update(kelvinValue)
                     self.tint = self.tintSmoother.update(tintValue)
@@ -186,6 +195,33 @@ final class CameraViewModel: ObservableObject {
     func deleteRecord(id: UUID) {
         records.removeAll { $0.id == id }
         saveRecordsToDisk()
+    }
+
+    // MARK: - Calibration Actions
+
+    /// Calibrates the current multiplier to match a known reference target lux value.
+    func calibrate(to targetLux: Double) {
+        let newMultiplier = CalibrationStore.calculateMultiplier(measuredLux: lastRawLux, targetLux: targetLux)
+        self.calibrationMultiplier = newMultiplier
+        CalibrationStore.saveMultiplier(newMultiplier)
+        
+        // Reset the smoother and re-run with new calibration immediately
+        self.luxSmoother.reset()
+        let calibratedLux = lastRawLux * newMultiplier
+        let smoothedLux = self.luxSmoother.update(calibratedLux)
+        self.lux = SignalSmoother.roundToTwoSignificantFigures(smoothedLux)
+    }
+
+    /// Resets the calibration multiplier back to 1.0.
+    func resetCalibration() {
+        self.calibrationMultiplier = 1.0
+        CalibrationStore.saveMultiplier(1.0)
+        
+        // Reset the smoother and re-run with standard calibration immediately
+        self.luxSmoother.reset()
+        let calibratedLux = lastRawLux * 1.0
+        let smoothedLux = self.luxSmoother.update(calibratedLux)
+        self.lux = SignalSmoother.roundToTwoSignificantFigures(smoothedLux)
     }
 
     private func saveRecordsToDisk() {
