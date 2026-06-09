@@ -19,7 +19,7 @@ Legend: `PENDING` · `IN_PROGRESS` · `AWAITING_REVIEW` · `CHANGES_REQUESTED` �
 
 | Task | Title | State | Merge |
 |------|-------|-------|-------|
-| P1 | Kill per-frame allocations | PENDING | — |
+| P1 | Kill per-frame allocations | DONE | c0acaf7 |
 | P2 | `@Observable` migration | PENDING | — |
 | P3 | Decompose the god object | PENDING | — |
 | P4 | Records → SwiftData (+ CSV export) | PENDING | — |
