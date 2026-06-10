@@ -101,7 +101,7 @@ LightMeter/
 └── Design/                 # Font sizes, spacing, dimensions
 
 LightMeterTests/
-├── Logic/                  # 153 tests covering all pure logic
+├── Logic/                  # 157 tests covering all pure logic
 └── Formatting/
 ```
 
@@ -127,7 +127,7 @@ Start here. Covers how a phone camera becomes a light meter — the three things
 
 ### 2. [Developer Guide](docs/developer-guide.md)
 
-The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 153-test suite covers it. Read this before you start porting anything.
+The codebase map. What each module does, how data flows from camera hardware through three layers to the screen, and how the 157-test suite covers it. Read this before you start porting anything.
 
 ### 3. [React Native Handover](docs/react-native-handover.md)
 

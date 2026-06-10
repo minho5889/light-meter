@@ -14,6 +14,7 @@
 		10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */; };
 		1242467572831488428302D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */; };
 		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
+		180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */; };
 		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
 		215E4128299483333603D01E /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F8A654477FB9A001991C20 /* LocalizationTests.swift */; };
 		3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */; };
@@ -81,6 +82,7 @@
 		14F8A654477FB9A001991C20 /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
 		18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
+		1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecordEntity.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
 		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				B365D9B743B9FC75C575FE68 /* FlickerModel.swift */,
 				A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */,
 				85A64F06C8F54E7EB52BD803 /* LightRecord.swift */,
+				1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */,
 				0225A0690A5D5C9027835EB2 /* MeasurementModel.swift */,
 				3046556155B9CF0608A10FB7 /* RecordsStore.swift */,
 			);
@@ -426,6 +429,7 @@
 				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
 				43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */,
+				180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */,
 				8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */,
 				07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */,
 				A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */,

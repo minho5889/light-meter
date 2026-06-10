@@ -28,6 +28,7 @@ let package = Package(
                 "Logic/TintInterpreter.swift",
                 "Logic/CalibrationStore.swift",
                 "Camera/LightRecord.swift",
+                "Camera/LightRecordEntity.swift",
                 "Camera/MeasurementModel.swift",
                 "Camera/RecordsStore.swift"
             ]

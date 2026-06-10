@@ -49,7 +49,20 @@ struct RecordsView: View {
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .tracking(1.5)
+                    
                     Spacer()
+                    
+                    if let exportURL = cameraViewModel.recordsStore.exportURL {
+                        ShareLink(item: exportURL) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(Color.white.opacity(0.12))
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel("Export CSV")
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, max(16, safeAreaTop + 12))
@@ -163,6 +176,15 @@ struct RecordsView: View {
                         .accessibilityLabel("Delete record")
                     }
                     .padding(.horizontal)
+                }
+                
+                if cameraViewModel.recordsStore.hasMorePages {
+                    ProgressView()
+                        .tint(.white)
+                        .padding(.vertical, 16)
+                        .onAppear {
+                            cameraViewModel.recordsStore.loadNextPage()
+                        }
                 }
             }
             .padding(.top, 6)
