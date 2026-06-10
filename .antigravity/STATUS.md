@@ -22,7 +22,7 @@ Legend: `PENDING` · `IN_PROGRESS` · `AWAITING_REVIEW` · `CHANGES_REQUESTED` �
 | P1 | Kill per-frame allocations | DONE | c0acaf7 |
 | P2 | `@Observable` migration | DONE | 0f5fa17 |
 | P3 | Decompose the god object | DONE | 67ec9eb |
-| P4 | Records → SwiftData (+ CSV export) | PENDING | — |
+| P4 | Records → SwiftData (+ CSV export) | DONE | 0383528 |
 
 ## Plan 3 — Product & App Store Readiness  *(do last)*
 
