@@ -27,17 +27,21 @@ uploads**.
 Resolved (from the team setup deck + installed cert):
 
 - ✅ **`.p12` password** — known (in the team setup deck; not stored here).
-- ✅ **Distribution certificate installed** — `Apple Distribution: Jisu Jung` is in the
-  login Keychain (`security find-identity -v -p codesigning`).
+- ✅ **Distribution certificate installed** — `Apple Distribution: Jisu Jung
+  (GWBS3Q4W36)` is in the login Keychain (`security find-identity -v -p codesigning`),
+  valid through **2026-09-18**.
 - ✅ **Team ID** — `GWBS3Q4W36`.
 
 ⛔ **Still needed from Sunny InnoLab (ask "Robert"):**
 
 1. **The distribution provisioning profile** (`.mobileprovision`), **Distribution –
-   App Store Connect** type, for this app. The deck says Robert issues it.
-2. **The exact bundle identifier** the profile is bound to (its App ID). Our placeholder
-   is `com.lightmeter.LightMeter` — it **must be changed to match** their App ID exactly,
-   or signing fails. (The bundle ID is embedded in the profile, so #1 answers #2.)
+   App Store Connect** type, for THIS app. The team guide says Robert issues it; it can
+   only be created from Sunny InnoLab's developer account, so it cannot be generated here.
+2. **The exact bundle identifier** the profile is bound to (its App ID). Sunny InnoLab's
+   apps use the pattern `com.sunnyinnolab.<app>` (e.g. `com.sunnyinnolab.Histree`), so ours
+   will likely be `com.sunnyinnolab.lightmeter` — but Robert sets the real one. Our project
+   placeholder `com.lightmeter.LightMeter` **must be changed to match** it exactly, or
+   signing fails. (The bundle ID is embedded in the profile, so #1 answers #2.)
 3. **Confirm the handoff**: they upload, so we hand them a **signed `.ipa`** (this runbook),
    unless they'd rather we upload directly — then ask for an App Store Connect role/invite.
 
