@@ -28,11 +28,11 @@ Legend: `PENDING` · `IN_PROGRESS` · `AWAITING_REVIEW` · `CHANGES_REQUESTED` �
 
 | Task | Title | State | Merge |
 |------|-------|-------|-------|
-| R1 | Photographer readouts (EV / f-stops / fc) | PENDING | — |
+| R1 | Photographer readouts (EV / f-stops / fc) | DONE | fdc6d45 |
 | R2 | Accessibility (Dynamic Type + VoiceOver) | PENDING | — |
 | R3 | App Store compliance pass | PENDING | — |
 | R4 | Capture polish | PENDING | — |
 
 ---
 
-**Current task:** none started yet → begin with **C1**.
+**Current task:** C1–C4, P1–P4, R1 all DONE → next PENDING is **R2** (Accessibility).

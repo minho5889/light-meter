@@ -53,10 +53,16 @@ and pick any available iPhone simulator.
 
 ## Definition of Done (every task)
 
-- Builds with **no new warnings**. There are two KNOWN pre-existing Swift 6
-  `sending`/data-race warnings in `CameraFrameProvider` (the per-frame pixel-buffer
-  Task) — these are accepted tech debt tracked to Plan 2 / P1 and must be GONE after
-  P1. Do not add any others; do not try to fix these before P1.
+- Builds with **no new warnings**. **Verify with a `clean` build, not an incremental
+  one** — `xcodebuild … clean test`. Incremental builds do NOT re-emit warnings for
+  unchanged files, so an incremental "0 warnings" can be a false negative (this is how
+  the P4 and R1 `var fetchDescriptor` warnings slipped through). All Plan-1/Plan-2
+  pre-existing warnings are now eliminated; the baseline is genuinely zero.
+- **Recurring warning watchlist** (the reviewer has caught each of these more than
+  once — check for them before requesting review):
+  - `var fetchDescriptor = FetchDescriptor(...)` that is never mutated → use `let`.
+    A `FetchDescriptor` only needs `var` if you later set `.predicate`/`.fetchLimit`
+    on it; if you pass everything in the initializer, it must be `let`.
 - All existing tests still pass (count grows as tasks add tests). New logic ships
   with new tests.
 - No new force-unwraps on the per-frame hot path (`CameraFrameProvider`).
