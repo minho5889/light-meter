@@ -62,6 +62,7 @@ public struct LocalizedStrings {
         "accessibility_captured_fc": [.english: "Captured %.1f foot-candles, %d Kelvin", .korean: "캡처됨: %.1f 풋캔들, %d 켈빈", .french: "Capturé : %.1f foot-candles, %d Kelvin"],
         "accessibility_captured_ev": [.english: "Captured EV %.1f, %d Kelvin", .korean: "캡처됨: EV %.1f, %d 켈빈", .french: "Capturé : EV %.1f, %d Kelvin"],
         "accessibility_delete_record": [.english: "Delete record %d", .korean: "%d번 기록 삭제", .french: "Supprimer l'enregistrement %d"],
+        "accessibility_share_record": [.english: "Share record %d", .korean: "%d번 기록 공유", .french: "Partager l'enregistrement %d"],
         
         // Flicker Accessibility
         "accessibility_flicker_gauge_label": [.english: "Flicker Safety Gauge", .korean: "플리커 안전 계기판", .french: "Jauge de Sécurité Flicker"],

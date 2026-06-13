@@ -28,7 +28,7 @@ struct CameraStateDecompositionTests {
         defaults.removePersistentDomain(forName: "RecordsStoreTestsSuite")
 
         let schema = Schema([LightRecordEntity.self])
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration("AddAndDelete", isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
@@ -60,7 +60,7 @@ struct CameraStateDecompositionTests {
         defaults.set(legacyData, forKey: "light_meter_records")
 
         let schema = Schema([LightRecordEntity.self])
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration("Migration", isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
 
         // 2. Instantiate store, triggering migration
@@ -87,7 +87,7 @@ struct CameraStateDecompositionTests {
         defaults.removePersistentDomain(forName: "CapTestsSuite")
 
         let schema = Schema([LightRecordEntity.self])
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration("HistoryCap", isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
@@ -116,7 +116,7 @@ struct CameraStateDecompositionTests {
         defaults.removePersistentDomain(forName: "PagingTestsSuite")
 
         let schema = Schema([LightRecordEntity.self])
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration("Paging", isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
@@ -152,7 +152,7 @@ struct CameraStateDecompositionTests {
         defaults.removePersistentDomain(forName: "CSVTestsSuite")
 
         let schema = Schema([LightRecordEntity.self])
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration("CSVExport", isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
@@ -165,5 +165,29 @@ struct CameraStateDecompositionTests {
         #expect(csvContent.contains("100.0,5000.0"))
 
         defaults.removePersistentDomain(forName: "CSVTestsSuite")
+    }
+
+    @Test func testCameraPositionPersistence() {
+        let defaults = UserDefaults.standard
+        let originalPositionRaw = defaults.integer(forKey: "com.lightmeter.cameraPosition")
+        
+        // Clean key
+        defaults.removeObject(forKey: "com.lightmeter.cameraPosition")
+        
+        // Default position should be back
+        var viewModel = CameraViewModel()
+        #expect(viewModel.currentCameraPosition == .back)
+        
+        // Save front position manually to simulate toggle persistence
+        defaults.set(2, forKey: "com.lightmeter.cameraPosition") // 2 is front
+        viewModel = CameraViewModel()
+        #expect(viewModel.currentCameraPosition == .front)
+        
+        // Restore original position
+        if originalPositionRaw != 0 {
+            defaults.set(originalPositionRaw, forKey: "com.lightmeter.cameraPosition")
+        } else {
+            defaults.removeObject(forKey: "com.lightmeter.cameraPosition")
+        }
     }
 }

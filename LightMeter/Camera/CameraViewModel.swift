@@ -38,6 +38,10 @@ final class CameraViewModel {
     nonisolated var sessionQueue: DispatchQueue { sessionActor.sessionQueue }
 
     init() {
+        let savedPositionRaw = UserDefaults.standard.integer(forKey: "com.lightmeter.cameraPosition")
+        let savedPosition = AVCaptureDevice.Position(rawValue: savedPositionRaw)
+        self.currentCameraPosition = (savedPosition == .back || savedPosition == .front) ? savedPosition! : .back
+
         let actor = self.sessionActor
         
         // Phase 1: Initialize frameProvider with a dummy callback to satisfy Swift's initialization checks
@@ -101,6 +105,7 @@ final class CameraViewModel {
         Task {
             if let newPosition = await sessionActor.toggleCamera() {
                 self.currentCameraPosition = newPosition
+                UserDefaults.standard.set(newPosition.rawValue, forKey: "com.lightmeter.cameraPosition")
                 self.measurement.resetSmoothers()
             }
         }

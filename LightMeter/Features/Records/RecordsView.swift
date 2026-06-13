@@ -205,6 +205,32 @@ struct RecordRowView: View {
         return parts.joined(separator: ", ")
     }
 
+    private var shareText: String {
+        let dateStr = Self.dateFormatter.string(from: record.timestamp)
+        let timeStr = Self.timeFormatter.string(from: record.timestamp)
+        
+        let luxVal = Self.formatValue(record.lux)
+        let kelvinVal = Self.formatValue(record.kelvin)
+        
+        var text = ""
+        switch appLanguage {
+        case .korean:
+            text = "LightMeter 측정 기록\n일시: \(dateStr) \(timeStr)\n밝기: \(luxVal) LUX\n색온도: \(kelvinVal)K"
+        case .french:
+            text = "Enregistrement LightMeter\nDate: \(dateStr) \(timeStr)\nLuminosité: \(luxVal) LUX\nTempérature: \(kelvinVal)K"
+        case .english:
+            text = "LightMeter Reading\nDate: \(dateStr) \(timeStr)\nLuminance: \(luxVal) LUX\nColor Temp: \(kelvinVal)K"
+        }
+        
+        if !record.activeChips.isEmpty {
+            let chipsNames = record.activeChips.map { $0.localizedName(language: appLanguage) }.joined(separator: ", ")
+            let recom = appLanguage == .korean ? "권장 활동" : (appLanguage == .french ? "Activités recommandées" : "Recommended Activities")
+            text += "\n\(recom): \(chipsNames)"
+        }
+        
+        return text
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 12) {
@@ -261,6 +287,15 @@ struct RecordRowView: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel(accessibilityLabelText)
             
+            // Share record button
+            ShareLink(item: shareText) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.system(.body).weight(.semibold))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 50, height: 80)
+            }
+            .accessibilityLabel(String(format: LocalizedStrings.translate(key: "accessibility_share_record", language: appLanguage), reverseIndex))
+
             // Swipe-to-delete helper or explicit trash button
             Button(action: onDelete) {
                 Image(systemName: "trash")

@@ -1,4 +1,5 @@
 import SwiftUI
+import AudioToolbox
 
 struct MeasurementView: View {
     var cameraViewModel: CameraViewModel
@@ -319,6 +320,12 @@ struct MeasurementView: View {
     private func capture() {
         let currentLux = cameraViewModel.measurement.lux
         let currentKelvin = cameraViewModel.measurement.colorTemperature
+
+        // Haptic feedback & shutter sound on capture
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        AudioServicesPlaySystemSound(1108)
 
         Task {
             guard let frame = await cameraViewModel.captureFrameAsync() else { return }
