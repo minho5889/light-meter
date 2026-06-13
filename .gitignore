@@ -31,6 +31,15 @@ Pods/
 .LSOverride
 ._*
 
+# Signing secrets — NEVER commit these
+*.p12
+*.mobileprovision
+*.cer
+*.certSigningRequest
+*.pem
+*.key
+AuthKey_*.p8
+
 # Kiro
 .kiro/settings/
 
