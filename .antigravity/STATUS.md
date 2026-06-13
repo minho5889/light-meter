@@ -30,9 +30,12 @@ Legend: `PENDING` · `IN_PROGRESS` · `AWAITING_REVIEW` · `CHANGES_REQUESTED` �
 |------|-------|-------|-------|
 | R1 | Photographer readouts (EV / f-stops / fc) | DONE | fdc6d45 |
 | R2 | Accessibility (Dynamic Type + VoiceOver) | DONE | 1f50052 |
-| R3 | App Store compliance pass | PENDING | — |
+| R3 | App Store compliance pass | DONE | 8b0a535 |
 | R4 | Capture polish | PENDING | — |
 
 ---
 
-**Current task:** C1–C4, P1–P4, R1–R2 all DONE → next PENDING is **R3** (App Store compliance — the release gate).
+**Current task:** C1–C4, P1–P4, R1–R3 all DONE → only **R4** (capture polish) remains.
+
+> **Note:** R3 was implemented directly by the reviewer (Claude) to fast-track the
+> TestFlight gate, not via Antigravity. Antigravity must SKIP R3 and go straight to R4.
