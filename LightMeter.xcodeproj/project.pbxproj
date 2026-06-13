@@ -39,10 +39,12 @@
 		82453B2D0DF1E3A5EC37C2FB /* ExposureValueCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9213AEC2DEFD77FABC5D778 /* ExposureValueCalculatorTests.swift */; };
 		839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */; };
 		8867737AEAE195B03EEA114F /* FlickerInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */; };
+		897BCAEA38B78FD20B98973C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30817019AC95765C07F07866 /* Assets.xcassets */; };
 		8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */; };
 		8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */; };
 		947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */; };
 		9A555183B301322AC12B3898 /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791FD5DC633AA4927A763E7D /* MeasurementView.swift */; };
+		9C6FE3D275D79634D8615F77 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */; };
 		A182CF4B3A6D6FA724DC5696 /* CalibrationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */; };
 		A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */; };
 		ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */; };
@@ -91,6 +93,7 @@
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		3046556155B9CF0608A10FB7 /* RecordsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsStore.swift; sourceTree = "<group>"; };
+		30817019AC95765C07F07866 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreterTests.swift; sourceTree = "<group>"; };
 		4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerAnalyzer.swift; sourceTree = "<group>"; };
 		4CA478C98177BF80E25C1D1C /* CalibrationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStore.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		85A64F06C8F54E7EB52BD803 /* LightRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecord.swift; sourceTree = "<group>"; };
 		85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
 		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
+		8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8F292B5CCA00B82FC232868D /* SignalSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalSmoother.swift; sourceTree = "<group>"; };
 		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
 		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
@@ -266,8 +270,10 @@
 		A01057C35C248096046CD8A8 /* LightMeter */ = {
 			isa = PBXGroup;
 			children = (
+				30817019AC95765C07F07866 /* Assets.xcassets */,
 				CB9D9057780326CEC3398958 /* ContentView.swift */,
 				4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */,
+				8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */,
 				32974A5A9A5D3E12B3ECA87F /* Camera */,
 				A7DBF172D43D691786A561E4 /* Design */,
 				F067EEC0AA233D4F9BAF7E50 /* Features */,
@@ -321,6 +327,7 @@
 			buildConfigurationList = C2F164187A0DB389EA44519C /* Build configuration list for PBXNativeTarget "LightMeter" */;
 			buildPhases = (
 				5533F8349B450B600B746FDD /* Sources */,
+				929E74BFA52833062CA18285 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -385,6 +392,18 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		929E74BFA52833062CA18285 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				897BCAEA38B78FD20B98973C /* Assets.xcassets in Resources */,
+				9C6FE3D275D79634D8615F77 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		04E1D0D34B7B45394834FACF /* Sources */ = {

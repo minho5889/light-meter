@@ -133,6 +133,10 @@ The codebase map. What each module does, how data flows from camera hardware thr
 
 The Android port plan. Team structure, what to build, suggested pace, and the key technical differences between iOS and Android camera APIs. Read this only if you're working on the React Native build.
 
+### 4. [Release Checklist](docs/release-checklist.md)
+
+The TestFlight / App Store runbook: signing setup (manual signing with the distribution cert + provisioning profile), archive and `.ipa` export, export-compliance, and the pre-flight checklist. Read this when preparing a build for distribution.
+
 ### Optional: [Debugging](docs/debugging/)
 
 The `docs/debugging/` folder contains reference material for when things go wrong or you want to understand the project's history:

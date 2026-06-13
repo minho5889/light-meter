@@ -21,11 +21,20 @@ targets:
         SWIFT_VERSION: "6.0"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     info:
       path: LightMeter/Info.plist
       properties:
         NSCameraUsageDescription: "This app needs camera access to measure light levels (lux and color temperature) in your environment."
         UILaunchScreen: {}
+        ITSAppUsesNonExemptEncryption: false
+        CFBundleDisplayName: "Sunny Light Meter"
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
 
   LightMeterTests:
     type: bundle.unit-test
