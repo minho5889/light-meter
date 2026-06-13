@@ -2,215 +2,95 @@ import Foundation
 import Observation
 import SwiftData
 
-/// Model that isolates database loading/saving, record additions, list removals,
-/// history capping, and CSV export. All disk operations are offloaded from the main actor.
-@Observable
-@MainActor
-public final class RecordsStore: Sendable {
-    public var records: [LightRecord] = []
-    public var hasMorePages: Bool = false
-    public var exportURL: URL? = nil
-
+/// Background serial actor managing SwiftData database context reads and writes.
+actor RecordsDatabaseWorker {
     private let container: ModelContainer
-    private static let recordsKey = "light_meter_records"
-    private let defaults: UserDefaults
-    private let pageSize = 20
-    private var currentPage = 0
-    private var fetchGeneration = 0
 
-    public init(container: ModelContainer? = nil, defaults: UserDefaults = .standard) {
-        self.defaults = defaults
-        
-        do {
-            if let container = container {
-                self.container = container
-            } else {
-                let schema = Schema([LightRecordEntity.self])
-                let config = ModelConfiguration(isStoredInMemoryOnly: false)
-                self.container = try ModelContainer(for: schema, configurations: [config])
-            }
-        } catch {
-            fatalError("Failed to initialize ModelContainer: \(error)")
-        }
-        
-        performMigrationAndInitialLoad()
+    init(container: ModelContainer) {
+        self.container = container
     }
 
-    public func loadFirstPage() {
-        currentPage = 0
-        records = []
-        fetchGeneration += 1
-        fetchPage(page: 0, generation: fetchGeneration)
+    func saveRecord(id: UUID, lux: Double, kelvin: Double, timestamp: Date, activeChips: [ActivityChip]) throws {
+        let context = ModelContext(container)
+        let entity = LightRecordEntity(
+            id: id,
+            lux: lux,
+            kelvin: kelvin,
+            timestamp: timestamp,
+            activeChips: activeChips
+        )
+        context.insert(entity)
+        try context.save()
+        try enforceHistoryCap(context: context)
     }
 
-    public func loadNextPage() {
-        guard hasMorePages else { return }
-        fetchPage(page: currentPage + 1, generation: fetchGeneration)
-    }
-
-    public func saveRecord(lux: Double, kelvin: Double) {
-        let container = self.container
-        let index = LuxRange.rangeIndex(for: lux)
-        let chips = Array(ActivityChip.activeChips(for: index))
-        let newRecord = LightRecord(lux: lux, kelvin: kelvin, timestamp: Date(), activeChips: chips)
+    func deleteRecord(id: UUID) throws {
+        let context = ModelContext(container)
+        var fetchDescriptor = FetchDescriptor<LightRecordEntity>()
+        fetchDescriptor.predicate = #Predicate { $0.id == id }
         
-        Task.detached {
-            do {
-                let context = ModelContext(container)
-                let entity = LightRecordEntity(
-                    id: newRecord.id,
-                    lux: newRecord.lux,
-                    kelvin: newRecord.kelvin,
-                    timestamp: newRecord.timestamp,
-                    activeChips: newRecord.activeChips
-                )
-                context.insert(entity)
-                try context.save()
-                
-                try self.enforceHistoryCap(context: context)
-                
-                await MainActor.run {
-                    self.loadFirstPage()
-                }
-            } catch {
-                print("Failed to save record: \(error)")
-            }
+        if let entity = try context.fetch(fetchDescriptor).first {
+            context.delete(entity)
+            try context.save()
         }
     }
 
-    public func deleteRecord(id: UUID) {
-        let container = self.container
-        
-        Task.detached {
-            do {
-                let context = ModelContext(container)
-                var fetchDescriptor = FetchDescriptor<LightRecordEntity>()
-                fetchDescriptor.predicate = #Predicate { $0.id == id }
-                
-                if let entity = try context.fetch(fetchDescriptor).first {
-                    context.delete(entity)
-                    try context.save()
-                }
-                
-                await MainActor.run {
-                    self.loadFirstPage()
-                }
-            } catch {
-                print("Failed to delete record: \(error)")
-            }
+    func migrateLegacyRecords(_ legacyRecords: [LightRecord]) throws {
+        let context = ModelContext(container)
+        for record in legacyRecords {
+            let entity = LightRecordEntity(
+                id: record.id,
+                lux: record.lux,
+                kelvin: record.kelvin,
+                timestamp: record.timestamp,
+                activeChips: record.activeChips
+            )
+            context.insert(entity)
         }
+        try context.save()
+        try enforceHistoryCap(context: context)
     }
 
-    public func generateCSVExportURL() async -> URL? {
-        let container = self.container
-        return await Task.detached {
-            do {
-                let context = ModelContext(container)
-                let fetchDescriptor = FetchDescriptor<LightRecordEntity>(
-                    sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
-                )
-                let entities = try context.fetch(fetchDescriptor)
-                
-                var csvString = "ID,Timestamp,Lux,Kelvin,Environment Chips\n"
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                
-                for entity in entities {
-                    let timestampStr = dateFormatter.string(from: entity.timestamp)
-                    let chipsStr = entity.rawActiveChips.joined(separator: ";")
-                    
-                    csvString += "\(entity.id),\(timestampStr),\(entity.lux),\(entity.kelvin),\"\(chipsStr)\"\n"
-                }
-                
-                let tempURL = FileManager.default.temporaryDirectory
-                    .appendingPathComponent("light_meter_history.csv")
-                
-                try csvString.write(to: tempURL, atomically: true, encoding: .utf8)
-                return tempURL
-            } catch {
-                print("Failed to generate CSV: \(error)")
-                return nil
-            }
-        }.value
+    func fetchPage(limit: Int, offset: Int) throws -> (records: [LightRecord], totalCount: Int) {
+        let context = ModelContext(container)
+        let totalCount = try context.fetchCount(FetchDescriptor<LightRecordEntity>())
+        
+        var fetchDescriptor = FetchDescriptor<LightRecordEntity>(
+            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+        )
+        fetchDescriptor.fetchLimit = limit
+        fetchDescriptor.fetchOffset = offset
+        
+        let entities = try context.fetch(fetchDescriptor)
+        let records = entities.map { $0.toStruct() }
+        return (records, totalCount)
     }
 
-    // MARK: - Private Helpers
-
-    private func performMigrationAndInitialLoad() {
-        if let legacyData = defaults.data(forKey: Self.recordsKey) {
-            do {
-                let legacyRecords = try JSONDecoder().decode([LightRecord].self, from: legacyData)
-                if !legacyRecords.isEmpty {
-                    let container = self.container
-                    Task.detached {
-                        let context = ModelContext(container)
-                        for record in legacyRecords {
-                            let entity = LightRecordEntity(
-                                id: record.id,
-                                lux: record.lux,
-                                kelvin: record.kelvin,
-                                timestamp: record.timestamp,
-                                activeChips: record.activeChips
-                            )
-                            context.insert(entity)
-                        }
-                        try? context.save()
-                        try? self.enforceHistoryCap(context: context)
-                        
-                        await MainActor.run {
-                            self.defaults.removeObject(forKey: Self.recordsKey)
-                            self.loadFirstPage()
-                        }
-                    }
-                    return
-                }
-            } catch {
-                print("Failed to migrate legacy records: \(error)")
-            }
+    func generateCSVExportURL() throws -> URL? {
+        let context = ModelContext(container)
+        let fetchDescriptor = FetchDescriptor<LightRecordEntity>(
+            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+        )
+        let entities = try context.fetch(fetchDescriptor)
+        
+        var csvString = "ID,Timestamp,Lux,Kelvin,Environment Chips\n"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        for entity in entities {
+            let timestampStr = dateFormatter.string(from: entity.timestamp)
+            let chipsStr = entity.rawActiveChips.joined(separator: ";")
+            csvString += "\(entity.id),\(timestampStr),\(entity.lux),\(entity.kelvin),\"\(chipsStr)\"\n"
         }
         
-        loadFirstPage()
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("light_meter_history.csv")
+        
+        try csvString.write(to: tempURL, atomically: true, encoding: .utf8)
+        return tempURL
     }
 
-    private func fetchPage(page: Int, generation: Int) {
-        let container = self.container
-        let limit = pageSize
-        let offset = page * pageSize
-
-        Task.detached {
-            do {
-                let context = ModelContext(container)
-
-                let totalCount = try context.fetchCount(FetchDescriptor<LightRecordEntity>())
-
-                var fetchDescriptor = FetchDescriptor<LightRecordEntity>(
-                    sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
-                )
-                fetchDescriptor.fetchLimit = limit
-                fetchDescriptor.fetchOffset = offset
-
-                let entities = try context.fetch(fetchDescriptor)
-                let structRecords = entities.map { $0.toStruct() }
-
-                await MainActor.run {
-                    guard self.fetchGeneration == generation else { return }
-                    if page == 0 {
-                        self.records = structRecords
-                    } else {
-                        self.records.append(contentsOf: structRecords)
-                    }
-                    self.currentPage = page
-                    self.hasMorePages = self.records.count < totalCount
-                    self.updateExportURL()
-                }
-            } catch {
-                print("Failed to fetch page: \(error)")
-            }
-        }
-    }
-
-    nonisolated private func enforceHistoryCap(context: ModelContext) throws {
+    private func enforceHistoryCap(context: ModelContext) throws {
         let fetchDescriptor = FetchDescriptor<LightRecordEntity>(
             sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
         )
@@ -223,13 +103,149 @@ public final class RecordsStore: Sendable {
             try context.save()
         }
     }
+}
+
+/// Model that isolates database loading/saving, record additions, list removals,
+/// history capping, and CSV export. All disk operations are offloaded from the main actor.
+@Observable
+@MainActor
+public final class RecordsStore: Sendable {
+    public var records: [LightRecord] = []
+    public var hasMorePages: Bool = false
+    public var exportURL: URL? = nil
+    public var activeFetchTask: Task<Void, Never>? = nil
+
+    private let container: ModelContainer
+    private let worker: RecordsDatabaseWorker
+    private static let recordsKey = "light_meter_records"
+    private let defaults: UserDefaults
+    private let pageSize = 20
+    private var currentPage = 0
+
+    public init(container: ModelContainer? = nil, defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        
+        do {
+            let activeContainer: ModelContainer
+            if let container = container {
+                activeContainer = container
+            } else {
+                let schema = Schema([LightRecordEntity.self])
+                let config = ModelConfiguration(isStoredInMemoryOnly: false)
+                activeContainer = try ModelContainer(for: schema, configurations: [config])
+            }
+            self.container = activeContainer
+            self.worker = RecordsDatabaseWorker(container: activeContainer)
+        } catch {
+            fatalError("Failed to initialize ModelContainer: \(error)")
+        }
+        
+        performMigrationAndInitialLoad()
+    }
+
+    public func loadFirstPage() {
+        currentPage = 0
+        records = []
+        fetchPage(page: 0)
+    }
+
+    public func loadNextPage() {
+        guard hasMorePages else { return }
+        fetchPage(page: currentPage + 1)
+    }
+
+    @discardableResult
+    public func saveRecord(lux: Double, kelvin: Double) -> Task<Void, Never> {
+        let index = LuxRange.rangeIndex(for: lux)
+        let chips = Array(ActivityChip.activeChips(for: index))
+        let id = UUID()
+        let timestamp = Date()
+        
+        return Task {
+            do {
+                try await worker.saveRecord(id: id, lux: lux, kelvin: kelvin, timestamp: timestamp, activeChips: chips)
+                self.loadFirstPage()
+                await activeFetchTask?.value
+            } catch {
+                print("Failed to save record: \(error)")
+            }
+        }
+    }
+
+    @discardableResult
+    public func deleteRecord(id: UUID) -> Task<Void, Never> {
+        return Task {
+            do {
+                try await worker.deleteRecord(id: id)
+                self.loadFirstPage()
+                await activeFetchTask?.value
+            } catch {
+                print("Failed to delete record: \(error)")
+            }
+        }
+    }
+
+    public func generateCSVExportURL() async -> URL? {
+        do {
+            return try await worker.generateCSVExportURL()
+        } catch {
+            print("Failed to generate CSV: \(error)")
+            return nil
+        }
+    }
+
+    // MARK: - Private Helpers
+
+    private func performMigrationAndInitialLoad() {
+        if let legacyData = defaults.data(forKey: Self.recordsKey) {
+            do {
+                let legacyRecords = try JSONDecoder().decode([LightRecord].self, from: legacyData)
+                if !legacyRecords.isEmpty {
+                    Task {
+                        do {
+                            try await worker.migrateLegacyRecords(legacyRecords)
+                            self.defaults.removeObject(forKey: Self.recordsKey)
+                        } catch {
+                            print("Failed to migrate legacy records: \(error)")
+                        }
+                        self.loadFirstPage()
+                    }
+                    return
+                }
+            } catch {
+                print("Failed to migrate legacy records: \(error)")
+            }
+        }
+        
+        loadFirstPage()
+    }
+
+    private func fetchPage(page: Int) {
+        let limit = pageSize
+        let offset = page * pageSize
+        
+        activeFetchTask = Task {
+            do {
+                let result = try await worker.fetchPage(limit: limit, offset: offset)
+                
+                if page == 0 {
+                    self.records = result.records
+                } else {
+                    self.records.append(contentsOf: result.records)
+                }
+                self.currentPage = page
+                self.hasMorePages = self.records.count < result.totalCount
+                self.updateExportURL()
+            } catch {
+                print("Failed to fetch page: \(error)")
+            }
+        }
+    }
 
     private func updateExportURL() {
         Task {
             let url = await generateCSVExportURL()
-            await MainActor.run {
-                self.exportURL = url
-            }
+            self.exportURL = url
         }
     }
 }

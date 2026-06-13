@@ -25,6 +25,7 @@
 		4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34737E8E6769616196B553 /* TabTransitionAction.swift */; };
 		4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */; };
 		4C80E8F81CB4267206F8BCC9 /* FlickerAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */; };
+		5453E25EA4CD9E2DD3345ACC /* ExposureValueCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */; };
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
 		6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */; };
 		62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */; };
@@ -35,6 +36,7 @@
 		77D76C7BC802A14BC11BED7A /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAB4538FA9C995543411E8 /* AppLanguage.swift */; };
 		7E76B6F795E249E5A140198A /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0F44D6F9686E67479A6D05 /* RecordsView.swift */; };
 		812876F0AE08889F28F29768 /* LuxRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A18F24B9F641399B19318EE /* LuxRange.swift */; };
+		82453B2D0DF1E3A5EC37C2FB /* ExposureValueCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9213AEC2DEFD77FABC5D778 /* ExposureValueCalculatorTests.swift */; };
 		839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */; };
 		8867737AEAE195B03EEA114F /* FlickerInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */; };
 		8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */; };
@@ -83,6 +85,7 @@
 		16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
 		18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecordEntity.swift; sourceTree = "<group>"; };
+		2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureValueCalculator.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
 		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		AE078BD017B4B9258C10AED6 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		B365D9B743B9FC75C575FE68 /* FlickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerModel.swift; sourceTree = "<group>"; };
+		B9213AEC2DEFD77FABC5D778 /* ExposureValueCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureValueCalculatorTests.swift; sourceTree = "<group>"; };
 		B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TintInterpreterTests.swift; sourceTree = "<group>"; };
 		C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
 		CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStoreTests.swift; sourceTree = "<group>"; };
@@ -167,6 +171,7 @@
 				6CC4B0951CF6D7835D8B9995 /* CameraStateDecompositionTests.swift */,
 				F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */,
 				6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */,
+				B9213AEC2DEFD77FABC5D778 /* ExposureValueCalculatorTests.swift */,
 				0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */,
 				48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */,
 				D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */,
@@ -199,6 +204,7 @@
 				4CA478C98177BF80E25C1D1C /* CalibrationStore.swift */,
 				4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */,
 				593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */,
+				2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */,
 				4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */,
 				A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */,
 				8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */,
@@ -389,6 +395,7 @@
 				FCAC37C271D527801A4BF7FA /* CameraStateDecompositionTests.swift in Sources */,
 				09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */,
 				B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */,
+				82453B2D0DF1E3A5EC37C2FB /* ExposureValueCalculatorTests.swift in Sources */,
 				F99DF0F94565431FDA4E5DD4 /* FlickerAnalyzerTests.swift in Sources */,
 				62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */,
 				839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */,
@@ -420,6 +427,7 @@
 				10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */,
 				BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */,
 				C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */,
+				5453E25EA4CD9E2DD3345ACC /* ExposureValueCalculator.swift in Sources */,
 				4C80E8F81CB4267206F8BCC9 /* FlickerAnalyzer.swift in Sources */,
 				B5987DCB478F3C327B9A57DA /* FlickerCheckView.swift in Sources */,
 				8867737AEAE195B03EEA114F /* FlickerInterpreter.swift in Sources */,

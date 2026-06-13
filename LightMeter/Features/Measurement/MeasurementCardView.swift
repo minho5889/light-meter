@@ -5,6 +5,7 @@ struct MeasurementCardView: View {
     let kelvin: Double
     let isCaptured: Bool
     let language: AppLanguage
+    let selectedUnit: MeasurementUnit
     var interpretationDescription: String = ""
     var interpretationTip: String = ""
     var comparisonText: String = ""
@@ -30,19 +31,45 @@ struct MeasurementCardView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header: Left-Aligned Readings
             VStack(alignment: .leading, spacing: 4) {
-                // Lux layout: 120 LUX (with smaller superscript LUX)
+                // Main layout: converted value with superscript label
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(Self.formatValue(lux))
+                    Text(displayValueString)
                         .font(.system(size: 40, weight: .bold, design: .rounded))
-                    Text("LUX")
+                    Text(unitLabelString)
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.white.opacity(0.6))
                 }
 
-                // Kelvin layout: 3,800K below it
-                Text("\(Self.formatValue(kelvin))K")
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .foregroundColor(.white.opacity(0.8))
+                // Kelvin layout + secondary readouts row
+                HStack(spacing: 12) {
+                    Text("\(Self.formatValue(kelvin))K")
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    Text("•")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white.opacity(0.3))
+                    
+                    HStack(spacing: 8) {
+                        if selectedUnit != .lux {
+                            Text("\(Self.formatValue(lux)) lx")
+                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        if selectedUnit != .footCandle {
+                            let fc = ExposureValueCalculator.calculateFootCandles(lux: lux)
+                            Text(String(format: "%.1f fc", fc))
+                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        if selectedUnit != .ev {
+                            let ev = ExposureValueCalculator.calculateEV(lux: lux)
+                            Text(String(format: "EV %.1f", ev))
+                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                    }
+                }
             }
             .padding(.horizontal, 4)
 
@@ -124,8 +151,43 @@ struct MeasurementCardView: View {
         .accessibilityLabel(accessibilityDescription)
     }
 
+    private var displayValueString: String {
+        switch selectedUnit {
+        case .lux:
+            return Self.formatValue(lux)
+        case .footCandle:
+            let fc = ExposureValueCalculator.calculateFootCandles(lux: lux)
+            return String(format: "%.1f", fc)
+        case .ev:
+            let ev = ExposureValueCalculator.calculateEV(lux: lux)
+            return String(format: "%.1f", ev)
+        }
+    }
+
+    private var unitLabelString: String {
+        switch selectedUnit {
+        case .lux:
+            return "LUX"
+        case .footCandle:
+            return LocalizedStrings.translate(key: "ui_fc_short", language: language).uppercased()
+        case .ev:
+            return "EV"
+        }
+    }
+
     private var accessibilityDescription: String {
-        var label = "\(Self.formatValue(lux)) lux, \(Self.formatValue(kelvin)) Kelvin"
+        let mainVal: String
+        switch selectedUnit {
+        case .lux:
+            mainVal = "\(Self.formatValue(lux)) lux"
+        case .footCandle:
+            let fc = ExposureValueCalculator.calculateFootCandles(lux: lux)
+            mainVal = String(format: "%.1f foot-candles", fc)
+        case .ev:
+            let ev = ExposureValueCalculator.calculateEV(lux: lux)
+            mainVal = String(format: "EV %.1f", ev)
+        }
+        var label = "\(mainVal), \(Self.formatValue(kelvin)) Kelvin"
         if isCaptured {
             label += ", \(interpretationDescription), \(comparisonText)"
         }

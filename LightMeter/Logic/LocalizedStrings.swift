@@ -47,7 +47,12 @@ public struct LocalizedStrings {
         "ui_calibrate_apply": [.english: "Apply Calibration", .korean: "보정값 적용", .french: "Appliquer l'Étalonnage"],
         "ui_calibrate_reset": [.english: "Reset to Default (1.0x)", .korean: "기본값(1.0배)으로 초기화", .french: "Réinitialiser par Défaut (1.0x)"],
         "ui_calibrate_cancel": [.english: "Cancel", .korean: "취소", .french: "Annuler"],
-        "ui_calibrate_button": [.english: "Calibrate", .korean: "보정하기", .french: "Étalonner"]
+        "ui_calibrate_button": [.english: "Calibrate", .korean: "보정하기", .french: "Étalonner"],
+        "ui_fc_short": [.english: "fc", .korean: "풋캔들", .french: "fc"],
+        "ui_ev_short": [.english: "EV", .korean: "EV", .french: "EV"],
+        "ui_equivalent_exposure": [.english: "Equivalent Exposure (ISO 100)", .korean: "동등 노출 설정 (ISO 100)", .french: "Expositions Équivalentes (ISO 100)"],
+        "ui_shutter_speed": [.english: "Shutter", .korean: "셔터 속도", .french: "Obturateur"],
+        "ui_aperture": [.english: "Aperture", .korean: "조리개", .french: "Ouverture"]
     ]
 
     /// Translates a given key into the selected language.

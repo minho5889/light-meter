@@ -34,29 +34,17 @@ struct CameraStateDecompositionTests {
         let store = RecordsStore(container: container, defaults: defaults)
         
         // Wait briefly for initial load
-        try await Task.sleep(nanoseconds: 20_000_000)
+        await store.activeFetchTask?.value
         #expect(store.records.isEmpty)
         
-        store.saveRecord(lux: 200.0, kelvin: 4000.0)
-        
-        // Wait for save and reload
-        for _ in 0..<100 {
-            if store.records.count == 1 { break }
-            try await Task.sleep(nanoseconds: 10_000_000)
-        }
+        await store.saveRecord(lux: 200.0, kelvin: 4000.0).value
         
         #expect(store.records.count == 1)
         #expect(store.records[0].lux == 200.0)
         #expect(store.records[0].kelvin == 4000.0)
 
         let recordId = store.records[0].id
-        store.deleteRecord(id: recordId)
-        
-        // Wait for delete and reload
-        for _ in 0..<100 {
-            if store.records.isEmpty { break }
-            try await Task.sleep(nanoseconds: 10_000_000)
-        }
+        await store.deleteRecord(id: recordId).value
         
         #expect(store.records.isEmpty)
         defaults.removePersistentDomain(forName: "RecordsStoreTestsSuite")
@@ -103,17 +91,11 @@ struct CameraStateDecompositionTests {
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
+        await store.activeFetchTask?.value
         
-        // Save 105 records
+        // Save 105 records sequentially
         for i in 1...105 {
-            store.saveRecord(lux: Double(i), kelvin: 5000.0)
-            try await Task.sleep(nanoseconds: 5_000_000)
-        }
-
-        // Wait for store records to stabilize
-        for _ in 0..<200 {
-            if store.records.count == 20 { break } // since saveRecord reloads first page, records will be limited to page size of 20
-            try await Task.sleep(nanoseconds: 20_000_000)
+            await store.saveRecord(lux: Double(i), kelvin: 5000.0).value
         }
 
         // Fetch everything from context directly to confirm the database cap is exactly 100
@@ -138,17 +120,11 @@ struct CameraStateDecompositionTests {
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
+        await store.activeFetchTask?.value
 
-        // Save 45 records
+        // Save 45 records sequentially
         for i in 1...45 {
-            store.saveRecord(lux: Double(i), kelvin: 4000.0)
-            try await Task.sleep(nanoseconds: 2_000_000)
-        }
-
-        // Wait for initial page (page 0, limit 20)
-        for _ in 0..<100 {
-            if store.records.count == 20 { break }
-            try await Task.sleep(nanoseconds: 20_000_000)
+            await store.saveRecord(lux: Double(i), kelvin: 4000.0).value
         }
 
         #expect(store.records.count == 20)
@@ -156,22 +132,14 @@ struct CameraStateDecompositionTests {
 
         // Load next page (page 1, adds 20, total 40)
         store.loadNextPage()
-        
-        for _ in 0..<100 {
-            if store.records.count == 40 { break }
-            try await Task.sleep(nanoseconds: 20_000_000)
-        }
+        await store.activeFetchTask?.value
 
         #expect(store.records.count == 40)
         #expect(store.hasMorePages == true)
 
         // Load next page (page 2, adds 5, total 45)
         store.loadNextPage()
-
-        for _ in 0..<100 {
-            if store.records.count == 45 { break }
-            try await Task.sleep(nanoseconds: 20_000_000)
-        }
+        await store.activeFetchTask?.value
 
         #expect(store.records.count == 45)
         #expect(store.hasMorePages == false)
@@ -188,13 +156,7 @@ struct CameraStateDecompositionTests {
         let container = try ModelContainer(for: schema, configurations: [config])
 
         let store = RecordsStore(container: container, defaults: defaults)
-        store.saveRecord(lux: 100.0, kelvin: 5000.0)
-
-        // Wait for save
-        for _ in 0..<100 {
-            if store.records.count == 1 { break }
-            try await Task.sleep(nanoseconds: 10_000_000)
-        }
+        await store.saveRecord(lux: 100.0, kelvin: 5000.0).value
 
         let csvURL = try await #require(store.generateCSVExportURL())
         let csvContent = try String(contentsOf: csvURL, encoding: .utf8)

@@ -30,7 +30,8 @@ let package = Package(
                 "Camera/LightRecord.swift",
                 "Camera/LightRecordEntity.swift",
                 "Camera/MeasurementModel.swift",
-                "Camera/RecordsStore.swift"
+                "Camera/RecordsStore.swift",
+                "Logic/ExposureValueCalculator.swift"
             ]
         ),
         .testTarget(
@@ -52,7 +53,8 @@ let package = Package(
                 "Logic/SignalSmootherTests.swift",
                 "Logic/TintInterpreterTests.swift",
                 "Logic/CalibrationStoreTests.swift",
-                "Logic/CameraStateDecompositionTests.swift"
+                "Logic/CameraStateDecompositionTests.swift",
+                "Logic/ExposureValueCalculatorTests.swift"
             ]
         )
     ]
