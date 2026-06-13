@@ -52,7 +52,23 @@ public struct LocalizedStrings {
         "ui_ev_short": [.english: "EV", .korean: "EV", .french: "EV"],
         "ui_equivalent_exposure": [.english: "Equivalent Exposure (ISO 100)", .korean: "동등 노출 설정 (ISO 100)", .french: "Expositions Équivalentes (ISO 100)"],
         "ui_shutter_speed": [.english: "Shutter", .korean: "셔터 속도", .french: "Obturateur"],
-        "ui_aperture": [.english: "Aperture", .korean: "조리개", .french: "Ouverture"]
+        "ui_aperture": [.english: "Aperture", .korean: "조리개", .french: "Ouverture"],
+        
+        // Accessibility announcements
+        "accessibility_capture": [.english: "Capture", .korean: "측정", .french: "Capturer"],
+        "accessibility_switch_camera": [.english: "Switch camera", .korean: "카메라 전환", .french: "Changer de caméra"],
+        "accessibility_back_live": [.english: "Back to live mode", .korean: "실시간 모드로 돌아가기", .french: "Retour au mode direct"],
+        "accessibility_captured_lux": [.english: "Captured %d lux, %d Kelvin", .korean: "캡처됨: %d 룩스, %d 켈빈", .french: "Capturé : %d lux, %d Kelvin"],
+        "accessibility_captured_fc": [.english: "Captured %.1f foot-candles, %d Kelvin", .korean: "캡처됨: %.1f 풋캔들, %d 켈빈", .french: "Capturé : %.1f foot-candles, %d Kelvin"],
+        "accessibility_captured_ev": [.english: "Captured EV %.1f, %d Kelvin", .korean: "캡처됨: EV %.1f, %d 켈빈", .french: "Capturé : EV %.1f, %d Kelvin"],
+        "accessibility_delete_record": [.english: "Delete record %d", .korean: "%d번 기록 삭제", .french: "Supprimer l'enregistrement %d"],
+        
+        // Flicker Accessibility
+        "accessibility_flicker_gauge_label": [.english: "Flicker Safety Gauge", .korean: "플리커 안전 계기판", .french: "Jauge de Sécurité Flicker"],
+        "accessibility_flicker_percent": [.english: "%.1f percent", .korean: "%.1f 퍼센트", .french: "%.1f pour cent"],
+        "accessibility_flicker_frequency": [.english: "%.0f hertz", .korean: "%.0f 헤르츠", .french: "%.0f hertz"],
+        "accessibility_flicker_freq_unknown": [.english: "frequency unknown", .korean: "주파수 알 수 없음", .french: "fréquence inconnue"],
+        "accessibility_flicker_inactive": [.english: "0 percent, inactive", .korean: "0 퍼센트, 비활성화됨", .french: "0 pour cent, inactif"]
     ]
 
     /// Translates a given key into the selected language.

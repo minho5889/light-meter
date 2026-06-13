@@ -72,7 +72,7 @@ struct MeasurementView: View {
                             Image(systemName: "slider.horizontal.3")
                             Text(LocalizedStrings.translate(key: "ui_calibrate_button", language: cameraViewModel.appLanguage))
                         }
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .font(.system(.footnote, design: .rounded).weight(.bold))
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
@@ -83,6 +83,7 @@ struct MeasurementView: View {
                                 .stroke(Color.white.opacity(0.1), lineWidth: 1)
                         )
                     }
+                    .accessibilityLabel(LocalizedStrings.translate(key: "ui_calibrate_button", language: cameraViewModel.appLanguage))
 
                     equivalentExposureTable
 
@@ -93,7 +94,7 @@ struct MeasurementView: View {
                                 Image(systemName: "info.circle.fill")
                                     .foregroundColor(.orange)
                                 Text(LocalizedStrings.translate(key: "ui_reflected_disclosure_title", language: cameraViewModel.appLanguage))
-                                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                                    .font(.system(.footnote, design: .rounded).weight(.bold))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Button(action: {
@@ -103,13 +104,13 @@ struct MeasurementView: View {
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.white.opacity(0.6))
-                                        .font(.system(size: 16))
+                                        .font(.system(.body))
                                 }
-                                .accessibilityLabel("Dismiss disclosure")
+                                .accessibilityLabel(LocalizedStrings.translate(key: "ui_close", language: cameraViewModel.appLanguage))
                             }
                             
                             Text(LocalizedStrings.translate(key: "ui_reflected_disclosure_desc", language: cameraViewModel.appLanguage))
-                                .font(.system(size: 12, design: .rounded))
+                                .font(.system(.footnote, design: .rounded))
                                 .foregroundColor(.white.opacity(0.8))
                                 .fixedSize(horizontal: false, vertical: true)
                         }
@@ -140,17 +141,17 @@ struct MeasurementView: View {
                                 .frame(width: DesignConstants.captureButtonInner, height: DesignConstants.captureButtonInner)
                         )
                 }
-                .accessibilityLabel("Capture")
+                .accessibilityLabel(LocalizedStrings.translate(key: "accessibility_capture", language: cameraViewModel.appLanguage))
 
                 Button(action: { cameraViewModel.toggleCamera() }) {
                     Image(systemName: "camera.rotate")
-                        .font(.system(size: DesignConstants.fontSizeXL, weight: .medium))
+                        .font(DesignConstants.fontXL)
                         .foregroundColor(.white)
                         .frame(width: DesignConstants.toggleButtonSize, height: DesignConstants.toggleButtonSize)
                         .background(Color.white.opacity(0.2))
                         .clipShape(Circle())
                 }
-                .accessibilityLabel("Switch Camera")
+                .accessibilityLabel(LocalizedStrings.translate(key: "accessibility_switch_camera", language: cameraViewModel.appLanguage))
             }
             .padding(.bottom, 96) // Padded up to clear the custom capsule floating tab bar
         }
@@ -173,9 +174,9 @@ struct MeasurementView: View {
                     Button(action: returnToLiveMode) {
                         HStack(spacing: 8) {
                             Image(systemName: "chevron.left")
-                                .font(.system(size: 16, weight: .bold))
+                                .font(.system(.body).weight(.bold))
                             Text(LocalizedStrings.translate(key: "ui_back", language: cameraViewModel.appLanguage))
-                                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                .font(.system(.body, design: .rounded).weight(.semibold))
                         }
                         .foregroundColor(.black)
                         .padding(.horizontal, 16)
@@ -184,7 +185,7 @@ struct MeasurementView: View {
                         .clipShape(Capsule())
                         .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
                     }
-                    .accessibilityLabel("Back to live mode")
+                    .accessibilityLabel(LocalizedStrings.translate(key: "accessibility_back_live", language: cameraViewModel.appLanguage))
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -226,13 +227,15 @@ struct MeasurementView: View {
                     }
                 }) {
                     Text(name)
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .font(.system(.footnote, design: .rounded).weight(.bold))
                         .foregroundColor(isSelected ? .black : .white)
                         .padding(.vertical, 8)
                         .frame(maxWidth: .infinity)
                         .background(isSelected ? Color.white : Color.clear)
                         .cornerRadius(10)
                 }
+                .accessibilityLabel(name)
+                .accessibilityAddTraits(isSelected ? [.isSelected] : [])
             }
         }
         .padding(4)
@@ -270,7 +273,7 @@ struct MeasurementView: View {
         
         return VStack(alignment: .leading, spacing: 10) {
             Text(LocalizedStrings.translate(key: "ui_equivalent_exposure", language: cameraViewModel.appLanguage))
-                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .font(.system(.caption, design: .rounded).weight(.bold))
                 .foregroundColor(.white.opacity(0.5))
                 .tracking(1.0)
                 .padding(.horizontal, 4)
@@ -280,11 +283,11 @@ struct MeasurementView: View {
                     ForEach(settings, id: \.fStop) { setting in
                         VStack(spacing: 6) {
                             Text("f/\(setting.fStop, specifier: setting.fStop.truncatingRemainder(dividingBy: 1) == 0 ? "%.0f" : "%.1f")")
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .font(.system(.footnote, design: .rounded).weight(.bold))
                                 .foregroundColor(.white)
                             
                             Text(setting.shutterSpeedString)
-                                .font(.system(size: 11, weight: .medium, design: .rounded))
+                                .font(.system(.caption2, design: .rounded).weight(.medium))
                                 .foregroundColor(.white.opacity(0.6))
                         }
                         .padding(.horizontal, 14)
@@ -295,6 +298,8 @@ struct MeasurementView: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(Color.white.opacity(0.1), lineWidth: 1)
                         )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Aperture f/\(setting.fStop, specifier: setting.fStop.truncatingRemainder(dividingBy: 1) == 0 ? "%.0f" : "%.1f"), shutter speed \(setting.shutterSpeedString)")
                     }
                 }
                 .padding(.horizontal, 4)
@@ -329,6 +334,23 @@ struct MeasurementView: View {
             cameraViewModel.recordsStore.saveRecord(lux: currentLux, kelvin: currentKelvin)
             
             isCaptured = true
+            
+            // VoiceOver announcement on capture
+            let announcement: String
+            switch selectedUnit {
+            case .lux:
+                let format = LocalizedStrings.translate(key: "accessibility_captured_lux", language: cameraViewModel.appLanguage)
+                announcement = String(format: format, Int(currentLux), Int(currentKelvin))
+            case .footCandle:
+                let fc = ExposureValueCalculator.calculateFootCandles(lux: currentLux)
+                let format = LocalizedStrings.translate(key: "accessibility_captured_fc", language: cameraViewModel.appLanguage)
+                announcement = String(format: format, fc, Int(currentKelvin))
+            case .ev:
+                let ev = ExposureValueCalculator.calculateEV(lux: currentLux)
+                let format = LocalizedStrings.translate(key: "accessibility_captured_ev", language: cameraViewModel.appLanguage)
+                announcement = String(format: format, ev, Int(currentKelvin))
+            }
+            UIAccessibility.post(notification: .announcement, argument: announcement)
         }
     }
 

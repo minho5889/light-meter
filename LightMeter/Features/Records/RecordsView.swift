@@ -46,7 +46,7 @@ struct RecordsView: View {
                 // Header Title Section
                 HStack {
                     Text(LocalizedStrings.translate(key: "tab_records", language: cameraViewModel.appLanguage).uppercased())
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .font(DesignConstants.fontTitle)
                         .foregroundColor(.white)
                         .tracking(1.5)
                     
@@ -55,7 +55,7 @@ struct RecordsView: View {
                     if let exportURL = cameraViewModel.recordsStore.exportURL {
                         ShareLink(item: exportURL) {
                             Image(systemName: "square.and.arrow.up")
-                                .font(.system(size: 16, weight: .bold))
+                                .font(DesignConstants.fontSM.weight(.bold))
                                 .foregroundColor(.white)
                                 .padding(8)
                                 .background(Color.white.opacity(0.12))
@@ -88,11 +88,11 @@ struct RecordsView: View {
                 .foregroundColor(.white.opacity(0.2))
             
             Text(LocalizedStrings.translate(key: "ui_no_records", language: cameraViewModel.appLanguage))
-                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .font(DesignConstants.fontMD.weight(.bold))
                 .foregroundColor(.white.opacity(0.6))
             
             Text(LocalizedStrings.translate(key: "ui_records_empty_desc", language: cameraViewModel.appLanguage))
-                .font(.system(size: 13, design: .rounded))
+                .font(DesignConstants.fontXXS)
                 .foregroundColor(.white.opacity(0.4))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
@@ -141,6 +141,8 @@ struct RecordRowView: View {
     let appLanguage: AppLanguage
     let onDelete: () -> Void
 
+    @ScaledMetric(relativeTo: .title3) private var valueSize: CGFloat = 26
+
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -164,19 +166,58 @@ struct RecordRowView: View {
         return numberFormatter.string(from: NSNumber(value: value)) ?? "\(Int(value))"
     }
 
+    private var accessibilityLabelText: String {
+        let dateStr = Self.dateFormatter.string(from: record.timestamp)
+        let timeStr = Self.timeFormatter.string(from: record.timestamp)
+        
+        let recordLabel: String
+        let luxLabel: String
+        let kelvinLabel: String
+        
+        switch appLanguage {
+        case .korean:
+            recordLabel = "기록 \(reverseIndex)번"
+            luxLabel = "\(Self.formatValue(record.lux)) 룩스"
+            kelvinLabel = "\(Self.formatValue(record.kelvin)) 켈빈"
+        case .french:
+            recordLabel = "Enregistrement \(reverseIndex)"
+            luxLabel = "\(Self.formatValue(record.lux)) lux"
+            kelvinLabel = "\(Self.formatValue(record.kelvin)) Kelvin"
+        case .english:
+            recordLabel = "Record \(reverseIndex)"
+            luxLabel = "\(Self.formatValue(record.lux)) lux"
+            kelvinLabel = "\(Self.formatValue(record.kelvin)) Kelvin"
+        }
+        
+        var parts = [
+            recordLabel,
+            "\(dateStr) \(timeStr)",
+            luxLabel,
+            kelvinLabel
+        ]
+        
+        if !record.activeChips.isEmpty {
+            let chipsNames = record.activeChips.map { $0.localizedName(language: appLanguage) }.joined(separator: ", ")
+            let recommendedFor = appLanguage == .korean ? "권장 활동: \(chipsNames)" : (appLanguage == .french ? "Recommandé pour : \(chipsNames)" : "Recommended for: \(chipsNames)")
+            parts.append(recommendedFor)
+        }
+        
+        return parts.joined(separator: ", ")
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 12) {
                 // Header Row: #Index + Localized Timestamp
                 HStack {
                     Text("#\(reverseIndex)")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(.subheadline, design: .rounded).weight(.bold))
                         .foregroundColor(.white.opacity(0.5))
                     
                     Spacer()
                     
                     Text("\(Self.dateFormatter.string(from: record.timestamp))  \(Self.timeFormatter.string(from: record.timestamp))")
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .font(.system(.caption, design: .rounded).weight(.medium))
                         .foregroundColor(.white.opacity(0.4))
                 }
                 
@@ -184,15 +225,14 @@ struct RecordRowView: View {
                 HStack(alignment: .firstTextBaseline, spacing: 16) {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(Self.formatValue(record.lux))
-                            .font(.system(size: 26, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .font(.system(size: valueSize, weight: .bold, design: .rounded))
                         Text("LUX")
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .font(.system(.caption2, design: .rounded).weight(.bold))
                             .foregroundColor(.white.opacity(0.5))
                     }
                     
                     Text("\(Self.formatValue(record.kelvin))K")
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .font(.system(.body, design: .rounded).weight(.semibold))
                         .foregroundColor(.white.opacity(0.8))
                 }
                 
@@ -201,7 +241,7 @@ struct RecordRowView: View {
                     HStack(spacing: 8) {
                         ForEach(record.activeChips, id: \.self) { chip in
                             Text(chip.localizedName(language: appLanguage))
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                                .font(.system(.caption2, design: .rounded).weight(.bold))
                                 .foregroundColor(.white.opacity(0.7))
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 5)
@@ -218,17 +258,18 @@ struct RecordRowView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(Color.white.opacity(0.08), lineWidth: 1)
             )
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(accessibilityLabelText)
             
             // Swipe-to-delete helper or explicit trash button
             Button(action: onDelete) {
                 Image(systemName: "trash")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(.body).weight(.semibold))
                     .foregroundColor(.red.opacity(0.8))
                     .frame(width: 50, height: 80)
                     .padding(.leading, 12)
             }
-            .accessibilityLabel("Delete record")
+            .accessibilityLabel(String(format: LocalizedStrings.translate(key: "accessibility_delete_record", language: appLanguage), reverseIndex))
         }
     }
 }
-

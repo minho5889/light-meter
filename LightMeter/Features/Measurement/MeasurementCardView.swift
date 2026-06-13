@@ -10,6 +10,8 @@ struct MeasurementCardView: View {
     var interpretationTip: String = ""
     var comparisonText: String = ""
 
+    @ScaledMetric(relativeTo: .largeTitle) private var displayValueSize: CGFloat = 40
+
     private static let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -34,38 +36,38 @@ struct MeasurementCardView: View {
                 // Main layout: converted value with superscript label
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(displayValueString)
-                        .font(.system(size: 40, weight: .bold, design: .rounded))
+                        .font(.system(size: displayValueSize, weight: .bold, design: .rounded))
                     Text(unitLabelString)
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(.subheadline, design: .rounded).weight(.bold))
                         .foregroundColor(.white.opacity(0.6))
                 }
 
                 // Kelvin layout + secondary readouts row
                 HStack(spacing: 12) {
                     Text("\(Self.formatValue(kelvin))K")
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                        .font(.system(.body, design: .rounded).weight(.semibold))
                         .foregroundColor(.white.opacity(0.8))
                     
                     Text("•")
-                        .font(.system(size: 14))
+                        .font(.system(.subheadline))
                         .foregroundColor(.white.opacity(0.3))
                     
                     HStack(spacing: 8) {
                         if selectedUnit != .lux {
                             Text("\(Self.formatValue(lux)) lx")
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(.footnote, design: .rounded).weight(.semibold))
                                 .foregroundColor(.white.opacity(0.6))
                         }
                         if selectedUnit != .footCandle {
                             let fc = ExposureValueCalculator.calculateFootCandles(lux: lux)
                             Text(String(format: "%.1f fc", fc))
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(.footnote, design: .rounded).weight(.semibold))
                                 .foregroundColor(.white.opacity(0.6))
                         }
                         if selectedUnit != .ev {
                             let ev = ExposureValueCalculator.calculateEV(lux: lux)
                             Text(String(format: "EV %.1f", ev))
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(.footnote, design: .rounded).weight(.semibold))
                                 .foregroundColor(.white.opacity(0.6))
                         }
                     }
@@ -81,16 +83,16 @@ struct MeasurementCardView: View {
                 // Section 1: User Guide (사용자 가이드)
                 VStack(alignment: .leading, spacing: 6) {
                     Text(LocalizedStrings.translate(key: "ui_user_guide", language: language))
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .font(.system(.caption, design: .rounded).weight(.bold))
                         .foregroundColor(.white.opacity(0.5))
                         .tracking(1.0)
                     
                     Text(interpretationDescription)
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .font(.system(.subheadline, design: .rounded).weight(.bold))
                         .foregroundColor(.white)
                     
                     Text(interpretationTip)
-                        .font(.system(size: 13, design: .rounded))
+                        .font(.system(.footnote, design: .rounded))
                         .foregroundColor(.white.opacity(0.8))
                         .lineLimit(3)
                         .fixedSize(horizontal: false, vertical: true)
@@ -107,7 +109,7 @@ struct MeasurementCardView: View {
                 // Section 2: Recommended Activities (권장 환경 및 활동)
                 VStack(alignment: .leading, spacing: 10) {
                     Text(LocalizedStrings.translate(key: "ui_recommended_activities", language: language))
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .font(.system(.caption, design: .rounded).weight(.bold))
                         .foregroundColor(.white.opacity(0.5))
                         .tracking(1.0)
 
@@ -122,7 +124,7 @@ struct MeasurementCardView: View {
                             let isActive = activeChips.contains(chip)
                             
                             Text(chip.localizedName(language: language))
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                .font(.system(.caption, design: .rounded).weight(.medium))
                                 .foregroundColor(isActive ? .black : .white.opacity(0.6))
                                 .padding(.vertical, 8)
                                 .frame(maxWidth: .infinity)
@@ -190,6 +192,11 @@ struct MeasurementCardView: View {
         var label = "\(mainVal), \(Self.formatValue(kelvin)) Kelvin"
         if isCaptured {
             label += ", \(interpretationDescription), \(comparisonText)"
+            if !activeChips.isEmpty {
+                let chipsNames = activeChips.map { $0.localizedName(language: language) }.joined(separator: ", ")
+                let recommendedFor = language == .korean ? "권장 활동: \(chipsNames)" : (language == .french ? "Recommandé pour : \(chipsNames)" : "Recommended for: \(chipsNames)")
+                label += ", \(recommendedFor)"
+            }
         }
         return label
     }

@@ -44,12 +44,12 @@ struct FlickerCheckView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(LocalizedStrings.translate(key: "ui_light_check", language: viewModel.appLanguage))
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .font(.system(.caption, design: .rounded).weight(.bold))
                     .foregroundColor(.white.opacity(0.6))
                     .tracking(2.0)
                 
                 Text(LocalizedStrings.translate(key: "tab_check", language: viewModel.appLanguage))
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .font(.system(.title2, design: .rounded).weight(.bold))
                     .foregroundColor(.white)
             }
             Spacer()
@@ -64,7 +64,7 @@ struct FlickerCheckView: View {
                         .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: viewModel.flicker.isCheckingFlicker)
                     
                     Text(LocalizedStrings.translate(key: "ui_analyzing", language: viewModel.appLanguage))
-                        .font(.system(size: 10, weight: .black, design: .rounded))
+                        .font(.system(.caption2, design: .rounded).weight(.black))
                         .foregroundColor(safetyColor)
                         .tracking(1.0)
                 }
@@ -102,20 +102,23 @@ struct FlickerCheckView: View {
  
                 VStack(spacing: 2) {
                     Text(viewModel.flicker.isCheckingFlicker ? String(format: "%.1f%%", viewModel.flicker.flickerPercentage) : "0.0%")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .font(.system(.title, design: .rounded).weight(.bold))
                         .foregroundColor(.white)
                     
                     Text(viewModel.flicker.isCheckingFlicker && viewModel.flicker.flickerFrequency > 5 ? String(format: "%.0f Hz", viewModel.flicker.flickerFrequency) : "-- Hz")
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(.footnote, design: .rounded).weight(.medium))
                         .foregroundColor(.white.opacity(0.6))
                 }
             }
             .frame(width: 130, height: 130)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(LocalizedStrings.translate(key: "accessibility_flicker_gauge_label", language: viewModel.appLanguage))
+            .accessibilityValue(flickerGaugeAccessibilityValue)
 
             // Real-Time Oscilloscope Wave Scope
             VStack(alignment: .leading, spacing: 8) {
                 Text(LocalizedStrings.translate(key: "ui_wave_scope", language: viewModel.appLanguage))
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                    .font(.system(.caption, design: .rounded).weight(.bold))
                     .foregroundColor(.white.opacity(0.4))
                     .tracking(1.0)
                 
@@ -139,17 +142,38 @@ struct FlickerCheckView: View {
                         .animation(.interactiveSpring(response: 0.15, dampingFraction: 0.8), value: viewModel.flicker.waveData)
                 }
             }
+            .accessibilityHidden(true)
         }
     }
 
+    private var flickerGaugeAccessibilityValue: String {
+        guard viewModel.flicker.isCheckingFlicker else {
+            return LocalizedStrings.translate(key: "accessibility_flicker_inactive", language: viewModel.appLanguage)
+        }
+        
+        let percentStr = String(format: LocalizedStrings.translate(key: "accessibility_flicker_percent", language: viewModel.appLanguage), viewModel.flicker.flickerPercentage)
+        
+        let freqStr: String
+        if viewModel.flicker.flickerFrequency > 5 {
+            freqStr = String(format: LocalizedStrings.translate(key: "accessibility_flicker_frequency", language: viewModel.appLanguage), viewModel.flicker.flickerFrequency)
+        } else {
+            freqStr = LocalizedStrings.translate(key: "accessibility_flicker_freq_unknown", language: viewModel.appLanguage)
+        }
+        
+        return "\(percentStr), \(freqStr)"
+    }
+
     private var safetyDescriptionCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(viewModel.flicker.isCheckingFlicker ? FlickerInterpreter.safetyLevelTitle(level: viewModel.flicker.flickerSafetyLevel, language: viewModel.appLanguage).uppercased() : "READY")
-                .font(.system(size: 14, weight: .bold, design: .rounded))
+        let title = viewModel.flicker.isCheckingFlicker ? FlickerInterpreter.safetyLevelTitle(level: viewModel.flicker.flickerSafetyLevel, language: viewModel.appLanguage).uppercased() : "READY"
+        let desc = viewModel.flicker.isCheckingFlicker ? viewModel.flicker.flickerDescription : LocalizedStrings.translate(key: "ui_flicker_ready_desc", language: viewModel.appLanguage)
+        
+        return VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.system(.subheadline, design: .rounded).weight(.bold))
                 .foregroundColor(viewModel.flicker.isCheckingFlicker ? safetyColor : .white.opacity(0.6))
                 
-            Text(viewModel.flicker.isCheckingFlicker ? viewModel.flicker.flickerDescription : LocalizedStrings.translate(key: "ui_flicker_ready_desc", language: viewModel.appLanguage))
-                .font(.system(size: 13, design: .rounded))
+            Text(desc)
+                .font(.system(.footnote, design: .rounded))
                 .foregroundColor(.white.opacity(0.8))
                 .lineLimit(3)
                 .fixedSize(horizontal: false, vertical: true)
@@ -162,10 +186,14 @@ struct FlickerCheckView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.white.opacity(0.08), lineWidth: 1)
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(viewModel.flicker.isCheckingFlicker ? "Safety status: \(title), description: \(desc)" : "Ready to check safety")
     }
 
     private var controlTriggerButton: some View {
-        Button(action: {
+        let label = viewModel.flicker.isCheckingFlicker ? LocalizedStrings.translate(key: "ui_stop_check", language: viewModel.appLanguage) : LocalizedStrings.translate(key: "ui_start_check", language: viewModel.appLanguage)
+        
+        return Button(action: {
             if viewModel.flicker.isCheckingFlicker {
                 viewModel.stopFlickerCheck()
             } else {
@@ -174,10 +202,10 @@ struct FlickerCheckView: View {
         }) {
             HStack(spacing: 12) {
                 Image(systemName: viewModel.flicker.isCheckingFlicker ? "stop.fill" : "bolt.shield.fill")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(.body).weight(.semibold))
                 
-                Text(viewModel.flicker.isCheckingFlicker ? LocalizedStrings.translate(key: "ui_stop_check", language: viewModel.appLanguage) : LocalizedStrings.translate(key: "ui_start_check", language: viewModel.appLanguage))
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                Text(label)
+                    .font(.system(.body, design: .rounded).weight(.semibold))
             }
             .foregroundColor(viewModel.flicker.isCheckingFlicker ? .white : .black)
             .frame(maxWidth: .infinity)
@@ -186,6 +214,7 @@ struct FlickerCheckView: View {
             .cornerRadius(16)
             .shadow(color: (viewModel.flicker.isCheckingFlicker ? Color.red : Color.white).opacity(0.2), radius: 10, x: 0, y: 5)
         }
+        .accessibilityLabel(label)
     }
 
     // MARK: - Helper UI Properties

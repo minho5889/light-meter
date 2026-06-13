@@ -10,10 +10,10 @@ struct PlaceholderView: View {
 
             VStack(spacing: DesignConstants.spacingSM) {
                 Text(title)
-                    .font(.system(size: DesignConstants.fontSizeTitle, weight: .bold))
+                    .font(DesignConstants.fontTitle)
                     .foregroundColor(.white)
                 Text(subtitle)
-                    .font(.system(size: DesignConstants.fontSizeSM))
+                    .font(DesignConstants.fontSM)
                     .foregroundColor(.gray)
             }
         }

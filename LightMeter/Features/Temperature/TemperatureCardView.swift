@@ -8,6 +8,8 @@ struct TemperatureCardView: View {
     let tintTip: String
     let language: AppLanguage
 
+    @ScaledMetric(relativeTo: .largeTitle) private var readingSize: CGFloat = 40
+
     private static let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -26,9 +28,9 @@ struct TemperatureCardView: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(Self.formatValue(kelvin))
-                        .font(.system(size: 40, weight: .bold, design: .rounded))
+                        .font(.system(size: readingSize, weight: .bold, design: .rounded))
                     Text("K")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(.subheadline, design: .rounded).weight(.bold))
                         .foregroundColor(.white.opacity(0.6))
                 }
             }
@@ -40,11 +42,11 @@ struct TemperatureCardView: View {
             // Teinte details
             VStack(alignment: .leading, spacing: 8) {
                 Text(interpretationDescription)
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(.body, design: .rounded).weight(.bold))
                     .foregroundColor(.white)
                 
                 Text(interpretationTip)
-                    .font(.system(size: 13, design: .rounded))
+                    .font(.system(.footnote, design: .rounded))
                     .foregroundColor(.white.opacity(0.8))
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
@@ -64,17 +66,17 @@ struct TemperatureCardView: View {
             // Tint Section
             VStack(alignment: .leading, spacing: 10) {
                 Text(LocalizedStrings.translate(key: "ui_tint", language: language))
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .font(.system(.caption, design: .rounded).weight(.bold))
                     .foregroundColor(.white.opacity(0.5))
                     .tracking(1.0)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(tintDescription)
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .font(.system(.body, design: .rounded).weight(.bold))
                         .foregroundColor(.white)
                     
                     Text(tintTip)
-                        .font(.system(size: 13, design: .rounded))
+                        .font(.system(.footnote, design: .rounded))
                         .foregroundColor(.white.opacity(0.8))
                         .lineLimit(3)
                         .fixedSize(horizontal: false, vertical: true)

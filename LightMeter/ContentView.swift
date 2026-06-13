@@ -67,7 +67,7 @@ struct ContentView: View {
                 VStack {
                     Spacer()
                     Text("Camera access is required to measure light.\nPlease enable it in Settings.")
-                        .font(.system(size: DesignConstants.fontSizeSM))
+                        .font(DesignConstants.fontSM)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .padding()
@@ -119,11 +119,11 @@ struct ContentView: View {
         }) {
             VStack(spacing: 3) {
                 Image(systemName: systemIcon)
-                    .font(.system(size: 16, weight: isSelected ? .bold : .medium))
+                    .font(.system(.body).weight(isSelected ? .bold : .medium))
                     .frame(height: 22)
                 
                 Text(label)
-                    .font(.system(size: 9, weight: isSelected ? .bold : .medium, design: .rounded))
+                    .font(.system(.caption2, design: .rounded).weight(isSelected ? .bold : .medium))
             }
             .foregroundColor(isSelected ? .black : .white.opacity(0.6))
             .padding(.vertical, 8)
@@ -134,5 +134,7 @@ struct ContentView: View {
             )
             .animation(.easeIn(duration: 0.15), value: isSelected)
         }
+        .accessibilityLabel(label)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 }
