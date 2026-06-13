@@ -22,20 +22,24 @@ uploads**.
 
 ---
 
-## ⛔ Still needed from Sunny InnoLab
+## Signing inputs — status
 
-Ask them for (the same person who sent the `.p12` will have these):
+Resolved (from the team setup deck + installed cert):
 
-1. **The `.p12` password** — to install the distribution certificate into Keychain.
-2. **The distribution provisioning profile** (`.mobileprovision`), **App Store** type,
-   for this app.
-3. **The exact bundle identifier** the profile is bound to (its App ID). Our placeholder
+- ✅ **`.p12` password** — known (in the team setup deck; not stored here).
+- ✅ **Distribution certificate installed** — `Apple Distribution: Jisu Jung` is in the
+  login Keychain (`security find-identity -v -p codesigning`).
+- ✅ **Team ID** — `GWBS3Q4W36`.
+
+⛔ **Still needed from Sunny InnoLab (ask "Robert"):**
+
+1. **The distribution provisioning profile** (`.mobileprovision`), **Distribution –
+   App Store Connect** type, for this app. The deck says Robert issues it.
+2. **The exact bundle identifier** the profile is bound to (its App ID). Our placeholder
    is `com.lightmeter.LightMeter` — it **must be changed to match** their App ID exactly,
-   or signing fails.
-4. **The Team ID** (10 chars). Derivable from the installed cert, but confirm it.
-5. **Confirm the handoff**: they upload, so we hand them a **signed `.ipa`** (this runbook),
-   unless they'd rather we upload directly — in which case ask for an App Store Connect
-   role/invite instead.
+   or signing fails. (The bundle ID is embedded in the profile, so #1 answers #2.)
+3. **Confirm the handoff**: they upload, so we hand them a **signed `.ipa`** (this runbook),
+   unless they'd rather we upload directly — then ask for an App Store Connect role/invite.
 
 > A matching **App Store Connect app record** must exist for the bundle ID before any
 > upload. Sunny InnoLab creates this (or confirms it exists).
@@ -44,13 +48,17 @@ Ask them for (the same person who sent the `.p12` will have these):
 
 ## 🔧 One-time signing setup (once the files arrive)
 
-**1. Install the certificate** (you'll be prompted for the `.p12` password):
+**1. Install the certificate** — ✅ **already done** (`Apple Distribution: Jisu Jung
+(GWBS3Q4W36)` is installed). To reinstall on another Mac, import the `.p12` with its
+password (from the team deck):
 ```bash
 security import ~/Downloads/p12-certificates.p12 \
   -k ~/Library/Keychains/login.keychain-db \
   -T /usr/bin/codesign -P '<P12_PASSWORD>'
-security find-identity -v -p codesigning   # confirm "Apple Distribution: Sunny InnoLab (TEAMID)"
+security find-identity -v -p codesigning   # confirm "Apple Distribution: Jisu Jung (GWBS3Q4W36)"
 ```
+> Non-interactive archiving may also need the key partition list set (requires the Mac's
+> login password): `security set-key-partition-list -S apple-tool:,apple: -s -k <login-pw> ~/Library/Keychains/login.keychain-db`
 
 **2. Install the provisioning profile** — double-click the `.mobileprovision`, or:
 ```bash
@@ -62,9 +70,9 @@ Note its **"Name"** (shown in Xcode) — needed below as the specifier.
 (do NOT change it in Xcode's UI — `xcodegen generate` overwrites that). Replace the signing
 block with:
 ```yaml
-        PRODUCT_BUNDLE_IDENTIFIER: <SUNNY_INNOLAB_APP_ID>   # must match the profile
+        PRODUCT_BUNDLE_IDENTIFIER: <APP_ID_FROM_PROFILE>   # must match the profile
         CODE_SIGN_STYLE: Manual
-        DEVELOPMENT_TEAM: <TEAMID>
+        DEVELOPMENT_TEAM: GWBS3Q4W36
         PROVISIONING_PROFILE_SPECIFIER: "<Profile Name>"
         CODE_SIGN_IDENTITY: "Apple Distribution"
 ```
