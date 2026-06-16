@@ -38,6 +38,8 @@ struct LMRecord: Identifiable {
     let brightness: String
     /// Color-temperature value with unit, e.g. `1,200K`.
     let temperature: String
+    /// The backing store record's id, used to delete on swipe. `nil` in previews.
+    var recordID: UUID? = nil
 }
 
 extension LMRecord {
@@ -314,20 +316,25 @@ struct LMRecordCard: View {
     }
 }
 
-/// A record card with a trailing swipe-to-delete affordance, matching the
-/// Figma "swiped" state (a red-tinted circular trash button revealed at the
-/// trailing edge).
-struct LMSwipableRecordCard: View {
+/// An interactive record row: drag the card left to reveal a red-tinted trash
+/// button, then tap it to delete. Matches the Figma "swiped" state.
+private struct LMSwipeRow: View {
     let record: LMRecord
-    /// When `true` the card is shown in its revealed (swiped) state.
-    var revealed: Bool = false
-    var onDelete: () -> Void = {}
+    let revealed: Bool
+    var onRevealChange: (Bool) -> Void
+    var onDelete: () -> Void
 
-    private let revealWidth: CGFloat = 72
+    @State private var dragOffset: CGFloat = 0
+    private let revealWidth: CGFloat = 76
+
+    private var offset: CGFloat {
+        let base = revealed ? -revealWidth : 0
+        return min(0, max(-revealWidth - 16, base + dragOffset))
+    }
 
     var body: some View {
         ZStack(alignment: .trailing) {
-            // Delete button sitting behind the card's trailing edge.
+            // Trash button revealed behind the card's trailing edge.
             Button(action: onDelete) {
                 Image(systemName: "trash")
                     .font(.system(size: 18, weight: .regular))
@@ -341,29 +348,57 @@ struct LMSwipableRecordCard: View {
                     }
             }
             .buttonStyle(.plain)
-            .padding(.trailing, 8)
+            .padding(.trailing, 12)
+            .opacity(offset < -8 ? 1 : 0)
 
             LMRecordCard(record: record)
-                .offset(x: revealed ? -revealWidth : 0)
+                .offset(x: offset)
+                .gesture(
+                    DragGesture(minimumDistance: 10)
+                        .onChanged { value in
+                            if abs(value.translation.width) > abs(value.translation.height) {
+                                dragOffset = value.translation.width
+                            }
+                        }
+                        .onEnded { value in
+                            let projected = (revealed ? -revealWidth : 0) + value.translation.width
+                            dragOffset = 0
+                            onRevealChange(projected < -revealWidth / 2)
+                        }
+                )
         }
         .animation(.snappy(duration: 0.25), value: revealed)
+        .animation(.interactiveSpring(response: 0.2), value: dragOffset)
     }
 }
 
 // MARK: - Records List
 
-/// Scrollable list of record cards (with one card shown in its swiped state to
-/// mirror the Figma render).
+/// Scrollable list of record cards with interactive swipe-to-delete.
 struct LMRecordsList: View {
     let records: [LMRecord]
-    /// Index of the card to show in its revealed (swiped) state, if any.
-    var revealedIndex: Int? = 1
+    /// Called with the record to delete when its trash button is tapped.
+    var onDelete: ((LMRecord) -> Void)? = nil
+
+    @State private var revealedID: UUID? = nil
 
     var body: some View {
         ScrollView {
             VStack(spacing: LM.gap + 4) {
-                ForEach(Array(records.enumerated()), id: \.element.id) { idx, record in
-                    LMSwipableRecordCard(record: record, revealed: idx == revealedIndex)
+                ForEach(records) { record in
+                    LMSwipeRow(
+                        record: record,
+                        revealed: revealedID == record.id,
+                        onRevealChange: { open in
+                            withAnimation(.snappy(duration: 0.25)) {
+                                revealedID = open ? record.id : nil
+                            }
+                        },
+                        onDelete: {
+                            withAnimation(.snappy(duration: 0.25)) { revealedID = nil }
+                            onDelete?(record)
+                        }
+                    )
                 }
             }
             .padding(.horizontal, LM.pad)

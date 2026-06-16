@@ -149,6 +149,9 @@ struct LMGlass: ViewModifier {
             .overlay {
                 shape.strokeBorder(LM.hairline, lineWidth: 1)
             }
+            // Soft float so glass reads over any camera scene and lifts off the
+            // records gradient, matching the Figma's elevated cards.
+            .shadow(color: .black.opacity(0.10), radius: 14, x: 0, y: 5)
     }
 }
 

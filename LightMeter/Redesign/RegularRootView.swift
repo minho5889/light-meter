@@ -48,7 +48,10 @@ struct RegularRootView: View {
         .sheet(isPresented: $showSettings) {
             RegularSettingsSheet(language: language)
         }
-        .onAppear { cameraViewModel.requestPermission() }
+        .onAppear {
+            cameraViewModel.requestPermission()
+            applyDebugLaunchOptions()
+        }
         .onChange(of: selection) { _, newTab in handleTabChange(to: newTab) }
         .onReceive(NotificationCenter.default.publisher(
             for: UIApplication.willEnterForegroundNotification)) { _ in
@@ -156,7 +159,7 @@ struct RegularRootView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                LMRecordsList(records: mappedRecords, revealedIndex: nil)
+                LMRecordsList(records: mappedRecords, onDelete: deleteRecord)
                     .padding(.top, 56)
             }
         }
@@ -281,9 +284,15 @@ struct RegularRootView: View {
                 dateLine: Self.dateFormatter.string(from: record.timestamp),
                 timeLine: Self.timeFormatter.string(from: record.timestamp),
                 brightness: "\(Int(record.lux)) Lux",
-                temperature: "\(formatNumber(record.kelvin))K"
+                temperature: "\(formatNumber(record.kelvin))K",
+                recordID: record.id
             )
         }
+    }
+
+    private func deleteRecord(_ record: LMRecord) {
+        guard let id = record.recordID else { return }
+        cameraViewModel.recordsStore.deleteRecord(id: id)
     }
 
     private func formatNumber(_ value: Double) -> String {
@@ -308,6 +317,27 @@ struct RegularRootView: View {
         f.timeStyle = .short
         return f
     }()
+
+    // MARK: - Debug launch hooks (screenshot / UI review aid; stripped in Release)
+
+    private func applyDebugLaunchOptions() {
+        #if DEBUG
+        let env = ProcessInfo.processInfo.environment
+        if env["LM_SEED"] != nil {
+            cameraViewModel.recordsStore.saveRecord(lux: 900, kelvin: 1200)
+            cameraViewModel.recordsStore.saveRecord(lux: 600, kelvin: 5600)
+            cameraViewModel.recordsStore.saveRecord(lux: 120, kelvin: 3800)
+        }
+        switch env["LM_TAB"] {
+        case "temperature": selection = .temperature
+        case "check":       selection = .check
+        case "records":     selection = .records
+        default:            break
+        }
+        if env["LM_CAPTURED"] != nil { isCaptured = true }
+        if env["LM_SETTINGS"] != nil { showSettings = true }
+        #endif
+    }
 }
 
 #Preview {
