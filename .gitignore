@@ -40,6 +40,9 @@ Pods/
 *.key
 AuthKey_*.p8
 
+# Local MCP / tooling config (machine-specific, may reference tokens)
+.mcp.json
+
 # Kiro
 .kiro/settings/
 
