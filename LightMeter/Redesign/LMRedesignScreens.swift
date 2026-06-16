@@ -157,6 +157,14 @@ struct LMGlassReadoutCard: View {
     var lux: String = "120"
     var unit: String = "LUX"
     var temperature: String = "3,800K"
+    /// Optional expanded "user guide" content. When `guideDescription` is set,
+    /// the card grows to show a divider, an optional title, the description and
+    /// an optional tip (the captured-state card in the Figma).
+    var guideTitle: String? = nil
+    var guideDescription: String? = nil
+    var guideTip: String? = nil
+
+    private var isExpanded: Bool { guideDescription != nil }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -171,11 +179,37 @@ struct LMGlassReadoutCard: View {
             Text(temperature)
                 .font(LM.font(LM.FontSize.h2, .medium))
                 .foregroundStyle(LM.textSecondary)
+
+            if isExpanded {
+                Divider()
+                    .overlay(LM.hairline)
+                    .padding(.top, 6)
+
+                if let guideTitle {
+                    Text(guideTitle.uppercased())
+                        .font(LM.font(LM.FontSize.caption, .semibold))
+                        .foregroundStyle(LM.textSecondary)
+                        .padding(.top, 4)
+                }
+                if let guideDescription {
+                    Text(guideDescription)
+                        .font(LM.font(LM.FontSize.body, .semibold))
+                        .foregroundStyle(LM.textPrimary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if let guideTip {
+                    Text(guideTip)
+                        .font(LM.font(LM.FontSize.caption))
+                        .foregroundStyle(LM.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
-        .frame(width: 220, alignment: .leading)
+        .frame(width: isExpanded ? 290 : 220, alignment: .leading)
         .lmGlass(tint: LM.glassTintSoft)
+        .animation(.snappy(duration: 0.25), value: isExpanded)
     }
 }
 

@@ -4,7 +4,7 @@ import SwiftUI
 struct LightMeterApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
