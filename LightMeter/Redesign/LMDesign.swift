@@ -88,12 +88,23 @@ enum LM {
 
     // MARK: Typography
 
-    /// SF Rounded as an Inter substitute. See file header for bundling Inter.
+    /// Inter (the typeface the Figma design uses), bundled in
+    /// `LightMeter/Redesign/Fonts/`. The static OTFs are registered via
+    /// `UIAppFonts` in Info.plist. PostScript names: `Inter-Regular`,
+    /// `Inter-Medium`, `Inter-SemiBold`, `Inter-Bold`. Falls back to the system
+    /// face if a weight is not registered (e.g. CJK glyphs use the system font).
     /// - Parameters:
     ///   - size: Point size.
     ///   - weight: Font weight (default `.regular`).
     static func font(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .rounded)
+        let name: String
+        switch weight {
+        case .bold, .heavy, .black:    name = "Inter-Bold"
+        case .semibold:                name = "Inter-SemiBold"
+        case .medium:                  name = "Inter-Medium"
+        default:                       name = "Inter-Regular"
+        }
+        return .custom(name, size: size)
     }
 
     /// Named type sizes (spec @3px / 3).

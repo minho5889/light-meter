@@ -35,6 +35,11 @@ targets:
         UISupportedInterfaceOrientations~ipad:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationPortraitUpsideDown
+        UIAppFonts:
+          - Inter-Regular.otf
+          - Inter-Medium.otf
+          - Inter-SemiBold.otf
+          - Inter-Bold.otf
 
   LightMeterTests:
     type: bundle.unit-test
