@@ -274,6 +274,7 @@ struct LMCaptureControls: View {
 /// A single record card on the Records screen.
 struct LMRecordCard: View {
     let record: LMRecord
+    var language: AppLanguage = .english
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -298,8 +299,8 @@ struct LMRecordCard: View {
 
             // Two-column metrics.
             HStack(spacing: 0) {
-                metric(title: "밝기", value: record.brightness)
-                metric(title: "색온도", value: record.temperature)
+                metric(title: LocalizedStrings.translate(key: "tab_brightness", language: language), value: record.brightness)
+                metric(title: LocalizedStrings.translate(key: "tab_temperature", language: language), value: record.temperature)
             }
         }
         .padding(LM.pad)
@@ -324,6 +325,7 @@ struct LMRecordCard: View {
 /// button, then tap it to delete. Matches the Figma "swiped" state.
 private struct LMSwipeRow: View {
     let record: LMRecord
+    var language: AppLanguage = .english
     let revealed: Bool
     var onRevealChange: (Bool) -> Void
     var onDelete: () -> Void
@@ -355,7 +357,7 @@ private struct LMSwipeRow: View {
             .padding(.trailing, 12)
             .opacity(offset < -8 ? 1 : 0)
 
-            LMRecordCard(record: record)
+            LMRecordCard(record: record, language: language)
                 .offset(x: offset)
                 .gesture(
                     DragGesture(minimumDistance: 10)
@@ -381,6 +383,7 @@ private struct LMSwipeRow: View {
 /// Scrollable list of record cards with interactive swipe-to-delete.
 struct LMRecordsList: View {
     let records: [LMRecord]
+    var language: AppLanguage = .english
     /// Called with the record to delete when its trash button is tapped.
     var onDelete: ((LMRecord) -> Void)? = nil
 
@@ -392,6 +395,7 @@ struct LMRecordsList: View {
                 ForEach(records) { record in
                     LMSwipeRow(
                         record: record,
+                        language: language,
                         revealed: revealedID == record.id,
                         onRevealChange: { open in
                             withAnimation(.snappy(duration: 0.25)) {

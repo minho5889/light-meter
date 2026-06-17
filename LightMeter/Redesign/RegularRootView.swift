@@ -165,16 +165,22 @@ struct RegularRootView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                LMRecordsList(records: mappedRecords, onDelete: deleteRecord)
+                LMRecordsList(records: mappedRecords, language: language, onDelete: deleteRecord)
                     .padding(.top, 56)
             }
         }
     }
 
     private var permissionDenied: some View {
-        VStack {
+        let message: String
+        switch language {
+        case .korean: message = "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요."
+        case .french: message = "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages."
+        case .english: message = "Camera access is required to measure light.\nPlease enable it in Settings."
+        }
+        return VStack {
             Spacer()
-            Text("Camera access is required to measure light.\nPlease enable it in Settings.")
+            Text(message)
                 .font(LM.font(LM.FontSize.body))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
