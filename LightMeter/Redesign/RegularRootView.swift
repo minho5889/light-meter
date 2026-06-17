@@ -24,6 +24,8 @@ struct RegularRootView: View {
     @State private var previousTabIndex = 0
     @State private var isCaptured = false
     @State private var frozenFrame: UIImage? = nil
+    @State private var capturedLux: Double = 0
+    @State private var capturedKelvin: Double = 0
     @State private var showSettings = false
 
     private var language: AppLanguage { cameraViewModel.appLanguage }
@@ -100,14 +102,18 @@ struct RegularRootView: View {
 
     private var brightnessContent: some View {
         let m = cameraViewModel.measurement
+        // Captured state freezes the readout at the snapshot values; live
+        // state tracks the camera.
+        let luxValue = isCaptured ? capturedLux : m.lux
+        let kelvinValue = isCaptured ? capturedKelvin : m.colorTemperature
         let interp = isCaptured
-            ? LuxInterpreter.interpret(lux: m.lux, language: language)
+            ? LuxInterpreter.interpret(lux: luxValue, language: language)
             : nil
         return HStack(alignment: .top) {
             LMGlassReadoutCard(
-                lux: "\(Int(m.lux))",
+                lux: "\(Int(luxValue))",
                 unit: "LUX",
-                temperature: "\(formatNumber(m.colorTemperature))K",
+                temperature: "\(formatNumber(kelvinValue))K",
                 guideTitle: interp != nil
                     ? LocalizedStrings.translate(key: "ui_user_guide", language: language)
                     : nil,
@@ -181,27 +187,6 @@ struct RegularRootView: View {
 
     private var topBar: some View {
         HStack(alignment: .top) {
-            if isCaptured {
-                Button {
-                    withAnimation(.snappy(duration: 0.25)) {
-                        isCaptured = false
-                        frozenFrame = nil
-                    }
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(LM.textPrimary)
-                        .frame(width: 44, height: 44)
-                        .background {
-                            Circle()
-                                .fill(LM.glass)
-                                .overlay { Circle().fill(LM.glassTintMed) }
-                                .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
-                        }
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Back to live")
-            }
             Spacer()
             if cameraViewModel.permissionGranted {
                 LMSettingsButton { showSettings = true }
@@ -223,6 +208,9 @@ struct RegularRootView: View {
                     onFlip: { cameraViewModel.toggleCamera() }
                 )
                 .padding(.bottom, 24)
+            } else if isCaptured {
+                backControl
+                    .padding(.bottom, 24)
             }
             if cameraViewModel.permissionGranted {
                 LMCapsuleTabBar(selection: $selection)
@@ -230,6 +218,33 @@ struct RegularRootView: View {
                     .padding(.bottom, LM.gap)
             }
         }
+    }
+
+    /// Bottom-center "Back" control shown in the captured state — a white circle
+    /// + label where the shutter button sits, matching the Figma.
+    private var backControl: some View {
+        Button {
+            withAnimation(.snappy(duration: 0.25)) {
+                isCaptured = false
+                frozenFrame = nil
+            }
+        } label: {
+            VStack(spacing: 6) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(LM.textPrimary)
+                    .frame(width: 64, height: 64)
+                    .background(Circle().fill(.white))
+                    .overlay(Circle().strokeBorder(LM.hairline, lineWidth: 1))
+                    .shadow(color: .black.opacity(0.18), radius: 8, y: 2)
+                Text(LocalizedStrings.translate(key: "ui_back", language: language))
+                    .font(LM.font(LM.FontSize.micro, .medium))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.35), radius: 3)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(LocalizedStrings.translate(key: "ui_back", language: language))
     }
 
     // MARK: - Actions
@@ -246,6 +261,8 @@ struct RegularRootView: View {
             let frame = await cameraViewModel.captureFrameAsync()
             await MainActor.run {
                 frozenFrame = frame
+                capturedLux = lux
+                capturedKelvin = kelvin
                 cameraViewModel.recordsStore.saveRecord(lux: lux, kelvin: kelvin)
                 withAnimation(.snappy(duration: 0.25)) { isCaptured = true }
             }

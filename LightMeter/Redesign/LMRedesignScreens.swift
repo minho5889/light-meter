@@ -209,7 +209,11 @@ struct LMGlassReadoutCard: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
-        .frame(width: isExpanded ? 290 : 220, alignment: .leading)
+        // Collapsed: a fixed, compact card. Expanded (captured): fills the
+        // content width like the Figma's wide guide card.
+        .frame(minWidth: isExpanded ? 0 : 220,
+               maxWidth: isExpanded ? .infinity : 220,
+               alignment: .leading)
         .lmGlass(tint: LM.glassTintSoft)
         .animation(.snappy(duration: 0.25), value: isExpanded)
     }
