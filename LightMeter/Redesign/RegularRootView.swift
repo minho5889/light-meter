@@ -29,6 +29,7 @@ struct RegularRootView: View {
     @State private var showSettings = false
     @State private var showCoach = false
     @State private var coachIntent: CoachIntent = .room
+    @State private var captureFlash = false
     @AppStorage("lm_tutorial_seen_v1") private var tutorialSeen = false
     @State private var showTutorial = false
     @State private var tutorialStartStep = 0
@@ -45,6 +46,13 @@ struct RegularRootView: View {
             contentLayer
             topBar
             bottomBar
+        }
+        .overlay {
+            // Quick camera "shutter" flash on capture.
+            Color.white
+                .opacity(captureFlash ? 0.85 : 0)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
         }
         .overlayPreferenceValue(TutorialAnchorKey.self) { prefs in
             GeometryReader { geo in
@@ -379,6 +387,12 @@ struct RegularRootView: View {
         generator.prepare()
         generator.impactOccurred()
         AudioServicesPlaySystemSound(1108)
+
+        // Shutter flash: snap to white, then fade out.
+        captureFlash = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+            withAnimation(.easeOut(duration: 0.35)) { captureFlash = false }
+        }
 
         let lux = cameraViewModel.measurement.lux
         let kelvin = cameraViewModel.measurement.colorTemperature
