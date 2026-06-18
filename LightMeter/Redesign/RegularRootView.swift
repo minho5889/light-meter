@@ -232,15 +232,7 @@ struct RegularRootView: View {
     private var recordsContent: some View {
         Group {
             if mappedRecords.isEmpty {
-                VStack(spacing: LM.gap) {
-                    Image(systemName: "tray")
-                        .font(.system(size: 34))
-                        .foregroundStyle(LM.textSecondary)
-                    Text(LocalizedStrings.translate(key: "ui_no_records", language: language))
-                        .font(LM.font(LM.FontSize.h2, .semibold))
-                        .foregroundStyle(LM.textSecondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                recordsEmptyState
             } else {
                 LMRecordsList(records: mappedRecords, language: language, onDelete: deleteRecord)
                     .padding(.top, 56)
@@ -248,22 +240,70 @@ struct RegularRootView: View {
         }
     }
 
+    /// Friendly, on-brand empty state for the Records / Light Diary tab.
+    private var recordsEmptyState: some View {
+        let subtitle: String
+        switch language {
+        case .korean:  subtitle = "측정을 캡처하면 라이트 다이어리가 시작돼요 ✨"
+        case .french:  subtitle = "Capture une mesure pour démarrer ton Light Diary ✨"
+        case .english: subtitle = "Capture a reading to start your Light Diary ✨"
+        }
+        return VStack(spacing: 10) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 34))
+                .foregroundStyle(LM.accent)
+            Text(LocalizedStrings.translate(key: "ui_no_records", language: language))
+                .font(LM.font(LM.FontSize.h2, .bold))
+                .foregroundStyle(LM.textPrimary)
+            Text(subtitle)
+                .font(LM.font(LM.FontSize.caption, .medium))
+                .foregroundStyle(LM.textSecondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal, 32)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
     private var permissionDenied: some View {
         let message: String
+        let buttonLabel: String
         switch language {
-        case .korean: message = "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요."
-        case .french: message = "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages."
-        case .english: message = "Camera access is required to measure light.\nPlease enable it in Settings."
+        case .korean:
+            message = "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요."
+            buttonLabel = "설정 열기"
+        case .french:
+            message = "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages."
+            buttonLabel = "Ouvrir Réglages"
+        case .english:
+            message = "Camera access is required to measure light.\nPlease enable it in Settings."
+            buttonLabel = "Open Settings"
         }
-        return VStack {
+        return VStack(spacing: 20) {
             Spacer()
+            Image(systemName: "camera.fill")
+                .font(.system(size: 44, weight: .regular))
+                .foregroundStyle(.white.opacity(0.8))
             Text(message)
                 .font(LM.font(LM.FontSize.body))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-                .padding()
+            Button {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                Text(buttonLabel)
+                    .font(LM.font(LM.FontSize.body, .semibold))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(Capsule().fill(LM.accent))
+            }
+            .buttonStyle(.plain)
             Spacer()
         }
+        .padding(LM.pad)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Top bar (settings + back)

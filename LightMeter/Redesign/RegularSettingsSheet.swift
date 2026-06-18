@@ -67,6 +67,12 @@ struct RegularSettingsSheet: View {
                         ko: "Bedrock/Claude 프록시 URL을 붙여넣으면 실제 모델을 사용해요. 비워두면 내장 오프라인 코치가 동작합니다.",
                         fr: "Colle l'URL de ton proxy Bedrock/Claude pour le modèle en direct. Vide = coach hors-ligne intégré."))
                 }
+
+                Section {} footer: {
+                    Text(appVersion)
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
+                }
             }
             .navigationTitle(localized(en: "Settings", ko: "설정", fr: "Réglages"))
             .navigationBarTitleDisplayMode(.inline)
@@ -77,6 +83,12 @@ struct RegularSettingsSheet: View {
             }
         }
         .presentationDetents([.medium, .large])
+    }
+
+    private var appVersion: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
+        return "Sunny Light Meter \(version) (\(build))"
     }
 
     private func localized(en: String, ko: String, fr: String) -> String {
