@@ -208,7 +208,7 @@ struct LMAmbienceView: View {
                         .fill(LinearGradient(colors: scene.swatch, startPoint: .topLeading, endPoint: .bottomTrailing))
                         .frame(width: 40, height: 40)
                     Image(systemName: scene.icon)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: LM.FontSize.h2, weight: .semibold))
                         .foregroundStyle(.white)
                         .shadow(color: .black.opacity(0.25), radius: 2)
                 }

@@ -306,7 +306,7 @@ struct LMCoachSheet: View {
                     Spacer()
                     Button { dismiss() } label: {
                         Image(systemName: "xmark")
-                            .font(.system(size: 14, weight: .bold))
+                            .font(.system(size: LM.FontSize.body, weight: .bold))
                             .foregroundStyle(LM.textSecondary)
                             .padding(8)
                             .background(Circle().fill(LM.glassTintStrong))

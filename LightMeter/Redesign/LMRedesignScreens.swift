@@ -126,7 +126,7 @@ private struct LMTabItem: View {
         Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: tab.symbol)
-                    .font(.system(size: 18, weight: .regular))
+                    .font(.system(size: LM.FontSize.h1, weight: .regular))
                 Text(tab.title(language))
                     .font(LM.font(LM.FontSize.micro, .medium))
                     .lineLimit(1)
@@ -182,7 +182,7 @@ struct LMSettingsButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: "gearshape")
-                .font(.system(size: 18, weight: .regular))
+                .font(.system(size: LM.FontSize.h1, weight: .regular))
                 .foregroundStyle(LM.textPrimary)
                 .frame(width: 44, height: 44)
                 .background {
@@ -302,7 +302,7 @@ struct LMCaptureControls: View {
                 Spacer()
                 Button(action: onFlip) {
                     Image(systemName: "camera.rotate")
-                        .font(.system(size: 18, weight: .regular))
+                        .font(.system(size: LM.FontSize.h1, weight: .regular))
                         .foregroundStyle(LM.textPrimary)
                         .frame(width: 48, height: 48)
                         .background {
@@ -355,7 +355,7 @@ struct LMRecordCard: View {
                 if expanded && hasPhoto {
                     Button(action: onFullscreen) {
                         Image(systemName: "arrow.up.left.and.arrow.down.right")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: LM.FontSize.h2, weight: .semibold))
                             .foregroundStyle(.white)
                             .padding(14)
                             .background(Circle().fill(.black.opacity(0.4)))
@@ -459,7 +459,7 @@ private struct LMSwipeRow: View {
             // Trash button revealed behind the card's trailing edge.
             Button(action: onDelete) {
                 Image(systemName: "trash")
-                    .font(.system(size: 18, weight: .regular))
+                    .font(.system(size: LM.FontSize.h1, weight: .regular))
                     .foregroundStyle(LM.textPrimary)
                     .frame(width: 52, height: 52)
                     .background {
