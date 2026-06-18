@@ -176,6 +176,7 @@ struct LMCapsuleTabBar: View {
 
 /// Circular frosted "settings" button (top-right of each screen).
 struct LMSettingsButton: View {
+    var language: AppLanguage = .english
     var action: () -> Void = {}
 
     var body: some View {
@@ -192,6 +193,7 @@ struct LMSettingsButton: View {
                 }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(LocalizedStrings.translate(key: "ax_settings", language: language))
     }
 }
 
@@ -268,6 +270,7 @@ struct LMGlassReadoutCard: View {
 /// Bottom capture controls on the main screen: a large white shutter button
 /// with a secondary glass "flip camera" button to its right.
 struct LMCaptureControls: View {
+    var language: AppLanguage = .english
     var onCapture: () -> Void = {}
     var onFlip: () -> Void = {}
 
@@ -290,6 +293,7 @@ struct LMCaptureControls: View {
             }
             .buttonStyle(.plain)
             .tutorialAnchor(.capture)
+            .accessibilityLabel(LocalizedStrings.translate(key: "ax_capture", language: language))
 
             // Flip-camera button, offset to the trailing side.
             HStack {
@@ -307,6 +311,7 @@ struct LMCaptureControls: View {
                         }
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(LocalizedStrings.translate(key: "ax_flip_camera", language: language))
             }
             .padding(.trailing, 36)
         }
@@ -356,6 +361,7 @@ struct LMRecordCard: View {
                     }
                     .buttonStyle(.plain)
                     .transition(.opacity)
+                    .accessibilityLabel(LocalizedStrings.translate(key: "ax_view_fullscreen", language: language))
                 }
             }
             .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 4)
@@ -463,6 +469,7 @@ private struct LMSwipeRow: View {
             .buttonStyle(.plain)
             .padding(.trailing, 12)
             .opacity(offset < -8 ? 1 : 0)
+            .accessibilityLabel(LocalizedStrings.translate(key: "ax_delete", language: language))
 
             LMRecordCard(record: record, language: language, expanded: expanded, onFullscreen: onFullscreen)
                 .offset(x: offset)
@@ -588,6 +595,7 @@ struct LMSnapshotViewer: View {
                             .background(Circle().fill(.black.opacity(0.5)))
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(LocalizedStrings.translate(key: "ax_close", language: language))
                 }
                 Spacer()
                 VStack(spacing: 14) {

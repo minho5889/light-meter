@@ -320,7 +320,7 @@ struct RegularRootView: View {
         HStack(alignment: .top) {
             Spacer()
             if cameraViewModel.permissionGranted {
-                LMSettingsButton { showSettings = true }
+                LMSettingsButton(language: language) { showSettings = true }
                     .tutorialAnchor(.settings)
             }
         }
@@ -336,6 +336,7 @@ struct RegularRootView: View {
             Spacer()
             if canCapture {
                 LMCaptureControls(
+                    language: language,
                     onCapture: capture,
                     onFlip: { cameraViewModel.toggleCamera() }
                 )

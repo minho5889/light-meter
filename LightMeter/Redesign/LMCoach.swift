@@ -294,6 +294,7 @@ struct LMCoachSheet: View {
                             .background(Circle().fill(LM.glassTintStrong))
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(LocalizedStrings.translate(key: "ax_close", language: language))
                 }
 
                 Picker("", selection: $intent) {

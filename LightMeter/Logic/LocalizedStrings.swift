@@ -10,6 +10,14 @@ public struct LocalizedStrings {
         "tab_check": [.english: "Check", .korean: "플리커", .french: "Sécurité"],
         "tab_ambience": [.english: "Ambience", .korean: "분위기", .french: "Ambiance"],
         "tab_records": [.english: "Records", .korean: "기록", .french: "Historique"],
+
+        // Accessibility (VoiceOver) labels for icon-only controls
+        "ax_settings": [.english: "Settings", .korean: "설정", .french: "Réglages"],
+        "ax_capture": [.english: "Capture", .korean: "캡처", .french: "Capturer"],
+        "ax_flip_camera": [.english: "Flip camera", .korean: "카메라 전환", .french: "Changer de caméra"],
+        "ax_view_fullscreen": [.english: "View full screen", .korean: "전체 화면 보기", .french: "Plein écran"],
+        "ax_delete": [.english: "Delete record", .korean: "기록 삭제", .french: "Supprimer"],
+        "ax_close": [.english: "Close", .korean: "닫기", .french: "Fermer"],
         
         // Static UI Titles & Details
         "ui_user_guide": [.english: "User Guide", .korean: "사용자 가이드", .french: "Guide de l'utilisateur"],
