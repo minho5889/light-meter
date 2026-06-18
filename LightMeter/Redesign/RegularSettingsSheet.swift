@@ -11,6 +11,7 @@ import SwiftUI
 
 struct RegularSettingsSheet: View {
     @AppStorage(AppModeStorage.key) private var modeRaw: String = AppMode.regular.rawValue
+    @AppStorage("lm_coach_endpoint") private var coachEndpoint: String = ""
     @Environment(\.dismiss) private var dismiss
 
     var language: AppLanguage = .systemLanguage
@@ -52,6 +53,20 @@ struct RegularSettingsSheet: View {
                         .foregroundStyle(LM.accent)
                     }
                 }
+
+                Section {
+                    TextField("https://…", text: $coachEndpoint)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .keyboardType(.URL)
+                } header: {
+                    Text(localized(en: "AI Coach endpoint", ko: "AI 코치 엔드포인트", fr: "Point de terminaison IA"))
+                } footer: {
+                    Text(localized(
+                        en: "Paste your Bedrock/Claude proxy URL to use the live model. Leave empty for the built-in offline coach.",
+                        ko: "Bedrock/Claude 프록시 URL을 붙여넣으면 실제 모델을 사용해요. 비워두면 내장 오프라인 코치가 동작합니다.",
+                        fr: "Colle l'URL de ton proxy Bedrock/Claude pour le modèle en direct. Vide = coach hors-ligne intégré."))
+                }
             }
             .navigationTitle(localized(en: "Settings", ko: "설정", fr: "Réglages"))
             .navigationBarTitleDisplayMode(.inline)
@@ -61,7 +76,7 @@ struct RegularSettingsSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
 
     private func localized(en: String, ko: String, fr: String) -> String {

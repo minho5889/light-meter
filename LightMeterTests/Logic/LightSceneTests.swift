@@ -6,10 +6,18 @@ struct LightSceneTests {
     // MARK: - Known values
 
     @Test func closestAtMidpointIsSelf() {
-        // Each scene's own midpoint should map back to that scene.
-        for scene in LightScene.all {
-            let match = LightScene.closest(lux: scene.luxMid, kelvin: scene.kelvinMid)
-            #expect(match.id == scene.id)
+        // Each scene's own midpoint should map back to that scene, in both catalogs.
+        for catalog in [LightScene.all, LightScene.aesthetics] {
+            for scene in catalog {
+                let match = LightScene.closest(in: catalog, lux: scene.luxMid, kelvin: scene.kelvinMid)
+                #expect(match.id == scene.id)
+            }
+        }
+    }
+
+    @Test func catalogsHaveUniqueIDs() {
+        for catalog in [LightScene.all, LightScene.aesthetics] {
+            #expect(Set(catalog.map(\.id)).count == catalog.count)
         }
     }
 

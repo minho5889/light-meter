@@ -79,13 +79,43 @@ struct LightScene: Identifiable {
                    nameEN: "Wind-down", nameKO: "취침 준비", nameFR: "Coucher"),
     ]
 
+    /// Gen-Z aesthetic "looks" — same engine, trend-named targets. Names stay in
+    /// English (global aesthetic vocabulary), like the vibe names.
+    static let aesthetics: [LightScene] = [
+        LightScene(id: "goldenhour", icon: "sun.horizon.fill", lux: 200...500, kelvin: 2500...3200,
+                   swatch: [Color(hex: 0xFFB26B), Color(hex: 0xFF7E3D)],
+                   nameEN: "Golden Hour", nameKO: "Golden Hour", nameFR: "Golden Hour"),
+        LightScene(id: "cleangirl", icon: "sparkles", lux: 400...800, kelvin: 4500...5500,
+                   swatch: [Color(hex: 0xEAF2FF), Color(hex: 0xC9D8EE)],
+                   nameEN: "Clean Girl", nameKO: "Clean Girl", nameFR: "Clean Girl"),
+        LightScene(id: "cottagecore", icon: "leaf.fill", lux: 60...180, kelvin: 2400...3000,
+                   swatch: [Color(hex: 0xE8C98A), Color(hex: 0xB98E5A)],
+                   nameEN: "Cottagecore", nameKO: "Cottagecore", nameFR: "Cottagecore"),
+        LightScene(id: "darkacademia", icon: "books.vertical.fill", lux: 30...100, kelvin: 2300...2900,
+                   swatch: [Color(hex: 0xA6743E), Color(hex: 0x5A3B22)],
+                   nameEN: "Dark Academia", nameKO: "Dark Academia", nameFR: "Dark Academia"),
+        LightScene(id: "y2k", icon: "sparkle", lux: 150...500, kelvin: 5000...6500,
+                   swatch: [Color(hex: 0xB57BFF), Color(hex: 0xFF6AD5)],
+                   nameEN: "Y2K Neon", nameKO: "Y2K Neon", nameFR: "Y2K Neon"),
+        LightScene(id: "softgirl", icon: "heart.fill", lux: 250...600, kelvin: 3200...4200,
+                   swatch: [Color(hex: 0xFFD6E0), Color(hex: 0xFFB39C)],
+                   nameEN: "Soft Girl", nameKO: "Soft Girl", nameFR: "Soft Girl"),
+    ]
+
+    static func closest(in scenes: [LightScene], lux: Double, kelvin: Double) -> LightScene {
+        scenes.min { $0.distance(lux: lux, kelvin: kelvin) < $1.distance(lux: lux, kelvin: kelvin) } ?? scenes[0]
+    }
+
     static func closest(lux: Double, kelvin: Double) -> LightScene {
-        all.min { $0.distance(lux: lux, kelvin: kelvin) < $1.distance(lux: lux, kelvin: kelvin) } ?? all[0]
+        closest(in: all, lux: lux, kelvin: kelvin)
     }
 }
 
 /// Direction a reading should move to reach a scene's target range.
 enum SceneAdjust: Equatable { case ok, increase, decrease }
+
+/// Which catalog the Ambience tab is showing.
+enum AmbienceSet: String, CaseIterable { case moods, aesthetics }
 
 // MARK: - Ambience screen
 
@@ -95,10 +125,12 @@ struct LMAmbienceView: View {
     var language: AppLanguage = .english
 
     @State private var selectedID: String?
+    @State private var sceneSet: AmbienceSet = .moods
 
     private var hasReading: Bool { lux > 0.5 }
+    private var scenes: [LightScene] { sceneSet == .moods ? LightScene.all : LightScene.aesthetics }
     private var selected: LightScene {
-        LightScene.all.first { $0.id == selectedID } ?? LightScene.closest(lux: lux, kelvin: kelvin)
+        scenes.first { $0.id == selectedID } ?? LightScene.closest(in: scenes, lux: lux, kelvin: kelvin)
     }
 
     private let columns = [GridItem(.flexible(), spacing: LM.gap),
@@ -108,8 +140,13 @@ struct LMAmbienceView: View {
         ScrollView {
             VStack(spacing: LM.gap + 2) {
                 header
+                Picker("", selection: $sceneSet) {
+                    Text(t("Moods", "무드", "Ambiances")).tag(AmbienceSet.moods)
+                    Text(t("Aesthetics", "감성", "Esthétiques")).tag(AmbienceSet.aesthetics)
+                }
+                .pickerStyle(.segmented)
                 LazyVGrid(columns: columns, spacing: LM.gap) {
-                    ForEach(LightScene.all) { scene in
+                    ForEach(scenes) { scene in
                         sceneTile(scene)
                     }
                 }
@@ -118,6 +155,13 @@ struct LMAmbienceView: View {
             .padding(.horizontal, LM.pad)
             .padding(.top, 64)
             .padding(.bottom, 140)
+            .animation(.snappy(duration: 0.25), value: sceneSet)
+        }
+        .onChange(of: sceneSet) { _, _ in selectedID = nil }
+        .onAppear {
+            #if DEBUG
+            if ProcessInfo.processInfo.environment["LM_AMBSET"] == "aesthetics" { sceneSet = .aesthetics }
+            #endif
         }
     }
 
@@ -132,7 +176,7 @@ struct LMAmbienceView: View {
                 Text(t("Now: \(Int(lux)) lx · \(Int(kelvin))K · \(warmthLabel(kelvin)). Closest to ",
                         "현재: \(Int(lux)) lx · \(Int(kelvin))K · \(warmthLabel(kelvin)). 가장 가까운 분위기는 ",
                         "Actuel : \(Int(lux)) lx · \(Int(kelvin))K · \(warmthLabel(kelvin)). Plus proche de ")
-                     + LightScene.closest(lux: lux, kelvin: kelvin).name(language) + ".")
+                     + LightScene.closest(in: scenes, lux: lux, kelvin: kelvin).name(language) + ".")
                     .font(LM.font(LM.FontSize.caption, .medium))
                     .foregroundStyle(LM.textSecondary)
             } else {
