@@ -150,13 +150,32 @@ struct RegularRootView: View {
                     guideTip: interp?.tip
                 )
                 .tutorialAnchor(.readout)
-                if isCaptured { coachButton }
+                if isCaptured {
+                    vibePill
+                    coachButton
+                }
             }
             Spacer(minLength: 0)
         }
         .padding(.horizontal, LM.pad)
         .padding(.top, 64)
         .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    /// The captured reading's vibe, surfaced right in the capture moment (a
+    /// frosted pill so it reads over the frozen frame) — ties the Gen-Z vibe
+    /// into the core loop, matching the Records / Coach / Diary surfaces.
+    private var vibePill: some View {
+        let v = LightVibe.of(lux: capturedLux, kelvin: capturedKelvin)
+        return HStack(spacing: 6) {
+            Text(v.emoji).font(.system(size: 15))
+            Text(v.name)
+                .font(.custom("CaveatBrush-Regular", size: 22))
+                .foregroundStyle(LM.accent)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .lmGlass(cornerRadius: LM.pillRadius)
     }
 
     /// Opens the AI Lighting Coach for the just-captured snapshot + readings.
@@ -167,7 +186,7 @@ struct RegularRootView: View {
         case .french:  label = "Coach lumière IA"
         case .english: label = "AI Lighting Coach"
         }
-        return Button { showCoach = true } label: {
+        return Button { LMHaptics.soft(); showCoach = true } label: {
             HStack(spacing: 8) {
                 Image(systemName: "sparkles")
                 Text(label)
@@ -475,7 +494,11 @@ struct RegularRootView: View {
         case "records":     selection = .records
         default:            break
         }
-        if env["LM_CAPTURED"] != nil { isCaptured = true }
+        if env["LM_CAPTURED"] != nil {
+            isCaptured = true
+            capturedLux = Double(env["LM_LUX"] ?? "") ?? capturedLux
+            capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? capturedKelvin
+        }
         if env["LM_SETTINGS"] != nil { showSettings = true }
         if let s = env["LM_TUTSTEP"], let n = Int(s) {
             tutorialStartStep = n

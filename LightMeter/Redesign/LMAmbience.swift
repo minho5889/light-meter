@@ -157,7 +157,7 @@ struct LMAmbienceView: View {
             .padding(.bottom, 140)
             .animation(.snappy(duration: 0.25), value: sceneSet)
         }
-        .onChange(of: sceneSet) { _, _ in selectedID = nil }
+        .onChange(of: sceneSet) { _, _ in LMHaptics.tap(); selectedID = nil }
         .onAppear {
             #if DEBUG
             if ProcessInfo.processInfo.environment["LM_AMBSET"] == "aesthetics" { sceneSet = .aesthetics }
@@ -169,7 +169,9 @@ struct LMAmbienceView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(t("Set the mood", "분위기 설정", "Crée l'ambiance"))
+            Text(sceneSet == .moods
+                 ? t("Set the mood", "분위기 설정", "Crée l'ambiance")
+                 : t("Pick your aesthetic", "감성 고르기", "Choisis ton esthétique"))
                 .font(LM.font(LM.FontSize.h1, .bold))
                 .foregroundStyle(LM.textPrimary)
             if hasReading {
@@ -197,6 +199,7 @@ struct LMAmbienceView: View {
     private func sceneTile(_ scene: LightScene) -> some View {
         let isSelected = scene.id == selected.id && hasReading
         return Button {
+            LMHaptics.tap()
             withAnimation(.snappy(duration: 0.2)) { selectedID = scene.id }
         } label: {
             HStack(spacing: 12) {

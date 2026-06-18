@@ -43,6 +43,7 @@
 		709FC4E02683A202277F1A67 /* LightVibeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867AA31536134DB737578A34 /* LightVibeTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
 		743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5ED9664D0D38546DC14383 /* LMDesign.swift */; };
+		76B55ABFA961ECF69E6BBB6D /* LMHaptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E3B8AE1C3CF2A40E74146 /* LMHaptics.swift */; };
 		7708CED8D4A5D81141993481 /* MeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0225A0690A5D5C9027835EB2 /* MeasurementModel.swift */; };
 		77D76C7BC802A14BC11BED7A /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAB4538FA9C995543411E8 /* AppLanguage.swift */; };
 		7E76B6F795E249E5A140198A /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0F44D6F9686E67479A6D05 /* RecordsView.swift */; };
@@ -171,6 +172,7 @@
 		CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMRedesignScreens.swift; sourceTree = "<group>"; };
 		CDEAB4538FA9C995543411E8 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
 		D34A8C75239DE29BDA2548C3 /* LMCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMCoach.swift; sourceTree = "<group>"; };
+		D38E3B8AE1C3CF2A40E74146 /* LMHaptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMHaptics.swift; sourceTree = "<group>"; };
 		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
 		D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConstants.swift; sourceTree = "<group>"; };
 		D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				5AED70E53F1B6EE06D9D85A7 /* LMAmbience.swift */,
 				D34A8C75239DE29BDA2548C3 /* LMCoach.swift */,
 				FB5ED9664D0D38546DC14383 /* LMDesign.swift */,
+				D38E3B8AE1C3CF2A40E74146 /* LMHaptics.swift */,
 				1E01DD573742FE93E365CD36 /* LMImage.swift */,
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
 				440FF8453EAF88226011E845 /* RegularRootView.swift */,
@@ -554,6 +557,7 @@
 				60B55395E28B0C99001C5F58 /* LMAmbience.swift in Sources */,
 				B54BF0A640B211EBBBE2FF32 /* LMCoach.swift in Sources */,
 				743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */,
+				76B55ABFA961ECF69E6BBB6D /* LMHaptics.swift in Sources */,
 				8C9AE8987F7AAEA4158C78D5 /* LMImage.swift in Sources */,
 				3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,

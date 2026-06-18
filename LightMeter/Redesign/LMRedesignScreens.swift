@@ -506,6 +506,7 @@ struct LMRecordsList: View {
                         onTap: {
                             // Only records with a snapshot expand.
                             guard record.photoData != nil else { return }
+                            LMHaptics.tap()
                             withAnimation(.snappy(duration: 0.3)) {
                                 expandedID = (expandedID == record.id) ? nil : record.id
                             }
