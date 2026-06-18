@@ -328,7 +328,9 @@ struct TutorialOverlay: View {
         if text.unicodeScalars.contains(where: { isHangul($0) }) {
             return .custom("NanumPen-Regular", size: LM.FontSize.h1 + 16)
         }
-        return .custom("Caveat", size: LM.FontSize.h1 + 14).weight(.bold)
+        // Caveat Brush: a marker/brush hand face — heavier strokes than plain
+        // Caveat, so glyphs like "?" read as full, complete marks (not thin curls).
+        return .custom("CaveatBrush-Regular", size: LM.FontSize.h1 + 12)
     }
 
     /// Description / controls font — SF Rounded, to pair with the marker heading
@@ -348,17 +350,9 @@ struct TutorialOverlay: View {
         }
     }
 
-    /// The heading as one Text: the word in the handwritten face, but a trailing
-    /// "?" / "!" in the clean rounded face. Caveat and Nanum Pen draw those marks
-    /// as thin slanted curls that read as half-formed / chopped; the rounded mark
-    /// is unmistakably complete and ties to the rounded body text.
+    /// The heading in the handwritten face (whole word + punctuation in one face).
     private func headingText(_ title: String) -> Text {
-        let hand = handwrittenFont(for: title)
-        guard let last = title.last, last == "?" || last == "!" else {
-            return Text(title).font(hand)
-        }
-        let punct = Font.system(size: LM.FontSize.h1 + 9, weight: .heavy, design: .rounded)
-        return Text(String(title.dropLast())).font(hand) + Text(String(last)).font(punct)
+        Text(title).font(handwrittenFont(for: title))
     }
 
     private func floatingNote(step: TutorialStep, screen: CGSize, target: CGRect) -> some View {

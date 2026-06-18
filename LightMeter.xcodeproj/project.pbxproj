@@ -12,13 +12,13 @@
 		07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141E153718B1A66906CF6AA8 /* LuxCalculator.swift */; };
 		08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */; };
 		09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */; };
+		0A65B714C46E45F8BC0CED3E /* CaveatBrush-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */; };
 		10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */; };
 		1242467572831488428302D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */; };
 		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
 		180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */; };
 		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
 		215E4128299483333603D01E /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F8A654477FB9A001991C20 /* LocalizationTests.swift */; };
-		2300A19303BF000C9B1130AE /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2837AE5F83D7C3F87C7DF8EE /* Caveat-Bold.ttf */; };
 		248655F8D6DD9BF0FF04E9D6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF58B2B18E5B2200318F7B63 /* RootView.swift */; };
 		3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */; };
 		3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */; };
@@ -104,8 +104,8 @@
 		1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMActivityGrid.swift; sourceTree = "<group>"; };
 		2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureValueCalculator.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
+		22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CaveatBrush-Regular.ttf"; sourceTree = "<group>"; };
 		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
-		2837AE5F83D7C3F87C7DF8EE /* Caveat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caveat-Bold.ttf"; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		3046556155B9CF0608A10FB7 /* RecordsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsStore.swift; sourceTree = "<group>"; };
@@ -339,7 +339,7 @@
 		BB1700B0E28EB28A3707600D /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				2837AE5F83D7C3F87C7DF8EE /* Caveat-Bold.ttf */,
+				22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */,
 				D95BE6F33722B640FD540AF9 /* Inter-Bold.otf */,
 				85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */,
 				57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */,
@@ -457,7 +457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				897BCAEA38B78FD20B98973C /* Assets.xcassets in Resources */,
-				2300A19303BF000C9B1130AE /* Caveat-Bold.ttf in Resources */,
+				0A65B714C46E45F8BC0CED3E /* CaveatBrush-Regular.ttf in Resources */,
 				C221CB31AC2590AB7633C296 /* Inter-Bold.otf in Resources */,
 				95DBE1A2A311E0E4000FD23A /* Inter-Medium.otf in Resources */,
 				89E501FC530641ED3303EFDC /* Inter-Regular.otf in Resources */,
