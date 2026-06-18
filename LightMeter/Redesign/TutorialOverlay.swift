@@ -348,6 +348,19 @@ struct TutorialOverlay: View {
         }
     }
 
+    /// The heading as one Text: the word in the handwritten face, but a trailing
+    /// "?" / "!" in the clean rounded face. Caveat and Nanum Pen draw those marks
+    /// as thin slanted curls that read as half-formed / chopped; the rounded mark
+    /// is unmistakably complete and ties to the rounded body text.
+    private func headingText(_ title: String) -> Text {
+        let hand = handwrittenFont(for: title)
+        guard let last = title.last, last == "?" || last == "!" else {
+            return Text(title).font(hand)
+        }
+        let punct = Font.system(size: LM.FontSize.h1 + 9, weight: .heavy, design: .rounded)
+        return Text(String(title.dropLast())).font(hand) + Text(String(last)).font(punct)
+    }
+
     private func floatingNote(step: TutorialStep, screen: CGSize, target: CGRect) -> some View {
         let layout = noteLayout(target: target, screen: screen)
         return noteBlock(step)
@@ -362,8 +375,7 @@ struct TutorialOverlay: View {
 
     private func noteBlock(_ step: TutorialStep) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(step.title)
-                .font(handwrittenFont(for: step.title))
+            headingText(step.title)
                 .foregroundStyle(LM.accent)
                 .shadow(color: .black.opacity(0.45), radius: 3, y: 1)
                 // Script faces (Caveat / Nanum Pen) overhang their measured
