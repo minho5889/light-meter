@@ -337,7 +337,7 @@ struct RegularRootView: View {
                     .padding(.bottom, 24)
             }
             if cameraViewModel.permissionGranted {
-                LMCapsuleTabBar(selection: $selection)
+                LMCapsuleTabBar(selection: $selection, language: language)
                     .tutorialAnchor(.tabs)
                     .padding(.horizontal, LM.pad)
                     .padding(.bottom, LM.gap)

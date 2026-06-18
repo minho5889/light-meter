@@ -101,12 +101,25 @@ enum LMTab: String, CaseIterable, Identifiable {
         case .records:     return "record.circle"
         }
     }
+
+    /// Localized label (matches the rest of the app, which is fully localized).
+    func title(_ language: AppLanguage) -> String {
+        let key: String
+        switch self {
+        case .brightness:  key = "tab_brightness"
+        case .temperature: key = "tab_temperature"
+        case .ambience:    key = "tab_ambience"
+        case .records:     key = "tab_records"
+        }
+        return LocalizedStrings.translate(key: key, language: language)
+    }
 }
 
 /// A single tappable item inside `LMCapsuleTabBar`.
 private struct LMTabItem: View {
     let tab: LMTab
     let isSelected: Bool
+    var language: AppLanguage = .english
     let action: () -> Void
 
     var body: some View {
@@ -114,8 +127,10 @@ private struct LMTabItem: View {
             VStack(spacing: 4) {
                 Image(systemName: tab.symbol)
                     .font(.system(size: 18, weight: .regular))
-                Text(tab.rawValue)
+                Text(tab.title(language))
                     .font(LM.font(LM.FontSize.micro, .medium))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             .foregroundStyle(isSelected ? LM.textPrimary : LM.textSecondary)
             .frame(maxWidth: .infinity)
@@ -141,11 +156,13 @@ private struct LMTabItem: View {
 /// selected item.
 struct LMCapsuleTabBar: View {
     @Binding var selection: LMTab
+    var language: AppLanguage = .english
 
     var body: some View {
         HStack(spacing: 4) {
             ForEach(LMTab.allCases) { tab in
-                LMTabItem(tab: tab, isSelected: tab == selection) {
+                LMTabItem(tab: tab, isSelected: tab == selection, language: language) {
+                    LMHaptics.tap()
                     withAnimation(.snappy(duration: 0.22)) { selection = tab }
                 }
             }

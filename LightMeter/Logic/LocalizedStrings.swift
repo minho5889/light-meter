@@ -8,6 +8,7 @@ public struct LocalizedStrings {
         "tab_brightness": [.english: "Brightness", .korean: "밝기", .french: "Luminosité"],
         "tab_temperature": [.english: "Temperature", .korean: "색온도", .french: "Température"],
         "tab_check": [.english: "Check", .korean: "플리커", .french: "Sécurité"],
+        "tab_ambience": [.english: "Ambience", .korean: "분위기", .french: "Ambiance"],
         "tab_records": [.english: "Records", .korean: "기록", .french: "Historique"],
         
         // Static UI Titles & Details
