@@ -201,6 +201,7 @@ struct TutorialOverlay: View {
     let anchors: [TutorialTarget: CGRect]
     @Binding var isActive: Bool
     var startIndex: Int = 0
+    var language: AppLanguage = .english
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -389,6 +390,9 @@ struct TutorialOverlay: View {
 
             // Reserve the full body's height (invisible sizer) so the note size
             // — and therefore the arrow tail — stays put while the text types in.
+            // The sizer carries the full body for VoiceOver; the animated
+            // typewriter overlay is hidden from accessibility so the partial
+            // text isn't announced (and the body isn't read twice).
             Text(step.body)
                 .font(noteBodyFont)
                 .opacity(0)
@@ -399,6 +403,7 @@ struct TutorialOverlay: View {
                         .foregroundStyle(.white.opacity(0.92))
                         .shadow(color: .black.opacity(0.55), radius: 3)
                         .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityHidden(true)
                 }
 
             HStack(spacing: 14) {
@@ -409,15 +414,22 @@ struct TutorialOverlay: View {
                             .frame(width: i == index ? 16 : 6, height: 6)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(language.tr(
+                    "Step \(index + 1) of \(steps.count)",
+                    "\(steps.count)단계 중 \(index + 1)단계",
+                    "Étape \(index + 1) sur \(steps.count)"))
                 Spacer(minLength: 12)
                 Button(action: finish) {
-                    Text("Skip")
+                    Text(language.tr("Skip", "건너뛰기", "Passer"))
                         .font(.system(size: LM.FontSize.caption, weight: .medium, design: .rounded))
                         .foregroundStyle(.white.opacity(0.7))
                         .shadow(color: .black.opacity(0.5), radius: 2)
                 }
                 Button(action: advance) {
-                    Text(index == steps.count - 1 ? "Done" : "Next")
+                    Text(index == steps.count - 1
+                         ? language.tr("Done", "완료", "Terminé")
+                         : language.tr("Next", "다음", "Suivant"))
                         .font(.system(size: LM.FontSize.body, weight: .semibold, design: .rounded))
                         .foregroundStyle(.black)
                         .padding(.horizontal, 20)

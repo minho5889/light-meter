@@ -381,6 +381,7 @@ struct LMRecordCard: View {
                 Image(systemName: "photo")
                     .font(.system(size: 30, weight: .regular))
                     .foregroundStyle(.white.opacity(0.3))
+                    .accessibilityHidden(true)
             }
             LinearGradient(colors: [.black.opacity(0.05), .black.opacity(0.2), .black.opacity(0.7)],
                            startPoint: .top, endPoint: .bottom)

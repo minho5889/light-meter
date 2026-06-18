@@ -192,8 +192,23 @@ struct LMVibeCard: View {
     let kelvin: Double
     var score: Int? = nil
     var width: CGFloat = 320
+    var language: AppLanguage = .english
 
     private var height: CGFloat { width * 1.25 }
+
+    /// One concise, localized summary for VoiceOver so the card reads as a
+    /// single element instead of a string of decorative fragments.
+    private var accessibilitySummary: String {
+        var parts = [vibe, language.tr("\(Int(lux)) lux, \(Int(kelvin)) Kelvin",
+                                       "\(Int(lux)) 럭스, \(Int(kelvin)) 켈빈",
+                                       "\(Int(lux)) lux, \(Int(kelvin)) Kelvin")]
+        if let score {
+            parts.append(language.tr("light score \(score) out of 100",
+                                     "조명 점수 100점 만점에 \(score)점",
+                                     "score lumière \(score) sur 100"))
+        }
+        return parts.joined(separator: ", ")
+    }
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -209,6 +224,7 @@ struct LMVibeCard: View {
             VStack(alignment: .leading, spacing: width * 0.018) {
                 Spacer()
                 Text(emoji).font(.system(size: width * 0.15))
+                    .accessibilityHidden(true)
                 Text(vibe)
                     .font(.custom("CaveatBrush-Regular", size: width * 0.135))
                     .foregroundStyle(.white)
@@ -224,6 +240,7 @@ struct LMVibeCard: View {
                 .font(.system(size: width * 0.04, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white.opacity(0.75))
                 .padding(.top, width * 0.01)
+                .accessibilityHidden(true)
             }
             .shadow(color: .black.opacity(0.4), radius: 4, y: 1)
             .padding(width * 0.07)
@@ -248,6 +265,8 @@ struct LMVibeCard: View {
         }
         .frame(width: width, height: height)
         .clipShape(RoundedRectangle(cornerRadius: width * 0.06, style: .continuous))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilitySummary)
     }
 }
 
@@ -261,6 +280,7 @@ struct LMCoachSheet: View {
     var service: LightingCoachService = StubLightingCoachService()
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var intent: CoachIntent
     @State private var advice: CoachAdvice?
     @State private var failed = false
@@ -303,7 +323,8 @@ struct LMCoachSheet: View {
 
                 if let advice {
                     LMVibeCard(image: image, emoji: advice.emoji, vibe: advice.vibe,
-                               lux: lux, kelvin: kelvin, score: advice.score, width: 300)
+                               lux: lux, kelvin: kelvin, score: advice.score, width: 300,
+                               language: language)
                         .frame(maxWidth: .infinity)
                         .transition(.opacity)
 
@@ -334,6 +355,7 @@ struct LMCoachSheet: View {
                                     .font(.system(size: 13))
                                     .foregroundStyle(LM.accent)
                                     .padding(.top, 2)
+                                    .accessibilityHidden(true)
                                 Text(tip)
                                     .font(LM.font(LM.FontSize.body, .medium))
                                     .foregroundStyle(LM.textPrimary)
@@ -378,10 +400,15 @@ struct LMCoachSheet: View {
         do {
             let result = try await service.advise(imageData: data, lux: lux, kelvin: kelvin,
                                                   language: language, intent: intent)
-            withAnimation(.easeOut(duration: 0.25)) { advice = result }
+            // Respect Reduce Motion: skip the cross-fade and present immediately.
+            if reduceMotion {
+                advice = result
+            } else {
+                withAnimation(.easeOut(duration: 0.25)) { advice = result }
+            }
             renderShareCard(result)
         } catch {
-            withAnimation { failed = true }
+            if reduceMotion { failed = true } else { withAnimation { failed = true } }
         }
     }
 

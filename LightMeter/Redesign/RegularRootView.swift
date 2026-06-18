@@ -63,7 +63,8 @@ struct RegularRootView: View {
                         steps: tutorialSteps,
                         anchors: prefs.mapValues { geo[$0] },
                         isActive: $showTutorial,
-                        startIndex: tutorialStartStep
+                        startIndex: tutorialStartStep,
+                        language: language
                     )
                 }
             }
@@ -200,6 +201,7 @@ struct RegularRootView: View {
         return Button { LMHaptics.soft(); showCoach = true } label: {
             HStack(spacing: 8) {
                 Image(systemName: "sparkles")
+                    .accessibilityHidden(true)
                 Text(label)
             }
             .font(LM.font(LM.FontSize.body, .semibold))
@@ -281,6 +283,7 @@ struct RegularRootView: View {
             Image(systemName: "sparkles")
                 .font(.system(size: 34))
                 .foregroundStyle(LM.accent)
+                .accessibilityHidden(true)
             Text(LocalizedStrings.translate(key: "ui_no_records", language: language))
                 .font(LM.font(LM.FontSize.h2, .bold))
                 .foregroundStyle(LM.textPrimary)
@@ -301,6 +304,7 @@ struct RegularRootView: View {
             Image(systemName: "camera.fill")
                 .font(.system(size: 44, weight: .regular))
                 .foregroundStyle(.white.opacity(0.8))
+                .accessibilityHidden(true)
             Text(message)
                 .font(LM.font(LM.FontSize.body))
                 .foregroundStyle(.white)
