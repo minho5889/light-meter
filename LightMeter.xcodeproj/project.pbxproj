@@ -49,6 +49,7 @@
 		897BCAEA38B78FD20B98973C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30817019AC95765C07F07866 /* Assets.xcassets */; };
 		89E501FC530641ED3303EFDC /* Inter-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */; };
 		8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */; };
+		8C9AE8987F7AAEA4158C78D5 /* LMImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E01DD573742FE93E365CD36 /* LMImage.swift */; };
 		8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */; };
 		947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */; };
 		95DBE1A2A311E0E4000FD23A /* Inter-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */; };
@@ -102,6 +103,7 @@
 		18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecordEntity.swift; sourceTree = "<group>"; };
 		1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMActivityGrid.swift; sourceTree = "<group>"; };
+		1E01DD573742FE93E365CD36 /* LMImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMImage.swift; sourceTree = "<group>"; };
 		2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureValueCalculator.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
 		22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CaveatBrush-Regular.ttf"; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				E4C7FC900A635BA48145427C /* AppMode.swift */,
 				1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */,
 				FB5ED9664D0D38546DC14383 /* LMDesign.swift */,
+				1E01DD573742FE93E365CD36 /* LMImage.swift */,
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
 				440FF8453EAF88226011E845 /* RegularRootView.swift */,
 				3B8C3240A5CE287AE8AE55FA /* RegularSettingsSheet.swift */,
@@ -521,6 +524,7 @@
 				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */,
 				743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */,
+				8C9AE8987F7AAEA4158C78D5 /* LMImage.swift in Sources */,
 				3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
 				43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */,

@@ -300,7 +300,8 @@ struct RegularRootView: View {
                 frozenFrame = frame
                 capturedLux = lux
                 capturedKelvin = kelvin
-                cameraViewModel.recordsStore.saveRecord(lux: lux, kelvin: kelvin)
+                let photoData = frame.flatMap { LMImage.jpegData($0) }
+                cameraViewModel.recordsStore.saveRecord(lux: lux, kelvin: kelvin, photoData: photoData)
                 withAnimation(.snappy(duration: 0.25)) { isCaptured = true }
             }
         }
@@ -389,7 +390,8 @@ struct RegularRootView: View {
                 timeLine: Self.timeFormatter.string(from: record.timestamp),
                 brightness: "\(Int(record.lux)) Lux",
                 temperature: "\(formatNumber(record.kelvin))K",
-                recordID: record.id
+                recordID: record.id,
+                photoData: record.photoData
             )
         }
     }
@@ -428,9 +430,10 @@ struct RegularRootView: View {
         #if DEBUG
         let env = ProcessInfo.processInfo.environment
         if env["LM_SEED"] != nil {
-            cameraViewModel.recordsStore.saveRecord(lux: 900, kelvin: 1200)
-            cameraViewModel.recordsStore.saveRecord(lux: 600, kelvin: 5600)
-            cameraViewModel.recordsStore.saveRecord(lux: 120, kelvin: 3800)
+            cameraViewModel.recordsStore.saveRecord(lux: 900, kelvin: 1200, photoData: sampleSnapshot(.systemOrange, .systemPink))
+            cameraViewModel.recordsStore.saveRecord(lux: 600, kelvin: 5600, photoData: sampleSnapshot(.systemTeal, .systemBlue))
+            cameraViewModel.recordsStore.saveRecord(lux: 120, kelvin: 3800, photoData: sampleSnapshot(.systemIndigo, .systemPurple))
+            cameraViewModel.recordsStore.saveRecord(lux: 300, kelvin: 4500) // no photo → placeholder
         }
         switch env["LM_TAB"] {
         case "temperature": selection = .temperature
@@ -446,6 +449,28 @@ struct RegularRootView: View {
         }
         #endif
     }
+
+    #if DEBUG
+    /// A synthetic "snapshot" (gradient + soft highlights) so seeded Records show
+    /// real photo cards on the simulator, which has no camera.
+    private func sampleSnapshot(_ top: UIColor, _ bottom: UIColor) -> Data? {
+        let size = CGSize(width: 900, height: 1200)
+        let fmt = UIGraphicsImageRendererFormat.default()
+        fmt.scale = 1; fmt.opaque = true
+        let img = UIGraphicsImageRenderer(size: size, format: fmt).image { ctx in
+            let cg = ctx.cgContext
+            if let grad = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                     colors: [top.cgColor, bottom.cgColor] as CFArray, locations: [0, 1]) {
+                cg.drawLinearGradient(grad, start: .zero,
+                                      end: CGPoint(x: size.width, y: size.height), options: [])
+            }
+            cg.setFillColor(UIColor.white.withAlphaComponent(0.16).cgColor)
+            cg.fillEllipse(in: CGRect(x: size.width * 0.45, y: size.height * 0.12, width: 380, height: 380))
+            cg.fillEllipse(in: CGRect(x: size.width * 0.02, y: size.height * 0.62, width: 240, height: 240))
+        }
+        return LMImage.jpegData(img, maxDimension: 1100, quality: 0.7)
+    }
+    #endif
 }
 
 #Preview {

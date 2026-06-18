@@ -10,14 +10,15 @@ actor RecordsDatabaseWorker {
         self.container = container
     }
 
-    func saveRecord(id: UUID, lux: Double, kelvin: Double, timestamp: Date, activeChips: [ActivityChip]) throws {
+    func saveRecord(id: UUID, lux: Double, kelvin: Double, timestamp: Date, activeChips: [ActivityChip], photoData: Data?) throws {
         let context = ModelContext(container)
         let entity = LightRecordEntity(
             id: id,
             lux: lux,
             kelvin: kelvin,
             timestamp: timestamp,
-            activeChips: activeChips
+            activeChips: activeChips,
+            photoData: photoData
         )
         context.insert(entity)
         try context.save()
@@ -43,7 +44,8 @@ actor RecordsDatabaseWorker {
                 lux: record.lux,
                 kelvin: record.kelvin,
                 timestamp: record.timestamp,
-                activeChips: record.activeChips
+                activeChips: record.activeChips,
+                photoData: record.photoData
             )
             context.insert(entity)
         }
@@ -155,15 +157,15 @@ public final class RecordsStore: Sendable {
     }
 
     @discardableResult
-    public func saveRecord(lux: Double, kelvin: Double) -> Task<Void, Never> {
+    public func saveRecord(lux: Double, kelvin: Double, photoData: Data? = nil) -> Task<Void, Never> {
         let index = LuxRange.rangeIndex(for: lux)
         let chips = Array(ActivityChip.activeChips(for: index))
         let id = UUID()
         let timestamp = Date()
-        
+
         return Task {
             do {
-                try await worker.saveRecord(id: id, lux: lux, kelvin: kelvin, timestamp: timestamp, activeChips: chips)
+                try await worker.saveRecord(id: id, lux: lux, kelvin: kelvin, timestamp: timestamp, activeChips: chips, photoData: photoData)
                 self.loadFirstPage()
                 await activeFetchTask?.value
             } catch {
