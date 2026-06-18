@@ -47,10 +47,13 @@ struct LMRecord: Identifiable {
     /// Light Diary vibe (derived locally from the reading), e.g. "Cozy Cabincore".
     var vibe: String? = nil
     var emoji: String? = nil
+    /// Raw values (for rendering the shareable vibe card).
+    var luxValue: Double = 0
+    var kelvinValue: Double = 0
 
     init(index: Int, dateLine: String, timeLine: String, brightness: String,
          temperature: String, recordID: UUID? = nil, photoData: Data? = nil,
-         vibe: String? = nil, emoji: String? = nil) {
+         vibe: String? = nil, emoji: String? = nil, luxValue: Double = 0, kelvinValue: Double = 0) {
         self.id = recordID ?? UUID()
         self.index = index
         self.dateLine = dateLine
@@ -61,6 +64,8 @@ struct LMRecord: Identifiable {
         self.photoData = photoData
         self.vibe = vibe
         self.emoji = emoji
+        self.luxValue = luxValue
+        self.kelvinValue = kelvinValue
     }
 }
 
@@ -542,6 +547,7 @@ struct LMSnapshotViewer: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var image: UIImage? = nil
+    @State private var shareCard: Image? = nil
 
     var body: some View {
         ZStack {
@@ -566,23 +572,73 @@ struct LMSnapshotViewer: View {
                     .buttonStyle(.plain)
                 }
                 Spacer()
-                HStack(spacing: 28) {
-                    caption(LocalizedStrings.translate(key: "tab_brightness", language: language), record.brightness)
-                    caption(LocalizedStrings.translate(key: "tab_temperature", language: language), record.temperature)
+                VStack(spacing: 14) {
+                    if let vibe = record.vibe {
+                        HStack(spacing: 6) {
+                            if let emoji = record.emoji { Text(emoji).font(.system(size: 18)) }
+                            Text(vibe)
+                                .font(.custom("CaveatBrush-Regular", size: 26))
+                                .foregroundStyle(.white)
+                        }
+                    }
+                    HStack(spacing: 28) {
+                        caption(LocalizedStrings.translate(key: "tab_brightness", language: language), record.brightness)
+                        caption(LocalizedStrings.translate(key: "tab_temperature", language: language), record.temperature)
+                    }
+                    .padding(.vertical, 14)
+                    .padding(.horizontal, 24)
+                    .background(Capsule().fill(.black.opacity(0.5)))
+
+                    if let shareCard {
+                        ShareLink(item: shareCard,
+                                  preview: SharePreview(shareTitle, image: shareCard)) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "square.and.arrow.up")
+                                Text(shareButtonLabel)
+                            }
+                            .font(LM.font(LM.FontSize.body, .semibold))
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, 22)
+                            .padding(.vertical, 12)
+                            .background(Capsule().fill(LM.accent))
+                        }
+                    }
                 }
-                .padding(.vertical, 14)
-                .padding(.horizontal, 24)
-                .background(Capsule().fill(.black.opacity(0.5)))
             }
             .padding(20)
         }
         .contentShape(Rectangle())
         .onTapGesture { dismiss() }
         .task(id: record.id) {
-            if let data = record.photoData {
-                image = LMImage.downsample(data, maxPixel: 2000)
-            }
+            let decoded = record.photoData.flatMap { LMImage.downsample($0, maxPixel: 2000) }
+            image = decoded
+            renderShareCard(image: decoded)
         }
+    }
+
+    private var shareTitle: String {
+        switch language {
+        case .korean:  return "내 빛 분위기"
+        case .french:  return "Mon ambiance"
+        case .english: return "My light vibe"
+        }
+    }
+
+    private var shareButtonLabel: String {
+        switch language {
+        case .korean:  return "분위기 공유"
+        case .french:  return "Partager"
+        case .english: return "Share your vibe"
+        }
+    }
+
+    @MainActor
+    private func renderShareCard(image: UIImage?) {
+        let card = LMVibeCard(image: image, emoji: record.emoji ?? "✨", vibe: record.vibe ?? "Your Light",
+                              lux: record.luxValue, kelvin: record.kelvinValue, width: 360)
+        let renderer = ImageRenderer(content: card)
+        renderer.scale = 3
+        if let ui = renderer.uiImage { shareCard = Image(uiImage: ui) }
     }
 
     private func caption(_ title: String, _ value: String) -> some View {

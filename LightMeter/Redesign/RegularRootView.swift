@@ -423,7 +423,9 @@ struct RegularRootView: View {
                 recordID: record.id,
                 photoData: record.photoData,
                 vibe: v.name,
-                emoji: v.emoji
+                emoji: v.emoji,
+                luxValue: record.lux,
+                kelvinValue: record.kelvin
             )
         }
     }
