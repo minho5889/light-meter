@@ -119,22 +119,29 @@ private struct HandArrow: Shape {
         var p = Path()
         let dx = to.x - from.x, dy = to.y - from.y
         let len = max(1, sqrt(dx * dx + dy * dy))
-        let ux = dx / len, uy = dy / len          // unit vector along the shaft
-        let px = -uy, py = ux                      // unit perpendicular
-        let bow = min(13, len * 0.09)              // gentle hand-drawn curve
-        let steps = 44
+        let px = -dy / len, py = dx / len          // unit perpendicular
+        let bow = min(11, len * 0.08)              // gentle hand-drawn curve
+        let steps = 48
+        var prev = from                            // 2nd-to-last point (tip tangent)
         for i in 0...steps {
             let t = CGFloat(i) / CGFloat(steps)
-            let env = sin(t * .pi)                 // 0 at both ends, 1 in middle
-            let off = bow * env + 1.2 * sin(t * 5.5 + seed) * env
+            // Squared envelope: zero offset AND zero slope at both ends, so the
+            // shaft leaves the tail and meets the tip dead straight — no kink.
+            let env = sin(t * .pi)
+            let env2 = env * env
+            let off = bow * env2 + 1.0 * sin(t * 5.0 + seed) * env2
             let pt = CGPoint(x: from.x + dx * t + px * off,
                              y: from.y + dy * t + py * off)
             if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
+            if i == steps - 1 { prev = pt }
         }
-        // Arrowhead: two tidy barbs splaying back from the tip.
-        let headLen = min(17, max(12, len * 0.16))
-        let spread: CGFloat = 0.40
-        let backAngle = atan2(-uy, -ux)
+        // Arrowhead aligned to the shaft's actual tangent at the tip, so the two
+        // barbs sit symmetrically on the real approach direction.
+        let tx = to.x - prev.x, ty = to.y - prev.y
+        let tl = max(0.0001, sqrt(tx * tx + ty * ty))
+        let backAngle = atan2(-ty / tl, -tx / tl)
+        let headLen = min(18, max(13, len * 0.17))
+        let spread: CGFloat = 0.46
         let b1 = CGPoint(x: to.x + headLen * cos(backAngle + spread),
                          y: to.y + headLen * sin(backAngle + spread))
         let b2 = CGPoint(x: to.x + headLen * cos(backAngle - spread),
