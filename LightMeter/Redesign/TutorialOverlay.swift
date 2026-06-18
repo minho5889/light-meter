@@ -310,14 +310,15 @@ struct TutorialOverlay: View {
 
     // MARK: floating note
 
-    /// Handwriting face for the heading, by script. Bradley Hand renders Latin
-    /// beautifully but has no Hangul, so Korean headings use the bundled Nanum
-    /// Pen Script (a Korean pen face); it reads lighter, so it's sized up a touch.
+    /// Handwriting face for the heading, by script. Latin uses bundled Caveat
+    /// (a modern marker-pen face); Caveat has no Hangul, so Korean headings use
+    /// the bundled Nanum Pen Script. Both read lighter than a UI font, so the
+    /// headings are sized up.
     private func handwrittenFont(for text: String) -> Font {
         if text.unicodeScalars.contains(where: { isHangul($0) }) {
             return .custom("NanumPen-Regular", size: LM.FontSize.h1 + 16)
         }
-        return .custom("Bradley Hand", size: LM.FontSize.h1 + 8).weight(.bold)
+        return .custom("Caveat", size: LM.FontSize.h1 + 14).weight(.bold)
     }
 
     private func isHangul(_ s: Unicode.Scalar) -> Bool {
@@ -392,7 +393,7 @@ struct TutorialOverlay: View {
                 Button(action: advance) {
                     Text(index == steps.count - 1 ? "Done" : "Next")
                         .font(LM.font(LM.FontSize.body, .semibold))
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
                         .background(Capsule().fill(LM.accent))

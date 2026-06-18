@@ -46,6 +46,7 @@ targets:
           - Inter-SemiBold.otf
           - Inter-Bold.otf
           - NanumPenScript-Regular.ttf
+          - Caveat-Bold.ttf
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "5"
 

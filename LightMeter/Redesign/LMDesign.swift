@@ -49,8 +49,9 @@ enum LM {
     /// Destructive / delete tint — `#A43333` @ 0.2.
     static let deleteTint = Color(hex: 0xA43333, alpha: 0.2)
 
-    /// Warm "marker" accent for the onboarding tutorial pen strokes & highlights.
-    static let accent = Color(hex: 0xFF6A3D)
+    /// Electric-violet "marker" accent for the onboarding tutorial pen strokes
+    /// & highlights — trendy but semi-professional.
+    static let accent = Color(hex: 0x7C5CFF)
 
     // MARK: Gradients
 
