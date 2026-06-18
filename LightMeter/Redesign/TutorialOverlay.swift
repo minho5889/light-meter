@@ -2,11 +2,13 @@
 //  TutorialOverlay.swift
 //  LightMeter
 //
-//  A trendy "spotlight" onboarding walkthrough for Regular mode:
+//  A "hand-drawn" spotlight onboarding walkthrough for Regular mode. It feels
+//  like someone is annotating the screen with a marker:
 //    • dims the whole screen, punching a bright spotlight over one element,
-//    • draws an animated marker/pen stroke around it (the "pen write-up"),
-//    • types the description in on a glass caption card,
-//    • pops the highlighted element into focus, with Next / Skip / progress dots.
+//    • scribbles a slightly wobbly marker loop around it (overshooting like a
+//      real pen circle), then sketches a hand-drawn arrow pointing at it,
+//    • writes the note in on a glass caption card — the heading in a
+//      handwriting face, the body typed out — with Next / Skip / progress dots.
 //
 //  Usage: tag elements with `.tutorialAnchor(.readout)` etc., then host
 //  `TutorialOverlay` via `.overlayPreferenceValue(TutorialAnchorKey.self)`.
@@ -54,28 +56,76 @@ struct TutorialStep: Identifiable {
     var inset: CGFloat = 10
 }
 
-// MARK: - Pen stroke shape
+// MARK: - Hand-drawn marker shapes
 
-/// A slightly hand-drawn marker stroke that loops around a rect (oval for
-/// circle targets, rounded box for rect targets), with a small overshoot so it
-/// reads as a quick pen circle.
-private struct PenStroke: Shape {
-    let shape: SpotlightShape
-    let cornerRadius: CGFloat
+/// A wobbly marker loop that circles a rect. Built from many short segments
+/// whose radius is perturbed by layered sines (deterministic, so the line is
+/// stable across redraws) and that overshoot the start by ~half a turn, so it
+/// reads as a quick hand-drawn pen circle rather than a perfect ellipse.
+private struct HandLoop: Shape {
+    /// Radians swept past a full turn, for the marker overshoot.
+    var overshoot: CGFloat = 0.55
+    /// Varies the wobble phase per step so each loop looks individually drawn.
+    var seed: CGFloat = 0
 
     func path(in rect: CGRect) -> Path {
         var p = Path()
-        switch shape {
-        case .circle:
-            // Start at top, loop around ~370° for a marker-circle overshoot.
-            let c = CGPoint(x: rect.midX, y: rect.midY)
-            let r = max(rect.width, rect.height) / 2
-            p.addArc(center: c, radius: r,
-                     startAngle: .degrees(-95), endAngle: .degrees(275),
-                     clockwise: false)
-        case .roundedRect:
-            p.addRoundedRect(in: rect, cornerSize: CGSize(width: cornerRadius, height: cornerRadius))
+        let cx = rect.midX, cy = rect.midY
+        let rx = rect.width / 2, ry = rect.height / 2
+        let start: CGFloat = -.pi * 0.62          // begin up and to the left
+        let sweep: CGFloat = .pi * 2 + overshoot
+        let steps = 168
+        let s1 = seed * 1.3 + 0.7
+        let s2 = seed * 2.1 + 2.3
+        for i in 0...steps {
+            let t = CGFloat(i) / CGFloat(steps)
+            let a = start + sweep * t
+            // Pen tremor: two incommensurate sines → organic, non-repeating wobble.
+            let w = 1 + 0.05 * sin(a * 2.7 + s1) + 0.03 * sin(a * 5.1 + s2)
+            // A touch of center drift so it isn't a clean concentric loop.
+            let dx = 0.018 * rx * sin(a * 1.3 + s1)
+            let dy = 0.018 * ry * cos(a * 1.7 + s2)
+            let pt = CGPoint(x: cx + dx + rx * w * cos(a),
+                             y: cy + dy + ry * w * sin(a))
+            if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
         }
+        return p
+    }
+}
+
+/// A hand-drawn arrow from `from` to `to`: a gently bowed, lightly trembling
+/// shaft with a two-barb arrowhead at the tip. The shaft is laid down first and
+/// the head last, so a `.trim(0, progress)` reveals it as if sketched by hand.
+private struct HandArrow: Shape {
+    var from: CGPoint
+    var to: CGPoint
+    var seed: CGFloat = 0
+
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let dx = to.x - from.x, dy = to.y - from.y
+        let len = max(1, sqrt(dx * dx + dy * dy))
+        let ux = dx / len, uy = dy / len          // unit vector along the shaft
+        let px = -uy, py = ux                      // unit perpendicular
+        let bow = min(22, len * 0.20)              // hand-drawn curve
+        let steps = 52
+        for i in 0...steps {
+            let t = CGFloat(i) / CGFloat(steps)
+            let env = sin(t * .pi)                 // 0 at both ends, 1 in middle
+            let off = bow * env + 2.2 * sin(t * 7 + seed) * env
+            let pt = CGPoint(x: from.x + dx * t + px * off,
+                             y: from.y + dy * t + py * off)
+            if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
+        }
+        // Arrowhead: two barbs splaying back from the tip.
+        let headLen = max(13, len * 0.18)
+        let spread: CGFloat = 0.42
+        let backAngle = atan2(-uy, -ux)
+        let b1 = CGPoint(x: to.x + headLen * cos(backAngle + spread),
+                         y: to.y + headLen * sin(backAngle + spread))
+        let b2 = CGPoint(x: to.x + headLen * cos(backAngle - spread),
+                         y: to.y + headLen * sin(backAngle - spread))
+        p.move(to: b1); p.addLine(to: to); p.addLine(to: b2)
         return p
     }
 }
@@ -104,6 +154,7 @@ struct TutorialOverlay: View {
 
     @State private var index = 0
     @State private var penProgress: CGFloat = 0
+    @State private var arrowProgress: CGFloat = 0
     @State private var focusPop: CGFloat = 0.85
     @State private var typed = 0
 
@@ -124,8 +175,9 @@ struct TutorialOverlay: View {
                         }
                         .onTapGesture { advance() }
 
-                    // Animated pen/marker stroke around the element.
-                    penStroke(step, rect: rect)
+                    // Hand-drawn marker loop around the element + pointing arrow.
+                    markerLoop(rect: rect)
+                    pointingArrow(rect: rect, screen: geo.size)
 
                     // Caption + controls, placed clear of the spotlight.
                     captionCard(step: step, screen: geo.size, target: rect)
@@ -137,7 +189,7 @@ struct TutorialOverlay: View {
         .onAppear { if startIndex != 0 { index = startIndex } }
     }
 
-    // MARK: spotlight & pen
+    // MARK: spotlight, marker & arrow
 
     @ViewBuilder
     private func spotlightShape(_ shape: SpotlightShape, rect: CGRect, radius: CGFloat) -> some View {
@@ -150,29 +202,60 @@ struct TutorialOverlay: View {
         }
     }
 
-    private func penStroke(_ step: TutorialStep, rect: CGRect) -> some View {
-        PenStroke(shape: step.shape, cornerRadius: step.inset + 18)
-            .trim(from: 0, to: penProgress)
-            .stroke(LM.accent, style: StrokeStyle(lineWidth: 3.5, lineCap: .round, lineJoin: .round))
-            .frame(width: rect.width + 14, height: rect.height + 14)
-            .scaleEffect(focusPop)
-            .position(x: rect.midX, y: rect.midY)
-            .shadow(color: LM.accent.opacity(0.5), radius: 6)
-            .allowsHitTesting(false)
+    /// Padding of the marker loop beyond the (already inset) target rect.
+    private func loopPadding(_ rect: CGRect) -> CGSize {
+        CGSize(width: max(16, rect.width * 0.06), height: max(16, rect.height * 0.10))
+    }
+
+    private func markerLoop(rect: CGRect) -> some View {
+        let pad = loopPadding(rect)
+        let loop = HandLoop(seed: CGFloat(index)).trim(from: 0, to: penProgress)
+        return ZStack {
+            // Soft ink bleed under the crisp stroke.
+            loop.stroke(LM.accent.opacity(0.30),
+                        style: StrokeStyle(lineWidth: 8, lineCap: .round, lineJoin: .round))
+            loop.stroke(LM.accent,
+                        style: StrokeStyle(lineWidth: 3.5, lineCap: .round, lineJoin: .round))
+        }
+        .frame(width: rect.width + pad.width * 2, height: rect.height + pad.height * 2)
+        .scaleEffect(focusPop)
+        .position(x: rect.midX, y: rect.midY)
+        .shadow(color: LM.accent.opacity(0.45), radius: 5)
+        .allowsHitTesting(false)
+    }
+
+    private func pointingArrow(rect: CGRect, screen: CGSize) -> some View {
+        let pad = loopPadding(rect)
+        let captionBelow = rect.midY < screen.height * 0.5     // note sits opposite the target
+        let side: CGFloat = rect.midX <= screen.width * 0.5 ? 1 : -1
+        let tipX = rect.midX + side * min(rect.width * 0.22, 60)
+        let edge = captionBelow ? rect.maxY + pad.height : rect.minY - pad.height
+        let dir: CGFloat = captionBelow ? 1 : -1               // toward the caption
+        let tip = CGPoint(x: tipX, y: edge + dir * 20)
+        let tail = CGPoint(x: tipX + side * 46, y: edge + dir * 100)
+        let arrow = HandArrow(from: tail, to: tip, seed: CGFloat(index) * 1.7)
+            .trim(from: 0, to: arrowProgress)
+        return ZStack {
+            arrow.stroke(LM.accent.opacity(0.30),
+                         style: StrokeStyle(lineWidth: 6.5, lineCap: .round, lineJoin: .round))
+            arrow.stroke(LM.accent,
+                         style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+        }
+        .shadow(color: LM.accent.opacity(0.4), radius: 4)
+        .allowsHitTesting(false)
     }
 
     // MARK: caption
 
     private func captionCard(step: TutorialStep, screen: CGSize, target: CGRect) -> some View {
-        // Put the card on the opposite side of the screen from the target.
         // Put the caption on the opposite half from the spotlight so they don't overlap.
         let targetInTopHalf = target.midY < screen.height * 0.5
         return VStack {
             if targetInTopHalf { Spacer() }
             VStack(alignment: .leading, spacing: 10) {
                 Text(step.title)
-                    .font(LM.font(LM.FontSize.h1, .bold))
-                    .foregroundStyle(.white)
+                    .font(.custom("Bradley Hand", size: LM.FontSize.h1 + 8).weight(.bold))
+                    .foregroundStyle(LM.accent)
                 Text(String(step.body.prefix(typed)))
                     .font(LM.font(LM.FontSize.body, .medium))
                     .foregroundStyle(.white.opacity(0.85))
@@ -223,12 +306,15 @@ struct TutorialOverlay: View {
 
     private func runStepAnimation(_ step: TutorialStep) async {
         penProgress = 0
+        arrowProgress = 0
         focusPop = 0.85
         typed = 0
         withAnimation(.spring(response: 0.45, dampingFraction: 0.7)) { focusPop = 1.0 }
-        withAnimation(.easeInOut(duration: 0.7).delay(0.15)) { penProgress = 1.0 }
-        // typewriter
-        try? await Task.sleep(nanoseconds: 350_000_000)
+        // Scribble the loop, then sketch the arrow pointing at it.
+        withAnimation(.easeInOut(duration: 0.6).delay(0.12)) { penProgress = 1.0 }
+        withAnimation(.easeOut(duration: 0.4).delay(0.62)) { arrowProgress = 1.0 }
+        // Write the note in.
+        try? await Task.sleep(nanoseconds: 850_000_000)
         for i in 0...step.body.count {
             if Task.isCancelled { return }
             typed = i
