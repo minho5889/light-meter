@@ -160,7 +160,9 @@ private struct HandUnderline: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let startX: CGFloat = -5
-        let endX = rect.width + 7
+        // Underline frame now includes the heading's trailing safety margin, so
+        // pull the end back to keep the swoosh tight to the word (~7pt past it).
+        let endX = rect.width - 3
         let yMid = rect.midY
         let steps = 44
         let s = seed * 1.7 + 0.4
@@ -364,6 +366,10 @@ struct TutorialOverlay: View {
                 .font(handwrittenFont(for: step.title))
                 .foregroundStyle(LM.accent)
                 .shadow(color: .black.opacity(0.45), radius: 3, y: 1)
+                // Script faces (Caveat / Nanum Pen) overhang their measured
+                // width; this trailing margin keeps the last glyph's tail from
+                // clipping (a sub-pixel-rounding issue that can show on device).
+                .padding(.trailing, 10)
                 .fixedSize()
                 .overlay(alignment: .bottomLeading) {
                     HandUnderline(seed: CGFloat(index))
