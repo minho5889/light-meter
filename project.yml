@@ -48,7 +48,7 @@ targets:
           - NanumPenScript-Regular.ttf
           - CaveatBrush-Regular.ttf
         CFBundleShortVersionString: "1.0"
-        CFBundleVersion: "5"
+        CFBundleVersion: "6"
 
   LightMeterTests:
     type: bundle.unit-test
