@@ -86,6 +86,7 @@ struct RecordsView: View {
             Image(systemName: "list.clipboard")
                 .font(.system(size: 64))
                 .foregroundColor(.white.opacity(0.2))
+                .accessibilityHidden(true)
             
             Text(LocalizedStrings.translate(key: "ui_no_records", language: cameraViewModel.appLanguage))
                 .font(DesignConstants.fontMD.weight(.bold))

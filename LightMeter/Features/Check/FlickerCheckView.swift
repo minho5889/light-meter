@@ -3,6 +3,8 @@ import SwiftUI
 struct FlickerCheckView: View {
     var viewModel: CameraViewModel
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         ZStack {
             // Transparent background to let the shared camera preview show through
@@ -60,8 +62,10 @@ struct FlickerCheckView: View {
                     Circle()
                         .fill(safetyColor)
                         .frame(width: 8, height: 8)
-                        .scaleEffect(viewModel.flicker.isCheckingFlicker ? 1.2 : 1.0)
-                        .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: viewModel.flicker.isCheckingFlicker)
+                        .scaleEffect(!reduceMotion && viewModel.flicker.isCheckingFlicker ? 1.2 : 1.0)
+                        // Respect Reduce Motion: skip the continuous pulsing.
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                                   value: viewModel.flicker.isCheckingFlicker)
                     
                     Text(LocalizedStrings.translate(key: "ui_analyzing", language: viewModel.appLanguage))
                         .font(.system(.caption2, design: .rounded).weight(.black))
@@ -164,7 +168,7 @@ struct FlickerCheckView: View {
     }
 
     private var safetyDescriptionCard: some View {
-        let title = viewModel.flicker.isCheckingFlicker ? FlickerInterpreter.safetyLevelTitle(level: viewModel.flicker.flickerSafetyLevel, language: viewModel.appLanguage).uppercased() : "READY"
+        let title = viewModel.flicker.isCheckingFlicker ? FlickerInterpreter.safetyLevelTitle(level: viewModel.flicker.flickerSafetyLevel, language: viewModel.appLanguage).uppercased() : LocalizedStrings.translate(key: "ui_flicker_ready", language: viewModel.appLanguage)
         let desc = viewModel.flicker.isCheckingFlicker ? viewModel.flicker.flickerDescription : LocalizedStrings.translate(key: "ui_flicker_ready_desc", language: viewModel.appLanguage)
         
         return VStack(alignment: .leading, spacing: 8) {

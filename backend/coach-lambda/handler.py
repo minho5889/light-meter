@@ -33,6 +33,26 @@ _bedrock = boto3.client("bedrock-runtime", region_name=REGION)
 
 _LANG = {"en": "English", "ko": "Korean", "fr": "French"}
 
+# Lambda Function URLs cap the request body at ~6 MB; the app sends a 1024px
+# JPEG (tens of KB). Reject anything far larger as likely abuse before paying
+# the base64 decode + Bedrock inference cost.
+_MAX_IMAGE_B64 = 3_000_000  # base64 characters (~2.25 MB decoded)
+
+
+def _num(value, lo, hi):
+    """Coerce a client-supplied value into a number clamped to [lo, hi].
+
+    Returns 0.0 for missing / non-numeric / NaN input so a malformed request
+    can never crash the handler or reach the model as garbage.
+    """
+    try:
+        n = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    if n != n:  # NaN
+        return 0.0
+    return max(lo, min(hi, n))
+
 _SYSTEM_ROOM = (
     "You are an expert lighting consultant inside a phone light-meter app. "
     "You are given a photo of a room plus precise measurements. Give brief, "
@@ -82,25 +102,28 @@ def handler(event, _context):
     except Exception:
         return _response(400, {"error": "invalid request body"})
 
-    lux = req.get("lux", 0)
-    kelvin = req.get("kelvin", 0)
+    lux = _num(req.get("lux"), lo=0, hi=200_000)
+    kelvin = _num(req.get("kelvin"), lo=0, hi=20_000)
     language = _LANG.get(req.get("language", "en"), "English")
     image_b64 = req.get("image_base64")
     mode = req.get("mode", "room")
     system_prompt = _SYSTEM_SELFIE if mode == "selfie" else _SYSTEM_ROOM
 
     content = []
-    if image_b64:
-        try:
-            content.append(
-                {"image": {"format": "jpeg", "source": {"bytes": base64.b64decode(image_b64)}}}
-            )
-        except Exception:
-            pass  # advise from numbers alone if the image is unusable
+    if isinstance(image_b64, str) and image_b64:
+        if len(image_b64) > _MAX_IMAGE_B64:
+            print(f"image rejected: {len(image_b64)} base64 chars exceeds cap")
+        else:
+            try:
+                content.append(
+                    {"image": {"format": "jpeg", "source": {"bytes": base64.b64decode(image_b64)}}}
+                )
+            except Exception:
+                pass  # advise from numbers alone if the image is unusable
     content.append(
         {
             "text": (
-                f"Measurements: {round(float(lux))} lux, {round(float(kelvin))}K. "
+                f"Measurements: {round(lux)} lux, {round(kelvin)}K. "
                 f"Write the headline and tips in {language}. Return the JSON now."
             )
         }
@@ -115,7 +138,10 @@ def handler(event, _context):
         )
         text = out["output"]["message"]["content"][0]["text"]
     except Exception as exc:  # noqa: BLE001
-        return _response(502, {"error": f"model error: {exc}"})
+        # Log the real error to CloudWatch; return a generic message so we don't
+        # leak Bedrock internals (model id, region, throttle state) to clients.
+        print(f"bedrock converse failed: {exc}")
+        return _response(502, {"error": "lighting service unavailable"})
 
     # Be lenient: pull the first {...} block in case the model adds stray text.
     match = re.search(r"\{.*\}", text, re.S)

@@ -32,6 +32,7 @@ public struct LocalizedStrings {
         "ui_light_check": [.english: "LIGHT CHECK", .korean: "LIGHT CHECK", .french: "CONTRÔLE LUMINEUX"],
         "ui_analyzing": [.english: "ANALYZING", .korean: "분석중", .french: "ANALYSE EN COURS"],
         "ui_wave_scope": [.english: "WAVE SCOPE", .korean: "WAVE SCOPE", .french: "CANAL D'ONDE"],
+        "ui_flicker_ready": [.english: "READY", .korean: "준비됨", .french: "PRÊT"],
         "ui_start_check": [.english: "Start Safety Check", .korean: "시작하기", .french: "Lancer le contrôle"],
         "ui_stop_check": [.english: "Stop Check", .korean: "중지하기", .french: "Arrêter le contrôle"],
         "ui_flicker_ready_desc": [.english: "Point your phone at a light source and tap the button below to start the health and safety checks.", .korean: "핸드폰을 광원 방향으로 향하게 하고 시작 버튼을 누르면 빛 안전성 검사가 시작됩니다.", .french: "Pointez votre téléphone vers une source de lumière et appuyez sur le bouton ci-dessous pour lancer les contrôles de sécurité."],
