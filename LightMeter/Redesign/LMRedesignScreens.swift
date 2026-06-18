@@ -245,6 +245,7 @@ struct LMCaptureControls: View {
                 }
             }
             .buttonStyle(.plain)
+            .tutorialAnchor(.capture)
 
             // Flip-camera button, offset to the trailing side.
             HStack {

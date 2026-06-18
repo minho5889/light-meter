@@ -56,6 +56,7 @@
 		9C6FE3D275D79634D8615F77 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */; };
 		A182CF4B3A6D6FA724DC5696 /* CalibrationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */; };
 		A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */; };
+		AC5BBD58DF529182D48F79CE /* TutorialOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */; };
 		ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */; };
 		B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */; };
 		B5987DCB478F3C327B9A57DA /* FlickerCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269857D946F301075B6B5E73 /* FlickerCheckView.swift */; };
@@ -106,6 +107,7 @@
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		3046556155B9CF0608A10FB7 /* RecordsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsStore.swift; sourceTree = "<group>"; };
 		30817019AC95765C07F07866 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
 		3B8C3240A5CE287AE8AE55FA /* RegularSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularSettingsSheet.swift; sourceTree = "<group>"; };
 		440FF8453EAF88226011E845 /* RegularRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularRootView.swift; sourceTree = "<group>"; };
 		48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreterTests.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
 				440FF8453EAF88226011E845 /* RegularRootView.swift */,
 				3B8C3240A5CE287AE8AE55FA /* RegularSettingsSheet.swift */,
+				30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */,
 				BB1700B0E28EB28A3707600D /* Fonts */,
 			);
 			path = Redesign;
@@ -533,6 +536,7 @@
 				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
 				3F23D6DD2E64E8D6BFCD0CD7 /* TintInterpreter.swift in Sources */,
 				08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */,
+				AC5BBD58DF529182D48F79CE /* TutorialOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

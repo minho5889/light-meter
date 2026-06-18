@@ -27,6 +27,9 @@ struct RegularRootView: View {
     @State private var capturedLux: Double = 0
     @State private var capturedKelvin: Double = 0
     @State private var showSettings = false
+    @AppStorage("lm_tutorial_seen_v1") private var tutorialSeen = false
+    @State private var showTutorial = false
+    @State private var tutorialStartStep = 0
 
     private var language: AppLanguage { cameraViewModel.appLanguage }
     private var isCameraTab: Bool { selection != .records }
@@ -47,12 +50,37 @@ struct RegularRootView: View {
             topBar
             bottomBar
         }
+        .overlayPreferenceValue(TutorialAnchorKey.self) { prefs in
+            GeometryReader { geo in
+                if showTutorial {
+                    TutorialOverlay(
+                        steps: tutorialSteps,
+                        anchors: prefs.mapValues { geo[$0] },
+                        isActive: $showTutorial,
+                        startIndex: tutorialStartStep
+                    )
+                }
+            }
+            .ignoresSafeArea()
+        }
         .sheet(isPresented: $showSettings) {
-            RegularSettingsSheet(language: language)
+            RegularSettingsSheet(language: language, onReplayTutorial: {
+                showSettings = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                    isCaptured = false
+                    selection = .brightness
+                    showTutorial = true
+                }
+            })
         }
         .onAppear {
             cameraViewModel.requestPermission()
             applyDebugLaunchOptions()
+            maybeStartTutorial()
+        }
+        .onChange(of: cameraViewModel.permissionGranted) { _, _ in maybeStartTutorial() }
+        .onChange(of: showTutorial) { wasShowing, showing in
+            if wasShowing && !showing { tutorialSeen = true }
         }
         .onChange(of: selection) { _, newTab in handleTabChange(to: newTab) }
         .onReceive(NotificationCenter.default.publisher(
@@ -120,6 +148,7 @@ struct RegularRootView: View {
                 guideDescription: interp?.description,
                 guideTip: interp?.tip
             )
+            .tutorialAnchor(.readout)
             Spacer(minLength: 0)
         }
         .padding(.horizontal, LM.pad)
@@ -196,6 +225,7 @@ struct RegularRootView: View {
             Spacer()
             if cameraViewModel.permissionGranted {
                 LMSettingsButton { showSettings = true }
+                    .tutorialAnchor(.settings)
             }
         }
         .padding(.horizontal, LM.pad)
@@ -220,6 +250,7 @@ struct RegularRootView: View {
             }
             if cameraViewModel.permissionGranted {
                 LMCapsuleTabBar(selection: $selection)
+                    .tutorialAnchor(.tabs)
                     .padding(.horizontal, LM.pad)
                     .padding(.bottom, LM.gap)
             }
@@ -286,6 +317,56 @@ struct RegularRootView: View {
         case .none:         break
         }
         previousTabIndex = index
+    }
+
+    // MARK: - Tutorial
+
+    private func maybeStartTutorial() {
+        guard !tutorialSeen, !showTutorial, cameraViewModel.permissionGranted else { return }
+        selection = .brightness
+        isCaptured = false
+        // Let the layout settle so the spotlight anchors resolve.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            if !tutorialSeen, !showTutorial, cameraViewModel.permissionGranted {
+                showTutorial = true
+            }
+        }
+    }
+
+    private var tutorialSteps: [TutorialStep] {
+        func t(_ en: String, _ ko: String, _ fr: String) -> String {
+            switch language { case .korean: return ko; case .french: return fr; case .english: return en }
+        }
+        return [
+            TutorialStep(
+                target: .readout,
+                title: t("Live reading", "실시간 측정", "Mesure en direct"),
+                body: t("Point at any scene — this shows the brightness in lux and the color temperature, updating live.",
+                        "어디든 비춰 보세요. 밝기(럭스)와 색온도가 실시간으로 표시됩니다.",
+                        "Visez une scène — la luminosité (lux) et la température de couleur s'affichent en direct."),
+                shape: .roundedRect, inset: 12),
+            TutorialStep(
+                target: .capture,
+                title: t("Capture it", "캡처하기", "Capturer"),
+                body: t("Tap to freeze the reading. You'll get a plain-language guide, and it's saved to Records.",
+                        "탭하면 측정값이 고정됩니다. 쉬운 설명을 보여주고 기록에도 저장돼요.",
+                        "Touchez pour figer la mesure. Vous obtenez un guide simple, enregistré dans l'historique."),
+                shape: .circle, inset: 10),
+            TutorialStep(
+                target: .tabs,
+                title: t("Four views", "네 가지 화면", "Quatre vues"),
+                body: t("Switch between Brightness, color Temperature, a light Check, and your saved Records.",
+                        "밝기, 색온도, 빛 진단(Check), 저장된 기록(Records)을 전환할 수 있어요.",
+                        "Basculez entre Luminosité, Température, Check de la lumière et Historique."),
+                shape: .roundedRect, inset: 8),
+            TutorialStep(
+                target: .settings,
+                title: t("Want more?", "더 필요하세요?", "Besoin de plus ?"),
+                body: t("Tap the gear and switch to Advanced mode for calibration, EV, f-stops and flicker analysis.",
+                        "톱니바퀴를 눌러 고급 모드로 전환하면 보정, EV, 조리개, 플리커 분석을 쓸 수 있어요.",
+                        "Touchez l'engrenage et passez en mode Avancé : calibration, EV, ouvertures et flicker."),
+                shape: .circle, inset: 8),
+        ]
     }
 
     // MARK: - Helpers
@@ -359,6 +440,10 @@ struct RegularRootView: View {
         }
         if env["LM_CAPTURED"] != nil { isCaptured = true }
         if env["LM_SETTINGS"] != nil { showSettings = true }
+        if let s = env["LM_TUTSTEP"], let n = Int(s) {
+            tutorialStartStep = n
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { showTutorial = true }
+        }
         #endif
     }
 }

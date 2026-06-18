@@ -14,6 +14,7 @@ struct RegularSettingsSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var language: AppLanguage = .systemLanguage
+    var onReplayTutorial: () -> Void = {}
 
     private var modeBinding: Binding<AppMode> {
         Binding(
@@ -38,6 +39,18 @@ struct RegularSettingsSheet: View {
                     Text(localized(en: "Experience", ko: "사용 모드", fr: "Expérience"))
                 } footer: {
                     Text(modeBinding.wrappedValue.subtitle(language))
+                }
+
+                Section {
+                    Button {
+                        onReplayTutorial()
+                    } label: {
+                        Label(
+                            localized(en: "Show the walkthrough", ko: "사용법 둘러보기", fr: "Revoir le guide"),
+                            systemImage: "sparkles"
+                        )
+                        .foregroundStyle(LM.accent)
+                    }
                 }
             }
             .navigationTitle(localized(en: "Settings", ko: "설정", fr: "Réglages"))
