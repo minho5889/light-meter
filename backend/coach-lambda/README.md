@@ -52,3 +52,40 @@ estimate for the scale table.
 
 > Reference implementation — validate on first deploy (model id, region, model
 > access). Not deployed/tested from this repo.
+
+---
+
+## Go-live plan (end to end)
+
+**Phase 0 — in-app (DONE, shipping):** backend-agnostic `LightingCoachService`,
+offline stub fallback, `RemoteLightingCoachService` → `lm_coach_endpoint`, and a
+**Settings → AI Coach endpoint** field to paste the URL. Nothing here holds a key.
+
+**Phase 1 — deploy the proxy (your AWS, ~15 min):** steps 1–4 above (enable
+Nova 2 Lite access → Lambda with `handler.py` → IAM `bedrock:InvokeModel` →
+Function URL).
+
+**Phase 2 — connect + test:**
+- Paste the Function URL into Settings → AI Coach endpoint.
+- Test on a **real device** (sim has no camera): capture → Coach, try **Room**
+  and **Selfie**. Confirm the JSON parses (`vibe/emoji/headline/tips/score`) and
+  the advice/scoring quality. Tune the system prompt in `handler.py` if needed
+  (redeploy = paste).
+
+**Phase 3 — pick the model (compare on real output):** Nova 2 Lite (~$7/mo at
+100 DAU) vs Claude Sonnet (best quality) — swap `BEDROCK_MODEL_ID` only. Cost is
+negligible at this scale, so choose on quality.
+
+**Phase 4 — harden before public launch:**
+- Lock the Function URL (IAM/JWT or API Gateway + throttling) — an open URL is
+  callable (and billable) by anyone.
+- Per-device rate limiting; the app already caps the image at 1024px.
+- Prompt caching for the system prompt (cuts cost).
+- Graceful fallback: the app already shows a retry on error — consider
+  auto-falling back to the offline stub.
+- CloudWatch logs + a cost/error alarm.
+
+**⚠️ Privacy (App Store):** in live mode the room/selfie photo is sent to AWS
+Bedrock. Disclose this (privacy policy + `PrivacyInfo.xcprivacy`) and/or gate it
+behind explicit consent before shipping the live model to the App Store. The
+offline stub sends nothing off-device.
