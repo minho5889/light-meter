@@ -30,6 +30,7 @@ struct RegularRootView: View {
     @State private var showCoach = false
     @State private var coachIntent: CoachIntent = .room
     @State private var captureFlash = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage("lm_tutorial_seen_v1") private var tutorialSeen = false
     @State private var showTutorial = false
     @State private var tutorialStartStep = 0
@@ -53,6 +54,7 @@ struct RegularRootView: View {
                 .opacity(captureFlash ? 0.85 : 0)
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
+                .accessibilityHidden(true)
         }
         .overlayPreferenceValue(TutorialAnchorKey.self) { prefs in
             GeometryReader { geo in
@@ -389,10 +391,13 @@ struct RegularRootView: View {
         generator.impactOccurred()
         AudioServicesPlaySystemSound(1108)
 
-        // Shutter flash: snap to white, then fade out.
-        captureFlash = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
-            withAnimation(.easeOut(duration: 0.35)) { captureFlash = false }
+        // Shutter flash: snap to white, then fade out. Skipped under Reduce
+        // Motion (a full-screen flash is a motion/flash sensitivity concern).
+        if !reduceMotion {
+            captureFlash = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+                withAnimation(.easeOut(duration: 0.35)) { captureFlash = false }
+            }
         }
 
         let lux = cameraViewModel.measurement.lux

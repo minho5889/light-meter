@@ -262,6 +262,8 @@ struct LMGlassReadoutCard: View {
                alignment: .leading)
         .lmGlass(tint: LM.glassTintSoft)
         .animation(.snappy(duration: 0.25), value: isExpanded)
+        // Read the whole readout as one VoiceOver element instead of 5 fragments.
+        .accessibilityElement(children: .combine)
     }
 }
 
