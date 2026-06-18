@@ -337,8 +337,9 @@ struct MeasurementView: View {
             capturedInterpretationTip = interpretation.tip
             capturedComparisonText = ComparisonGenerator.generate(lux: currentLux)
             
-            // Automatically save to Records history
-            cameraViewModel.recordsStore.saveRecord(lux: currentLux, kelvin: currentKelvin)
+            // Automatically save to Records history, with the captured snapshot.
+            let photoData = LMImage.jpegData(frame)
+            cameraViewModel.recordsStore.saveRecord(lux: currentLux, kelvin: currentKelvin, photoData: photoData)
             
             isCaptured = true
             
