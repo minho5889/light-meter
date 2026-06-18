@@ -62,6 +62,7 @@
 		AC5BBD58DF529182D48F79CE /* TutorialOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */; };
 		ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */; };
 		B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */; };
+		B54BF0A640B211EBBBE2FF32 /* LMCoach.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A8C75239DE29BDA2548C3 /* LMCoach.swift */; };
 		B5987DCB478F3C327B9A57DA /* FlickerCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269857D946F301075B6B5E73 /* FlickerCheckView.swift */; };
 		B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */; };
 		BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9D9057780326CEC3398958 /* ContentView.swift */; };
@@ -158,6 +159,7 @@
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMRedesignScreens.swift; sourceTree = "<group>"; };
 		CDEAB4538FA9C995543411E8 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
+		D34A8C75239DE29BDA2548C3 /* LMCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMCoach.swift; sourceTree = "<group>"; };
 		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
 		D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConstants.swift; sourceTree = "<group>"; };
 		D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 				E4C7FC900A635BA48145427C /* AppMode.swift */,
 				1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */,
 				5AED70E53F1B6EE06D9D85A7 /* LMAmbience.swift */,
+				D34A8C75239DE29BDA2548C3 /* LMCoach.swift */,
 				FB5ED9664D0D38546DC14383 /* LMDesign.swift */,
 				1E01DD573742FE93E365CD36 /* LMImage.swift */,
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
@@ -527,6 +530,7 @@
 				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */,
 				60B55395E28B0C99001C5F58 /* LMAmbience.swift in Sources */,
+				B54BF0A640B211EBBBE2FF32 /* LMCoach.swift in Sources */,
 				743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */,
 				8C9AE8987F7AAEA4158C78D5 /* LMImage.swift in Sources */,
 				3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */,

@@ -27,6 +27,7 @@ struct RegularRootView: View {
     @State private var capturedLux: Double = 0
     @State private var capturedKelvin: Double = 0
     @State private var showSettings = false
+    @State private var showCoach = false
     @AppStorage("lm_tutorial_seen_v1") private var tutorialSeen = false
     @State private var showTutorial = false
     @State private var tutorialStartStep = 0
@@ -56,6 +57,10 @@ struct RegularRootView: View {
                 }
             }
             .ignoresSafeArea()
+        }
+        .sheet(isPresented: $showCoach) {
+            LMCoachSheet(image: frozenFrame, lux: capturedLux, kelvin: capturedKelvin,
+                         language: language, service: LightingCoach.service())
         }
         .sheet(isPresented: $showSettings) {
             RegularSettingsSheet(language: language, onReplayTutorial: {
@@ -132,22 +137,48 @@ struct RegularRootView: View {
             ? LuxInterpreter.interpret(lux: luxValue, language: language)
             : nil
         return HStack(alignment: .top) {
-            LMGlassReadoutCard(
-                lux: "\(Int(luxValue))",
-                unit: "LUX",
-                temperature: "\(formatNumber(kelvinValue))K",
-                guideTitle: interp != nil
-                    ? LocalizedStrings.translate(key: "ui_user_guide", language: language)
-                    : nil,
-                guideDescription: interp?.description,
-                guideTip: interp?.tip
-            )
-            .tutorialAnchor(.readout)
+            VStack(alignment: .leading, spacing: 12) {
+                LMGlassReadoutCard(
+                    lux: "\(Int(luxValue))",
+                    unit: "LUX",
+                    temperature: "\(formatNumber(kelvinValue))K",
+                    guideTitle: interp != nil
+                        ? LocalizedStrings.translate(key: "ui_user_guide", language: language)
+                        : nil,
+                    guideDescription: interp?.description,
+                    guideTip: interp?.tip
+                )
+                .tutorialAnchor(.readout)
+                if isCaptured { coachButton }
+            }
             Spacer(minLength: 0)
         }
         .padding(.horizontal, LM.pad)
         .padding(.top, 64)
         .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    /// Opens the AI Lighting Coach for the just-captured snapshot + readings.
+    private var coachButton: some View {
+        let label: String
+        switch language {
+        case .korean:  label = "AI 조명 코치"
+        case .french:  label = "Coach lumière IA"
+        case .english: label = "AI Lighting Coach"
+        }
+        return Button { showCoach = true } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "sparkles")
+                Text(label)
+            }
+            .font(LM.font(LM.FontSize.body, .semibold))
+            .foregroundStyle(.black)
+            .padding(.horizontal, 18)
+            .padding(.vertical, 12)
+            .background(Capsule().fill(LM.accent))
+            .shadow(color: LM.accent.opacity(0.4), radius: 8, y: 3)
+        }
+        .buttonStyle(.plain)
     }
 
     private var temperatureContent: some View {
@@ -443,6 +474,13 @@ struct RegularRootView: View {
         if let s = env["LM_TUTSTEP"], let n = Int(s) {
             tutorialStartStep = n
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { showTutorial = true }
+        }
+        if env["LM_COACH"] != nil {
+            isCaptured = true
+            capturedLux = Double(env["LM_LUX"] ?? "") ?? 80
+            capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? 3000
+            if let d = sampleSnapshot(.systemOrange, .systemPink), let img = UIImage(data: d) { frozenFrame = img }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { showCoach = true }
         }
         #endif
     }
