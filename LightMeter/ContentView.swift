@@ -79,7 +79,7 @@ struct ContentView: View {
                                 .background(.ultraThinMaterial, in: Circle())
                                 .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
                         }
-                        .accessibilityLabel("Settings")
+                        .accessibilityLabel(LocalizedStrings.translate(key: "ax_settings", language: cameraViewModel.appLanguage))
                     }
                     Spacer()
                 }
@@ -91,7 +91,7 @@ struct ContentView: View {
             if !cameraViewModel.permissionGranted {
                 VStack {
                     Spacer()
-                    Text("Camera access is required to measure light.\nPlease enable it in Settings.")
+                    Text(LocalizedStrings.translate(key: "ui_camera_permission_message", language: cameraViewModel.appLanguage))
                         .font(DesignConstants.fontSM)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)

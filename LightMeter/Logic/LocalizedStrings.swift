@@ -41,6 +41,10 @@ public struct LocalizedStrings {
         // Records Empty State
         "ui_no_records": [.english: "No records yet", .korean: "저장된 기록이 없습니다", .french: "Aucun historique"],
         "ui_records_empty_desc": [.english: "Your captured light readings will automatically appear here.", .korean: "캡처한 밝기 측정 결과가 여기에 자동으로 저장됩니다.", .french: "Vos mesures capturées s'afficheront automatiquement ici."],
+
+        // Camera Permission (shared by Regular + Advanced roots)
+        "ui_camera_permission_message": [.english: "Camera access is required to measure light.\nPlease enable it in Settings.", .korean: "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요.", .french: "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages."],
+        "ui_camera_permission_action": [.english: "Open Settings", .korean: "설정 열기", .french: "Ouvrir Réglages"],
         
         // Reflected Light Disclosure
         "ui_reflected_disclosure_title": [.english: "Reflected Light Estimate", .korean: "반사광 측정 정보", .french: "Estimation de la Lumière Réfléchie"],

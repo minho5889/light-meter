@@ -294,11 +294,8 @@ struct RegularRootView: View {
     }
 
     private var permissionDenied: some View {
-        let message = language.tr(
-            "Camera access is required to measure light.\nPlease enable it in Settings.",
-            "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요.",
-            "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages.")
-        let buttonLabel = language.tr("Open Settings", "설정 열기", "Ouvrir Réglages")
+        let message = LocalizedStrings.translate(key: "ui_camera_permission_message", language: language)
+        let buttonLabel = LocalizedStrings.translate(key: "ui_camera_permission_action", language: language)
         return VStack(spacing: 20) {
             Spacer()
             Image(systemName: "camera.fill")

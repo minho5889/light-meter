@@ -19,7 +19,10 @@ public struct CalibrationStore: Sendable {
     /// Calculates a new multiplier from a known reference/target lux value and the current measured lux.
     /// Clamps the resulting multiplier to a safe range [0.1, 10.0].
     public static func calculateMultiplier(measuredLux: Double, targetLux: Double) -> Double {
-        guard measuredLux > 0.01 else { return 1.0 }
+        // A zero/negative reference is nonsensical and would otherwise clamp to a
+        // 0.1x multiplier, silently darkening every future reading. Treat invalid
+        // input as "no calibration" instead.
+        guard measuredLux > 0.01, targetLux > 0.01 else { return 1.0 }
         let rawMultiplier = targetLux / measuredLux
         return clampMultiplier(rawMultiplier)
     }
