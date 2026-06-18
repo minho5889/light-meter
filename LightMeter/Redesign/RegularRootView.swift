@@ -161,8 +161,8 @@ struct RegularRootView: View {
                 )
                 .tutorialAnchor(.readout)
                 if isCaptured {
-                    vibePill
-                    coachButton
+                    vibePill.transition(captureRevealTransition)
+                    coachButton.transition(captureRevealTransition)
                 }
             }
             Spacer(minLength: 0)
@@ -170,6 +170,12 @@ struct RegularRootView: View {
         .padding(.horizontal, LM.pad)
         .padding(.top, 64)
         .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    /// How the vibe pill + Coach button reveal after a capture — a spring pop,
+    /// or a plain fade under Reduce Motion.
+    private var captureRevealTransition: AnyTransition {
+        reduceMotion ? .opacity : .scale(scale: 0.85).combined(with: .opacity)
     }
 
     /// The captured reading's vibe, surfaced right in the capture moment (a
