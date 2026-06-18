@@ -130,6 +130,33 @@ private struct HandArrow: Shape {
     }
 }
 
+/// A quick hand-drawn underline swoosh, sized to sit under a word: mostly flat
+/// with a little tremor, a slight downward drift, and an upward flick at the end
+/// — like underlining a heading in a notebook. Overshoots both ends.
+private struct HandUnderline: Shape {
+    var seed: CGFloat = 0
+
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let startX: CGFloat = -5
+        let endX = rect.width + 7
+        let yMid = rect.midY
+        let steps = 44
+        let s = seed * 1.7 + 0.4
+        for i in 0...steps {
+            let t = CGFloat(i) / CGFloat(steps)
+            let x = startX + (endX - startX) * t
+            let y = yMid
+                + 1.6 * sin(t * 3.3 + s)              // gentle tremor
+                + 1.2 * t                              // slight downward drift
+                - 3.4 * max(0, (t - 0.85) / 0.15)      // flick up at the end
+            if i == 0 { p.move(to: CGPoint(x: x, y: y)) }
+            else { p.addLine(to: CGPoint(x: x, y: y)) }
+        }
+        return p
+    }
+}
+
 // MARK: - reverse mask helper
 
 private extension View {
@@ -155,6 +182,7 @@ struct TutorialOverlay: View {
     @State private var index = 0
     @State private var penProgress: CGFloat = 0
     @State private var arrowProgress: CGFloat = 0
+    @State private var underlineProgress: CGFloat = 0
     @State private var focusPop: CGFloat = 0.85
     @State private var typed = 0
 
@@ -256,6 +284,17 @@ struct TutorialOverlay: View {
                 Text(step.title)
                     .font(.custom("Bradley Hand", size: LM.FontSize.h1 + 8).weight(.bold))
                     .foregroundStyle(LM.accent)
+                    .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
+                    .fixedSize()
+                    .overlay(alignment: .bottomLeading) {
+                        HandUnderline(seed: CGFloat(index))
+                            .trim(from: 0, to: underlineProgress)
+                            .stroke(LM.accent,
+                                    style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+                            .frame(height: 6)
+                            .offset(y: 8)
+                            .allowsHitTesting(false)
+                    }
                 Text(String(step.body.prefix(typed)))
                     .font(LM.font(LM.FontSize.body, .medium))
                     .foregroundStyle(.white.opacity(0.85))
@@ -307,13 +346,15 @@ struct TutorialOverlay: View {
     private func runStepAnimation(_ step: TutorialStep) async {
         penProgress = 0
         arrowProgress = 0
+        underlineProgress = 0
         focusPop = 0.85
         typed = 0
         withAnimation(.spring(response: 0.45, dampingFraction: 0.7)) { focusPop = 1.0 }
         // Scribble the loop, then sketch the arrow pointing at it.
         withAnimation(.easeInOut(duration: 0.6).delay(0.12)) { penProgress = 1.0 }
         withAnimation(.easeOut(duration: 0.4).delay(0.62)) { arrowProgress = 1.0 }
-        // Write the note in.
+        // Underline the heading, then write the note in.
+        withAnimation(.easeOut(duration: 0.3).delay(0.92)) { underlineProgress = 1.0 }
         try? await Task.sleep(nanoseconds: 850_000_000)
         for i in 0...step.body.count {
             if Task.isCancelled { return }
