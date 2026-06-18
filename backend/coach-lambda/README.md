@@ -8,8 +8,12 @@ It forwards the snapshot + readings to Amazon Bedrock and returns the advice.
 ```
 POST  { "image_base64": <jpeg base64 | null>, "lux": <number>,
         "kelvin": <number>, "language": "en" | "ko" | "fr" }
-200   { "headline": <string>, "tips": [<string>, ...] }
+200   { "vibe": <string>, "emoji": <string>,
+        "headline": <string>, "tips": [<string>, ...] }
 ```
+
+`vibe` + `emoji` power the shareable Light Vibe card; `headline` + `tips` are the
+practical coach advice.
 
 ## Deploy (one-time, ~15 min)
 

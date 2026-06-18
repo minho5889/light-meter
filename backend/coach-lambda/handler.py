@@ -40,7 +40,11 @@ _SYSTEM = (
     "(reading, working, relaxing, dining, winding down for sleep). Reason about "
     "brightness in lux, color temperature in Kelvin (lower = warmer), and what "
     "you can actually see in the photo. "
-    'Respond with STRICT JSON only: {"headline": string, "tips": [string, ...]}. '
+    "Respond with STRICT JSON only: "
+    '{"vibe": string, "emoji": string, "headline": string, "tips": [string, ...]}. '
+    'vibe = a short, trendy aesthetic name for the light in English (e.g. '
+    '"Golden Hour Glow", "Clean Girl Daylight", "Cozy Cabincore", "Moody Midnight", '
+    '"Main Character Energy"). emoji = one emoji matching the vibe. '
     "headline = one short verdict (max ~8 words). tips = 1-3 short, specific, "
     "actionable suggestions. No markdown, no prose outside the JSON."
 )
@@ -101,9 +105,11 @@ def handler(event, _context):
     match = re.search(r"\{.*\}", text, re.S)
     try:
         parsed = json.loads(match.group(0) if match else text)
+        vibe = str(parsed.get("vibe", "Your Light")).strip()[:40]
+        emoji = str(parsed.get("emoji", "✨")).strip()[:8]
         headline = str(parsed.get("headline", "")).strip()[:120]
         tips = [str(t).strip() for t in parsed.get("tips", []) if str(t).strip()][:4]
     except Exception:
-        headline, tips = text.strip()[:120], []
+        vibe, emoji, headline, tips = "Your Light", "✨", text.strip()[:120], []
 
-    return _response(200, {"headline": headline, "tips": tips})
+    return _response(200, {"vibe": vibe, "emoji": emoji, "headline": headline, "tips": tips})
