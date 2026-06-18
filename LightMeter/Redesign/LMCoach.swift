@@ -71,18 +71,7 @@ struct StubLightingCoachService: LightingCoachService {
         let dim = lux < 100, bright = lux > 400
         let warm = kelvin < 3300, cool = kelvin > 4700
 
-        let (vibe, emoji): (String, String)
-        switch (dim, bright, warm, cool) {
-        case (_, true, true, _):   (vibe, emoji) = ("Golden Hour Glow", "🌅")
-        case (_, true, _, true):   (vibe, emoji) = ("Clean Girl Daylight", "🤍")
-        case (_, true, _, _):      (vibe, emoji) = ("Main Character Energy", "✨")
-        case (true, _, true, _):   (vibe, emoji) = ("Cozy Cabincore", "🕯️")
-        case (true, _, _, true):   (vibe, emoji) = ("Moody Midnight", "🌃")
-        case (true, _, _, _):      (vibe, emoji) = ("Sleepy Wind-down", "🌙")
-        case (_, _, true, _):      (vibe, emoji) = ("Soft Sunset", "🌇")
-        case (_, _, _, true):      (vibe, emoji) = ("Studio Clean", "🎬")
-        default:                   (vibe, emoji) = ("Soft Daylight", "☁️")
-        }
+        let (vibe, emoji) = LightVibe.of(lux: lux, kelvin: kelvin)
 
         if intent == .selfie {
             let score = SelfieLightScore.score(lux: lux, kelvin: kelvin)

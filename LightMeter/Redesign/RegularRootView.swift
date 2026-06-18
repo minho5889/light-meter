@@ -413,14 +413,17 @@ struct RegularRootView: View {
     private var mappedRecords: [LMRecord] {
         let records = cameraViewModel.recordsStore.records
         return records.enumerated().map { offset, record in
-            LMRecord(
+            let v = LightVibe.of(lux: record.lux, kelvin: record.kelvin)
+            return LMRecord(
                 index: records.count - offset,
                 dateLine: Self.dateFormatter.string(from: record.timestamp),
                 timeLine: Self.timeFormatter.string(from: record.timestamp),
                 brightness: "\(Int(record.lux)) Lux",
                 temperature: "\(formatNumber(record.kelvin))K",
                 recordID: record.id,
-                photoData: record.photoData
+                photoData: record.photoData,
+                vibe: v.name,
+                emoji: v.emoji
             )
         }
     }

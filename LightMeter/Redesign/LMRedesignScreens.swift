@@ -44,9 +44,13 @@ struct LMRecord: Identifiable {
     var recordID: UUID? = nil
     /// The captured snapshot (downscaled JPEG), if any.
     var photoData: Data? = nil
+    /// Light Diary vibe (derived locally from the reading), e.g. "Cozy Cabincore".
+    var vibe: String? = nil
+    var emoji: String? = nil
 
     init(index: Int, dateLine: String, timeLine: String, brightness: String,
-         temperature: String, recordID: UUID? = nil, photoData: Data? = nil) {
+         temperature: String, recordID: UUID? = nil, photoData: Data? = nil,
+         vibe: String? = nil, emoji: String? = nil) {
         self.id = recordID ?? UUID()
         self.index = index
         self.dateLine = dateLine
@@ -55,6 +59,8 @@ struct LMRecord: Identifiable {
         self.temperature = temperature
         self.recordID = recordID
         self.photoData = photoData
+        self.vibe = vibe
+        self.emoji = emoji
     }
 }
 
@@ -363,6 +369,16 @@ struct LMRecordCard: View {
                 }
             }
             Spacer(minLength: 0)
+            if let vibe = record.vibe {
+                HStack(spacing: 6) {
+                    if let emoji = record.emoji {
+                        Text(emoji).font(.system(size: 15))
+                    }
+                    Text(vibe)
+                        .font(.custom("CaveatBrush-Regular", size: 21))
+                }
+                .padding(.bottom, 2)
+            }
             HStack(spacing: 0) {
                 metric(LocalizedStrings.translate(key: "tab_brightness", language: language), record.brightness)
                 metric(LocalizedStrings.translate(key: "tab_temperature", language: language), record.temperature)

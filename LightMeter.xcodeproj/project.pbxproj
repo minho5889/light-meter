@@ -15,6 +15,7 @@
 		0A65B714C46E45F8BC0CED3E /* CaveatBrush-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */; };
 		10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */; };
 		1242467572831488428302D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */; };
+		14DE2027116E61D65FE2FF71 /* LightVibe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0C19F3B40FE40DA49718F6 /* LightVibe.swift */; };
 		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
 		180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */; };
 		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
@@ -39,6 +40,7 @@
 		6AF688582A251DBCB4ECD15E /* TintInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */; };
 		6BA6F9CC64F5BBA2DBE870D2 /* RegularRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440FF8453EAF88226011E845 /* RegularRootView.swift */; };
 		6FFDC72D6B60277F88C94396 /* FlickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B365D9B743B9FC75C575FE68 /* FlickerModel.swift */; };
+		709FC4E02683A202277F1A67 /* LightVibeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867AA31536134DB737578A34 /* LightVibeTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
 		743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5ED9664D0D38546DC14383 /* LMDesign.swift */; };
 		7708CED8D4A5D81141993481 /* MeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0225A0690A5D5C9027835EB2 /* MeasurementModel.swift */; };
@@ -146,12 +148,14 @@
 		85A64F06C8F54E7EB52BD803 /* LightRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecord.swift; sourceTree = "<group>"; };
 		85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
 		85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.otf"; sourceTree = "<group>"; };
+		867AA31536134DB737578A34 /* LightVibeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightVibeTests.swift; sourceTree = "<group>"; };
 		8A27E93BD1C1917AF9C0C6D1 /* SelfieLightScoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieLightScoreTests.swift; sourceTree = "<group>"; };
 		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
 		8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8F292B5CCA00B82FC232868D /* SignalSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalSmoother.swift; sourceTree = "<group>"; };
 		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
 		98CEA969184077A01CB8FA1E /* SelfieLightScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieLightScore.swift; sourceTree = "<group>"; };
+		9A0C19F3B40FE40DA49718F6 /* LightVibe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightVibe.swift; sourceTree = "<group>"; };
 		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
 		A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreter.swift; sourceTree = "<group>"; };
@@ -222,6 +226,7 @@
 				48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */,
 				D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */,
 				F37ED00DEE89090785811C29 /* LightSceneTests.swift */,
+				867AA31536134DB737578A34 /* LightVibeTests.swift */,
 				83D372EE292A8D5A1F4F2988 /* LMImageTests.swift */,
 				14F8A654477FB9A001991C20 /* LocalizationTests.swift */,
 				746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */,
@@ -258,6 +263,7 @@
 				A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */,
 				8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */,
 				743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */,
+				9A0C19F3B40FE40DA49718F6 /* LightVibe.swift */,
 				C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */,
 				141E153718B1A66906CF6AA8 /* LuxCalculator.swift */,
 				85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */,
@@ -505,6 +511,7 @@
 				839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */,
 				B0BD586224FB0281CDC2076E /* LMImageTests.swift in Sources */,
 				8223A953A018C76AD97FFE7F /* LightSceneTests.swift in Sources */,
+				709FC4E02683A202277F1A67 /* LightVibeTests.swift in Sources */,
 				215E4128299483333603D01E /* LocalizationTests.swift in Sources */,
 				947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */,
 				61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */,
@@ -552,6 +559,7 @@
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
 				43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */,
 				180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */,
+				14DE2027116E61D65FE2FF71 /* LightVibe.swift in Sources */,
 				8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */,
 				07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */,
 				A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */,
