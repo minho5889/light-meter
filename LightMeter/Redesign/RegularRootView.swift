@@ -37,12 +37,6 @@ struct RegularRootView: View {
         selection == .brightness && !isCaptured && cameraViewModel.permissionGranted
     }
 
-    /// The 8 standard activities, in the Figma's reading order.
-    private let activities: [ActivityChip] = [
-        .readingAndStudy, .officeAndFocus, .tvAndMovies, .diningAndSocial,
-        .sleepAndComfort, .babyAndParenting, .datingAndRomance, .coffeeAndTeaTime,
-    ]
-
     var body: some View {
         ZStack(alignment: .top) {
             backgroundLayer
@@ -122,7 +116,7 @@ struct RegularRootView: View {
             switch selection {
             case .brightness:  brightnessContent
             case .temperature: temperatureContent
-            case .check:       checkContent
+            case .ambience:    ambienceContent
             case .records:     recordsContent
             }
         }
@@ -172,13 +166,16 @@ struct RegularRootView: View {
         .frame(maxHeight: .infinity, alignment: .top)
     }
 
-    private var checkContent: some View {
-        let labels = activities.map { $0.localizedName(language: language) }
-        return ScrollView {
-            LMActivityGrid(activities: labels)
-                .padding(.top, 64)
-                .padding(.bottom, 140)
-        }
+    private var ambienceContent: some View {
+        let m = cameraViewModel.measurement
+        var lux = m.lux
+        var kelvin = m.colorTemperature
+        #if DEBUG
+        let env = ProcessInfo.processInfo.environment
+        if let s = env["LM_LUX"], let v = Double(s) { lux = v }
+        if let s = env["LM_KELVIN"], let v = Double(s) { kelvin = v }
+        #endif
+        return LMAmbienceView(lux: lux, kelvin: kelvin, language: language)
     }
 
     private var recordsContent: some View {
@@ -376,7 +373,7 @@ struct RegularRootView: View {
         switch tab {
         case .brightness:  return 0
         case .temperature: return 1
-        case .check:       return 2
+        case .ambience:    return 2
         case .records:     return 3
         }
     }
@@ -437,7 +434,7 @@ struct RegularRootView: View {
         }
         switch env["LM_TAB"] {
         case "temperature": selection = .temperature
-        case "check":       selection = .check
+        case "ambience":    selection = .ambience
         case "records":     selection = .records
         default:            break
         }

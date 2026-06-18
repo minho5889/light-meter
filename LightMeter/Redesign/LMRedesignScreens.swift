@@ -76,7 +76,7 @@ extension LMRecord {
 enum LMTab: String, CaseIterable, Identifiable {
     case brightness  = "Brightness"
     case temperature = "Temperature"
-    case check       = "Check"
+    case ambience    = "Ambience"
     case records     = "Records"
 
     var id: String { rawValue }
@@ -86,7 +86,7 @@ enum LMTab: String, CaseIterable, Identifiable {
         switch self {
         case .brightness:  return "sun.max"
         case .temperature: return "thermometer.medium"
-        case .check:       return "magnifyingglass"
+        case .ambience:    return "lightbulb.fill"
         case .records:     return "record.circle"
         }
     }
