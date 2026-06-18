@@ -5,7 +5,8 @@
 //  The AI Lighting Coach (Regular mode). Sends the captured snapshot + the
 //  measured lux / color temperature to a model and returns:
 //    • a Gen-Z "vibe" (aesthetic name + emoji) → a shareable Light Vibe card,
-//    • a plain-language verdict + actionable lighting tips.
+//    • a plain-language verdict + actionable lighting tips,
+//    • in SELFIE mode, a 0–100 lighting score for selfies/content + creator tips.
 //
 //  Backend-agnostic: the UI talks to a `LightingCoachService`. A
 //  `StubLightingCoachService` makes the whole experience testable offline (and
@@ -19,15 +20,20 @@ import UIKit
 
 // MARK: - Model
 
+/// What the user wants advice about: their room, or how they look on camera.
+enum CoachIntent: String, Sendable, CaseIterable { case room, selfie }
+
 struct CoachAdvice: Equatable, Sendable {
     /// Aesthetic vibe name for the shareable card, e.g. "Golden Hour Glow".
     let vibe: String
     /// A single emoji that matches the vibe.
     let emoji: String
-    /// One-line practical verdict, e.g. "Cozy, but a bit dim to read."
+    /// One-line verdict, e.g. "Soft & flattering" / "Cozy, but a bit dim."
     let headline: String
     /// A few short, actionable suggestions.
     let tips: [String]
+    /// Selfie/content lighting score (0–100). `nil` in room mode.
+    var score: Int? = nil
 }
 
 // MARK: - Service
@@ -35,7 +41,8 @@ struct CoachAdvice: Equatable, Sendable {
 /// Takes the snapshot as JPEG `Data` (Sendable) rather than a UIImage, so it
 /// crosses the async boundary cleanly under Swift 6 strict concurrency.
 protocol LightingCoachService: Sendable {
-    func advise(imageData: Data?, lux: Double, kelvin: Double, language: AppLanguage) async throws -> CoachAdvice
+    func advise(imageData: Data?, lux: Double, kelvin: Double,
+                language: AppLanguage, intent: CoachIntent) async throws -> CoachAdvice
 }
 
 /// Picks the configured remote proxy if `lm_coach_endpoint` is set, else the
@@ -52,10 +59,11 @@ enum LightingCoach {
 
 // MARK: - Stub (offline, for build-out & simulator)
 
-/// Believable, rule-based advice + vibe so the Coach UX is fully testable
-/// without a backend. Swap for the real model by setting `lm_coach_endpoint`.
+/// Believable, rule-based advice + vibe + score so the Coach UX is fully
+/// testable without a backend. Swap for the real model via `lm_coach_endpoint`.
 struct StubLightingCoachService: LightingCoachService {
-    func advise(imageData: Data?, lux: Double, kelvin: Double, language: AppLanguage) async throws -> CoachAdvice {
+    func advise(imageData: Data?, lux: Double, kelvin: Double,
+                language: AppLanguage, intent: CoachIntent) async throws -> CoachAdvice {
         try? await Task.sleep(nanoseconds: 1_300_000_000)   // mimic model latency
         func t(_ en: String, _ ko: String, _ fr: String) -> String {
             switch language { case .korean: return ko; case .french: return fr; case .english: return en }
@@ -63,8 +71,6 @@ struct StubLightingCoachService: LightingCoachService {
         let dim = lux < 100, bright = lux > 400
         let warm = kelvin < 3300, cool = kelvin > 4700
 
-        // Vibe names use global Gen-Z aesthetic vocabulary (kept in English on
-        // purpose — these terms travel, and they render in the handwritten card font).
         let (vibe, emoji): (String, String)
         switch (dim, bright, warm, cool) {
         case (_, true, true, _):   (vibe, emoji) = ("Golden Hour Glow", "🌅")
@@ -78,6 +84,48 @@ struct StubLightingCoachService: LightingCoachService {
         default:                   (vibe, emoji) = ("Soft Daylight", "☁️")
         }
 
+        if intent == .selfie {
+            // Flattering selfie light ≈ bright-ish (200–1000 lx), neutral-warm (2700–5500K).
+            var s = 100.0
+            if lux < 200 { s -= min(45, (200 - lux) / 200 * 45) }
+            else if lux > 1000 { s -= min(30, (lux - 1000) / 1500 * 30) }
+            if kelvin > 5500 { s -= min(30, (kelvin - 5500) / 2000 * 30) }
+            else if kelvin < 2700 { s -= min(20, (2700 - kelvin) / 1000 * 20) }
+            let score = Int(max(20, min(100, s)).rounded())
+
+            let headline = score >= 80 ? t("Soft & flattering ✨", "부드럽고 화사해요 ✨", "Douce et flatteuse ✨")
+                : score >= 60 ? t("Decent — a tweak away", "괜찮아요 — 살짝만 손보면", "Correcte — un petit réglage")
+                              : t("Tricky light for selfies", "셀카엔 좀 까다로운 빛", "Lumière difficile pour selfies")
+            var tips: [String] = []
+            if lux < 200 {
+                tips.append(t("Too dim — face a window or add a ring light.",
+                              "너무 어두워요 — 창을 보거나 링라이트를 켜보세요.",
+                              "Trop sombre — place-toi face à une fenêtre ou ajoute une ring light."))
+            }
+            if kelvin > 5500 {
+                tips.append(t("A bit blue/clinical — warm it up for healthier skin tones.",
+                              "약간 푸르고 차가워요 — 색을 따뜻하게 하면 피부톤이 살아요.",
+                              "Un peu bleue/clinique — réchauffe-la pour un teint plus sain."))
+            }
+            if lux > 1000 {
+                tips.append(t("Harsh and blown-out — diffuse it or step back from the source.",
+                              "너무 강해서 날아가요 — 빛을 분산하거나 광원에서 떨어지세요.",
+                              "Dure et surexposée — diffuse-la ou éloigne-toi de la source."))
+            }
+            if kelvin < 2700 {
+                tips.append(t("Cozy but orange on camera — add cooler light to balance.",
+                              "아늑하지만 카메라엔 주황빛이 강해요 — 차가운 빛을 더해 균형을 맞추세요.",
+                              "Cosy mais orangée à l'écran — ajoute une lumière plus froide."))
+            }
+            if tips.isEmpty {
+                tips.append(t("Soft and even — great for selfies and video. ✨",
+                              "부드럽고 고른 빛 — 셀카와 영상에 딱이에요. ✨",
+                              "Douce et homogène — parfaite pour selfies et vidéo. ✨"))
+            }
+            return CoachAdvice(vibe: vibe, emoji: emoji, headline: headline, tips: tips, score: score)
+        }
+
+        // Room mode
         let level = dim ? t("dim", "어둡고", "tamisée") : bright ? t("bright", "밝고", "lumineuse") : t("moderate", "적당하고", "modérée")
         let warmth = warm ? t("warm", "따뜻한", "chaude") : cool ? t("cool", "차가운", "froide") : t("neutral", "중간", "neutre")
         let headline = t("This light is \(level) and \(warmth).",
@@ -118,17 +166,20 @@ struct RemoteLightingCoachService: LightingCoachService {
         let lux: Double
         let kelvin: Double
         let language: String
+        let mode: String
     }
     struct Response: Decodable {
         let vibe: String?
         let emoji: String?
         let headline: String
         let tips: [String]
+        let score: Int?
     }
 
-    func advise(imageData: Data?, lux: Double, kelvin: Double, language: AppLanguage) async throws -> CoachAdvice {
+    func advise(imageData: Data?, lux: Double, kelvin: Double,
+                language: AppLanguage, intent: CoachIntent) async throws -> CoachAdvice {
         let payload = Payload(image_base64: imageData?.base64EncodedString(),
-                              lux: lux, kelvin: kelvin, language: language.rawValue)
+                              lux: lux, kelvin: kelvin, language: language.rawValue, mode: intent.rawValue)
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -143,21 +194,22 @@ struct RemoteLightingCoachService: LightingCoachService {
         return CoachAdvice(vibe: decoded.vibe ?? "Your Light",
                            emoji: decoded.emoji ?? "✨",
                            headline: decoded.headline,
-                           tips: decoded.tips)
+                           tips: decoded.tips,
+                           score: decoded.score)
     }
 }
 
 // MARK: - Shareable Light Vibe card
 
-/// The aesthetic, shareable card: the snapshot + the AI vibe name + readings +
-/// app watermark. Sized relative to `width` so it looks identical on screen and
-/// when rendered to a high-res image for sharing.
+/// The aesthetic, shareable card. Sized relative to `width` so it looks
+/// identical on screen and when rendered to a high-res image for sharing.
 struct LMVibeCard: View {
     let image: UIImage?
     let emoji: String
     let vibe: String
     let lux: Double
     let kelvin: Double
+    var score: Int? = nil
     var width: CGFloat = 320
 
     private var height: CGFloat { width * 1.25 }
@@ -196,6 +248,23 @@ struct LMVibeCard: View {
             .padding(width * 0.07)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .overlay(alignment: .topTrailing) {
+            if let score {
+                VStack(spacing: -width * 0.008) {
+                    Text("\(score)")
+                        .font(.system(size: width * 0.12, weight: .heavy, design: .rounded))
+                    Text("/100")
+                        .font(.system(size: width * 0.035, weight: .semibold, design: .rounded))
+                        .opacity(0.85)
+                }
+                .foregroundStyle(.white)
+                .frame(width: width * 0.24, height: width * 0.24)
+                .background(Circle().fill(LM.accent))
+                .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: width * 0.006))
+                .shadow(color: .black.opacity(0.3), radius: 4)
+                .padding(width * 0.05)
+            }
+        }
         .frame(width: width, height: height)
         .clipShape(RoundedRectangle(cornerRadius: width * 0.06, style: .continuous))
     }
@@ -211,13 +280,24 @@ struct LMCoachSheet: View {
     var service: LightingCoachService = StubLightingCoachService()
 
     @Environment(\.dismiss) private var dismiss
+    @State private var intent: CoachIntent
     @State private var advice: CoachAdvice?
     @State private var failed = false
     @State private var shareCard: Image?
 
+    init(image: UIImage?, lux: Double, kelvin: Double, language: AppLanguage = .english,
+         service: LightingCoachService = StubLightingCoachService(), initialIntent: CoachIntent = .room) {
+        self.image = image
+        self.lux = lux
+        self.kelvin = kelvin
+        self.language = language
+        self.service = service
+        _intent = State(initialValue: initialIntent)
+    }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(t("Lighting Coach", "조명 코치", "Coach lumière"), systemImage: "sparkles")
                         .font(LM.font(LM.FontSize.h1, .bold))
@@ -233,9 +313,15 @@ struct LMCoachSheet: View {
                     .buttonStyle(.plain)
                 }
 
+                Picker("", selection: $intent) {
+                    Text(t("Room", "공간", "Pièce")).tag(CoachIntent.room)
+                    Text(t("Selfie", "셀카", "Selfie")).tag(CoachIntent.selfie)
+                }
+                .pickerStyle(.segmented)
+
                 if let advice {
                     LMVibeCard(image: image, emoji: advice.emoji, vibe: advice.vibe,
-                               lux: lux, kelvin: kelvin, width: 300)
+                               lux: lux, kelvin: kelvin, score: advice.score, width: 300)
                         .frame(maxWidth: .infinity)
                         .transition(.opacity)
 
@@ -298,6 +384,7 @@ struct LMCoachSheet: View {
         }
         .presentationDetents([.large])
         .task { await load() }
+        .onChange(of: intent) { _, _ in Task { await load() } }
     }
 
     @MainActor
@@ -307,7 +394,8 @@ struct LMCoachSheet: View {
         shareCard = nil
         let data = image.flatMap { LMImage.jpegData($0, maxDimension: 1024, quality: 0.6) }
         do {
-            let result = try await service.advise(imageData: data, lux: lux, kelvin: kelvin, language: language)
+            let result = try await service.advise(imageData: data, lux: lux, kelvin: kelvin,
+                                                  language: language, intent: intent)
             withAnimation(.easeOut(duration: 0.25)) { advice = result }
             renderShareCard(result)
         } catch {
@@ -318,7 +406,7 @@ struct LMCoachSheet: View {
     @MainActor
     private func renderShareCard(_ advice: CoachAdvice) {
         let card = LMVibeCard(image: image, emoji: advice.emoji, vibe: advice.vibe,
-                              lux: lux, kelvin: kelvin, width: 360)
+                              lux: lux, kelvin: kelvin, score: advice.score, width: 360)
         let renderer = ImageRenderer(content: card)
         renderer.scale = 3
         if let ui = renderer.uiImage { shareCard = Image(uiImage: ui) }

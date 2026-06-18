@@ -7,13 +7,15 @@ It forwards the snapshot + readings to Amazon Bedrock and returns the advice.
 
 ```
 POST  { "image_base64": <jpeg base64 | null>, "lux": <number>,
-        "kelvin": <number>, "language": "en" | "ko" | "fr" }
-200   { "vibe": <string>, "emoji": <string>,
-        "headline": <string>, "tips": [<string>, ...] }
+        "kelvin": <number>, "language": "en" | "ko" | "fr",
+        "mode": "room" | "selfie" }
+200   { "vibe": <string>, "emoji": <string>, "headline": <string>,
+        "tips": [<string>, ...], "score": <int 0–100, selfie mode only> }
 ```
 
 `vibe` + `emoji` power the shareable Light Vibe card; `headline` + `tips` are the
-practical coach advice.
+advice. `mode:"selfie"` switches the system prompt to a content-creator rating
+and adds `score` (lighting-for-selfies, 0–100).
 
 ## Deploy (one-time, ~15 min)
 

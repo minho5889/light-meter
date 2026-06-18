@@ -28,6 +28,7 @@ struct RegularRootView: View {
     @State private var capturedKelvin: Double = 0
     @State private var showSettings = false
     @State private var showCoach = false
+    @State private var coachIntent: CoachIntent = .room
     @AppStorage("lm_tutorial_seen_v1") private var tutorialSeen = false
     @State private var showTutorial = false
     @State private var tutorialStartStep = 0
@@ -60,7 +61,7 @@ struct RegularRootView: View {
         }
         .sheet(isPresented: $showCoach) {
             LMCoachSheet(image: frozenFrame, lux: capturedLux, kelvin: capturedKelvin,
-                         language: language, service: LightingCoach.service())
+                         language: language, service: LightingCoach.service(), initialIntent: coachIntent)
         }
         .sheet(isPresented: $showSettings) {
             RegularSettingsSheet(language: language, onReplayTutorial: {
@@ -475,10 +476,11 @@ struct RegularRootView: View {
             tutorialStartStep = n
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { showTutorial = true }
         }
-        if env["LM_COACH"] != nil {
+        if let coach = env["LM_COACH"] {
             isCaptured = true
             capturedLux = Double(env["LM_LUX"] ?? "") ?? 80
             capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? 3000
+            coachIntent = (coach == "selfie") ? .selfie : .room
             if let d = sampleSnapshot(.systemOrange, .systemPink), let img = UIImage(data: d) { frozenFrame = img }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { showCoach = true }
         }

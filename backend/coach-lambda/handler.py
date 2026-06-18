@@ -33,7 +33,7 @@ _bedrock = boto3.client("bedrock-runtime", region_name=REGION)
 
 _LANG = {"en": "English", "ko": "Korean", "fr": "French"}
 
-_SYSTEM = (
+_SYSTEM_ROOM = (
     "You are an expert lighting consultant inside a phone light-meter app. "
     "You are given a photo of a room plus precise measurements. Give brief, "
     "practical, friendly advice about the lighting for everyday activities "
@@ -47,6 +47,20 @@ _SYSTEM = (
     '"Main Character Energy"). emoji = one emoji matching the vibe. '
     "headline = one short verdict (max ~8 words). tips = 1-3 short, specific, "
     "actionable suggestions. No markdown, no prose outside the JSON."
+)
+
+_SYSTEM_SELFIE = (
+    "You are an expert lighting coach for selfies, OOTD photos and video content. "
+    "You are given a photo plus precise measurements. Rate how flattering the "
+    "light is for the person/scene on camera and how to improve it. Flattering "
+    "light is soft, fairly bright (~200–1000 lux) and neutral-to-warm "
+    "(~2700–5500K); harsh, dim or very blue light scores lower. "
+    "Respond with STRICT JSON only: "
+    '{"vibe": string, "emoji": string, "score": integer, "headline": string, "tips": [string, ...]}. '
+    "score = 0–100 lighting-for-content rating. vibe = a short trendy aesthetic "
+    "name in English. emoji = one matching emoji. headline = short verdict "
+    "(max ~8 words). tips = 1-3 creator-focused suggestions (e.g. face a window, "
+    "add a ring light, warm it up, diffuse the source). No markdown, JSON only."
 )
 
 
@@ -72,6 +86,8 @@ def handler(event, _context):
     kelvin = req.get("kelvin", 0)
     language = _LANG.get(req.get("language", "en"), "English")
     image_b64 = req.get("image_base64")
+    mode = req.get("mode", "room")
+    system_prompt = _SYSTEM_SELFIE if mode == "selfie" else _SYSTEM_ROOM
 
     content = []
     if image_b64:
@@ -93,7 +109,7 @@ def handler(event, _context):
     try:
         out = _bedrock.converse(
             modelId=MODEL_ID,
-            system=[{"text": _SYSTEM}],
+            system=[{"text": system_prompt}],
             messages=[{"role": "user", "content": content}],
             inferenceConfig={"maxTokens": 400, "temperature": 0.4},
         )
@@ -109,7 +125,12 @@ def handler(event, _context):
         emoji = str(parsed.get("emoji", "✨")).strip()[:8]
         headline = str(parsed.get("headline", "")).strip()[:120]
         tips = [str(t).strip() for t in parsed.get("tips", []) if str(t).strip()][:4]
+        score = parsed.get("score")
+        score = int(score) if isinstance(score, (int, float)) else None
     except Exception:
-        vibe, emoji, headline, tips = "Your Light", "✨", text.strip()[:120], []
+        vibe, emoji, headline, tips, score = "Your Light", "✨", text.strip()[:120], [], None
 
-    return _response(200, {"vibe": vibe, "emoji": emoji, "headline": headline, "tips": tips})
+    result = {"vibe": vibe, "emoji": emoji, "headline": headline, "tips": tips}
+    if score is not None:
+        result["score"] = max(0, min(100, score))
+    return _response(200, result)
