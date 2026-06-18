@@ -179,6 +179,8 @@ struct TutorialOverlay: View {
     @Binding var isActive: Bool
     var startIndex: Int = 0
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var index = 0
     @State private var penProgress: CGFloat = 0
     @State private var arrowProgress: CGFloat = 0
@@ -349,6 +351,16 @@ struct TutorialOverlay: View {
         underlineProgress = 0
         focusPop = 0.85
         typed = 0
+        // Respect Reduce Motion: present the finished annotation without the
+        // draw-on / typewriter motion.
+        if reduceMotion {
+            focusPop = 1.0
+            penProgress = 1.0
+            arrowProgress = 1.0
+            underlineProgress = 1.0
+            typed = step.body.count
+            return
+        }
         withAnimation(.spring(response: 0.45, dampingFraction: 0.7)) { focusPop = 1.0 }
         // Scribble the loop, then sketch the arrow pointing at it.
         withAnimation(.easeInOut(duration: 0.6).delay(0.12)) { penProgress = 1.0 }
