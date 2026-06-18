@@ -196,12 +196,7 @@ struct RegularRootView: View {
 
     /// Opens the AI Lighting Coach for the just-captured snapshot + readings.
     private var coachButton: some View {
-        let label: String
-        switch language {
-        case .korean:  label = "AI 조명 코치"
-        case .french:  label = "Coach lumière IA"
-        case .english: label = "AI Lighting Coach"
-        }
+        let label = language.tr("AI Lighting Coach", "AI 조명 코치", "Coach lumière IA")
         return Button { LMHaptics.soft(); showCoach = true } label: {
             HStack(spacing: 8) {
                 Image(systemName: "sparkles")
@@ -250,20 +245,38 @@ struct RegularRootView: View {
             if mappedRecords.isEmpty {
                 recordsEmptyState
             } else {
-                LMRecordsList(records: mappedRecords, language: language, onDelete: deleteRecord)
-                    .padding(.top, 56)
+                VStack(spacing: 8) {
+                    collectionHeader
+                        .padding(.top, 56)
+                        .padding(.horizontal, LM.pad)
+                    LMRecordsList(records: mappedRecords, language: language, onDelete: deleteRecord)
+                }
             }
+        }
+    }
+
+    /// Light-Diary collection summary: how many readings + distinct vibes saved.
+    private var collectionHeader: some View {
+        let count = mappedRecords.count
+        let vibes = Set(mappedRecords.compactMap { $0.vibe }).count
+        let text = language.tr(
+            "\(count) reading\(count == 1 ? "" : "s") · \(vibes) vibe\(vibes == 1 ? "" : "s") collected ✨",
+            "기록 \(count)개 · 분위기 \(vibes)종 ✨",
+            "\(count) mesures · \(vibes) ambiances ✨")
+        return HStack {
+            Text(text)
+                .font(LM.font(LM.FontSize.caption, .semibold))
+                .foregroundStyle(LM.textSecondary)
+            Spacer()
         }
     }
 
     /// Friendly, on-brand empty state for the Records / Light Diary tab.
     private var recordsEmptyState: some View {
-        let subtitle: String
-        switch language {
-        case .korean:  subtitle = "측정을 캡처하면 라이트 다이어리가 시작돼요 ✨"
-        case .french:  subtitle = "Capture une mesure pour démarrer ton Light Diary ✨"
-        case .english: subtitle = "Capture a reading to start your Light Diary ✨"
-        }
+        let subtitle = language.tr(
+            "Capture a reading to start your Light Diary ✨",
+            "측정을 캡처하면 라이트 다이어리가 시작돼요 ✨",
+            "Capture une mesure pour démarrer ton Light Diary ✨")
         return VStack(spacing: 10) {
             Image(systemName: "sparkles")
                 .font(.system(size: 34))
@@ -281,19 +294,11 @@ struct RegularRootView: View {
     }
 
     private var permissionDenied: some View {
-        let message: String
-        let buttonLabel: String
-        switch language {
-        case .korean:
-            message = "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요."
-            buttonLabel = "설정 열기"
-        case .french:
-            message = "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages."
-            buttonLabel = "Ouvrir Réglages"
-        case .english:
-            message = "Camera access is required to measure light.\nPlease enable it in Settings."
-            buttonLabel = "Open Settings"
-        }
+        let message = language.tr(
+            "Camera access is required to measure light.\nPlease enable it in Settings.",
+            "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요.",
+            "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages.")
+        let buttonLabel = language.tr("Open Settings", "설정 열기", "Ouvrir Réglages")
         return VStack(spacing: 20) {
             Spacer()
             Image(systemName: "camera.fill")
@@ -449,9 +454,7 @@ struct RegularRootView: View {
     }
 
     private var tutorialSteps: [TutorialStep] {
-        func t(_ en: String, _ ko: String, _ fr: String) -> String {
-            switch language { case .korean: return ko; case .french: return fr; case .english: return en }
-        }
+        let t = language.tr
         return [
             TutorialStep(
                 target: .readout,

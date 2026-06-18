@@ -298,10 +298,6 @@ struct LMAmbienceView: View {
     }
 
     private func t(_ en: String, _ ko: String, _ fr: String) -> String {
-        switch language {
-        case .korean:  return ko
-        case .french:  return fr
-        case .english: return en
-        }
+        language.tr(en, ko, fr)
     }
 }

@@ -645,19 +645,11 @@ struct LMSnapshotViewer: View {
     }
 
     private var shareTitle: String {
-        switch language {
-        case .korean:  return "내 빛 분위기"
-        case .french:  return "Mon ambiance"
-        case .english: return "My light vibe"
-        }
+        language.tr("My light vibe", "내 빛 분위기", "Mon ambiance")
     }
 
     private var shareButtonLabel: String {
-        switch language {
-        case .korean:  return "분위기 공유"
-        case .french:  return "Partager"
-        case .english: return "Share your vibe"
-        }
+        language.tr("Share your vibe", "분위기 공유", "Partager")
     }
 
     @MainActor

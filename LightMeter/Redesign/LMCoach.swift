@@ -65,9 +65,7 @@ struct StubLightingCoachService: LightingCoachService {
     func advise(imageData: Data?, lux: Double, kelvin: Double,
                 language: AppLanguage, intent: CoachIntent) async throws -> CoachAdvice {
         try? await Task.sleep(nanoseconds: 1_300_000_000)   // mimic model latency
-        func t(_ en: String, _ ko: String, _ fr: String) -> String {
-            switch language { case .korean: return ko; case .french: return fr; case .english: return en }
-        }
+        let t = language.tr
         let dim = lux < 100, bright = lux > 400
         let warm = kelvin < 3300, cool = kelvin > 4700
 
@@ -397,6 +395,6 @@ struct LMCoachSheet: View {
     }
 
     private func t(_ en: String, _ ko: String, _ fr: String) -> String {
-        switch language { case .korean: return ko; case .french: return fr; case .english: return en }
+        language.tr(en, ko, fr)
     }
 }

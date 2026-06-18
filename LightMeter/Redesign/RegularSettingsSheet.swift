@@ -92,11 +92,7 @@ struct RegularSettingsSheet: View {
     }
 
     private func localized(en: String, ko: String, fr: String) -> String {
-        switch language {
-        case .korean: return ko
-        case .french: return fr
-        case .english: return en
-        }
+        language.tr(en, ko, fr)
     }
 }
 
