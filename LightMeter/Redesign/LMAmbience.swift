@@ -42,6 +42,22 @@ struct LightScene: Identifiable {
         return luxErr + kErr
     }
 
+    /// How the room's brightness should move toward this scene.
+    /// `.increase` = brighten, `.decrease` = dim, `.ok` = already in range.
+    func brightnessAdjust(lux: Double) -> SceneAdjust {
+        if lux < self.lux.lowerBound { return .increase }
+        if lux > self.lux.upperBound { return .decrease }
+        return .ok
+    }
+
+    /// How the room's warmth should move toward this scene.
+    /// `.increase` = warm it up (lower Kelvin), `.decrease` = cool it down.
+    func warmthAdjust(kelvin: Double) -> SceneAdjust {
+        if kelvin > self.kelvin.upperBound { return .increase }
+        if kelvin < self.kelvin.lowerBound { return .decrease }
+        return .ok
+    }
+
     static let all: [LightScene] = [
         LightScene(id: "relax", icon: "moon.stars.fill", lux: 20...80, kelvin: 2000...2700,
                    swatch: [Color(hex: 0xFFB26B), Color(hex: 0xFF7E3D)],
@@ -67,6 +83,9 @@ struct LightScene: Identifiable {
         all.min { $0.distance(lux: lux, kelvin: kelvin) < $1.distance(lux: lux, kelvin: kelvin) } ?? all[0]
     }
 }
+
+/// Direction a reading should move to reach a scene's target range.
+enum SceneAdjust: Equatable { case ok, increase, decrease }
 
 // MARK: - Ambience screen
 
@@ -196,15 +215,15 @@ struct LMAmbienceView: View {
     private func suggestion(for scene: LightScene) -> String {
         let name = scene.name(language)
         var parts: [String] = []
-        if lux < scene.lux.lowerBound {
-            parts.append(t("brighten the room", "조명을 더 밝게", "monte la luminosité"))
-        } else if lux > scene.lux.upperBound {
-            parts.append(t("dim it down", "조명을 더 어둡게", "baisse l'intensité"))
+        switch scene.brightnessAdjust(lux: lux) {
+        case .increase: parts.append(t("brighten the room", "조명을 더 밝게", "monte la luminosité"))
+        case .decrease: parts.append(t("dim it down", "조명을 더 어둡게", "baisse l'intensité"))
+        case .ok: break
         }
-        if kelvin > scene.kelvin.upperBound {
-            parts.append(t("warm the light", "색을 더 따뜻하게", "réchauffe la lumière"))
-        } else if kelvin < scene.kelvin.lowerBound {
-            parts.append(t("cool it down", "색을 더 차갑게", "refroidis la lumière"))
+        switch scene.warmthAdjust(kelvin: kelvin) {
+        case .increase: parts.append(t("warm the light", "색을 더 따뜻하게", "réchauffe la lumière"))
+        case .decrease: parts.append(t("cool it down", "색을 더 차갑게", "refroidis la lumière"))
+        case .ok: break
         }
         if parts.isEmpty {
             return t("You're right in the \(name) zone. ✨",

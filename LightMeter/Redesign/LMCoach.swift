@@ -85,13 +85,7 @@ struct StubLightingCoachService: LightingCoachService {
         }
 
         if intent == .selfie {
-            // Flattering selfie light ≈ bright-ish (200–1000 lx), neutral-warm (2700–5500K).
-            var s = 100.0
-            if lux < 200 { s -= min(45, (200 - lux) / 200 * 45) }
-            else if lux > 1000 { s -= min(30, (lux - 1000) / 1500 * 30) }
-            if kelvin > 5500 { s -= min(30, (kelvin - 5500) / 2000 * 30) }
-            else if kelvin < 2700 { s -= min(20, (2700 - kelvin) / 1000 * 20) }
-            let score = Int(max(20, min(100, s)).rounded())
+            let score = SelfieLightScore.score(lux: lux, kelvin: kelvin)
 
             let headline = score >= 80 ? t("Soft & flattering ✨", "부드럽고 화사해요 ✨", "Douce et flatteuse ✨")
                 : score >= 60 ? t("Decent — a tweak away", "괜찮아요 — 살짝만 손보면", "Correcte — un petit réglage")
