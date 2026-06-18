@@ -119,29 +119,30 @@ private struct HandArrow: Shape {
         var p = Path()
         let dx = to.x - from.x, dy = to.y - from.y
         let len = max(1, sqrt(dx * dx + dy * dy))
-        let px = -dy / len, py = dx / len          // unit perpendicular
-        let bow = min(11, len * 0.08)              // gentle hand-drawn curve
+        let ux = dx / len, uy = dy / len           // unit chord direction
+        let px = -uy, py = ux                       // unit perpendicular
+        let bow = min(8, len * 0.06)               // subtle hand-drawn curve
+        let headLen = min(18, max(13, len * 0.17))
+        let spread: CGFloat = 0.44
+        // Stop the shaft just short of the tip so its round cap doesn't pile up
+        // at the point — the arrowhead's V makes the clean tip instead.
+        let stop = max(0, 1 - (headLen * 0.55) / len)
         let steps = 48
-        var prev = from                            // 2nd-to-last point (tip tangent)
         for i in 0...steps {
-            let t = CGFloat(i) / CGFloat(steps)
+            let u = CGFloat(i) / CGFloat(steps)     // 0…1 along the drawn shaft
+            let t = stop * u                         // fraction toward the tip
             // Squared envelope: zero offset AND zero slope at both ends, so the
-            // shaft leaves the tail and meets the tip dead straight — no kink.
-            let env = sin(t * .pi)
+            // shaft runs dead straight along the chord into the arrowhead.
+            let env = sin(u * .pi)
             let env2 = env * env
-            let off = bow * env2 + 1.0 * sin(t * 5.0 + seed) * env2
+            let off = bow * env2 + 0.4 * sin(u * 5.0 + seed) * env2
             let pt = CGPoint(x: from.x + dx * t + px * off,
                              y: from.y + dy * t + py * off)
             if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
-            if i == steps - 1 { prev = pt }
         }
-        // Arrowhead aligned to the shaft's actual tangent at the tip, so the two
-        // barbs sit symmetrically on the real approach direction.
-        let tx = to.x - prev.x, ty = to.y - prev.y
-        let tl = max(0.0001, sqrt(tx * tx + ty * ty))
-        let backAngle = atan2(-ty / tl, -tx / tl)
-        let headLen = min(18, max(13, len * 0.17))
-        let spread: CGFloat = 0.46
+        // Arrowhead aimed straight along the chord (exactly where the shaft
+        // arrives), so the two barbs are perfectly symmetric — no tilt.
+        let backAngle = atan2(-uy, -ux)
         let b1 = CGPoint(x: to.x + headLen * cos(backAngle + spread),
                          y: to.y + headLen * sin(backAngle + spread))
         let b2 = CGPoint(x: to.x + headLen * cos(backAngle - spread),
