@@ -71,6 +71,7 @@
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
 		E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */; };
 		E56A97D88FE11681E64FB07F /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */; };
+		E68ED32CE8B9F294A540DAE9 /* NanumPenScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59866E0246D8FC0B7925133C /* NanumPenScript-Regular.ttf */; };
 		E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */; };
 		EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */; };
 		ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE078BD017B4B9258C10AED6 /* TemperatureView.swift */; };
@@ -119,6 +120,7 @@
 		522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.otf"; sourceTree = "<group>"; };
 		593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGenerator.swift; sourceTree = "<group>"; };
+		59866E0246D8FC0B7925133C /* NanumPenScript-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumPenScript-Regular.ttf"; sourceTree = "<group>"; };
 		62BF30A70BBBF1C7BEB3CCDF /* LightMeterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LightMeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		62FD179DA1B6CA53048BECC1 /* ActivityChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChip.swift; sourceTree = "<group>"; };
 		6A34737E8E6769616196B553 /* TabTransitionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionAction.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */,
 				57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */,
 				F03E740E40B2D08B82CF9A59 /* Inter-SemiBold.otf */,
+				59866E0246D8FC0B7925133C /* NanumPenScript-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				95DBE1A2A311E0E4000FD23A /* Inter-Medium.otf in Resources */,
 				89E501FC530641ED3303EFDC /* Inter-Regular.otf in Resources */,
 				415641BA5DB1A2931A4EB9C8 /* Inter-SemiBold.otf in Resources */,
+				E68ED32CE8B9F294A540DAE9 /* NanumPenScript-Regular.ttf in Resources */,
 				9C6FE3D275D79634D8615F77 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -26,6 +26,11 @@ targets:
       path: LightMeter/Info.plist
       properties:
         NSCameraUsageDescription: "This app needs camera access to measure light levels (lux and color temperature) in your environment."
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations:
+          - en
+          - ko
+          - fr
         UILaunchScreen: {}
         ITSAppUsesNonExemptEncryption: false
         CFBundleDisplayName: "Sunny Light Meter"
@@ -40,6 +45,7 @@ targets:
           - Inter-Medium.otf
           - Inter-SemiBold.otf
           - Inter-Bold.otf
+          - NanumPenScript-Regular.ttf
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "5"
 

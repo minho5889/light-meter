@@ -277,6 +277,27 @@ struct TutorialOverlay: View {
 
     // MARK: caption
 
+    /// Handwriting face for the heading, by script. Bradley Hand renders Latin
+    /// beautifully but has no Hangul, so Korean headings use the bundled Nanum
+    /// Pen Script (a Korean pen face); it reads lighter, so it's sized up a touch.
+    private func handwrittenFont(for text: String) -> Font {
+        if text.unicodeScalars.contains(where: { isHangul($0) }) {
+            return .custom("NanumPen-Regular", size: LM.FontSize.h1 + 16)
+        }
+        return .custom("Bradley Hand", size: LM.FontSize.h1 + 8).weight(.bold)
+    }
+
+    private func isHangul(_ s: Unicode.Scalar) -> Bool {
+        switch s.value {
+        case 0xAC00...0xD7A3,   // Hangul syllables
+             0x1100...0x11FF,   // Jamo
+             0x3130...0x318F:   // compatibility Jamo
+            return true
+        default:
+            return false
+        }
+    }
+
     private func captionCard(step: TutorialStep, screen: CGSize, target: CGRect) -> some View {
         // Put the caption on the opposite half from the spotlight so they don't overlap.
         let targetInTopHalf = target.midY < screen.height * 0.5
@@ -284,7 +305,7 @@ struct TutorialOverlay: View {
             if targetInTopHalf { Spacer() }
             VStack(alignment: .leading, spacing: 10) {
                 Text(step.title)
-                    .font(.custom("Bradley Hand", size: LM.FontSize.h1 + 8).weight(.bold))
+                    .font(handwrittenFont(for: step.title))
                     .foregroundStyle(LM.accent)
                     .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
                     .fixedSize()

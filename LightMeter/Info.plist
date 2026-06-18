@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>Sunny Light Meter</string>
 	<key>CFBundleExecutable</key>
@@ -12,6 +12,12 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ko</string>
+		<string>fr</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -30,6 +36,7 @@
 		<string>Inter-Medium.otf</string>
 		<string>Inter-SemiBold.otf</string>
 		<string>Inter-Bold.otf</string>
+		<string>NanumPenScript-Regular.ttf</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
