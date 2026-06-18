@@ -321,6 +321,12 @@ struct TutorialOverlay: View {
         return .custom("Caveat", size: LM.FontSize.h1 + 14).weight(.bold)
     }
 
+    /// Description / controls font — SF Rounded, to pair with the marker heading
+    /// (friendly + trendy, and clean across en/ko/fr).
+    private var noteBodyFont: Font {
+        .system(size: LM.FontSize.body + 1, weight: .medium, design: .rounded)
+    }
+
     private func isHangul(_ s: Unicode.Scalar) -> Bool {
         switch s.value {
         case 0xAC00...0xD7A3,   // Hangul syllables
@@ -364,12 +370,12 @@ struct TutorialOverlay: View {
             // Reserve the full body's height (invisible sizer) so the note size
             // — and therefore the arrow tail — stays put while the text types in.
             Text(step.body)
-                .font(LM.font(LM.FontSize.body, .medium))
+                .font(noteBodyFont)
                 .opacity(0)
                 .fixedSize(horizontal: false, vertical: true)
                 .overlay(alignment: .topLeading) {
                     Text(String(step.body.prefix(typed)))
-                        .font(LM.font(LM.FontSize.body, .medium))
+                        .font(noteBodyFont)
                         .foregroundStyle(.white.opacity(0.92))
                         .shadow(color: .black.opacity(0.55), radius: 3)
                         .fixedSize(horizontal: false, vertical: true)
@@ -386,14 +392,14 @@ struct TutorialOverlay: View {
                 Spacer(minLength: 12)
                 Button(action: finish) {
                     Text("Skip")
-                        .font(LM.font(LM.FontSize.caption, .medium))
+                        .font(.system(size: LM.FontSize.caption, weight: .medium, design: .rounded))
                         .foregroundStyle(.white.opacity(0.7))
                         .shadow(color: .black.opacity(0.5), radius: 2)
                 }
                 Button(action: advance) {
                     Text(index == steps.count - 1 ? "Done" : "Next")
-                        .font(LM.font(LM.FontSize.body, .semibold))
-                        .foregroundStyle(.white)
+                        .font(.system(size: LM.FontSize.body, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.black)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
                         .background(Capsule().fill(LM.accent))
