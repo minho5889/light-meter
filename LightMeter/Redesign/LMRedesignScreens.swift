@@ -294,12 +294,13 @@ struct LMCaptureControls: View {
                 Button(action: onFlip) {
                     Image(systemName: "camera.rotate")
                         .font(.system(size: 18, weight: .regular))
-                        .foregroundStyle(LM.textPrimary)
+                        .foregroundStyle(LM.readoutText)          // near-white, like the card/bar
                         .frame(width: 46, height: 46)
                         .background {
                             Circle()
                                 .fill(LM.glass)
-                                .overlay { Circle().fill(LM.glassTintMed) }
+                                .environment(\.colorScheme, .dark)  // dark frosted glass
+                                .overlay { Circle().fill(LM.readoutGlass) }
                                 .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
                         }
                 }
