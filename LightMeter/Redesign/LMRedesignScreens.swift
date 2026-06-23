@@ -254,7 +254,7 @@ struct LMGlassReadoutCard: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
-        .frame(width: isExpanded ? 290 : 220, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)   // full-width card (Figma 318pt)
         .lmGlass(tint: LM.readoutGlass, dark: true)
         .animation(.snappy(duration: 0.25), value: isExpanded)
     }

@@ -102,6 +102,9 @@ enum LM {
 
     /// Standard content padding.
     static let pad: CGFloat = 16
+    /// Readout-card side margin from the screen edge (Figma redline: 38pt,
+    /// giving a ~318pt-wide card on a 393pt screen).
+    static let readoutMargin: CGFloat = 38
     /// Standard gap between elements.
     static let gap: CGFloat = 12
 

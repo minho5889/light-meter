@@ -103,46 +103,40 @@ struct RegularRootView: View {
         let interp = isCaptured
             ? LuxInterpreter.interpret(lux: m.lux, language: language)
             : nil
-        return HStack(alignment: .top) {
-            LMGlassReadoutCard(
-                lux: luxDisplay(m.lux),
-                unit: "LUX",
-                temperature: "\(formatNumber(m.colorTemperature))K",
-                guideTitle: interp != nil
-                    ? LocalizedStrings.translate(key: "ui_actionable_tip", language: language)
-                    : nil,
-                guideDescription: interp?.description,
-                guideTip: interp?.tip
-            )
-            Spacer(minLength: 0)
-        }
-        .padding(.horizontal, LM.pad)
+        return LMGlassReadoutCard(
+            lux: luxDisplay(m.lux),
+            unit: "LUX",
+            temperature: "\(formatNumber(m.colorTemperature))K",
+            guideTitle: interp != nil
+                ? LocalizedStrings.translate(key: "ui_actionable_tip", language: language)
+                : nil,
+            guideDescription: interp?.description,
+            guideTip: interp?.tip
+        )
+        .padding(.horizontal, LM.readoutMargin)
         .padding(.top, 64)
-        .frame(maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
     private var temperatureContent: some View {
         let m = cameraViewModel.measurement
         let interp = KelvinInterpreter.interpret(kelvin: m.colorTemperature, language: language)
-        return HStack(alignment: .top) {
-            LMGlassReadoutCard(
-                lux: formatNumber(m.colorTemperature),
-                unit: "K",
-                temperature: "\(luxDisplay(m.lux)) LUX",
-                infoRows: [
-                    LMInfoRow(
-                        label: LocalizedStrings.translate(key: "ui_color_tone", language: language),
-                        value: interp.description),
-                    LMInfoRow(
-                        label: LocalizedStrings.translate(key: "ui_recommended_activities", language: language),
-                        value: interp.tip),
-                ]
-            )
-            Spacer(minLength: 0)
-        }
-        .padding(.horizontal, LM.pad)
+        return LMGlassReadoutCard(
+            lux: formatNumber(m.colorTemperature),
+            unit: "K",
+            temperature: "\(luxDisplay(m.lux)) LUX",
+            infoRows: [
+                LMInfoRow(
+                    label: LocalizedStrings.translate(key: "ui_color_tone", language: language),
+                    value: interp.description),
+                LMInfoRow(
+                    label: LocalizedStrings.translate(key: "ui_recommended_activities", language: language),
+                    value: interp.tip),
+            ]
+        )
+        .padding(.horizontal, LM.readoutMargin)
         .padding(.top, 64)
-        .frame(maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
     private var checkContent: some View {
