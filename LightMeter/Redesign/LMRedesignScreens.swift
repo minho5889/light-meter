@@ -253,7 +253,7 @@ struct LMGlassReadoutCard: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
         .frame(width: isExpanded ? 290 : 220, alignment: .leading)
-        .lmGlass(tint: LM.readoutGlass)
+        .lmGlass(tint: LM.readoutGlass, dark: true)
         .animation(.snappy(duration: 0.25), value: isExpanded)
     }
 }
@@ -343,7 +343,7 @@ struct LMRecordCard: View {
         }
         .padding(LM.pad)
         .frame(maxWidth: .infinity)
-        .lmGlass(tint: LM.readoutGlass)
+        .lmGlass(tint: LM.readoutGlass, dark: true)
     }
 
     private func metric(title: String, value: String) -> some View {
@@ -387,6 +387,7 @@ private struct LMSwipeRow: View {
                     .background {
                         Circle()
                             .fill(LM.glass)
+                            .environment(\.colorScheme, .dark)   // dark frosted circle
                             .overlay { Circle().fill(LM.readoutGlass) }
                             .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
                     }

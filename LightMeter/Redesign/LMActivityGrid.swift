@@ -72,7 +72,7 @@ private struct LMActivityCard: View {
                 .padding(.horizontal, LM.gap)
                 .padding(.vertical, 8)
                 .frame(height: height)
-                .lmGlass(cornerRadius: LM.cardRadius, tint: LM.readoutGlass)   // BG #2C2C2C @ 20%
+                .lmGlass(cornerRadius: LM.cardRadius, tint: LM.readoutGlass, dark: true)   // BG #2C2C2C @ 20%
         }
         .buttonStyle(LMPressableButtonStyle())
     }

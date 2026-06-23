@@ -161,14 +161,25 @@ struct LMGlass: ViewModifier {
     var cornerRadius: CGFloat = LM.cardRadius
     /// Tint laid over the material (default: medium `#FAFAFA` @ 0.5).
     var tint: Color = LM.glassTintMed
+    /// When true, the frosted material renders as a *dark* blur (forced dark
+    /// vibrancy) — the Figma "BG #2C2C2C" cards, which must read dark even over
+    /// a bright scene. Light controls (tab bar, buttons) leave this false.
+    var dark: Bool = false
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         return content
             .background {
-                shape
-                    .fill(LM.glass)
-                    .overlay { shape.fill(tint) }
+                if dark {
+                    shape
+                        .fill(LM.glass)
+                        .environment(\.colorScheme, .dark)   // dark frosted blur
+                        .overlay { shape.fill(tint) }
+                } else {
+                    shape
+                        .fill(LM.glass)
+                        .overlay { shape.fill(tint) }
+                }
             }
             .clipShape(shape)
             .overlay {
@@ -185,11 +196,13 @@ extension View {
     /// - Parameters:
     ///   - cornerRadius: Corner radius (default `LM.cardRadius`).
     ///   - tint: Overlay tint (default `LM.glassTintMed`).
+    ///   - dark: Render a dark frosted blur (Figma `#2C2C2C` cards).
     func lmGlass(
         cornerRadius: CGFloat = LM.cardRadius,
-        tint: Color = LM.glassTintMed
+        tint: Color = LM.glassTintMed,
+        dark: Bool = false
     ) -> some View {
-        modifier(LMGlass(cornerRadius: cornerRadius, tint: tint))
+        modifier(LMGlass(cornerRadius: cornerRadius, tint: tint, dark: dark))
     }
 }
 
