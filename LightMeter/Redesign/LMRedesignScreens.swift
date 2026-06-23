@@ -229,7 +229,7 @@ struct LMGlassReadoutCard: View {
                 if let guideTip {
                     Text(guideTip)
                         .font(LM.font(LM.FontSize.body, .regular))    // (tip) Regular 14pt
-                        .foregroundStyle(LM.readoutText.opacity(0.85))
+                        .foregroundStyle(LM.readoutText)              // full #FAFAFA per spec
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
@@ -240,7 +240,7 @@ struct LMGlassReadoutCard: View {
                             .foregroundStyle(LM.readoutText)
                         Text(row.value)
                             .font(LM.font(LM.FontSize.body, .regular))
-                            .foregroundStyle(LM.readoutText.opacity(0.9))
+                            .foregroundStyle(LM.readoutText)         // full #FAFAFA per spec
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .padding(.top, 4)
