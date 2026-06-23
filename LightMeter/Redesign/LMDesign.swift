@@ -49,6 +49,20 @@ enum LM {
     /// Destructive / delete tint — `#A43333` @ 0.2.
     static let deleteTint = Color(hex: 0xA43333, alpha: 0.2)
 
+    // MARK: Readout card (Figma spec)
+
+    /// Readout card glass fill — Figma "BG #2C2C2C @ 20%": a dark frosted tint
+    /// laid over the camera so the near-white text reads.
+    static let readoutGlass = Color(hex: 0x2C2C2C, alpha: 0.20)
+    /// Readout card text — Figma "#FAFAFA" (near-white) for all card copy.
+    static let readoutText = Color(hex: 0xFAFAFA)
+    /// Big lux number — "#FAFAFA + Gradation": a subtle top→bottom sheen.
+    static let readoutNumberGradient = LinearGradient(
+        colors: [Color(hex: 0xFAFAFA), Color(hex: 0xFAFAFA, alpha: 0.70)],
+        startPoint: .top,
+        endPoint: .bottom
+    )
+
     // MARK: Gradients
 
     /// `GRADIENT_LINEAR:#FAFAFA>#B5B5B5` — records card background (top → bottom).

@@ -182,48 +182,50 @@ struct LMGlassReadoutCard: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(lux)
-                    .font(LM.font(LM.FontSize.display, .bold))
-                    .foregroundStyle(LM.textPrimary)
+                    .font(LM.font(LM.FontSize.display, .semibold))   // Semi Bold 50pt
+                    .tracking(-1)                                     // -2% of 50pt
+                    .foregroundStyle(LM.readoutNumberGradient)        // FAFAFA + gradation
                 Text(unit)
-                    .font(LM.font(LM.FontSize.body, .semibold))
-                    .foregroundStyle(LM.textSecondary)
+                    .font(LM.font(LM.FontSize.h2, .regular))          // Regular 16pt
+                    .foregroundStyle(LM.readoutText)
             }
             Text(temperature)
-                .font(LM.font(LM.FontSize.h2, .medium))
-                .foregroundStyle(LM.textSecondary)
+                .font(LM.font(LM.FontSize.h1, .regular))              // Regular 18pt
+                .foregroundStyle(LM.readoutText)
 
             if isExpanded {
-                Divider()
-                    .overlay(LM.hairline)
+                Rectangle()                                           // Line: FAFAFA 1pt
+                    .fill(LM.readoutText.opacity(0.5))
+                    .frame(height: 1)
                     .padding(.top, 6)
 
                 if let guideTitle {
                     Text(guideTitle.uppercased())
-                        .font(LM.font(LM.FontSize.caption, .semibold))
-                        .foregroundStyle(LM.textSecondary)
+                        .font(LM.font(LM.FontSize.caption, .bold))    // Bold 12pt
+                        .foregroundStyle(LM.readoutText)
                         .padding(.top, 4)
                 }
                 if let guideDescription {
                     Text(guideDescription)
-                        .font(LM.font(LM.FontSize.body, .semibold))
-                        .foregroundStyle(LM.textPrimary)
+                        .font(LM.font(LM.FontSize.body, .bold))       // (env) Bold 14pt
+                        .foregroundStyle(LM.readoutText)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 if let guideTip {
                     Text(guideTip)
-                        .font(LM.font(LM.FontSize.caption))
-                        .foregroundStyle(LM.textSecondary)
+                        .font(LM.font(LM.FontSize.body, .regular))    // (tip) Regular 14pt
+                        .foregroundStyle(LM.readoutText.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
                 ForEach(infoRows) { row in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(row.label)
-                            .font(LM.font(LM.FontSize.caption, .semibold))
-                            .foregroundStyle(LM.textSecondary)
+                            .font(LM.font(LM.FontSize.caption, .bold))
+                            .foregroundStyle(LM.readoutText)
                         Text(row.value)
-                            .font(LM.font(LM.FontSize.body, .medium))
-                            .foregroundStyle(LM.textPrimary)
+                            .font(LM.font(LM.FontSize.body, .regular))
+                            .foregroundStyle(LM.readoutText.opacity(0.9))
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .padding(.top, 4)
@@ -234,7 +236,7 @@ struct LMGlassReadoutCard: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
         .frame(width: isExpanded ? 290 : 220, alignment: .leading)
-        .lmGlass(tint: LM.glassTintSoft)
+        .lmGlass(tint: LM.readoutGlass)
         .animation(.snappy(duration: 0.25), value: isExpanded)
     }
 }
