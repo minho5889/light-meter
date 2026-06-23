@@ -74,12 +74,26 @@ enum LMTab: String, CaseIterable, Identifiable {
         case .records:     return "record.circle"
         }
     }
+
+    /// Localized tab label per the Figma design (Brightness · Color Temp ·
+    /// Analysis · Records).
+    func title(_ language: AppLanguage) -> String {
+        let key: String
+        switch self {
+        case .brightness:  key = "tab_brightness"
+        case .temperature: key = "tab_color_temp"
+        case .check:       key = "tab_analysis"
+        case .records:     key = "tab_records"
+        }
+        return LocalizedStrings.translate(key: key, language: language)
+    }
 }
 
 /// A single tappable item inside `LMCapsuleTabBar`.
 private struct LMTabItem: View {
     let tab: LMTab
     let isSelected: Bool
+    var language: AppLanguage = .english
     let action: () -> Void
 
     var body: some View {
@@ -87,7 +101,7 @@ private struct LMTabItem: View {
             VStack(spacing: 4) {
                 Image(systemName: tab.symbol)
                     .font(.system(size: 18, weight: .regular))
-                Text(tab.rawValue)
+                Text(tab.title(language))
                     .font(LM.font(LM.FontSize.micro, .medium))
             }
             .foregroundStyle(isSelected ? LM.textPrimary : LM.textSecondary)
@@ -114,11 +128,12 @@ private struct LMTabItem: View {
 /// selected item.
 struct LMCapsuleTabBar: View {
     @Binding var selection: LMTab
+    var language: AppLanguage = .english
 
     var body: some View {
         HStack(spacing: 4) {
             ForEach(LMTab.allCases) { tab in
-                LMTabItem(tab: tab, isSelected: tab == selection) {
+                LMTabItem(tab: tab, isSelected: tab == selection, language: language) {
                     withAnimation(.snappy(duration: 0.22)) { selection = tab }
                 }
             }

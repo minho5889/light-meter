@@ -9,6 +9,10 @@ public struct LocalizedStrings {
         "tab_temperature": [.english: "Temperature", .korean: "색온도", .french: "Température"],
         "tab_check": [.english: "Check", .korean: "플리커", .french: "Sécurité"],
         "tab_records": [.english: "Records", .korean: "기록", .french: "Historique"],
+        // Regular-mode tab labels per Figma (distinct from the Advanced-mode
+        // "Temperature"/"Check" above, which ContentView still uses).
+        "tab_color_temp": [.english: "Color Temp", .korean: "색온도", .french: "Temp. couleur"],
+        "tab_analysis": [.english: "Analysis", .korean: "분석", .french: "Analyse"],
         
         // Static UI Titles & Details
         "ui_user_guide": [.english: "User Guide", .korean: "사용자 가이드", .french: "Guide de l'utilisateur"],
