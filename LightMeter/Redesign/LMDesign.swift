@@ -56,9 +56,14 @@ enum LM {
     static let readoutGlass = Color(hex: 0x2C2C2C, alpha: 0.20)
     /// Readout card text — Figma "#FAFAFA" (near-white) for all card copy.
     static let readoutText = Color(hex: 0xFAFAFA)
-    /// Big lux number — "#FAFAFA + Gradation": a subtle top→bottom sheen.
+    /// Big lux number — "#FAFAFA + Gradation": a strong top→bottom gloss, bright
+    /// white at the top fading to translucent at the base (per box_bright_val).
     static let readoutNumberGradient = LinearGradient(
-        colors: [Color(hex: 0xFAFAFA), Color(hex: 0xFAFAFA, alpha: 0.70)],
+        stops: [
+            .init(color: Color(hex: 0xFAFAFA), location: 0.0),
+            .init(color: Color(hex: 0xFAFAFA), location: 0.45),
+            .init(color: Color(hex: 0xFAFAFA, alpha: 0.30), location: 1.0),
+        ],
         startPoint: .top,
         endPoint: .bottom
     )
@@ -90,8 +95,8 @@ enum LM {
     static let cardRadius: CGFloat = 24
     /// Pill / capsule control corner radius (spec `~28`).
     static let pillRadius: CGFloat = 28
-    /// Large circular button diameter (shutter / FAB).
-    static let buttonCircle: CGFloat = 72
+    /// Large circular button diameter (shutter / Back), per Figma redline (79pt).
+    static let buttonCircle: CGFloat = 79
 
     // MARK: Spacing
 

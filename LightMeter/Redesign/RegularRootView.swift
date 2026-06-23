@@ -208,21 +208,20 @@ struct RegularRootView: View {
                 frozenFrame = nil
             }
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 0) {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(LM.textPrimary)
-                    .frame(width: LM.buttonCircle, height: LM.buttonCircle)
-                    .background {
-                        Circle()
-                            .fill(.white)
-                            .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 2) }
-                            .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
-                    }
                 Text(LocalizedStrings.translate(key: "ui_back", language: language))
                     .font(LM.font(LM.FontSize.caption, .medium))
-                    .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.4), radius: 2)
+                    .foregroundStyle(LM.textPrimary)
+            }
+            .frame(width: LM.buttonCircle, height: LM.buttonCircle)
+            .background {
+                Circle()
+                    .fill(.white)
+                    .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 2) }
+                    .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
             }
         }
         .buttonStyle(.plain)

@@ -294,7 +294,7 @@ struct LMCaptureControls: View {
                     Image(systemName: "camera.rotate")
                         .font(.system(size: 18, weight: .regular))
                         .foregroundStyle(LM.textPrimary)
-                        .frame(width: 48, height: 48)
+                        .frame(width: 46, height: 46)
                         .background {
                             Circle()
                                 .fill(LM.glass)
@@ -304,7 +304,7 @@ struct LMCaptureControls: View {
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.trailing, 36)
+            .padding(.trailing, 46)
         }
         .frame(maxWidth: .infinity)
     }
