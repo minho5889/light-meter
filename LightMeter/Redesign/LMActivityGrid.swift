@@ -63,8 +63,8 @@ private struct LMActivityCard: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(LM.font(LM.FontSize.body, .semibold))
-                .foregroundStyle(LM.textPrimary)
+                .font(LM.font(LM.FontSize.body, .bold))            // FAFAFA Bold 14pt
+                .foregroundStyle(LM.readoutText)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .minimumScaleFactor(0.85)
@@ -72,7 +72,7 @@ private struct LMActivityCard: View {
                 .padding(.horizontal, LM.gap)
                 .padding(.vertical, 8)
                 .frame(height: height)
-                .lmGlass(cornerRadius: LM.cardRadius, tint: LM.glassTintMed)
+                .lmGlass(cornerRadius: LM.cardRadius, tint: LM.readoutGlass)   // BG #2C2C2C @ 20%
         }
         .buttonStyle(LMPressableButtonStyle())
     }

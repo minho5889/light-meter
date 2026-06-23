@@ -167,7 +167,7 @@ struct RegularRootView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                LMRecordsList(records: mappedRecords, onDelete: deleteRecord)
+                LMRecordsList(records: mappedRecords, language: language, onDelete: deleteRecord)
                     .padding(.top, 56)
             }
         }

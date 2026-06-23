@@ -311,49 +311,49 @@ struct LMCaptureControls: View {
 /// A single record card on the Records screen.
 struct LMRecordCard: View {
     let record: LMRecord
+    var language: AppLanguage = .english
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             // Header: index (left) + date/time (right).
             HStack(alignment: .top) {
                 Text("#\(record.index)")
                     .font(LM.font(LM.FontSize.body, .semibold))
-                    .foregroundStyle(LM.textPrimary)
+                    .foregroundStyle(LM.readoutText)
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(record.dateLine)
                         .font(LM.font(LM.FontSize.body, .medium))
-                        .foregroundStyle(LM.textPrimary)
+                        .foregroundStyle(LM.readoutText)
                     Text(record.timeLine)
                         .font(LM.font(LM.FontSize.caption))
-                        .foregroundStyle(LM.textSecondary)
+                        .foregroundStyle(LM.readoutText.opacity(0.7))
                 }
             }
 
-            Divider()
-                .overlay(LM.hairline)
-
-            // Two-column metrics.
-            HStack(spacing: 0) {
-                metric(title: "밝기", value: record.brightness)
-                metric(title: "색온도", value: record.temperature)
+            // Two-column metrics (Brightness / Temperature), left-aligned.
+            HStack(alignment: .top, spacing: LM.gap) {
+                metric(title: LocalizedStrings.translate(key: "tab_brightness", language: language),
+                       value: record.brightness)
+                metric(title: LocalizedStrings.translate(key: "tab_temperature", language: language),
+                       value: record.temperature)
             }
         }
         .padding(LM.pad)
         .frame(maxWidth: .infinity)
-        .lmGlass(tint: LM.glassTintMed)
+        .lmGlass(tint: LM.readoutGlass)
     }
 
     private func metric(title: String, value: String) -> some View {
-        VStack(spacing: 4) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(LM.font(LM.FontSize.caption, .medium))
-                .foregroundStyle(LM.textSecondary)
+                .foregroundStyle(LM.readoutText.opacity(0.7))
             Text(value)
                 .font(LM.font(LM.FontSize.h2, .semibold))
-                .foregroundStyle(LM.textPrimary)
+                .foregroundStyle(LM.readoutText)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -362,6 +362,7 @@ struct LMRecordCard: View {
 private struct LMSwipeRow: View {
     let record: LMRecord
     let revealed: Bool
+    var language: AppLanguage = .english
     var onRevealChange: (Bool) -> Void
     var onDelete: () -> Void
 
@@ -379,12 +380,12 @@ private struct LMSwipeRow: View {
             Button(action: onDelete) {
                 Image(systemName: "trash")
                     .font(.system(size: 18, weight: .regular))
-                    .foregroundStyle(LM.textPrimary)
+                    .foregroundStyle(LM.readoutText)
                     .frame(width: 52, height: 52)
                     .background {
                         Circle()
                             .fill(LM.glass)
-                            .overlay { Circle().fill(LM.deleteTint) }
+                            .overlay { Circle().fill(LM.readoutGlass) }
                             .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
                     }
             }
@@ -392,7 +393,7 @@ private struct LMSwipeRow: View {
             .padding(.trailing, 12)
             .opacity(offset < -8 ? 1 : 0)
 
-            LMRecordCard(record: record)
+            LMRecordCard(record: record, language: language)
                 .offset(x: offset)
                 .gesture(
                     DragGesture(minimumDistance: 10)
@@ -418,6 +419,7 @@ private struct LMSwipeRow: View {
 /// Scrollable list of record cards with interactive swipe-to-delete.
 struct LMRecordsList: View {
     let records: [LMRecord]
+    var language: AppLanguage = .english
     /// Called with the record to delete when its trash button is tapped.
     var onDelete: ((LMRecord) -> Void)? = nil
 
@@ -430,6 +432,7 @@ struct LMRecordsList: View {
                     LMSwipeRow(
                         record: record,
                         revealed: revealedID == record.id,
+                        language: language,
                         onRevealChange: { open in
                             withAnimation(.snappy(duration: 0.25)) {
                                 revealedID = open ? record.id : nil
