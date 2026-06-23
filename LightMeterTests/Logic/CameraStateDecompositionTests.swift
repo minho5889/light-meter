@@ -75,12 +75,7 @@ struct CameraStateDecompositionTests {
         #expect(store.records.count == 1)
         #expect(store.records[0].lux == 350.0)
         #expect(store.records[0].kelvin == 4500.0)
-
-        // Chips are no longer stored — they are recomputed from lux on read.
-        // Verify the round-trip reproduces exactly the lux-derived set.
-        let expectedChips = ActivityChip.activeChips(for: LuxRange.rangeIndex(for: 350.0))
-        #expect(Set(store.records[0].activeChips) == expectedChips)
-
+        
         // Verify defaults has been cleared
         #expect(defaults.data(forKey: "light_meter_records") == nil)
 

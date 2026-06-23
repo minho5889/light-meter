@@ -4,7 +4,6 @@ struct ContentView: View {
     @State private var cameraViewModel = CameraViewModel()
     @State private var selectedTab: Int = 0
     @State private var previousTab: Int = 0
-    @State private var showModeSettings = false
 
     /// Camera tabs show the shared preview; non-camera tabs don't.
     private var isCameraTab: Bool { selectedTab == 0 || selectedTab == 1 || selectedTab == 2 }
@@ -63,35 +62,11 @@ struct ContentView: View {
                 }
             }
 
-            // Switch-back-to-Regular settings gear (Advanced mode). Hidden on the
-            // Records tab, which already uses the top-right for its share button.
-            if cameraViewModel.permissionGranted && selectedTab != 3 {
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button {
-                            showModeSettings = true
-                        } label: {
-                            Image(systemName: "gearshape")
-                                .font(.system(.body, design: .rounded).weight(.semibold))
-                                .foregroundColor(.white)
-                                .frame(width: 40, height: 40)
-                                .background(.ultraThinMaterial, in: Circle())
-                                .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
-                        }
-                        .accessibilityLabel(LocalizedStrings.translate(key: "ax_settings", language: cameraViewModel.appLanguage))
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 12)
-            }
-
             // Permission-denied overlay — shown on top when camera access is missing
             if !cameraViewModel.permissionGranted {
                 VStack {
                     Spacer()
-                    Text(LocalizedStrings.translate(key: "ui_camera_permission_message", language: cameraViewModel.appLanguage))
+                    Text("Camera access is required to measure light.\nPlease enable it in Settings.")
                         .font(DesignConstants.fontSM)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
@@ -99,9 +74,6 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-        }
-        .sheet(isPresented: $showModeSettings) {
-            RegularSettingsSheet(language: cameraViewModel.appLanguage)
         }
         .onAppear {
             cameraViewModel.requestPermission()

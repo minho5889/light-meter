@@ -49,10 +49,6 @@ enum LM {
     /// Destructive / delete tint — `#A43333` @ 0.2.
     static let deleteTint = Color(hex: 0xA43333, alpha: 0.2)
 
-    /// Trendy tangerine "marker" accent for the onboarding tutorial pen strokes
-    /// & highlights — warm and punchy, semi-professional.
-    static let accent = Color(hex: 0xFF7A1A)
-
     // MARK: Gradients
 
     /// `GRADIENT_LINEAR:#FAFAFA>#B5B5B5` — records card background (top → bottom).

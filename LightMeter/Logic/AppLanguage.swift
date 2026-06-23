@@ -11,14 +11,4 @@ public enum AppLanguage: String, CaseIterable, Codable, Sendable {
         let code = Locale.current.language.languageCode?.identifier ?? "en"
         return AppLanguage(rawValue: code) ?? .english
     }
-
-    /// Pick the right string for this language — consolidates the inline
-    /// en/ko/fr switches used across the redesign for short, dynamic labels.
-    public func tr(_ en: String, _ ko: String, _ fr: String) -> String {
-        switch self {
-        case .korean:  return ko
-        case .french:  return fr
-        case .english: return en
-        }
-    }
 }

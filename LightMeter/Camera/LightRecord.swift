@@ -7,21 +7,17 @@ public struct LightRecord: Codable, Identifiable, Sendable, Equatable {
     public let kelvin: Double
     public let timestamp: Date
     public let activeChips: [ActivityChip]
-    /// The captured snapshot (downscaled JPEG), if one was saved. `nil` for
-    /// legacy records and captures made without a frame.
-    public let photoData: Data?
 
-    public init(id: UUID = UUID(), lux: Double, kelvin: Double, timestamp: Date = Date(), activeChips: [ActivityChip], photoData: Data? = nil) {
+    public init(id: UUID = UUID(), lux: Double, kelvin: Double, timestamp: Date = Date(), activeChips: [ActivityChip]) {
         self.id = id
         self.lux = lux
         self.kelvin = kelvin
         self.timestamp = timestamp
         self.activeChips = activeChips
-        self.photoData = photoData
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, lux, kelvin, timestamp, activeChips, photoData
+        case id, lux, kelvin, timestamp, activeChips
     }
 
     public init(from decoder: Decoder) throws {
@@ -30,8 +26,7 @@ public struct LightRecord: Codable, Identifiable, Sendable, Equatable {
         self.lux = try container.decode(Double.self, forKey: .lux)
         self.kelvin = try container.decode(Double.self, forKey: .kelvin)
         self.timestamp = try container.decode(Date.self, forKey: .timestamp)
-        self.photoData = try? container.decodeIfPresent(Data.self, forKey: .photoData)
-
+        
         // Attempt to decode as [ActivityChip], fallback to mapping legacy [String] values to ActivityChip
         if let chips = try? container.decode([ActivityChip].self, forKey: .activeChips) {
             self.activeChips = chips

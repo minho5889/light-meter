@@ -94,7 +94,6 @@ struct MeasurementView: View {
                             HStack {
                                 Image(systemName: "info.circle.fill")
                                     .foregroundColor(.orange)
-                                    .accessibilityHidden(true)
                                 Text(LocalizedStrings.translate(key: "ui_reflected_disclosure_title", language: cameraViewModel.appLanguage))
                                     .font(.system(.footnote, design: .rounded).weight(.bold))
                                     .foregroundColor(.white)
@@ -338,9 +337,8 @@ struct MeasurementView: View {
             capturedInterpretationTip = interpretation.tip
             capturedComparisonText = ComparisonGenerator.generate(lux: currentLux)
             
-            // Automatically save to Records history, with the captured snapshot.
-            let photoData = LMImage.jpegData(frame)
-            cameraViewModel.recordsStore.saveRecord(lux: currentLux, kelvin: currentKelvin, photoData: photoData)
+            // Automatically save to Records history
+            cameraViewModel.recordsStore.saveRecord(lux: currentLux, kelvin: currentKelvin)
             
             isCaptured = true
             

@@ -8,16 +8,7 @@ public struct LocalizedStrings {
         "tab_brightness": [.english: "Brightness", .korean: "밝기", .french: "Luminosité"],
         "tab_temperature": [.english: "Temperature", .korean: "색온도", .french: "Température"],
         "tab_check": [.english: "Check", .korean: "플리커", .french: "Sécurité"],
-        "tab_ambience": [.english: "Ambience", .korean: "분위기", .french: "Ambiance"],
         "tab_records": [.english: "Records", .korean: "기록", .french: "Historique"],
-
-        // Accessibility (VoiceOver) labels for icon-only controls
-        "ax_settings": [.english: "Settings", .korean: "설정", .french: "Réglages"],
-        "ax_capture": [.english: "Capture", .korean: "캡처", .french: "Capturer"],
-        "ax_flip_camera": [.english: "Flip camera", .korean: "카메라 전환", .french: "Changer de caméra"],
-        "ax_view_fullscreen": [.english: "View full screen", .korean: "전체 화면 보기", .french: "Plein écran"],
-        "ax_delete": [.english: "Delete record", .korean: "기록 삭제", .french: "Supprimer"],
-        "ax_close": [.english: "Close", .korean: "닫기", .french: "Fermer"],
         
         // Static UI Titles & Details
         "ui_user_guide": [.english: "User Guide", .korean: "사용자 가이드", .french: "Guide de l'utilisateur"],
@@ -32,7 +23,6 @@ public struct LocalizedStrings {
         "ui_light_check": [.english: "LIGHT CHECK", .korean: "LIGHT CHECK", .french: "CONTRÔLE LUMINEUX"],
         "ui_analyzing": [.english: "ANALYZING", .korean: "분석중", .french: "ANALYSE EN COURS"],
         "ui_wave_scope": [.english: "WAVE SCOPE", .korean: "WAVE SCOPE", .french: "CANAL D'ONDE"],
-        "ui_flicker_ready": [.english: "READY", .korean: "준비됨", .french: "PRÊT"],
         "ui_start_check": [.english: "Start Safety Check", .korean: "시작하기", .french: "Lancer le contrôle"],
         "ui_stop_check": [.english: "Stop Check", .korean: "중지하기", .french: "Arrêter le contrôle"],
         "ui_flicker_ready_desc": [.english: "Point your phone at a light source and tap the button below to start the health and safety checks.", .korean: "핸드폰을 광원 방향으로 향하게 하고 시작 버튼을 누르면 빛 안전성 검사가 시작됩니다.", .french: "Pointez votre téléphone vers une source de lumière et appuyez sur le bouton ci-dessous pour lancer les contrôles de sécurité."],
@@ -42,10 +32,6 @@ public struct LocalizedStrings {
         // Records Empty State
         "ui_no_records": [.english: "No records yet", .korean: "저장된 기록이 없습니다", .french: "Aucun historique"],
         "ui_records_empty_desc": [.english: "Your captured light readings will automatically appear here.", .korean: "캡처한 밝기 측정 결과가 여기에 자동으로 저장됩니다.", .french: "Vos mesures capturées s'afficheront automatiquement ici."],
-
-        // Camera Permission (shared by Regular + Advanced roots)
-        "ui_camera_permission_message": [.english: "Camera access is required to measure light.\nPlease enable it in Settings.", .korean: "빛을 측정하려면 카메라 접근 권한이 필요합니다.\n설정에서 권한을 허용해 주세요.", .french: "L'accès à la caméra est requis pour mesurer la lumière.\nActivez-le dans Réglages."],
-        "ui_camera_permission_action": [.english: "Open Settings", .korean: "설정 열기", .french: "Ouvrir Réglages"],
         
         // Reflected Light Disclosure
         "ui_reflected_disclosure_title": [.english: "Reflected Light Estimate", .korean: "반사광 측정 정보", .french: "Estimation de la Lumière Réfléchie"],
@@ -62,10 +48,7 @@ public struct LocalizedStrings {
         "ui_calibrate_reset": [.english: "Reset to Default (1.0x)", .korean: "기본값(1.0배)으로 초기화", .french: "Réinitialiser par Défaut (1.0x)"],
         "ui_calibrate_cancel": [.english: "Cancel", .korean: "취소", .french: "Annuler"],
         "ui_calibrate_button": [.english: "Calibrate", .korean: "보정하기", .french: "Étalonner"],
-        // Visible unit labels stay in Latin (scientific-symbol convention),
-        // consistent with the hardcoded LUX / K / Hz / EV labels. The *spoken*
-        // VoiceOver units (accessibility_captured_*) remain localized.
-        "ui_fc_short": [.english: "fc", .korean: "fc", .french: "fc"],
+        "ui_fc_short": [.english: "fc", .korean: "풋캔들", .french: "fc"],
         "ui_ev_short": [.english: "EV", .korean: "EV", .french: "EV"],
         "ui_equivalent_exposure": [.english: "Equivalent Exposure (ISO 100)", .korean: "동등 노출 설정 (ISO 100)", .french: "Expositions Équivalentes (ISO 100)"],
         "ui_shutter_speed": [.english: "Shutter", .korean: "셔터 속도", .french: "Obturateur"],

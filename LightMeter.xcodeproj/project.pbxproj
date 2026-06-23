@@ -12,10 +12,8 @@
 		07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141E153718B1A66906CF6AA8 /* LuxCalculator.swift */; };
 		08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83CE8AD298F8AE0FCA5235B /* TransparentBackground.swift */; };
 		09FE133AEFC5C74D28A38ABB /* ColorTemperatureCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */; };
-		0A65B714C46E45F8BC0CED3E /* CaveatBrush-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */; };
 		10B867859DF219A3BCB5ABC9 /* ComparisonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */; };
 		1242467572831488428302D0 /* LuxRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */; };
-		14DE2027116E61D65FE2FF71 /* LightVibe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0C19F3B40FE40DA49718F6 /* LightVibe.swift */; };
 		14F5E324A0BA681C474744DC /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */; };
 		180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */; };
 		1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */; };
@@ -26,36 +24,30 @@
 		362E472CE38C282A5070C287 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */; };
 		3F23D6DD2E64E8D6BFCD0CD7 /* TintInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4508894EF1207B077AF446 /* TintInterpreter.swift */; };
 		415641BA5DB1A2931A4EB9C8 /* Inter-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F03E740E40B2D08B82CF9A59 /* Inter-SemiBold.otf */; };
-		417A9CABE99D7100C4AAA5BD /* SelfieLightScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98CEA969184077A01CB8FA1E /* SelfieLightScore.swift */; };
 		43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A64F06C8F54E7EB52BD803 /* LightRecord.swift */; };
 		4A85FF8D4948BCA39D1FE91F /* ActivityChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FD179DA1B6CA53048BECC1 /* ActivityChip.swift */; };
 		4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34737E8E6769616196B553 /* TabTransitionAction.swift */; };
 		4C70950EFF64BCCD13101F48 /* MeasurementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */; };
 		4C80E8F81CB4267206F8BCC9 /* FlickerAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7E50B75302F02BAA4C179D /* FlickerAnalyzer.swift */; };
 		5453E25EA4CD9E2DD3345ACC /* ExposureValueCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */; };
-		60B55395E28B0C99001C5F58 /* LMAmbience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AED70E53F1B6EE06D9D85A7 /* LMAmbience.swift */; };
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
 		6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */; };
 		62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */; };
 		6AF688582A251DBCB4ECD15E /* TintInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */; };
 		6BA6F9CC64F5BBA2DBE870D2 /* RegularRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440FF8453EAF88226011E845 /* RegularRootView.swift */; };
 		6FFDC72D6B60277F88C94396 /* FlickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B365D9B743B9FC75C575FE68 /* FlickerModel.swift */; };
-		709FC4E02683A202277F1A67 /* LightVibeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867AA31536134DB737578A34 /* LightVibeTests.swift */; };
 		70D86419EDB6EE55F0C2E1FF /* CameraFrameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */; };
 		743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5ED9664D0D38546DC14383 /* LMDesign.swift */; };
-		76B55ABFA961ECF69E6BBB6D /* LMHaptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E3B8AE1C3CF2A40E74146 /* LMHaptics.swift */; };
 		7708CED8D4A5D81141993481 /* MeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0225A0690A5D5C9027835EB2 /* MeasurementModel.swift */; };
 		77D76C7BC802A14BC11BED7A /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAB4538FA9C995543411E8 /* AppLanguage.swift */; };
 		7E76B6F795E249E5A140198A /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0F44D6F9686E67479A6D05 /* RecordsView.swift */; };
 		812876F0AE08889F28F29768 /* LuxRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A18F24B9F641399B19318EE /* LuxRange.swift */; };
-		8223A953A018C76AD97FFE7F /* LightSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37ED00DEE89090785811C29 /* LightSceneTests.swift */; };
 		82453B2D0DF1E3A5EC37C2FB /* ExposureValueCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9213AEC2DEFD77FABC5D778 /* ExposureValueCalculatorTests.swift */; };
 		839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */; };
 		8867737AEAE195B03EEA114F /* FlickerInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */; };
 		897BCAEA38B78FD20B98973C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30817019AC95765C07F07866 /* Assets.xcassets */; };
 		89E501FC530641ED3303EFDC /* Inter-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */; };
 		8B249869753FB633C77DEDE8 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B83EECEA6CAF73FCBB149B /* PlaceholderView.swift */; };
-		8C9AE8987F7AAEA4158C78D5 /* LMImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E01DD573742FE93E365CD36 /* LMImage.swift */; };
 		8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */; };
 		947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */; };
 		95DBE1A2A311E0E4000FD23A /* Inter-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */; };
@@ -64,12 +56,8 @@
 		9C6FE3D275D79634D8615F77 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */; };
 		A182CF4B3A6D6FA724DC5696 /* CalibrationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB800177FF031E4B31C6856E /* CalibrationStoreTests.swift */; };
 		A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */; };
-		A8D86399BBBC90D1A7C62A77 /* SelfieLightScoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A27E93BD1C1917AF9C0C6D1 /* SelfieLightScoreTests.swift */; };
-		AC5BBD58DF529182D48F79CE /* TutorialOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */; };
 		ACB9A526668038CF6D68BB8C /* CameraSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */; };
 		B0438C850571F78C5F21C1AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */; };
-		B0BD586224FB0281CDC2076E /* LMImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D372EE292A8D5A1F4F2988 /* LMImageTests.swift */; };
-		B54BF0A640B211EBBBE2FF32 /* LMCoach.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A8C75239DE29BDA2548C3 /* LMCoach.swift */; };
 		B5987DCB478F3C327B9A57DA /* FlickerCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269857D946F301075B6B5E73 /* FlickerCheckView.swift */; };
 		B9CAE995A7FF9C73682EC13E /* ComparisonGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3821D0BB479632C0A6C023 /* ComparisonGeneratorTests.swift */; };
 		BD57A3FCF3C238E708850DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9D9057780326CEC3398958 /* ContentView.swift */; };
@@ -82,7 +70,6 @@
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
 		E38769976DC2A83A3EED675E /* ColorTemperatureCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67E84515B0974CFEBCC270 /* ColorTemperatureCalculator.swift */; };
 		E56A97D88FE11681E64FB07F /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */; };
-		E68ED32CE8B9F294A540DAE9 /* NanumPenScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59866E0246D8FC0B7925133C /* NanumPenScript-Regular.ttf */; };
 		E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */; };
 		EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */; };
 		ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE078BD017B4B9258C10AED6 /* TemperatureView.swift */; };
@@ -112,16 +99,13 @@
 		18D1F49B7EC2EEF4761B0A31 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		1CA5AA7301C6BB499DD8431A /* LightRecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecordEntity.swift; sourceTree = "<group>"; };
 		1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMActivityGrid.swift; sourceTree = "<group>"; };
-		1E01DD573742FE93E365CD36 /* LMImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMImage.swift; sourceTree = "<group>"; };
 		2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureValueCalculator.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
-		22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CaveatBrush-Regular.ttf"; sourceTree = "<group>"; };
 		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		3046556155B9CF0608A10FB7 /* RecordsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsStore.swift; sourceTree = "<group>"; };
 		30817019AC95765C07F07866 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
 		3B8C3240A5CE287AE8AE55FA /* RegularSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularSettingsSheet.swift; sourceTree = "<group>"; };
 		440FF8453EAF88226011E845 /* RegularRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularRootView.swift; sourceTree = "<group>"; };
 		48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreterTests.swift; sourceTree = "<group>"; };
@@ -133,8 +117,6 @@
 		522D1D82DD47D254300BA8D9 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.otf"; sourceTree = "<group>"; };
 		593D8722074739DD8C5FA820 /* ComparisonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonGenerator.swift; sourceTree = "<group>"; };
-		59866E0246D8FC0B7925133C /* NanumPenScript-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumPenScript-Regular.ttf"; sourceTree = "<group>"; };
-		5AED70E53F1B6EE06D9D85A7 /* LMAmbience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMAmbience.swift; sourceTree = "<group>"; };
 		62BF30A70BBBF1C7BEB3CCDF /* LightMeterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LightMeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		62FD179DA1B6CA53048BECC1 /* ActivityChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChip.swift; sourceTree = "<group>"; };
 		6A34737E8E6769616196B553 /* TabTransitionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionAction.swift; sourceTree = "<group>"; };
@@ -145,18 +127,13 @@
 		746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxCalculatorTests.swift; sourceTree = "<group>"; };
 		751FACCEEAA3CABCD4FEEC22 /* NumberFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormattingTests.swift; sourceTree = "<group>"; };
 		791FD5DC633AA4927A763E7D /* MeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementView.swift; sourceTree = "<group>"; };
-		83D372EE292A8D5A1F4F2988 /* LMImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMImageTests.swift; sourceTree = "<group>"; };
 		85A64F06C8F54E7EB52BD803 /* LightRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRecord.swift; sourceTree = "<group>"; };
 		85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreter.swift; sourceTree = "<group>"; };
 		85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.otf"; sourceTree = "<group>"; };
-		867AA31536134DB737578A34 /* LightVibeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightVibeTests.swift; sourceTree = "<group>"; };
-		8A27E93BD1C1917AF9C0C6D1 /* SelfieLightScoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieLightScoreTests.swift; sourceTree = "<group>"; };
 		8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationResult.swift; sourceTree = "<group>"; };
 		8E9FEC3AC3AE88559A671D16 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8F292B5CCA00B82FC232868D /* SignalSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalSmoother.swift; sourceTree = "<group>"; };
 		97CE860EBD1C9BB2E1B9D5F6 /* TemperatureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureCardView.swift; sourceTree = "<group>"; };
-		98CEA969184077A01CB8FA1E /* SelfieLightScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieLightScore.swift; sourceTree = "<group>"; };
-		9A0C19F3B40FE40DA49718F6 /* LightVibe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightVibe.swift; sourceTree = "<group>"; };
 		9AAA5DB7D298829B8185EE94 /* MeasurementCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCardView.swift; sourceTree = "<group>"; };
 		A38CBC56BF5FA04DED7BD031 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerInterpreter.swift; sourceTree = "<group>"; };
@@ -171,8 +148,6 @@
 		CB9D9057780326CEC3398958 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMRedesignScreens.swift; sourceTree = "<group>"; };
 		CDEAB4538FA9C995543411E8 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
-		D34A8C75239DE29BDA2548C3 /* LMCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMCoach.swift; sourceTree = "<group>"; };
-		D38E3B8AE1C3CF2A40E74146 /* LMHaptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMHaptics.swift; sourceTree = "<group>"; };
 		D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinInterpreterTests.swift; sourceTree = "<group>"; };
 		D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConstants.swift; sourceTree = "<group>"; };
 		D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
@@ -182,7 +157,6 @@
 		E4C7FC900A635BA48145427C /* AppMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMode.swift; sourceTree = "<group>"; };
 		ED0F44D6F9686E67479A6D05 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
 		F03E740E40B2D08B82CF9A59 /* Inter-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.otf"; sourceTree = "<group>"; };
-		F37ED00DEE89090785811C29 /* LightSceneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightSceneTests.swift; sourceTree = "<group>"; };
 		F758B3F97431F0337E6ABDC6 /* ColorTemperatureCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemperatureCalculatorTests.swift; sourceTree = "<group>"; };
 		F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxInterpreterTests.swift; sourceTree = "<group>"; };
 		FB5ED9664D0D38546DC14383 /* LMDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMDesign.swift; sourceTree = "<group>"; };
@@ -227,14 +201,10 @@
 				0A66F6E5E512F4729562C374 /* FlickerAnalyzerTests.swift */,
 				48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */,
 				D3FC5A4DD51010FB9CA651BD /* KelvinInterpreterTests.swift */,
-				F37ED00DEE89090785811C29 /* LightSceneTests.swift */,
-				867AA31536134DB737578A34 /* LightVibeTests.swift */,
-				83D372EE292A8D5A1F4F2988 /* LMImageTests.swift */,
 				14F8A654477FB9A001991C20 /* LocalizationTests.swift */,
 				746B12E44F7BCED67364E2BF /* LuxCalculatorTests.swift */,
 				F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */,
 				D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */,
-				8A27E93BD1C1917AF9C0C6D1 /* SelfieLightScoreTests.swift */,
 				6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */,
 				2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */,
 				B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */,
@@ -265,12 +235,10 @@
 				A67C1AC37A50584E13380AAF /* FlickerInterpreter.swift */,
 				8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */,
 				743937F5B9EC0615A393A4A7 /* KelvinInterpreter.swift */,
-				9A0C19F3B40FE40DA49718F6 /* LightVibe.swift */,
 				C5D5DC59E119CEEB4CA7A6FD /* LocalizedStrings.swift */,
 				141E153718B1A66906CF6AA8 /* LuxCalculator.swift */,
 				85DC13C9F3C332F61A5FFB93 /* LuxInterpreter.swift */,
 				0A18F24B9F641399B19318EE /* LuxRange.swift */,
-				98CEA969184077A01CB8FA1E /* SelfieLightScore.swift */,
 				8F292B5CCA00B82FC232868D /* SignalSmoother.swift */,
 				6A34737E8E6769616196B553 /* TabTransitionAction.swift */,
 				DA4508894EF1207B077AF446 /* TintInterpreter.swift */,
@@ -309,15 +277,10 @@
 			children = (
 				E4C7FC900A635BA48145427C /* AppMode.swift */,
 				1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */,
-				5AED70E53F1B6EE06D9D85A7 /* LMAmbience.swift */,
-				D34A8C75239DE29BDA2548C3 /* LMCoach.swift */,
 				FB5ED9664D0D38546DC14383 /* LMDesign.swift */,
-				D38E3B8AE1C3CF2A40E74146 /* LMHaptics.swift */,
-				1E01DD573742FE93E365CD36 /* LMImage.swift */,
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
 				440FF8453EAF88226011E845 /* RegularRootView.swift */,
 				3B8C3240A5CE287AE8AE55FA /* RegularSettingsSheet.swift */,
-				30FCAE71F645A70348C75B60 /* TutorialOverlay.swift */,
 				BB1700B0E28EB28A3707600D /* Fonts */,
 			);
 			path = Redesign;
@@ -369,12 +332,10 @@
 		BB1700B0E28EB28A3707600D /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				22FF63730E193DF21205533F /* CaveatBrush-Regular.ttf */,
 				D95BE6F33722B640FD540AF9 /* Inter-Bold.otf */,
 				85F6A95A1908BC6CC58D20A3 /* Inter-Medium.otf */,
 				57B1F3460A1376FA8E3B911E /* Inter-Regular.otf */,
 				F03E740E40B2D08B82CF9A59 /* Inter-SemiBold.otf */,
-				59866E0246D8FC0B7925133C /* NanumPenScript-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -487,12 +448,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				897BCAEA38B78FD20B98973C /* Assets.xcassets in Resources */,
-				0A65B714C46E45F8BC0CED3E /* CaveatBrush-Regular.ttf in Resources */,
 				C221CB31AC2590AB7633C296 /* Inter-Bold.otf in Resources */,
 				95DBE1A2A311E0E4000FD23A /* Inter-Medium.otf in Resources */,
 				89E501FC530641ED3303EFDC /* Inter-Regular.otf in Resources */,
 				415641BA5DB1A2931A4EB9C8 /* Inter-SemiBold.otf in Resources */,
-				E68ED32CE8B9F294A540DAE9 /* NanumPenScript-Regular.ttf in Resources */,
 				9C6FE3D275D79634D8615F77 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,15 +471,11 @@
 				F99DF0F94565431FDA4E5DD4 /* FlickerAnalyzerTests.swift in Sources */,
 				62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */,
 				839EEDA5B3D99112391E8E3B /* KelvinInterpreterTests.swift in Sources */,
-				B0BD586224FB0281CDC2076E /* LMImageTests.swift in Sources */,
-				8223A953A018C76AD97FFE7F /* LightSceneTests.swift in Sources */,
-				709FC4E02683A202277F1A67 /* LightVibeTests.swift in Sources */,
 				215E4128299483333603D01E /* LocalizationTests.swift in Sources */,
 				947D43296F961E3FD48B7815 /* LuxCalculatorTests.swift in Sources */,
 				61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */,
 				1242467572831488428302D0 /* LuxRangeTests.swift in Sources */,
 				E83E4E39DA38B43E08552F29 /* NumberFormattingTests.swift in Sources */,
-				A8D86399BBBC90D1A7C62A77 /* SelfieLightScoreTests.swift in Sources */,
 				6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */,
 				DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */,
 				6AF688582A251DBCB4ECD15E /* TintInterpreterTests.swift in Sources */,
@@ -554,16 +509,11 @@
 				CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */,
 				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */,
-				60B55395E28B0C99001C5F58 /* LMAmbience.swift in Sources */,
-				B54BF0A640B211EBBBE2FF32 /* LMCoach.swift in Sources */,
 				743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */,
-				76B55ABFA961ECF69E6BBB6D /* LMHaptics.swift in Sources */,
-				8C9AE8987F7AAEA4158C78D5 /* LMImage.swift in Sources */,
 				3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
 				43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */,
 				180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */,
-				14DE2027116E61D65FE2FF71 /* LightVibe.swift in Sources */,
 				8D8625281D9C90D56D5B74E7 /* LocalizedStrings.swift in Sources */,
 				07B3105C28BF127BA06FBAD1 /* LuxCalculator.swift in Sources */,
 				A795BA9DC7BE53A2E6D2DB95 /* LuxInterpreter.swift in Sources */,
@@ -577,14 +527,12 @@
 				6BA6F9CC64F5BBA2DBE870D2 /* RegularRootView.swift in Sources */,
 				9A3E776BCBEC5E5DBB14D8E0 /* RegularSettingsSheet.swift in Sources */,
 				248655F8D6DD9BF0FF04E9D6 /* RootView.swift in Sources */,
-				417A9CABE99D7100C4AAA5BD /* SelfieLightScore.swift in Sources */,
 				044650C676618FA8908A4118 /* SignalSmoother.swift in Sources */,
 				4C49A43B335453EC83DC8A0E /* TabTransitionAction.swift in Sources */,
 				1F629BD969930724FA2C3667 /* TemperatureCardView.swift in Sources */,
 				ED43B53E290AEAA4611B1A0C /* TemperatureView.swift in Sources */,
 				3F23D6DD2E64E8D6BFCD0CD7 /* TintInterpreter.swift in Sources */,
 				08CD778A0867208D9A354A8A /* TransparentBackground.swift in Sources */,
-				AC5BBD58DF529182D48F79CE /* TutorialOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

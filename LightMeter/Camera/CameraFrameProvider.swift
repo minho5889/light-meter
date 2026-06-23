@@ -122,14 +122,10 @@ final class CameraFrameProvider: NSObject, AVCaptureVideoDataOutputSampleBufferD
         if rollingSamples.count == FlickerAnalyzer.bufferSize && frameCounter % 30 == 0 {
             let activeSamples = rollingSamples
             
-            // Read active hardware frame rate dynamically. Guard against a degenerate
-            // frame duration (value == 0) which would make sampleRate inf/NaN and
-            // corrupt every downstream flicker frequency. Skip this analysis cycle.
+            // Read active hardware frame rate dynamically
             let minDuration = device.activeVideoMinFrameDuration
-            guard minDuration.value > 0 else { return }
             let sampleRate = Float(minDuration.timescale) / Float(minDuration.value)
-            guard sampleRate.isFinite, sampleRate > 0 else { return }
-
+            
             if let result = FlickerAnalyzer.analyze(samples: activeSamples, sampleRate: sampleRate) {
                 // Slice the last 60 samples to represent the real-time oscilloscope wave
                 let waveSamples = Array(activeSamples.suffix(60))

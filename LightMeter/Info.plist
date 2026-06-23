@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Sunny Light Meter</string>
 	<key>CFBundleExecutable</key>
@@ -12,12 +12,6 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>en</string>
-		<string>ko</string>
-		<string>fr</string>
-	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -25,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>2</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
@@ -36,8 +30,6 @@
 		<string>Inter-Medium.otf</string>
 		<string>Inter-SemiBold.otf</string>
 		<string>Inter-Bold.otf</string>
-		<string>NanumPenScript-Regular.ttf</string>
-		<string>CaveatBrush-Regular.ttf</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>

@@ -27,9 +27,7 @@ import SwiftUI
 
 /// A single light-measurement record (mock data for the demo screens).
 struct LMRecord: Identifiable {
-    /// Stable identity = the backing record's id when present, so the list
-    /// doesn't recreate rows (and re-decode photos) when the store reloads.
-    let id: UUID
+    let id = UUID()
     /// Display index, e.g. `3` → shown as "#3".
     let index: Int
     /// Pre-formatted date line, e.g. `2026-10-31`.
@@ -42,31 +40,6 @@ struct LMRecord: Identifiable {
     let temperature: String
     /// The backing store record's id, used to delete on swipe. `nil` in previews.
     var recordID: UUID? = nil
-    /// The captured snapshot (downscaled JPEG), if any.
-    var photoData: Data? = nil
-    /// Light Diary vibe (derived locally from the reading), e.g. "Cozy Cabincore".
-    var vibe: String? = nil
-    var emoji: String? = nil
-    /// Raw values (for rendering the shareable vibe card).
-    var luxValue: Double = 0
-    var kelvinValue: Double = 0
-
-    init(index: Int, dateLine: String, timeLine: String, brightness: String,
-         temperature: String, recordID: UUID? = nil, photoData: Data? = nil,
-         vibe: String? = nil, emoji: String? = nil, luxValue: Double = 0, kelvinValue: Double = 0) {
-        self.id = recordID ?? UUID()
-        self.index = index
-        self.dateLine = dateLine
-        self.timeLine = timeLine
-        self.brightness = brightness
-        self.temperature = temperature
-        self.recordID = recordID
-        self.photoData = photoData
-        self.vibe = vibe
-        self.emoji = emoji
-        self.luxValue = luxValue
-        self.kelvinValue = kelvinValue
-    }
 }
 
 extension LMRecord {
@@ -87,7 +60,7 @@ extension LMRecord {
 enum LMTab: String, CaseIterable, Identifiable {
     case brightness  = "Brightness"
     case temperature = "Temperature"
-    case ambience    = "Ambience"
+    case check       = "Check"
     case records     = "Records"
 
     var id: String { rawValue }
@@ -97,21 +70,9 @@ enum LMTab: String, CaseIterable, Identifiable {
         switch self {
         case .brightness:  return "sun.max"
         case .temperature: return "thermometer.medium"
-        case .ambience:    return "lightbulb.fill"
+        case .check:       return "magnifyingglass"
         case .records:     return "record.circle"
         }
-    }
-
-    /// Localized label (matches the rest of the app, which is fully localized).
-    func title(_ language: AppLanguage) -> String {
-        let key: String
-        switch self {
-        case .brightness:  key = "tab_brightness"
-        case .temperature: key = "tab_temperature"
-        case .ambience:    key = "tab_ambience"
-        case .records:     key = "tab_records"
-        }
-        return LocalizedStrings.translate(key: key, language: language)
     }
 }
 
@@ -119,18 +80,15 @@ enum LMTab: String, CaseIterable, Identifiable {
 private struct LMTabItem: View {
     let tab: LMTab
     let isSelected: Bool
-    var language: AppLanguage = .english
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: tab.symbol)
-                    .font(.system(size: LM.FontSize.h1, weight: .regular))
-                Text(tab.title(language))
+                    .font(.system(size: 18, weight: .regular))
+                Text(tab.rawValue)
                     .font(LM.font(LM.FontSize.micro, .medium))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
             }
             .foregroundStyle(isSelected ? LM.textPrimary : LM.textSecondary)
             .frame(maxWidth: .infinity)
@@ -156,13 +114,11 @@ private struct LMTabItem: View {
 /// selected item.
 struct LMCapsuleTabBar: View {
     @Binding var selection: LMTab
-    var language: AppLanguage = .english
 
     var body: some View {
         HStack(spacing: 4) {
             ForEach(LMTab.allCases) { tab in
-                LMTabItem(tab: tab, isSelected: tab == selection, language: language) {
-                    LMHaptics.tap()
+                LMTabItem(tab: tab, isSelected: tab == selection) {
                     withAnimation(.snappy(duration: 0.22)) { selection = tab }
                 }
             }
@@ -176,13 +132,12 @@ struct LMCapsuleTabBar: View {
 
 /// Circular frosted "settings" button (top-right of each screen).
 struct LMSettingsButton: View {
-    var language: AppLanguage = .english
     var action: () -> Void = {}
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "gearshape")
-                .font(.system(size: LM.FontSize.h1, weight: .regular))
+                .font(.system(size: 18, weight: .regular))
                 .foregroundStyle(LM.textPrimary)
                 .frame(width: 44, height: 44)
                 .background {
@@ -193,7 +148,6 @@ struct LMSettingsButton: View {
                 }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(LocalizedStrings.translate(key: "ax_settings", language: language))
     }
 }
 
@@ -255,15 +209,9 @@ struct LMGlassReadoutCard: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
-        // Collapsed: a fixed, compact card. Expanded (captured): fills the
-        // content width like the Figma's wide guide card.
-        .frame(minWidth: isExpanded ? 0 : 220,
-               maxWidth: isExpanded ? .infinity : 220,
-               alignment: .leading)
+        .frame(width: isExpanded ? 290 : 220, alignment: .leading)
         .lmGlass(tint: LM.glassTintSoft)
         .animation(.snappy(duration: 0.25), value: isExpanded)
-        // Read the whole readout as one VoiceOver element instead of 5 fragments.
-        .accessibilityElement(children: .combine)
     }
 }
 
@@ -272,7 +220,6 @@ struct LMGlassReadoutCard: View {
 /// Bottom capture controls on the main screen: a large white shutter button
 /// with a secondary glass "flip camera" button to its right.
 struct LMCaptureControls: View {
-    var language: AppLanguage = .english
     var onCapture: () -> Void = {}
     var onFlip: () -> Void = {}
 
@@ -294,15 +241,13 @@ struct LMCaptureControls: View {
                 }
             }
             .buttonStyle(.plain)
-            .tutorialAnchor(.capture)
-            .accessibilityLabel(LocalizedStrings.translate(key: "ax_capture", language: language))
 
             // Flip-camera button, offset to the trailing side.
             HStack {
                 Spacer()
                 Button(action: onFlip) {
                     Image(systemName: "camera.rotate")
-                        .font(.system(size: LM.FontSize.h1, weight: .regular))
+                        .font(.system(size: 18, weight: .regular))
                         .foregroundStyle(LM.textPrimary)
                         .frame(width: 48, height: 48)
                         .background {
@@ -313,7 +258,6 @@ struct LMCaptureControls: View {
                         }
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(LocalizedStrings.translate(key: "ax_flip_camera", language: language))
             }
             .padding(.trailing, 36)
         }
@@ -326,111 +270,49 @@ struct LMCaptureControls: View {
 /// A single record card on the Records screen.
 struct LMRecordCard: View {
     let record: LMRecord
-    var language: AppLanguage = .english
-    var expanded: Bool = false
-    /// Called when the user taps the expand/full-screen affordance.
-    var onFullscreen: () -> Void = {}
-
-    @State private var image: UIImage? = nil
-
-    private var hasPhoto: Bool { record.photoData != nil }
-    private var height: CGFloat { expanded ? 320 : 120 }
 
     var body: some View {
-        content
-            .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.45), radius: 3, y: 1)
-            .padding(LM.pad)
-            // Fill the card; the snapshot sits behind via `.background` so the
-            // greedy scaledToFill image doesn't dominate layout.
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .frame(height: height)
-            .background { backgroundLayer }
-            .clipShape(RoundedRectangle(cornerRadius: LM.cardRadius, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: LM.cardRadius, style: .continuous)
-                    .strokeBorder(LM.hairline, lineWidth: 1)
-            }
-            .overlay(alignment: .center) {
-                if expanded && hasPhoto {
-                    Button(action: onFullscreen) {
-                        Image(systemName: "arrow.up.left.and.arrow.down.right")
-                            .font(.system(size: LM.FontSize.h2, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .padding(14)
-                            .background(Circle().fill(.black.opacity(0.4)))
-                            .overlay(Circle().strokeBorder(.white.opacity(0.5), lineWidth: 1))
-                    }
-                    .buttonStyle(.plain)
-                    .transition(.opacity)
-                    .accessibilityLabel(LocalizedStrings.translate(key: "ax_view_fullscreen", language: language))
-                }
-            }
-            .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 4)
-            .task(id: record.id) { loadImage() }
-    }
-
-    /// Snapshot (or placeholder) + a scrim so the white text reads over it.
-    private var backgroundLayer: some View {
-        ZStack {
-            if let image {
-                Image(uiImage: image).resizable().scaledToFill()
-            } else {
-                LinearGradient(colors: [Color(hex: 0x6E6A66), Color(hex: 0x45423F)],
-                               startPoint: .topLeading, endPoint: .bottomTrailing)
-                Image(systemName: "photo")
-                    .font(.system(size: 30, weight: .regular))
-                    .foregroundStyle(.white.opacity(0.3))
-                    .accessibilityHidden(true)
-            }
-            LinearGradient(colors: [.black.opacity(0.05), .black.opacity(0.2), .black.opacity(0.7)],
-                           startPoint: .top, endPoint: .bottom)
-        }
-    }
-
-    private var content: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 12) {
+            // Header: index (left) + date/time (right).
             HStack(alignment: .top) {
                 Text("#\(record.index)")
-                    .font(LM.font(LM.FontSize.body, .bold))
+                    .font(LM.font(LM.FontSize.body, .semibold))
+                    .foregroundStyle(LM.textPrimary)
                 Spacer()
-                VStack(alignment: .trailing, spacing: 1) {
-                    Text(record.dateLine).font(LM.font(LM.FontSize.caption, .semibold))
-                    Text(record.timeLine).font(LM.font(LM.FontSize.micro)).opacity(0.85)
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(record.dateLine)
+                        .font(LM.font(LM.FontSize.body, .medium))
+                        .foregroundStyle(LM.textPrimary)
+                    Text(record.timeLine)
+                        .font(LM.font(LM.FontSize.caption))
+                        .foregroundStyle(LM.textSecondary)
                 }
             }
-            Spacer(minLength: 0)
-            if let vibe = record.vibe {
-                HStack(spacing: 6) {
-                    if let emoji = record.emoji {
-                        Text(emoji).font(.system(size: 15))
-                    }
-                    Text(vibe)
-                        .font(.custom("CaveatBrush-Regular", size: 21))
-                }
-                .padding(.bottom, 2)
-            }
+
+            Divider()
+                .overlay(LM.hairline)
+
+            // Two-column metrics.
             HStack(spacing: 0) {
-                metric(LocalizedStrings.translate(key: "tab_brightness", language: language), record.brightness)
-                metric(LocalizedStrings.translate(key: "tab_temperature", language: language), record.temperature)
+                metric(title: "밝기", value: record.brightness)
+                metric(title: "색온도", value: record.temperature)
             }
         }
+        .padding(LM.pad)
+        .frame(maxWidth: .infinity)
+        .lmGlass(tint: LM.glassTintMed)
     }
 
-    private func metric(_ title: String, _ value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
+    private func metric(title: String, value: String) -> some View {
+        VStack(spacing: 4) {
             Text(title)
-                .font(LM.font(LM.FontSize.micro, .medium))
-                .opacity(0.85)
+                .font(LM.font(LM.FontSize.caption, .medium))
+                .foregroundStyle(LM.textSecondary)
             Text(value)
-                .font(LM.font(LM.FontSize.h2, .bold))
+                .font(LM.font(LM.FontSize.h2, .semibold))
+                .foregroundStyle(LM.textPrimary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private func loadImage() {
-        guard image == nil, let data = record.photoData else { return }
-        image = LMImage.downsample(data, maxPixel: 1100)
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -438,13 +320,9 @@ struct LMRecordCard: View {
 /// button, then tap it to delete. Matches the Figma "swiped" state.
 private struct LMSwipeRow: View {
     let record: LMRecord
-    var language: AppLanguage = .english
     let revealed: Bool
-    let expanded: Bool
     var onRevealChange: (Bool) -> Void
     var onDelete: () -> Void
-    var onTap: () -> Void
-    var onFullscreen: () -> Void
 
     @State private var dragOffset: CGFloat = 0
     private let revealWidth: CGFloat = 76
@@ -459,7 +337,7 @@ private struct LMSwipeRow: View {
             // Trash button revealed behind the card's trailing edge.
             Button(action: onDelete) {
                 Image(systemName: "trash")
-                    .font(.system(size: LM.FontSize.h1, weight: .regular))
+                    .font(.system(size: 18, weight: .regular))
                     .foregroundStyle(LM.textPrimary)
                     .frame(width: 52, height: 52)
                     .background {
@@ -472,12 +350,9 @@ private struct LMSwipeRow: View {
             .buttonStyle(.plain)
             .padding(.trailing, 12)
             .opacity(offset < -8 ? 1 : 0)
-            .accessibilityLabel(LocalizedStrings.translate(key: "ax_delete", language: language))
 
-            LMRecordCard(record: record, language: language, expanded: expanded, onFullscreen: onFullscreen)
+            LMRecordCard(record: record)
                 .offset(x: offset)
-                .contentShape(Rectangle())
-                .onTapGesture { onTap() }
                 .gesture(
                     DragGesture(minimumDistance: 10)
                         .onChanged { value in
@@ -493,7 +368,6 @@ private struct LMSwipeRow: View {
                 )
         }
         .animation(.snappy(duration: 0.25), value: revealed)
-        .animation(.snappy(duration: 0.3), value: expanded)
         .animation(.interactiveSpring(response: 0.2), value: dragOffset)
     }
 }
@@ -503,24 +377,18 @@ private struct LMSwipeRow: View {
 /// Scrollable list of record cards with interactive swipe-to-delete.
 struct LMRecordsList: View {
     let records: [LMRecord]
-    var language: AppLanguage = .english
     /// Called with the record to delete when its trash button is tapped.
     var onDelete: ((LMRecord) -> Void)? = nil
 
     @State private var revealedID: UUID? = nil
-    @State private var expandedID: UUID? = nil
-    @State private var fullscreen: LMRecord? = nil
-    @State private var debugApplied = false
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: LM.gap + 4) {
+            VStack(spacing: LM.gap + 4) {
                 ForEach(records) { record in
                     LMSwipeRow(
                         record: record,
-                        language: language,
                         revealed: revealedID == record.id,
-                        expanded: expandedID == record.id,
                         onRevealChange: { open in
                             withAnimation(.snappy(duration: 0.25)) {
                                 revealedID = open ? record.id : nil
@@ -529,147 +397,13 @@ struct LMRecordsList: View {
                         onDelete: {
                             withAnimation(.snappy(duration: 0.25)) { revealedID = nil }
                             onDelete?(record)
-                        },
-                        onTap: {
-                            // Only records with a snapshot expand.
-                            guard record.photoData != nil else { return }
-                            LMHaptics.tap()
-                            withAnimation(.snappy(duration: 0.3)) {
-                                expandedID = (expandedID == record.id) ? nil : record.id
-                            }
-                        },
-                        onFullscreen: { fullscreen = record }
+                        }
                     )
                 }
             }
             .padding(.horizontal, LM.pad)
             .padding(.top, LM.pad)
             .padding(.bottom, 120) // clear the floating tab bar
-        }
-        .fullScreenCover(item: $fullscreen) { record in
-            LMSnapshotViewer(record: record, language: language)
-        }
-        .onAppear { applyDebugRecordsState() }
-        .onChange(of: records.count) { _, _ in applyDebugRecordsState() }
-    }
-
-    /// DEBUG screenshot aids: pre-expand / pre-open the first photo record.
-    private func applyDebugRecordsState() {
-        #if DEBUG
-        guard !debugApplied, !records.isEmpty else { return }
-        let env = ProcessInfo.processInfo.environment
-        let firstPhoto = records.first { $0.photoData != nil }
-        if env["LM_EXPAND"] != nil { expandedID = firstPhoto?.id; debugApplied = true }
-        if env["LM_FULLSCREEN"] != nil { fullscreen = firstPhoto; debugApplied = true }
-        #endif
-    }
-}
-
-// MARK: - Full-screen Snapshot Viewer
-
-/// Shows a record's snapshot full-screen with its readout; tap anywhere or the
-/// close button to dismiss.
-struct LMSnapshotViewer: View {
-    let record: LMRecord
-    var language: AppLanguage = .english
-
-    @Environment(\.dismiss) private var dismiss
-    @State private var image: UIImage? = nil
-    @State private var shareCard: Image? = nil
-
-    var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-
-            if let image {
-                Image(uiImage: image).resizable().scaledToFit().ignoresSafeArea()
-            } else {
-                ProgressView().tint(.white)
-            }
-
-            VStack {
-                HStack {
-                    Spacer()
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(.white)
-                            .padding(12)
-                            .background(Circle().fill(.black.opacity(0.5)))
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(LocalizedStrings.translate(key: "ax_close", language: language))
-                }
-                Spacer()
-                VStack(spacing: 14) {
-                    if let vibe = record.vibe {
-                        HStack(spacing: 6) {
-                            if let emoji = record.emoji { Text(emoji).font(.system(size: 18)) }
-                            Text(vibe)
-                                .font(.custom("CaveatBrush-Regular", size: 26))
-                                .foregroundStyle(.white)
-                        }
-                    }
-                    HStack(spacing: 28) {
-                        caption(LocalizedStrings.translate(key: "tab_brightness", language: language), record.brightness)
-                        caption(LocalizedStrings.translate(key: "tab_temperature", language: language), record.temperature)
-                    }
-                    .padding(.vertical, 14)
-                    .padding(.horizontal, 24)
-                    .background(Capsule().fill(.black.opacity(0.5)))
-
-                    if let shareCard {
-                        ShareLink(item: shareCard,
-                                  preview: SharePreview(shareTitle, image: shareCard)) {
-                            HStack(spacing: 8) {
-                                Image(systemName: "square.and.arrow.up")
-                                Text(shareButtonLabel)
-                            }
-                            .font(LM.font(LM.FontSize.body, .semibold))
-                            .foregroundStyle(.black)
-                            .padding(.horizontal, 22)
-                            .padding(.vertical, 12)
-                            .background(Capsule().fill(LM.accent))
-                        }
-                    }
-                }
-            }
-            .padding(20)
-        }
-        .contentShape(Rectangle())
-        .onTapGesture { dismiss() }
-        .task(id: record.id) {
-            let decoded = record.photoData.flatMap { LMImage.downsample($0, maxPixel: 2000) }
-            image = decoded
-            renderShareCard(image: decoded)
-        }
-    }
-
-    private var shareTitle: String {
-        language.tr("My light vibe", "내 빛 분위기", "Mon ambiance")
-    }
-
-    private var shareButtonLabel: String {
-        language.tr("Share your vibe", "분위기 공유", "Partager")
-    }
-
-    @MainActor
-    private func renderShareCard(image: UIImage?) {
-        let card = LMVibeCard(image: image, emoji: record.emoji ?? "✨", vibe: record.vibe ?? "Your Light",
-                              lux: record.luxValue, kelvin: record.kelvinValue, width: 360)
-        let renderer = ImageRenderer(content: card)
-        renderer.scale = 3
-        if let ui = renderer.uiImage { shareCard = Image(uiImage: ui) }
-    }
-
-    private func caption(_ title: String, _ value: String) -> some View {
-        VStack(spacing: 2) {
-            Text(title)
-                .font(LM.font(LM.FontSize.micro, .medium))
-                .foregroundStyle(.white.opacity(0.7))
-            Text(value)
-                .font(LM.font(LM.FontSize.h2, .bold))
-                .foregroundStyle(.white)
         }
     }
 }

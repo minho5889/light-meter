@@ -22,11 +22,6 @@ struct CalibrationStoreTests {
         // Zero or near-zero measured lux defaults to 1.0 multiplier
         #expect(CalibrationStore.calculateMultiplier(measuredLux: 0.0, targetLux: 100.0) == 1.0)
         #expect(CalibrationStore.calculateMultiplier(measuredLux: 0.005, targetLux: 100.0) == 1.0)
-
-        // A zero/negative reference target is invalid and must NOT darken readings
-        // to the 0.1x floor — it should fall back to identity (no calibration).
-        #expect(CalibrationStore.calculateMultiplier(measuredLux: 100.0, targetLux: 0.0) == 1.0)
-        #expect(CalibrationStore.calculateMultiplier(measuredLux: 100.0, targetLux: -50.0) == 1.0)
     }
     
     @Test func persistenceRoundTrip() {

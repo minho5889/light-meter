@@ -10,14 +10,14 @@ actor RecordsDatabaseWorker {
         self.container = container
     }
 
-    func saveRecord(id: UUID, lux: Double, kelvin: Double, timestamp: Date, photoData: Data?) throws {
+    func saveRecord(id: UUID, lux: Double, kelvin: Double, timestamp: Date, activeChips: [ActivityChip]) throws {
         let context = ModelContext(container)
         let entity = LightRecordEntity(
             id: id,
             lux: lux,
             kelvin: kelvin,
             timestamp: timestamp,
-            photoData: photoData
+            activeChips: activeChips
         )
         context.insert(entity)
         try context.save()
@@ -43,7 +43,7 @@ actor RecordsDatabaseWorker {
                 lux: record.lux,
                 kelvin: record.kelvin,
                 timestamp: record.timestamp,
-                photoData: record.photoData
+                activeChips: record.activeChips
             )
             context.insert(entity)
         }
@@ -79,8 +79,7 @@ actor RecordsDatabaseWorker {
         
         for entity in entities {
             let timestampStr = dateFormatter.string(from: entity.timestamp)
-            let chips = ActivityChip.activeChips(for: LuxRange.rangeIndex(for: entity.lux)).map { $0.rawValue }
-            let chipsStr = chips.joined(separator: ";")
+            let chipsStr = entity.rawActiveChips.joined(separator: ";")
             csvString += "\(entity.id),\(timestampStr),\(entity.lux),\(entity.kelvin),\"\(chipsStr)\"\n"
         }
         
@@ -126,27 +125,20 @@ public final class RecordsStore: Sendable {
     public init(container: ModelContainer? = nil, defaults: UserDefaults = .standard) {
         self.defaults = defaults
         
-        let schema = Schema([LightRecordEntity.self])
-        let activeContainer: ModelContainer
-        if let container = container {
-            activeContainer = container
-        } else {
-            do {
+        do {
+            let activeContainer: ModelContainer
+            if let container = container {
+                activeContainer = container
+            } else {
+                let schema = Schema([LightRecordEntity.self])
                 let config = ModelConfiguration(isStoredInMemoryOnly: false)
                 activeContainer = try ModelContainer(for: schema, configurations: [config])
-            } catch {
-                // The on-disk store failed to open (e.g. a migration or corruption
-                // issue). History is non-critical, recomputable utility data, so we
-                // fall back to an in-memory store rather than crash on launch.
-                print("Persistent ModelContainer unavailable, falling back to in-memory: \(error)")
-                let memoryConfig = ModelConfiguration(isStoredInMemoryOnly: true)
-                // A bare in-memory container can't realistically fail; if it somehow
-                // does, there is no safe degraded mode left, so trapping is correct.
-                activeContainer = try! ModelContainer(for: schema, configurations: [memoryConfig])
             }
+            self.container = activeContainer
+            self.worker = RecordsDatabaseWorker(container: activeContainer)
+        } catch {
+            fatalError("Failed to initialize ModelContainer: \(error)")
         }
-        self.container = activeContainer
-        self.worker = RecordsDatabaseWorker(container: activeContainer)
         
         performMigrationAndInitialLoad()
     }
@@ -163,13 +155,15 @@ public final class RecordsStore: Sendable {
     }
 
     @discardableResult
-    public func saveRecord(lux: Double, kelvin: Double, photoData: Data? = nil) -> Task<Void, Never> {
+    public func saveRecord(lux: Double, kelvin: Double) -> Task<Void, Never> {
+        let index = LuxRange.rangeIndex(for: lux)
+        let chips = Array(ActivityChip.activeChips(for: index))
         let id = UUID()
         let timestamp = Date()
-
+        
         return Task {
             do {
-                try await worker.saveRecord(id: id, lux: lux, kelvin: kelvin, timestamp: timestamp, photoData: photoData)
+                try await worker.saveRecord(id: id, lux: lux, kelvin: kelvin, timestamp: timestamp, activeChips: chips)
                 self.loadFirstPage()
                 await activeFetchTask?.value
             } catch {
