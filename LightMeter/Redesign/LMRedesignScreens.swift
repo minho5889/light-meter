@@ -200,6 +200,8 @@ struct LMGlassReadoutCard: View {
                     .font(LM.font(LM.FontSize.display, .semibold))   // Semi Bold 50pt
                     .tracking(-1)                                     // -2% of 50pt
                     .foregroundStyle(LM.readoutNumberGradient)        // FAFAFA + gradation
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)                          // fit "100,000+" in-card
                 Text(unit)
                     .font(LM.font(LM.FontSize.h2, .regular))          // Regular 16pt
                     .foregroundStyle(LM.readoutText)
@@ -215,7 +217,7 @@ struct LMGlassReadoutCard: View {
                     .padding(.top, 6)
 
                 if let guideTitle {
-                    Text(guideTitle.uppercased())
+                    Text(guideTitle)                                  // title case per spec
                         .font(LM.font(LM.FontSize.caption, .bold))    // Bold 12pt
                         .foregroundStyle(LM.readoutText)
                         .padding(.top, 4)

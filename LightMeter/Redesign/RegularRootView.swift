@@ -105,11 +105,11 @@ struct RegularRootView: View {
             : nil
         return HStack(alignment: .top) {
             LMGlassReadoutCard(
-                lux: "\(Int(m.lux))",
+                lux: luxDisplay(m.lux),
                 unit: "LUX",
                 temperature: "\(formatNumber(m.colorTemperature))K",
                 guideTitle: interp != nil
-                    ? LocalizedStrings.translate(key: "ui_user_guide", language: language)
+                    ? LocalizedStrings.translate(key: "ui_actionable_tip", language: language)
                     : nil,
                 guideDescription: interp?.description,
                 guideTip: interp?.tip
@@ -128,7 +128,7 @@ struct RegularRootView: View {
             LMGlassReadoutCard(
                 lux: formatNumber(m.colorTemperature),
                 unit: "K",
-                temperature: "\(Int(m.lux)) LUX",
+                temperature: "\(luxDisplay(m.lux)) LUX",
                 infoRows: [
                     LMInfoRow(
                         label: LocalizedStrings.translate(key: "ui_color_tone", language: language),
@@ -303,7 +303,7 @@ struct RegularRootView: View {
                 index: records.count - offset,
                 dateLine: Self.dateFormatter.string(from: record.timestamp),
                 timeLine: Self.timeFormatter.string(from: record.timestamp),
-                brightness: "\(Int(record.lux)) Lux",
+                brightness: "\(luxDisplay(record.lux)) Lux",
                 temperature: "\(formatNumber(record.kelvin))K",
                 recordID: record.id
             )
@@ -317,6 +317,12 @@ struct RegularRootView: View {
 
     private func formatNumber(_ value: Double) -> String {
         Self.decimalFormatter.string(from: NSNumber(value: value)) ?? "\(Int(value))"
+    }
+
+    /// Lux readout string per the Figma: thousands separators, capped at
+    /// "100,000+" for extreme values (e.g. direct sunlight).
+    private func luxDisplay(_ lux: Double) -> String {
+        lux >= 100_000 ? "100,000+" : formatNumber(lux)
     }
 
     private static let decimalFormatter: NumberFormatter = {

@@ -16,6 +16,9 @@ public struct LocalizedStrings {
         
         // Static UI Titles & Details
         "ui_user_guide": [.english: "User Guide", .korean: "사용자 가이드", .french: "Guide de l'utilisateur"],
+        // Regular-mode brightness card guide label (Figma "Actionable Tip" /
+        // "사용자 가이드"); distinct from the Advanced-mode "User Guide" above.
+        "ui_actionable_tip": [.english: "Actionable Tip", .korean: "사용자 가이드", .french: "Conseil pratique"],
         "ui_recommended_activities": [.english: "Recommended Activities", .korean: "권장 환경 및 활동", .french: "Activités Recommandées"],
         "ui_color_tone": [.english: "Color Tone", .korean: "색감", .french: "Teinte de Couleur"],
         "ui_tint": [.english: "Color Tint", .korean: "색조 (Tint)", .french: "Teinte"],
