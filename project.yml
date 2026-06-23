@@ -41,7 +41,7 @@ targets:
           - Inter-SemiBold.otf
           - Inter-Bold.otf
         CFBundleShortVersionString: "1.0"
-        CFBundleVersion: "2"
+        CFBundleVersion: "7"
 
   LightMeterTests:
     type: bundle.unit-test
