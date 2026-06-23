@@ -104,7 +104,9 @@ private struct LMTabItem: View {
                 Text(tab.title(language))
                     .font(LM.font(LM.FontSize.micro, .medium))
             }
-            .foregroundStyle(isSelected ? LM.textPrimary : LM.textSecondary)
+            // On the dark bar: selected tab = dark text on a white pill;
+            // unselected = light (near-white) text/icons.
+            .foregroundStyle(isSelected ? LM.textPrimary : LM.readoutText.opacity(0.7))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .padding(.horizontal, 4)
@@ -139,7 +141,7 @@ struct LMCapsuleTabBar: View {
             }
         }
         .padding(6)
-        .lmGlass(cornerRadius: LM.pillRadius)
+        .lmGlass(cornerRadius: LM.pillRadius, tint: LM.readoutGlass, dark: true)
     }
 }
 
