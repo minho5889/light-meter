@@ -128,7 +128,15 @@ struct RegularRootView: View {
             LMGlassReadoutCard(
                 lux: formatNumber(m.colorTemperature),
                 unit: "K",
-                temperature: interp.description
+                temperature: "\(Int(m.lux)) LUX",
+                infoRows: [
+                    LMInfoRow(
+                        label: LocalizedStrings.translate(key: "ui_color_tone", language: language),
+                        value: interp.description),
+                    LMInfoRow(
+                        label: LocalizedStrings.translate(key: "ui_recommended_activities", language: language),
+                        value: interp.tip),
+                ]
             )
             Spacer(minLength: 0)
         }
@@ -181,27 +189,6 @@ struct RegularRootView: View {
 
     private var topBar: some View {
         HStack(alignment: .top) {
-            if isCaptured {
-                Button {
-                    withAnimation(.snappy(duration: 0.25)) {
-                        isCaptured = false
-                        frozenFrame = nil
-                    }
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(LM.textPrimary)
-                        .frame(width: 44, height: 44)
-                        .background {
-                            Circle()
-                                .fill(LM.glass)
-                                .overlay { Circle().fill(LM.glassTintMed) }
-                                .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
-                        }
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Back to live")
-            }
             Spacer()
             if cameraViewModel.permissionGranted {
                 LMSettingsButton { showSettings = true }
@@ -210,6 +197,36 @@ struct RegularRootView: View {
         .padding(.horizontal, LM.pad)
         .padding(.top, LM.pad)
         .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    /// Bottom-center "Back" control shown over a captured frame (replaces the
+    /// shutter), per the Figma Brightness-detail screen.
+    private var backControl: some View {
+        Button {
+            withAnimation(.snappy(duration: 0.25)) {
+                isCaptured = false
+                frozenFrame = nil
+            }
+        } label: {
+            VStack(spacing: 6) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(LM.textPrimary)
+                    .frame(width: LM.buttonCircle, height: LM.buttonCircle)
+                    .background {
+                        Circle()
+                            .fill(.white)
+                            .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 2) }
+                            .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
+                    }
+                Text(LocalizedStrings.translate(key: "ui_back", language: language))
+                    .font(LM.font(LM.FontSize.caption, .medium))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.4), radius: 2)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(LocalizedStrings.translate(key: "ui_back", language: language))
     }
 
     // MARK: - Bottom bar (capture + tab bar)
@@ -223,6 +240,9 @@ struct RegularRootView: View {
                     onFlip: { cameraViewModel.toggleCamera() }
                 )
                 .padding(.bottom, 24)
+            } else if isCaptured && selection == .brightness {
+                backControl
+                    .padding(.bottom, 24)
             }
             if cameraViewModel.permissionGranted {
                 LMCapsuleTabBar(selection: $selection)

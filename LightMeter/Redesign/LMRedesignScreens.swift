@@ -153,6 +153,13 @@ struct LMSettingsButton: View {
 
 // MARK: - Readout Card
 
+/// A labelled row in the expanded readout, e.g. Color Tone → "Candlelight 🔥".
+struct LMInfoRow: Identifiable {
+    let id = UUID()
+    let label: String
+    let value: String
+}
+
 /// Top-left frosted readout card on the main screen: a large lux value with a
 /// "LUX" unit, and the color-temperature underneath.
 struct LMGlassReadoutCard: View {
@@ -165,8 +172,11 @@ struct LMGlassReadoutCard: View {
     var guideTitle: String? = nil
     var guideDescription: String? = nil
     var guideTip: String? = nil
+    /// Optional labelled rows (Color Tone, Recommended environments) shown below
+    /// the divider — the Temperature tab card in the Figma.
+    var infoRows: [LMInfoRow] = []
 
-    private var isExpanded: Bool { guideDescription != nil }
+    private var isExpanded: Bool { guideDescription != nil || !infoRows.isEmpty }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -204,6 +214,20 @@ struct LMGlassReadoutCard: View {
                         .font(LM.font(LM.FontSize.caption))
                         .foregroundStyle(LM.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
+                }
+
+                ForEach(infoRows) { row in
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(row.label)
+                            .font(LM.font(LM.FontSize.caption, .semibold))
+                            .foregroundStyle(LM.textSecondary)
+                        Text(row.value)
+                            .font(LM.font(LM.FontSize.body, .medium))
+                            .foregroundStyle(LM.textPrimary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(.top, 4)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
         }
