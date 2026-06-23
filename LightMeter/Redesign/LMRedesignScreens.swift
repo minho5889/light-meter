@@ -155,12 +155,13 @@ struct LMSettingsButton: View {
         Button(action: action) {
             Image(systemName: "gearshape")
                 .font(.system(size: 18, weight: .regular))
-                .foregroundStyle(LM.textPrimary)
+                .foregroundStyle(LM.readoutText)                 // near-white, like the card/bar
                 .frame(width: 44, height: 44)
                 .background {
                     Circle()
                         .fill(LM.glass)
-                        .overlay { Circle().fill(LM.glassTintMed) }
+                        .environment(\.colorScheme, .dark)        // dark frosted glass
+                        .overlay { Circle().fill(LM.readoutGlass) }
                         .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
                 }
         }
