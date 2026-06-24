@@ -24,6 +24,11 @@ struct RegularRootView: View {
     @State private var previousTabIndex = 0
     @State private var isCaptured = false
     @State private var frozenFrame: UIImage? = nil
+    // Readout values frozen at capture time. The live `cameraViewModel.measurement`
+    // keeps updating ~10x/sec after a capture, so the captured card MUST read these
+    // snapshots (not the live measurement) to hold steady. See `capture()`.
+    @State private var capturedLux: Double? = nil
+    @State private var capturedKelvin: Double? = nil
     @State private var showSettings = false
 
     private var language: AppLanguage { cameraViewModel.appLanguage }
@@ -100,13 +105,16 @@ struct RegularRootView: View {
 
     private var brightnessContent: some View {
         let m = cameraViewModel.measurement
+        // When captured, hold the frozen snapshot; otherwise track live.
+        let lux = isCaptured ? (capturedLux ?? m.lux) : m.lux
+        let kelvin = isCaptured ? (capturedKelvin ?? m.colorTemperature) : m.colorTemperature
         let interp = isCaptured
-            ? LuxInterpreter.interpret(lux: m.lux, language: language)
+            ? LuxInterpreter.interpret(lux: lux, language: language)
             : nil
         return LMGlassReadoutCard(
-            lux: luxDisplay(m.lux),
+            lux: luxDisplay(lux),
             unit: "LUX",
-            temperature: "\(formatNumber(m.colorTemperature))K",
+            temperature: "\(formatNumber(kelvin))K",
             guideTitle: interp != nil
                 ? LocalizedStrings.translate(key: "ui_actionable_tip", language: language)
                 : nil,
@@ -200,6 +208,8 @@ struct RegularRootView: View {
             withAnimation(.snappy(duration: 0.25)) {
                 isCaptured = false
                 frozenFrame = nil
+                capturedLux = nil
+                capturedKelvin = nil
             }
         } label: {
             VStack(spacing: 0) {
@@ -259,6 +269,8 @@ struct RegularRootView: View {
             let frame = await cameraViewModel.captureFrameAsync()
             await MainActor.run {
                 frozenFrame = frame
+                capturedLux = lux
+                capturedKelvin = kelvin
                 cameraViewModel.recordsStore.saveRecord(lux: lux, kelvin: kelvin)
                 withAnimation(.snappy(duration: 0.25)) { isCaptured = true }
             }
@@ -268,6 +280,8 @@ struct RegularRootView: View {
     private func handleTabChange(to newTab: LMTab) {
         isCaptured = false
         frozenFrame = nil
+        capturedLux = nil
+        capturedKelvin = nil
         let index = tabIndex(newTab)
         cameraViewModel.activeTab = index
         switch TabTransitionAction.resolve(from: previousTabIndex, to: index) {
@@ -353,7 +367,13 @@ struct RegularRootView: View {
         case "records":     selection = .records
         default:            break
         }
-        if env["LM_CAPTURED"] != nil { isCaptured = true }
+        if env["LM_CAPTURED"] != nil {
+            // Seed frozen readout values so the captured card is verifiable in the
+            // simulator (where the live camera always reads 0).
+            capturedLux = Double(env["LM_LUX"] ?? "") ?? 12345
+            capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? 3800
+            isCaptured = true
+        }
         if env["LM_SETTINGS"] != nil { showSettings = true }
         #endif
     }
