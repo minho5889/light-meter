@@ -155,17 +155,8 @@ struct LMSettingsButton: View {
         Button(action: action) {
             Image(systemName: "gearshape")
                 .font(.system(size: 18, weight: .regular))
-                .foregroundStyle(LM.readoutText)                 // near-white, like the card/bar
-                .frame(width: 44, height: 44)
-                .background {
-                    Circle()
-                        .fill(LM.glass)
-                        .environment(\.colorScheme, .dark)        // dark frosted glass
-                        .overlay { Circle().fill(LM.readoutGlass) }
-                        .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
-                }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LMGlassCircleButtonStyle(diameter: 44))
     }
 }
 
@@ -286,7 +277,7 @@ struct LMCaptureControls: View {
                         .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
                 }
             }
-            .buttonStyle(.plain)
+            .buttonStyle(LMShutterButtonStyle())
 
             // Flip-camera button, offset to the trailing side.
             HStack {
@@ -294,17 +285,8 @@ struct LMCaptureControls: View {
                 Button(action: onFlip) {
                     Image(systemName: "camera.rotate")
                         .font(.system(size: 18, weight: .regular))
-                        .foregroundStyle(LM.readoutText)          // near-white, like the card/bar
-                        .frame(width: 46, height: 46)
-                        .background {
-                            Circle()
-                                .fill(LM.glass)
-                                .environment(\.colorScheme, .dark)  // dark frosted glass
-                                .overlay { Circle().fill(LM.readoutGlass) }
-                                .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
-                        }
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(LMGlassCircleButtonStyle(diameter: 46))
             }
             .padding(.trailing, 46)
         }

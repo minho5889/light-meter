@@ -215,20 +215,11 @@ struct RegularRootView: View {
             VStack(spacing: 0) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(LM.textPrimary)
                 Text(LocalizedStrings.translate(key: "ui_back", language: language))
                     .font(LM.font(LM.FontSize.caption, .medium))
-                    .foregroundStyle(LM.textPrimary)
-            }
-            .frame(width: LM.buttonCircle, height: LM.buttonCircle)
-            .background {
-                Circle()
-                    .fill(.white)
-                    .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 2) }
-                    .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LMBackButtonStyle())
         .accessibilityLabel(LocalizedStrings.translate(key: "ui_back", language: language))
     }
 

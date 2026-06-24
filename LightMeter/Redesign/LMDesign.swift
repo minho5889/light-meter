@@ -214,6 +214,62 @@ extension View {
     }
 }
 
+// MARK: - Button press styles (Figma btn_* resting/pressed states)
+
+/// White shutter (btn_cam): the white circle dims to gray while held.
+struct LMShutterButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .overlay {
+                Circle()
+                    .fill(Color.black.opacity(configuration.isPressed ? 0.22 : 0))
+                    .frame(width: LM.buttonCircle, height: LM.buttonCircle)
+            }
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+/// Dark frosted circular control (btn_cam_s flip, btn_setting): resting dark
+/// glass + near-white icon; darkens further while held.
+struct LMGlassCircleButtonStyle: ButtonStyle {
+    var diameter: CGFloat = 44
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(LM.readoutText)
+            .frame(width: diameter, height: diameter)
+            .background {
+                Circle()
+                    .fill(LM.glass)
+                    .environment(\.colorScheme, .dark)
+                    .overlay { Circle().fill(LM.readoutGlass) }
+                    .overlay { Circle().fill(Color.black.opacity(configuration.isPressed ? 0.25 : 0)) }
+                    .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
+            }
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+/// Back-to-live circle (btn_back): resting white with dark content; while held
+/// it inverts to a gray fill with near-white content.
+struct LMBackButtonStyle: ButtonStyle {
+    var diameter: CGFloat = LM.buttonCircle
+    func makeBody(configuration: Configuration) -> some View {
+        let pressed = configuration.isPressed
+        return configuration.label
+            .foregroundStyle(pressed ? LM.readoutText : LM.textPrimary)
+            .frame(width: diameter, height: diameter)
+            .background {
+                Circle()
+                    .fill(.white)
+                    .overlay { Circle().fill(Color.black.opacity(pressed ? 0.55 : 0)) }
+                    .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 2) }
+                    .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
+            }
+            .animation(.easeOut(duration: 0.12), value: pressed)
+    }
+}
+
 // MARK: - Preview
 
 #Preview("LM Tokens") {
