@@ -368,17 +368,8 @@ private struct LMSwipeRow: View {
             Button(action: onDelete) {
                 Image(systemName: "trash")
                     .font(.system(size: 18, weight: .regular))
-                    .foregroundStyle(LM.readoutText)
-                    .frame(width: 52, height: 52)
-                    .background {
-                        Circle()
-                            .fill(LM.glass)
-                            .environment(\.colorScheme, .dark)   // dark frosted circle
-                            .overlay { Circle().fill(LM.readoutGlass) }
-                            .overlay { Circle().strokeBorder(LM.hairline, lineWidth: 1) }
-                    }
             }
-            .buttonStyle(.plain)
+            .buttonStyle(LMGlassCircleButtonStyle(diameter: 52))
             .padding(.trailing, 12)
             .opacity(offset < -8 ? 1 : 0)
 
