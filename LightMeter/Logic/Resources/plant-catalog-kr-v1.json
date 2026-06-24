@@ -1,0 +1,1613 @@
+{
+  "version": "1.0.0",
+  "totalEntries": 30,
+  "directlyCited": 15,
+  "categoryDerived": 15,
+  "meta": {
+    "conversionNote": "Lux values are derived from PPFD using the standard sunlight conversion factor of 54 (lux = PPFD μmol/m²/s × 54), per Apogee Instruments. This factor is appropriate for daylight and window-filtered sunlight; under artificial light sources (fluorescent ~74, white LED ~70, HPS ~82) the same PPFD corresponds to different lux readings. Foot-candle figures from US university extensions were cross-checked using 1 fc = 10.764 lux.",
+    "photoperiodAssumption": "DLI values assume a 12-hour indoor photoperiod typical of Korean apartments year-round (DLI = PPFD × hours × 0.0036); a few entries use 10-14h to match the source studies they were derived from.",
+    "limitations": "Species-specific PPFD optima are sparse in peer-reviewed horticulture literature — roughly half of entries (15/30) are category-derived from genus-level analogs, the broader interior-foliage class, or US university extension foot-candle production data converted via sunlight factor 54. The lux conversion factor varies by light source (sunlight ~54, white LED ~70, fluorescent ~74); readings under artificial lighting will not map cleanly to these ranges. Cultivar-level precision is not supported: variegated, pink, or red-leaf forms typically need the upper half of the ranges to retain coloration. The dataset describes mature, acclimated plants in stable indoor conditions; propagation, recovery, and stress responses are out of scope. All flagged 'category-derived' entries should be treated as informed estimates, not species-specific measurements."
+  },
+  "plants": [
+    {
+      "id": "codiaeum-variegatum",
+      "scientificName": "Codiaeum variegatum",
+      "koreanName": "크로톤",
+      "englishName": "Croton",
+      "lightCategory": "bright indirect to bright direct (sunlight-tolerant; high-light foliage)",
+      "ppfd": {
+        "min": 100,
+        "optimal": 300,
+        "max": 600
+      },
+      "dli": {
+        "min": 4,
+        "optimal": 12,
+        "max": 22
+      },
+      "lux": {
+        "min": 5400,
+        "optimal": 16200,
+        "max": 32400,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Croton is a high-light foliage plant; vibrant red, orange, and yellow variegation only persists when light is strong enough to drive anthocyanin and carotenoid synthesis. Place within ~1 m of an unobstructed south or east window indoors; under chronic low light (below roughly 200 fc / ~2,000 lux) leaves revert to green and drop. Acclimate gradually before any direct midday sun to avoid leaf scorch and gray-dull foliage.",
+      "careNotesKo": "크로톤은 빛을 많이 좋아하는 관엽 식물이에요. 빨강·주황·노랑 무늬가 또렷하게 유지되려면 안토시아닌과 카로티노이드 합성을 끌어낼 정도의 충분한 빛이 필요해요. 가림 없는 남향이나 동향 창에서 1m 이내에 두는 게 좋고, 2,000 lux(약 200 fc) 이하의 어두운 곳에 오래 두면 잎이 다시 초록으로 돌아가고 떨어져요. 직사광선에 바로 노출하면 잎이 타거나 칙칙해지니까 며칠에 걸쳐 천천히 적응시켜 주세요.",
+      "derivationFlag": "category-derived from high-light foliage class (UF/IFAS ENH878 + general interior-plant foot-candle bands); species-specific PPFD ranges in peer-reviewed literature are sparse and reported as foot-candle/shade-% bands rather than μmol/m²/s",
+      "sources": [
+        {
+          "claim": "Croton is a high-light interior foliage plant; greenhouse production uses ~30–47% shade and color/variegation degrades at low light, with anthocyanin loss below ~400 fc and stable color maintained at 1,200–2,000 fc",
+          "sourceUrl": "https://journals.flvc.org/edis/article/download/108744/103911",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Crotons grow best in full sun but many cultivars tolerate or prefer light/partial shade; bright sunlight maximizes color, indoor plants accept partial sun but eventually lose color if light is inadequate",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/ornamentals/crotons/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Indoor crotons need bright, indirect light; higher light produces more vibrant leaf color and compact habit, while insufficient light reverts leaves to green and too much direct sun makes leaves gray and dull",
+          "sourceUrl": "https://hort.extension.wisc.edu/articles/croton-codiaeum-variegatum/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "NC State classifies Codiaeum variegatum as a full-sun to partial-shade plant",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/codiaeum-variegatum/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Interior-plant light categories: high light foliage >1,000 fc (~10,800 lux), medium 250–3,000 fc, low 50–250 fc — Croton sits at upper medium to high",
+          "sourceUrl": "https://courses.cit.cornell.edu/hort494/greenhouse/lighting/lightlft.html",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "rhapis-excelsa",
+      "scientificName": "Rhapis excelsa",
+      "koreanName": "관음죽",
+      "englishName": "Lady Palm",
+      "lightCategory": "low to medium (bright indirect, shade-tolerant understory palm)",
+      "ppfd": {
+        "min": 20,
+        "optimal": 80,
+        "max": 250
+      },
+      "dli": {
+        "min": 0.9,
+        "optimal": 3.5,
+        "max": 10.8
+      },
+      "lux": {
+        "min": 1080,
+        "optimal": 4320,
+        "max": 13500,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Shade-loving rainforest understory palm — keep out of direct sun, which scorches fronds and fades color. Best in bright indirect light a few feet back from an east or north window. Tolerates true low-light interiors (down to ~1,000 lux) but holds dark-green color and steady frond production around 4,000–5,000 lux. In dim Korean apartments below ~800 lux at midday, expect lower-frond shedding; supplement with a 5,000 K LED above the canopy.",
+      "careNotesKo": "관음죽은 그늘을 좋아하는 열대 우림 하층목이라 직사광선은 무조건 피해 주세요. 바로 받으면 잎이 타고 색이 누렇게 빠져요. 동향이나 북향 창에서 1~2m 떨어진 밝은 간접광이 가장 좋고, 1,000 lux 정도의 진짜 어두운 실내에서도 살아남긴 하지만 진한 초록색과 새 잎을 꾸준히 보고 싶다면 4,000~5,000 lux 정도가 이상적이에요. 한국 아파트에서 한낮에도 800 lux 아래로 떨어지는 자리라면 아래 잎부터 떨어지기 시작하니, 5,000 K LED를 30~45cm 위에서 비춰 주는 걸 추천해요.",
+      "derivationFlag": "category-derived from low-light interiorscape palm class (UF/IFAS FP501 gives only shade/part-shade categorical guidance; PPFD/DLI extrapolated from the standard low-light foliage band 50–150 μmol/m²/s with Rhapis placed in the lower half, anchored to the documented 100–500 fc interior recommendation)",
+      "sources": [
+        {
+          "claim": "Rhapis excelsa easy to grow in shade or partial shade; among the best palms for low-light interiorscape; potassium deficiency only in full sun",
+          "sourceUrl": "https://ask.ifas.ufl.edu/fp501",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Lady palm in 50–100 fc loses inner/lower fronds; best in bright indirect light all day",
+          "sourceUrl": "https://blogs.ifas.ufl.edu/charlotteco/2025/03/20/shady-palm-lady-palm/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Rhapis excelsa prefers part shade; full sun burns leaf tips and yellows foliage; dark green in shade, lighter under brighter light",
+          "sourceUrl": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=276756",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Rhapis excelsa light category: part shade to full shade; understory palm tolerant of dappled sun",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/rhapis-excelsa/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Low-light interior foliage requires ~50–150 μmol/m²/s PPFD (≈50–250 fc); Lady Palm thrives 100–500 fc (≈1,076–5,382 lux)",
+          "sourceUrl": "https://www.uaex.uada.edu/yard-garden/home-landscape/docs/Light%20and%20Moisture%20Requirements.pdf",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "zamioculcas-zamiifolia",
+      "scientificName": "Zamioculcas zamiifolia",
+      "koreanName": "금전수",
+      "englishName": "ZZ Plant",
+      "lightCategory": "low to medium indirect (low-light tolerant)",
+      "ppfd": {
+        "min": 5,
+        "optimal": 200,
+        "max": 500
+      },
+      "dli": {
+        "min": 0.2,
+        "optimal": 8.6,
+        "max": 21.6
+      },
+      "lux": {
+        "min": 270,
+        "optimal": 10800,
+        "max": 27000,
+        "conversionAssumption": "sunlight, factor 54; foot-candle source values converted at 1 fc = 10.764 lux"
+      },
+      "careNotesEn": "One of the most low-light-tolerant common houseplants — UF/IFAS documents continued leaf production at just 25 foot-candles (~270 lux) for over a year. For healthier growth, place in bright indirect light (1,000–1,500 fc / ~10,000–16,000 lux). Protect from direct midday sun: NYBG warns that bright sun causes leaf scald, curl, and dieback. Thrives 1–2 m back from an east or south-facing window behind a sheer curtain. Slow grower — do not over-water or over-fertilize when light is low.",
+      "careNotesKo": "금전수는 진짜 어두운 데서도 잘 버티는 식물 중 하나예요. UF/IFAS 연구에서 25 fc(약 270 lux)에서도 1년 넘게 새 잎을 꾸준히 냈다고 보고됐을 정도예요. 더 건강하게 키우고 싶다면 밝은 간접광(1,000~1,500 fc, 약 10,000~16,000 lux)이 이상적이에요. 한낮의 직사광은 피해 주세요 — 잎이 데이거나 말리고 가지가 죽을 수 있어요. 동향이나 남향 창에서 1~2m 떨어진 자리에 얇은 커튼 뒤로 두는 게 가장 좋아요. 천천히 자라는 식물이라 어두운 자리에 둘 때는 물·비료를 더 줄여 주세요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Commercial production light for Zamioculcas zamiifolia: 1,250–2,500 fc (80–90% shade); propagation 1,000–1,500 fc; interior tolerates 25 fc minimum with continued new-leaf growth for >1 year",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP252",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "ZZ plant prefers bright indirect light; tolerates very restricted sunlight; must be protected from bright sun to avoid leaf scald, leaf curl, and dieback",
+          "sourceUrl": "https://libguides.nybg.org/ZZPlant",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "ZZ plant is easily maintained under low-light interiors in homes and offices",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP480",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Clemson HGIC: ZZ plant survives low light but bright indirect light accelerates the very slow growth rate; avoid full sunlight",
+          "sourceUrl": "https://hgic.clemson.edu/factsheet/zz-plant-zamioculcas-zamiifolia-indoor-care-growing-tips-plant-guide/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Sunlight PPFD-to-lux conversion factor: 1 μmol/m²/s ≈ 54 lux (sunlight); 1 fc = 10.764 lux",
+          "sourceUrl": "https://www.apogeeinstruments.com/conversion-ppfd-to-lux/",
+          "sourceType": "apogee"
+        }
+      ]
+    },
+    {
+      "id": "ficus-elastica",
+      "scientificName": "Ficus elastica",
+      "koreanName": "고무나무",
+      "englishName": "Rubber Plant",
+      "lightCategory": "bright indirect (tolerates some direct sun once acclimatized)",
+      "ppfd": {
+        "min": 20,
+        "optimal": 150,
+        "max": 400
+      },
+      "dli": {
+        "min": 1,
+        "optimal": 6.5,
+        "max": 17
+      },
+      "lux": {
+        "min": 1080,
+        "optimal": 8100,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54 (1 μmol/m²/s ≈ 54 lux for daylight spectrum)"
+      },
+      "careNotesEn": "Place near a bright east or filtered south window for glossy, well-spaced leaves; tolerates lower light but new growth becomes small and leggy below ~1,000 lux sustained. Acclimatize gradually before exposing to direct midday sun — unhardened leaves scorch above ~25,000 lux. Rotate the pot weekly so growth stays even, and wipe leaves monthly to keep light absorption maximal.",
+      "careNotesKo": "잎이 윤이 나고 마디 간격도 예쁘게 나오게 하려면 밝은 동향이나 살짝 가린 남향 창 근처에 두세요. 어두운 자리도 견디긴 하지만 1,000 lux 이하가 오래 지속되면 새 잎이 작아지고 웃자라요. 직사광선에 바로 노출하면 잎이 타니까 며칠에 걸쳐 천천히 적응시켜 주세요(약 25,000 lux 이상에서 화상 위험). 매주 화분을 한 번씩 돌려서 사방으로 고르게 자라게 하고, 한 달에 한 번 잎을 닦아 주면 광 흡수율이 확 좋아져요.",
+      "derivationFlag": "category-derived from UF/IFAS interiorscape Ficus production data (genus-level, acclimatized-interior bands)",
+      "sources": [
+        {
+          "claim": "Ficus elastica produced under 70-80% shade (2,500-3,750 fc, ~26,900-40,400 lux); interior maintenance 100-200 fc (~1,076-2,153 lux)",
+          "sourceUrl": "https://edis.ifas.ufl.edu/publication/EP136",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS Ficus production guide — F. elastica nursery production light 4,000-8,000 fc, acclimatize at 1,250-2,500 fc for ≥2 months before interior use",
+          "sourceUrl": "https://mrec.ifas.ufl.edu/Foliage/folnotes/ficus.htm",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Foliage tropicals optimal PPFD/DLI: 100-250 µmol/m²/s; 4-9 mol/m²/day",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "NC State Extension — Ficus elastica indoor culture: bright filtered light; avoid direct hot sun; tolerates partial shade",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/ficus-elastica/",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "dracaena-fragrans",
+      "scientificName": "Dracaena fragrans",
+      "koreanName": "행운목",
+      "englishName": "Corn Plant",
+      "lightCategory": "low to medium (low-light tolerant, optimal in medium indirect light)",
+      "ppfd": {
+        "min": 20,
+        "optimal": 100,
+        "max": 200
+      },
+      "dli": {
+        "min": 0.9,
+        "optimal": 4.3,
+        "max": 8.6
+      },
+      "lux": {
+        "min": 1080,
+        "optimal": 5400,
+        "max": 10800,
+        "conversionAssumption": "sunlight, factor 54; foot-candle source values converted at 1 fc = 10.764 lux"
+      },
+      "careNotesEn": "Among the most shade-tolerant indoor plants — survives at very low light levels (~100 fc / ~1,000 lux) such as north-facing windows or interior corners, but grows best in bright indirect light (medium category, 200-500 fc). Avoid direct midday sun on indoor-acclimated foliage, which scorches leaves and bleaches the yellow central stripe of 'Massangeana'. Variegated cultivars need the upper end of this range (>300 fc) to keep their stripe; in too-dim light, stems etiolate and new leaves turn pale and thin.",
+      "careNotesKo": "행운목은 실내 식물 중에서도 그늘을 가장 잘 견디는 친구 중 하나예요. 북향 창이나 거실 구석처럼 1,000 lux 정도의 정말 어두운 자리에서도 살아남지만, 진짜 잘 자라는 자리는 200~500 fc 정도의 밝은 간접광이에요. 실내에 적응된 잎에 한낮 직사광선을 바로 쬐면 잎이 타고 마산게아나 품종의 노란 줄무늬가 하얗게 바래니까 피해 주세요. 무늬종은 줄무늬를 유지하려면 이 범위의 위쪽(300 fc 이상)이 필요하고, 너무 어두우면 줄기가 웃자라고 새 잎이 얇고 창백하게 나와요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Dracaena fragrans commercial production for interior use grown at 63-73% shade (3,250-4,000 fc)",
+          "sourceUrl": "https://edis.ifas.ufl.edu/ep149",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS houseplant light categories: Low 25-100 fc; Medium 100-500 fc; High 500-1,000 fc; Direct sun >1,000 fc",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/light-for-houseplants/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Dracaena fragrans 'Massangeana' — shade-grown houseplant suited to low-light indoor cultivation",
+          "sourceUrl": "https://edis.ifas.ufl.edu/fp184",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Dracaena fragrans is markedly more low-light tolerant than other Dracaena species; 100 FC minimum, 200 FC for good growth",
+          "sourceUrl": "https://www.houseplantjournal.com/bright-indirect-light-requirements-by-plant/",
+          "sourceType": "horticulture-table"
+        }
+      ]
+    },
+    {
+      "id": "dracaena-marginata",
+      "scientificName": "Dracaena marginata",
+      "koreanName": "드라세나 마지나타",
+      "englishName": "Madagascar Dragon Tree",
+      "lightCategory": "bright indirect (tolerates medium; sensitive to direct hot sun)",
+      "ppfd": {
+        "min": 30,
+        "optimal": 150,
+        "max": 600
+      },
+      "dli": {
+        "min": 1.5,
+        "optimal": 6.5,
+        "max": 12
+      },
+      "lux": {
+        "min": 1600,
+        "optimal": 8100,
+        "max": 32400,
+        "conversionAssumption": "sunlight, factor 54; cross-checked against UF/IFAS foot-candle ranges using 1 fc = 10.76 lux"
+      },
+      "careNotesEn": "Place near a bright east- or filtered south-facing window with indirect light; tolerates medium light but loses the red leaf margins and develops weak, leggy canes below ~1,600 lux (150 fc) for extended periods. Avoid prolonged direct midday sun through unfiltered glass — leaves scorch above ~32,000 lux. Acclimate gradually over 7-10 days when moving between light zones.",
+      "careNotesKo": "밝은 동향이나 살짝 가린 남향 창 근처의 간접광 자리가 가장 좋아요. 중간 밝기에서도 버티긴 하지만 1,600 lux(150 fc) 이하가 오래 지속되면 잎 가장자리 빨간색이 빠지고 줄기가 약하게 웃자라요. 가리지 않은 창으로 들어오는 한낮의 직사광선은 잎을 태울 수 있으니 피해 주세요(약 32,000 lux 이상). 자리를 옮길 때는 7~10일에 걸쳐 천천히 적응시켜 주세요.",
+      "derivationFlag": "category-derived from genus Dracaena (PPFD/DLI synthesized from genus-level houseplant tables; lux range cross-validated against UF/IFAS species-specific foot-candle production data)",
+      "sources": [
+        {
+          "claim": "Dracaena marginata commercial production light intensity 63-73% shade, 3,250-4,000 fc",
+          "sourceUrl": "https://edis.ifas.ufl.edu/ep149",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Dracaena genus interior PPFD optimum 100-200 umol/m2/s; DLI 5-10 mol/m2/day",
+          "sourceUrl": "https://homeplantbot.com/dracaena-dragon-trees-light-levels-indoors/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Dracaena marginata interior maintenance 400-800 fc optimal indoors; etiolation below ~150 fc sustained",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/dracaena-marginata/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Bright indirect light PPFD band 150-300 umol/m2/s; medium 50-150 umol/m2/s",
+          "sourceUrl": "https://homeplantbot.com/dracaena-dragon-trees-light-levels-indoors/",
+          "sourceType": "horticulture-table"
+        }
+      ]
+    },
+    {
+      "id": "dieffenbachia-seguine",
+      "scientificName": "Dieffenbachia seguine",
+      "koreanName": "디펜바키아",
+      "englishName": "Dumb Cane",
+      "lightCategory": "low to medium (bright indirect)",
+      "ppfd": {
+        "min": 10,
+        "optimal": 80,
+        "max": 250
+      },
+      "dli": {
+        "min": 0.5,
+        "optimal": 3.5,
+        "max": 10
+      },
+      "lux": {
+        "min": 540,
+        "optimal": 4320,
+        "max": 13500,
+        "conversionAssumption": "sunlight, factor 54 (lux/54 = PPFD)"
+      },
+      "careNotesEn": "Place in bright indirect light near an east-facing window or a few feet back from a south/west window with sheer curtain. Tolerates lower light but variegation fades and stems stretch leggy below ~50 μmol/m²/s. Direct midday sun scorches leaves; rotate the pot weekly so growth stays even. In Korean apartments (north-facing 발코니 or interior rooms), supplement with a 12h LED grow light to keep DLI above 3 mol/day during winter.",
+      "careNotesKo": "동향 창 근처나 남서향 창에서 얇은 커튼 뒤로 조금 떨어뜨려 둔 자리의 밝은 간접광이 가장 좋아요. 더 어두운 자리도 견디긴 하지만 50 μmol/m²/s 이하면 무늬가 흐려지고 줄기가 웃자라요. 한낮 직사광선은 잎을 태우니까 피하고, 매주 화분을 돌려서 사방으로 고르게 자라게 해 주세요. 북향 발코니나 안쪽 방처럼 어두운 자리에 있다면 겨울철에는 12시간 LED 식물등을 켜서 DLI를 3 mol/일 이상으로 맞춰 주세요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Dieffenbachia greenhouse production recommended at 80% shade = 2,500 fc (~478 μmol/m²/s); cultivar interior tolerances 50-250 fc",
+          "sourceUrl": "https://edis.ifas.ufl.edu/publication/EP137",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Dieffenbachia maculata light compensation point Lc < 9 μmol/m²/s after acclimatization; Araceae adapt well to interior light below 200 μmol/m²/s",
+          "sourceUrl": "https://ishs.org/ishs-article/881_114/",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Dieffenbachia maculata biomass saturates near 60 μmol/m²/s; no gain at 120 μmol/m²/s",
+          "sourceUrl": "https://www.sciencedirect.com/science/article/abs/pii/0304423892901523",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Purdue Floriculture DLI classification: low 1–3, medium 4–6, high 10–20 mol/m²/day",
+          "sourceUrl": "https://www.apogeeinstruments.com/daily-light-integral-measuring-light-for-plants/",
+          "sourceType": "apogee"
+        },
+        {
+          "claim": "Interior Dieffenbachia performs in medium light 250–1,000 fc; direct sun causes leaf burn",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/dieffenbachia/",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "dypsis-lutescens",
+      "scientificName": "Dypsis lutescens",
+      "koreanName": "아레카야자",
+      "englishName": "Areca Palm",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 30,
+        "optimal": 200,
+        "max": 400
+      },
+      "dli": {
+        "min": 1.3,
+        "optimal": 8.6,
+        "max": 17
+      },
+      "lux": {
+        "min": 1600,
+        "optimal": 10800,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54 (PPFD x 54 = lux)"
+      },
+      "careNotesEn": "Place near an east- or west-facing window with bright filtered light; tolerates a few hours of gentle morning sun but un-acclimatized leaves scorch under harsh midday sun through south-facing glass. Korean apartments often dip below the 1,500 lux survival floor more than 1m from the window in winter — rotate the pot periodically and supplement with a grow light if fronds yellow or stretch.",
+      "careNotesKo": "동향이나 서향 창 근처의 밝은 간접광이 가장 좋아요. 부드러운 아침햇살 몇 시간은 괜찮지만, 적응 안 된 잎에 남향 창의 한낮 직사광이 닿으면 타 버려요. 한국 아파트는 겨울철에 창에서 1m만 떨어져도 1,500 lux 아래로 떨어지는 경우가 많아서 살아남기도 빠듯해질 수 있어요. 화분을 자주 돌려 주시고, 잎이 노랗게 변하거나 웃자라기 시작하면 식물등을 보태 주세요.",
+      "derivationFlag": "PPFD/DLI category-derived from bright-indirect tropical foliage class; fc range is direct species citation (UKY)",
+      "sources": [
+        {
+          "claim": "Arecas (Chrysalidocarpus lutescens) require 150 to 300 fc of light for adequate interior growth",
+          "sourceUrl": "https://horticulture.mgcafe.uky.edu/sites/horticulture.ca.uky.edu/files/palms.pdf",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Bright-indirect tropical foliage PPFD/DLI category 100-250 umol/m²/s; 4-9 mol/m²/day DLI",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "UF/IFAS production light level for Areca palm 5,000-6,000 fc (~50% shade)",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/FR309",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Dypsis lutescens tolerates full sun to partial shade outdoors",
+          "sourceUrl": "https://journals.flvc.org/edis/article/view/137991",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Missouri Botanical Garden Plant Finder: Dypsis lutescens light - part shade to full sun (indoor: bright indirect)",
+          "sourceUrl": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=291457",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "RDA Korea recommends Areca palm as top air-purifying living-room plant for Korean homes",
+          "sourceUrl": "https://www.rda.go.kr/middlePopOpenPopNongsaroDBView.do?no=1358",
+          "sourceType": "rda"
+        }
+      ]
+    },
+    {
+      "id": "dracaena-angolensis",
+      "scientificName": "Dracaena angolensis (syn. Sansevieria cylindrica)",
+      "koreanName": "스투키",
+      "englishName": "Cylindrical Snake Plant",
+      "lightCategory": "bright indirect (tolerates low; rewards medium-to-bright indirect; brief direct sun OK)",
+      "ppfd": {
+        "min": 30,
+        "optimal": 150,
+        "max": 400
+      },
+      "dli": {
+        "min": 1.5,
+        "optimal": 6,
+        "max": 14
+      },
+      "lux": {
+        "min": 1600,
+        "optimal": 8000,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54 (PPFD umol/m2/s x 54 = lux)"
+      },
+      "careNotesEn": "Extremely drought- and shade-tolerant CAM succulent — survives in deep interior light but stays compact and develops better cylindrical leaf form under bright indirect light (an east window or a few feet back from a south/west window). Acclimate gradually before any direct sun; harsh afternoon sun behind glass can scorch the tips. Overwatering kills it far faster than low light, so err toward less light + less water rather than more of either.",
+      "careNotesKo": "스투키는 가뭄과 그늘에 정말 강한 CAM 다육이라 깊숙한 실내에서도 살아남아요. 다만 동향 창이나 남서향 창에서 조금 떨어진 밝은 간접광 자리에 두면 잎이 더 단단하고 원통 모양도 예쁘게 잡혀요. 직사광에 바로 노출하지 마시고 천천히 적응시켜 주세요 — 유리창 너머 한낮 햇살에 잎 끝이 타기도 해요. 어두운 것보다 과습이 훨씬 빨리 죽이니까, '빛도 조금 + 물도 조금' 쪽으로 키우는 게 안전해요.",
+      "derivationFlag": "category-derived from genus Dracaena snake-plant clade (D. trifasciata PPFD/DLI bands) and UF/IFAS interior Dracaena production light table; no species-specific PPFD literature exists for D. angolensis",
+      "sources": [
+        {
+          "claim": "Dracaena angolensis light category — dappled sunlight / partial shade (2-6 hrs direct); place in a brightly lit window indoors; afternoon sun causes scorch",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/dracaena-angolensis/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS commercial interior-Dracaena production light levels 73-80% shade (2,500-3,250 fc); arborea/fragrans/marginata at 63-73% shade (3,250-4,000 fc)",
+          "sourceUrl": "https://edis.ifas.ufl.edu/ep149",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Snake-plant clade interior light band — thrives 100-250 umol/m2/s PPFD; DLI 2-10 mol/m2/day",
+          "sourceUrl": "https://homeplantbot.com/snake-plant-light-tolerance-realities/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Dracaena trifasciata target PPFD by plant size — small ~64, large mature ~98 umol/m2/s over 10-11 h photoperiod",
+          "sourceUrl": "https://soltech.com/products/snake-plant-care",
+          "sourceType": "commercial-grower-spec"
+        },
+        {
+          "claim": "DLI = PPFD x photoperiod(s) / 1,000,000; sunlight PPFD-to-lux ~54",
+          "sourceUrl": "https://www.pubs.ext.vt.edu/SPES/spes-720/spes-720.html",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "spathiphyllum-wallisii",
+      "scientificName": "Spathiphyllum wallisii",
+      "koreanName": "스파티필름",
+      "englishName": "Peace Lily",
+      "lightCategory": "low to medium (bright indirect; shade-tolerant)",
+      "ppfd": {
+        "min": 10,
+        "optimal": 100,
+        "max": 400
+      },
+      "dli": {
+        "min": 1,
+        "optimal": 4,
+        "max": 12
+      },
+      "lux": {
+        "min": 540,
+        "optimal": 5400,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54 (PPFD * 54 = lux); cross-checked with UF/IFAS foot-candle production data (1 fc ≈ 10.76 lux)"
+      },
+      "careNotesEn": "Peace lily is one of the most shade-tolerant indoor foliage plants and is famous for flowering even under low light. Place 1–3 m from a north- or east-facing window; avoid direct sun, which bleaches and scorches the thin leaves. For reliable blooming in Korean apartments, bright indirect light (5,000–8,000 lux midday) is ideal; under deep shade (<1,000 lux) the plant survives but rarely flowers. Production max is ~27,000 lux — anything above this causes pale chlorotic leaves and burned margins.",
+      "careNotesKo": "스파티필름은 그늘에 정말 강한 관엽 식물이고, 어두운 자리에서도 꽃을 피우는 걸로 유명해요. 북향이나 동향 창에서 1~3m 정도 떨어진 자리가 좋고, 직사광은 피해 주세요 — 얇은 잎이 하얗게 바래고 타요. 한국 아파트에서 꽃을 안정적으로 보고 싶다면 한낮 5,000~8,000 lux 정도의 밝은 간접광이 이상적이에요. 1,000 lux 아래의 진한 그늘에서는 살아남긴 하지만 꽃은 잘 안 피어요. 27,000 lux 이상의 너무 밝은 빛에서는 잎이 창백해지고 가장자리가 타니까 주의해 주세요.",
+      "derivationFlag": "category-derived from low-light foliage class — UF/IFAS provides direct foot-candle ranges for commercial production (1500–2500 fc max), but species-specific PPFD/DLI optima are not in peer-reviewed literature; PPFD/DLI derived by converting UF/IFAS foot-candles via standard sunlight factor and cross-referenced with low-light foliage interior maintenance class",
+      "sources": [
+        {
+          "claim": "Spathiphyllum production max 1500–2500 fc; 75-80% shade; excessive light bleaches leaves",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP161",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Spathiphyllum household light category: bright indirect light. No direct sun",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP477",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Spathiphyllum is one of few foliage plants that flowers in low light; avoid direct sun (leaf scorch)",
+          "sourceUrl": "https://hgic.clemson.edu/factsheet/peace-lily/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Spathiphyllum light tolerance range from RDA Nongsaro: Low 300–800 lux / Medium 800–1,500 lux / High 1,500–10,000 lux",
+          "sourceUrl": "https://www.nongsaro.go.kr/portal/ps/psz/psza/contentSub.ps?menuId=PS00376&cntntsNo=19717",
+          "sourceType": "rda"
+        },
+        {
+          "claim": "Spathiphyllum wallisii PPFD 20–40 µmol/m²/s, DLI 4–14 mol/m²/d",
+          "sourceUrl": "https://plantlightdb.com/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Peace lily interior light chart: 50–100 fc survival/maintenance; placement 2–8 ft from N/E window",
+          "sourceUrl": "https://houseplantsnook.com/light-chart-of-50-popular-houseplants",
+          "sourceType": "horticulture-table"
+        }
+      ]
+    },
+    {
+      "id": "epipremnum-aureum",
+      "scientificName": "Epipremnum aureum",
+      "koreanName": "스킨답서스",
+      "englishName": "Golden Pothos",
+      "lightCategory": "low to medium (bright indirect preferred)",
+      "ppfd": {
+        "min": 25,
+        "optimal": 150,
+        "max": 300
+      },
+      "dli": {
+        "min": 1,
+        "optimal": 6,
+        "max": 10
+      },
+      "lux": {
+        "min": 1350,
+        "optimal": 8100,
+        "max": 16200,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Tolerates very low interior light (down to ~50 fc / 500 lux) but variegation fades and new leaves shrink below ~150 fc (~1,600 lux). Avoid direct midday sun above ~300 μmol/m²/s, which bleaches and scorches golden/marble leaves. East- or north-facing windows, or 1–2 m back from a south window with a sheer curtain, are ideal in Korean apartments.",
+      "careNotesKo": "스킨답서스는 진짜 어두운 실내(약 500 lux)도 견디지만, 1,600 lux(150 fc) 아래로 떨어지면 무늬가 흐려지고 새 잎이 작아져요. 한낮 직사광선(300 μmol/m²/s 이상)에 닿으면 골든·마블 무늬가 하얗게 바래고 타니까 피해 주세요. 동향이나 북향 창, 또는 남향 창에서 1~2m 떨어진 자리에 얇은 커튼을 친 위치가 한국 아파트에서 가장 이상적인 자리예요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Epipremnum aureum tolerates 50 fc; 150 fc maintains color and leaf size; production 2,500–3,250 fc (63–80% shade)",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP151",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Epipremnum aureum sustains at 25 μmol/m²/s (≈100 fc) for 12 h/day indoors",
+          "sourceUrl": "https://edis.ifas.ufl.edu/fp194",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Photosynthesis study of Epipremnum aureum — understory ~100 μmol/m²/s; canopy saturation ~1,000 μmol/m²/s",
+          "sourceUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11974542/",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Optimal thriving PPFD for Epipremnum aureum 120–280 μmol/m²/s",
+          "sourceUrl": "https://growlightmeter.com/guides/houseplant-lighting-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Ideal DLI for Epipremnum aureum 6–10 mol/m²/day",
+          "sourceUrl": "https://grow3light.com/top-7-indoor-plants-and-their-ideal-dli-for-maximum-growth/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Higher DLI → higher leaf count; low light reduces variegation (peer-reviewed Nature study)",
+          "sourceUrl": "https://www.nature.com/articles/s41598-024-67877-y",
+          "sourceType": "peer-reviewed"
+        }
+      ]
+    },
+    {
+      "id": "anthurium-andraeanum",
+      "scientificName": "Anthurium andraeanum",
+      "koreanName": "안스리움",
+      "englishName": "Flamingo Flower",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 50,
+        "optimal": 175,
+        "max": 350
+      },
+      "dli": {
+        "min": 2.2,
+        "optimal": 7.6,
+        "max": 15.1
+      },
+      "lux": {
+        "min": 2700,
+        "optimal": 9450,
+        "max": 18900,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Anthurium andraeanum is an understory tropical aroid: it wants bright indirect light, never direct midday sun. In Korean apartments, place 1–2 m back from an east-facing window, or behind a sheer curtain on a south window. Light compensation point is very low (<5 µmol/m²/s) so it survives dim corners, but blooming stops below ~50 µmol/m²/s. Sustained exposure above ~500 µmol/m²/s causes yellow burn spots on leaves and bracts within weeks.",
+      "careNotesKo": "안스리움은 열대 우림 하층의 천남성과 식물이라 밝은 간접광을 좋아하고 한낮 직사광은 절대 피해야 해요. 한국 아파트에서는 동향 창에서 1~2m 떨어뜨려 두거나, 남향 창의 얇은 커튼 뒤에 놓아 주세요. 광 보상점이 5 µmol/m²/s 이하로 아주 낮아서 어두운 구석에서도 살아남긴 하지만, 50 µmol/m²/s 아래에서는 꽃이 멈춰요. 500 µmol/m²/s 이상에서 며칠씩 노출되면 잎과 꽃턱잎(불염포)에 노란 화상 자국이 생기니 조심해 주세요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Anthurium andraeanum light saturation 347–484 µmol/m²/s; compensation <5 µmol/m²/s; optimal display PPFD ~350 µmol/m²/s; 550 µmol/m²/s causes yellow burn",
+          "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8145403/",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "UF/IFAS Anthurium andraeanum production: 1500–2000 fc (~300–400 µmol/m²/s) for flowering production",
+          "sourceUrl": "https://hort.ifas.ufl.edu/floriculture/pdfs/crop_production/Anthurium.pdf",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Houseplant-range light for Anthurium andraeanum: 200–400 fc at leaf surface, 10–12 h/day; bract initiation stops <150 fc; necrotic patches >500 fc",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/ornamentals/anthuriums/",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "aglaonema-commutatum",
+      "scientificName": "Aglaonema commutatum",
+      "koreanName": "아글라오네마",
+      "englishName": "Chinese Evergreen",
+      "lightCategory": "low to medium (obligate shade plant; bright indirect tolerated, no direct sun)",
+      "ppfd": {
+        "min": 20,
+        "optimal": 100,
+        "max": 250
+      },
+      "dli": {
+        "min": 0.9,
+        "optimal": 4.3,
+        "max": 10.8
+      },
+      "lux": {
+        "min": 1080,
+        "optimal": 5400,
+        "max": 13500,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Obligate shade plant — thrives in low to medium indirect light and tolerates very dim corners (as low as ~270 lux / 25 fc for survival). Avoid any direct sun, which scorches the leaves; an east or north window, or a few meters back from a south window behind a sheer curtain, is ideal. Variegated and pink cultivars need slightly more light (toward the optimal range) to keep their coloration.",
+      "careNotesKo": "아글라오네마는 그늘이 필수인 절대 음지식물이에요. 약 270 lux(25 fc)의 정말 어두운 구석에서도 살아남고, 낮~중간 밝기의 간접광에서 가장 잘 자라요. 직사광선은 무조건 피해 주세요 — 잎이 바로 타요. 동향이나 북향 창, 또는 남향 창에서 몇 미터 떨어뜨려 얇은 커튼 뒤에 둔 자리가 이상적이에요. 무늬종이나 핑크 품종은 색을 유지하려면 조금 더 밝은 자리(범위의 위쪽)가 필요해요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Aglaonema commutatum saturation 125 μmol/m²/s (low-light grown); light compensation <9 μmol/m²/s",
+          "sourceUrl": "https://www.mdpi.com/2076-3417/13/5/3021",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Aglaonema commutatum classified as obligate shade plant; light-saturated photosynthetic rate 0.7–1.0 μmol/m²/s",
+          "sourceUrl": "https://www.researchgate.net/publication/298730079_Effects_of_light_intensity_and_light_quality_on_the_obligate_shade_plant_Aglaonema_commutatum_II_Photosynthesis_and_dry-matter_partitioning",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "UF/IFAS Aglaonema production 73–90% shade (1,000–2,400 fc); interior tolerates as low as 25 fc",
+          "sourceUrl": "https://mrec.ifas.ufl.edu/Foliage/folnotes/aglaonem.htm",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS interiorscape Aglaonema cultural guidelines: 75–90% shade (1,250–3,000 fc)",
+          "sourceUrl": "https://journals.flvc.org/edis/article/download/109137/104298/152240",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Araceae interiorscape PPFD 0–200 μmol/m²/s covers common indoor conditions",
+          "sourceUrl": "https://ishs.org/ishs-article/881_114/",
+          "sourceType": "peer-reviewed"
+        }
+      ]
+    },
+    {
+      "id": "alocasia-amazonica",
+      "scientificName": "Alocasia × amazonica 'Polly'",
+      "koreanName": "알로카시아 아마조니카",
+      "englishName": "Alocasia Polly",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 100,
+        "optimal": 250,
+        "max": 500
+      },
+      "dli": {
+        "min": 4,
+        "optimal": 8,
+        "max": 12
+      },
+      "lux": {
+        "min": 5400,
+        "optimal": 13500,
+        "max": 27000,
+        "conversionAssumption": "sunlight, factor 54 (PPFD x 54 = lux)"
+      },
+      "careNotesEn": "Tropical understory aroid: bright, filtered light without direct midday sun. Commercial Florida nurseries grow Alocasia under 63-80% shade. Indoors, place 1-2 m back from a bright south/east window or behind a sheer curtain. Leaves scorch above ~30,000 lux of unfiltered sun; growth stalls and stems stretch below ~2,000 lux. High humidity and stable temperature improve light tolerance.",
+      "careNotesKo": "알로카시아는 열대 우림 하층 천남성과라서 밝지만 한낮 직사광선은 없는 자리를 좋아해요. 미국 플로리다 농장에서도 63~80%의 차광막 아래에서 키울 정도예요. 실내에서는 밝은 남향이나 동향 창에서 1~2m 떨어뜨려 두거나 얇은 커튼 뒤에 놓아 주세요. 가리지 않은 햇살 30,000 lux 이상에서는 잎이 타고, 반대로 2,000 lux 아래로 떨어지면 성장이 멈추고 줄기가 웃자라요. 습도와 온도가 안정적이면 빛 적응력도 올라가니까 신경 써 주세요.",
+      "derivationFlag": "category-derived from Alocasia genus shade-house production (63-80% shade) and aroid-understory PPFD class; species-specific mature-plant PPFD optima not found in peer-reviewed literature (only in vitro propagation data exists)",
+      "sources": [
+        {
+          "claim": "Alocasia amazonica in vitro plantlets grow best at low PFD (15 or 30 umol/m2/s); higher PFDs reduced chlorophyll",
+          "sourceUrl": "https://link.springer.com/article/10.1007/s11816-008-0063-6",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Alocasia spp. for indoor use require bright indirect light; landscape: partial shade",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/FP033",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS houseplant light categories: Medium 100-500 ftc (~1,075-5,400 lux); High 500-1,000 ftc (~5,400-10,800 lux)",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/light-for-houseplants/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Commercial Alocasia production in Florida uses 63-80% shade cloth",
+          "sourceUrl": "https://programs.ifas.ufl.edu/plant-breeding/tropical-foliage/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Aroid indoor PPFD targets: 100-250 umol/m2/s, DLI 6-10 mol/m2/day",
+          "sourceUrl": "https://rareplantcare.com/aroid-light-ppfd-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Alocasia practical indoor minimum 1,000 lux to maintain; 4,000+ lux for growth; >10,000 lux may scorch",
+          "sourceUrl": "https://florasense.com/blogs/bright-ideas-alocasia-light-requirements/",
+          "sourceType": "commercial-grower-spec"
+        }
+      ]
+    },
+    {
+      "id": "hedera-helix",
+      "scientificName": "Hedera helix",
+      "koreanName": "아이비",
+      "englishName": "English Ivy",
+      "lightCategory": "medium to bright indirect",
+      "ppfd": {
+        "min": 20,
+        "optimal": 250,
+        "max": 500
+      },
+      "dli": {
+        "min": 3,
+        "optimal": 10,
+        "max": 18
+      },
+      "lux": {
+        "min": 1080,
+        "optimal": 13500,
+        "max": 27000,
+        "conversionAssumption": "sunlight, factor 54 (1 fc = 10.76 lux; PPFD x 54 ~ lux)"
+      },
+      "careNotesEn": "English ivy is highly shade-tolerant and will hold its appearance at very low indoor light (~1,000 lux / 100 fc) if kept cool, but needs medium light (~13,000–15,000 lux) for compact growth and good variegation. Avoid direct midday sun through glass — leaves photosaturate well below full sun and variegated cultivars scorch above ~500 µmol/m²/s. An east-facing window or a few feet back from a south window is ideal; rotate the pot to keep growth even.",
+      "careNotesKo": "아이비는 그늘에 매우 강한 식물이에요. 시원한 환경이라면 1,000 lux(100 fc) 정도의 어두운 실내에서도 모양이 유지돼요. 다만 잎이 촘촘하고 무늬가 또렷하게 나오려면 중간 밝기(약 13,000~15,000 lux)가 필요해요. 유리창 너머 한낮 직사광선은 피해 주세요 — 아이비는 풀썬보다 훨씬 낮은 빛에서도 광포화가 오고, 무늬종은 500 µmol/m²/s 이상에서 잎이 타요. 동향 창이나 남향 창에서 조금 떨어진 자리가 이상적이고, 화분을 돌려가며 사방으로 고르게 자라게 해 주세요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Hedera helix commercial interiorscape: 1500–2500 fc (≈300–500 µmol/m²/s); tolerates as low as 100 fc for indoor maintenance",
+          "sourceUrl": "https://edis.ifas.ufl.edu/publication/ep243",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Hedera helix tolerates DLI 3–63 mol/m²/day; peak biomass at 3–5 mol/m²/day; stress at >18 mol/m²/day",
+          "sourceUrl": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2024.1464006/full",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Hedera helix photosynthesis saturates below 1000 µmol/m²/s; high-light acclimated 300–500 µmol/m²/s",
+          "sourceUrl": "https://link.springer.com/article/10.1007/BF00202965",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "DLI is the key driver of Hedera helix trait variability; SLA decreases linearly from DLI 8–13 down to ~109 cm²/g at DLI 22–25 mol/m²/day",
+          "sourceUrl": "https://www.nature.com/articles/s41598-025-23815-0",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Differential photosynthetic response of Hedera helix cultivars to irradiance; light saturation varies by cultivar",
+          "sourceUrl": "https://www.researchgate.net/publication/279628223_Differential_growth_and_photosynthetic_response_of_selected_cultivars_of_English_ivy_to_irradiance",
+          "sourceType": "peer-reviewed"
+        }
+      ]
+    },
+    {
+      "id": "phalaenopsis-aphrodite",
+      "scientificName": "Phalaenopsis aphrodite",
+      "koreanName": "호접란",
+      "englishName": "Moth Orchid",
+      "lightCategory": "low to medium (bright indirect, shade-loving)",
+      "ppfd": {
+        "min": 46,
+        "optimal": 165,
+        "max": 325
+      },
+      "dli": {
+        "min": 4,
+        "optimal": 6,
+        "max": 10
+      },
+      "lux": {
+        "min": 2484,
+        "optimal": 8910,
+        "max": 17550,
+        "conversionAssumption": "sunlight, factor 54 (note: indoor filtered daylight in living rooms typically reaches Phalaenopsis at the lower end; orchid is shade-loving CAM plant)"
+      },
+      "careNotesEn": "Moth orchids are shade-loving CAM plants — place near a bright east or filtered south window, never in direct midday sun. Sustained exposure above ~17,500 lux causes leaf scorch and photosystem damage. Leaves should feel cool and look medium green; dark green means too little light, reddish/yellow means too much.",
+      "careNotesKo": "호접란은 그늘을 좋아하는 CAM 식물이라 밝은 동향 창이나 살짝 가린 남향 창 근처가 좋고, 한낮 직사광선은 절대 피해 주세요. 17,500 lux 이상에 오래 노출되면 잎이 타고 광합성 기관이 손상돼요. 잎을 만져 봤을 때 시원하고 중간 톤의 초록색이 정상이에요. 잎이 진한 초록이면 빛이 부족한 거고, 붉거나 노란 기가 돌면 빛이 너무 많은 거예요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Phalaenopsis orchid photosynthesis peaks at PPFD 130-200 umol/m2/s; photoinhibition above 325 umol/m2/s (species-specific study)",
+          "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7503704/",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Phalaenopsis can tolerate light as low as 46 umol/m2/s with optimal blooming around 100 umol/m2/s",
+          "sourceUrl": "https://herebutnot.com/light-recommendations-ppfd-par-for-orchids-and-houseplants/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Phalaenopsis commercial production DLI 4-6 mol/m2/day; vegetative gains up to ~11.5 mol/m2/day",
+          "sourceUrl": "https://link.springer.com/article/10.1007/s13580-025-00753-4",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Phalaenopsis DLI 8-10 mol/m2/d tested for improved growth/flowering",
+          "sourceUrl": "https://ishs.org/ishs-article/1078_12/",
+          "sourceType": "peer-reviewed"
+        }
+      ]
+    },
+    {
+      "id": "ficus-umbellata",
+      "scientificName": "Ficus umbellata",
+      "koreanName": "휘카스 움베르타",
+      "englishName": "Ficus Umbellata",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 20,
+        "optimal": 150,
+        "max": 400
+      },
+      "dli": {
+        "min": 0.9,
+        "optimal": 6.5,
+        "max": 17.3
+      },
+      "lux": {
+        "min": 1080,
+        "optimal": 8100,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Place near an east-facing window or 1-2 m back from a bright south-facing window with sheer curtains; tolerates a few hours of soft morning sun but its large, thin leaves scorch in harsh midday direct sun. Rotate the pot a quarter turn weekly so the canopy stays even, and wipe the broad leaves monthly so dust doesn't cut effective light by 20-30%. Below ~1,000 lux for extended periods it will drop lower leaves; if your meter reads under ~3,000 lux at the plant, move it closer to the window or add a supplemental LED.",
+      "careNotesKo": "움베르타는 동향 창 근처나, 얇은 커튼이 있는 밝은 남향 창에서 1~2m 떨어진 자리를 좋아해요. 부드러운 아침햇살 몇 시간은 괜찮지만, 한낮 직사광선이 크고 얇은 잎에 닿으면 바로 타 버려요. 매주 화분을 4분의 1씩 돌려서 캐노피가 한쪽으로 기울지 않게 해 주세요. 넓은 잎에 먼지가 쌓이면 광 흡수가 20~30% 떨어지니까 한 달에 한 번은 잎을 닦아 주세요. 1,000 lux 아래가 오래 지속되면 아래 잎부터 떨어지고, 식물 위치에서 3,000 lux도 안 나오면 창가로 옮기거나 LED 식물등을 보태 주세요.",
+      "derivationFlag": "category-derived from genus Ficus (UF/IFAS interiorscape Ficus guidelines + F. benjamina PPFD data)",
+      "sources": [
+        {
+          "claim": "Interior Ficus light levels 100-200 fc after acclimatization under 80% shade",
+          "sourceUrl": "https://mrec.ifas.ufl.edu/Foliage/folnotes/ficus.htm",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS interiorscape Ficus: 70-80% shade production (2,500-3,750 fc); interior use 100-200 fc",
+          "sourceUrl": "https://edis.ifas.ufl.edu/publication/EP136",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Ficus benjamina PPFD: 160 umol/m2/s good growth; 80 umol/m2/s maintenance minimum",
+          "sourceUrl": "https://mrec.ifas.ufl.edu/foliage/resrpts/rh_91_5.htm",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "PPFD-to-foot-candle conversion: PPFD ≈ 0.2 × foot-candles",
+          "sourceUrl": "https://www.houseplantjournal.com/par-vs-foot-candles/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Foliage tropical DLI band: 4-9 mol/m2/day; 100-250 umol/m2/s PPFD",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        }
+      ]
+    },
+    {
+      "id": "hoya-carnosa",
+      "scientificName": "Hoya carnosa",
+      "koreanName": "호야",
+      "englishName": "Wax Plant",
+      "lightCategory": "bright indirect (medium-to-high; tolerates partial shade, needs higher light to bloom)",
+      "ppfd": {
+        "min": 50,
+        "optimal": 250,
+        "max": 400
+      },
+      "dli": {
+        "min": 4,
+        "optimal": 12,
+        "max": 16
+      },
+      "lux": {
+        "min": 2700,
+        "optimal": 13500,
+        "max": 21500,
+        "conversionAssumption": "sunlight, factor 54; cross-checked against extension foot-candle ranges (1 fc ≈ 10.76 lux)"
+      },
+      "careNotesEn": "Hoya carnosa is an epiphytic semi-succulent that thrives in bright, indirect light. It tolerates lower light for foliage maintenance but requires sustained medium-to-high light (ideally 1,500–2,000 fc / ~13,000–21,500 lux) for several weeks to initiate the wax-like flower umbels. In Korean apartments, place within 30–60 cm of an east or lightly filtered south window; avoid harsh midday summer sun through unfiltered glass, which scorches the waxy leaves. Do not relocate once buds form — peduncles are perennial and reused each bloom cycle.",
+      "careNotesKo": "호야는 착생성 반다육 식물이라 밝은 간접광을 정말 좋아해요. 잎만 유지하려면 어두운 자리에서도 버티지만, 왁스 같은 꽃송이가 피려면 1,500~2,000 fc(약 13,000~21,500 lux)의 중간~높은 밝기가 몇 주 동안 꾸준히 유지돼야 해요. 한국 아파트에서는 동향 창이나 살짝 가린 남향 창에서 30~60cm 이내가 좋고, 가리지 않은 한여름 한낮 직사광선은 왁스 잎을 태우니까 피해 주세요. 꽃봉오리가 생긴 뒤에는 절대 자리를 옮기지 마세요 — 꽃대는 다년생이라서 같은 자리에서 매년 다시 꽃이 피거든요.",
+      "derivationFlag": "DLI bloom range category-derived from Hoya kerrii (same genus); PPFD upper bound derived from foot-candle ranges via standard sunlight conversion",
+      "sources": [
+        {
+          "claim": "Hoya carnosa: Partial Shade (2-6 hours direct sun); bright indirect light year-round is ideal",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/hoya-carnosa/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Hoya carnosa tolerates low light but needs medium light to grow and high light to flower",
+          "sourceUrl": "https://extension.missouri.edu/publications/g6515",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Wax plants develop best under 1,500–2,000 fc (~16,140–21,520 lux)",
+          "sourceUrl": "https://extension.missouri.edu/publications/g6515",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Hoya carnosa shade-plant PPFD band ~50–150 μmol/m²/s for foliage; ~300–400 risks photoinhibition without acclimation",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Hoya kerrii (genus analog) requires DLI 12–16 mol/m²/day for ≥8 consecutive weeks to initiate bud formation",
+          "sourceUrl": "https://lifetips.alibaba.com/plant-care/hoya-kerrii-bloom",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Tropical foliage plant PPFD 100–250 μmol/m²/s for shade-tolerant species",
+          "sourceUrl": "https://www.china-growlight.com/info/plant-ppfd-guide-how-much-grow-light-103252968.html",
+          "sourceType": "horticulture-table"
+        }
+      ]
+    },
+    {
+      "id": "ficus-benghalensis",
+      "scientificName": "Ficus benghalensis",
+      "koreanName": "벵갈고무나무",
+      "englishName": "Banyan Fig",
+      "lightCategory": "bright indirect (high light, tolerates some direct morning sun)",
+      "ppfd": {
+        "min": 80,
+        "optimal": 200,
+        "max": 400
+      },
+      "dli": {
+        "min": 3.5,
+        "optimal": 8,
+        "max": 14
+      },
+      "lux": {
+        "min": 4320,
+        "optimal": 10800,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54 (PPFD umol/m2/s x 54 = lux)"
+      },
+      "careNotesEn": "Place near a bright east- or south-facing window with sheer-filtered light; tolerates a few hours of gentle direct morning sun but harsh midday sun through glass will scorch the broad leaves. Below ~80 umol/m2/s (≈1,500 lux / 150 fc) the plant survives but drops lower leaves and stretches; rotate the pot weekly for even canopy. In Korean apartments, a spot ~1 m back from a south window behind a thin curtain typically reads in the 8,000–12,000 lux optimal band on a clear day.",
+      "careNotesKo": "벵갈고무나무는 얇은 커튼이 있는 밝은 동향이나 남향 창 근처를 좋아해요. 부드러운 아침 직사광선 몇 시간은 괜찮지만, 유리창 너머 한낮 햇살은 넓은 잎을 태워 버려요. 80 umol/m2/s(약 1,500 lux / 150 fc) 이하면 살아남긴 하지만 아래 잎이 떨어지고 줄기가 웃자라요. 매주 화분을 돌려서 캐노피가 고르게 자라게 해 주세요. 한국 아파트에서는 맑은 날 남향 창에서 1m 떨어진 자리에 얇은 커튼을 친 위치가 보통 8,000~12,000 lux 정도 나와요 — 딱 좋은 범위예요.",
+      "derivationFlag": "category-derived from genus Ficus (F. benjamina interior production data, UF/IFAS) and the high light foliage interior class; species-specific PPFD/DLI optima for F. benghalensis are not published in peer-reviewed horticulture literature",
+      "sources": [
+        {
+          "claim": "Interior Ficus spp. maintenance 100–200 fc sustained; some cultivars tolerate 50 fc minimum. Production under 70–80% shade (~2,500–3,750 fc)",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP136",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Ficus benjamina (closest commercially-studied congener) PPFD ~80 umol/m2/s min, ~160 umol/m2/s good growth",
+          "sourceUrl": "https://mrec.ifas.ufl.edu/foliage/resrpts/rh_91_5.htm",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Tropical foliage houseplants 100–250 umol/m2/s PPFD; 4–9 mol/m2/day DLI",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "High-light houseplants: ≥200 fc min, 500–1,000 fc preferred",
+          "sourceUrl": "https://extension.missouri.edu/publications/g6515",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Ficus benghalensis (Ficus Audrey) requires bright indirect light; direct midday sun scorches foliage",
+          "sourceUrl": "https://soltech.com/products/ficus-audrey-care",
+          "sourceType": "commercial-grower-spec"
+        }
+      ]
+    },
+    {
+      "id": "nephrolepis-exaltata",
+      "scientificName": "Nephrolepis exaltata",
+      "koreanName": "보스턴고사리",
+      "englishName": "Boston Fern",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 115,
+        "optimal": 250,
+        "max": 380
+      },
+      "dli": {
+        "min": 5.5,
+        "optimal": 11,
+        "max": 16.5
+      },
+      "lux": {
+        "min": 6210,
+        "optimal": 13500,
+        "max": 20520,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Place in bright indirect light near an east- or north-facing window; never direct midday sun, which scorches and browns the fronds. Boston ferns do not acclimate well to sudden light changes — transition gradually over 7–10 days. Maintain high humidity and consistent moisture; combined with adequate (but not excessive) light, this prevents the leaflet drop that is the most common indoor failure mode.",
+      "careNotesKo": "보스턴고사리는 동향이나 북향 창 근처의 밝은 간접광을 좋아해요. 한낮 직사광선은 절대 피해 주세요 — 잎이 갈색으로 타 버려요. 빛 변화에 적응이 느린 편이라 자리를 옮길 때는 7~10일에 걸쳐 천천히 바꿔 주세요. 높은 습도와 일정한 토양 수분, 그리고 적당한 빛(너무 많지 않은)을 같이 챙겨 주면 보스턴고사리가 실내에서 죽는 가장 흔한 원인인 잎 떨어짐을 막을 수 있어요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Optimal DLI for Nephrolepis exaltata production 10-12 mol/m2/day; quality acceptable across 5.5-16.5 mol/m2/day across 11 cultivars",
+          "sourceUrl": "https://phys.org/news/2023-02-effects-photosynthetic-daily-swordfern-cultivars.html",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Photosynthetic Daily Light Integral Influences Growth in Swordfern Cultivars — tested 3.2-17.1 mol/m2/day; optimal 10-12",
+          "sourceUrl": "https://www.researchgate.net/publication/365921249_Photosynthetic_Daily_Light_Integral_Influences_Growth_Morphology_Physiology_and_Quality_of_Swordfern_Cultivars",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Boston fern requires filtered medium-intensity light 1,000-2,500 fc (~10,760-26,900 lux); direct sun scorches fronds",
+          "sourceUrl": "https://hort.extension.wisc.edu/articles/boston-fern-nephrolepis-exaltata-bostoniensis/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS classifies Boston fern as shaded greenhouse / partial-to-deep shade interior foliage crop",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP550",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "NC State: Nephrolepis exaltata prefers part shade to full shade",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/nephrolepis-exaltata/",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "calathea-orbifolia",
+      "scientificName": "Calathea orbifolia (Goeppertia orbifolia)",
+      "koreanName": "칼라데아 오르비폴리아",
+      "englishName": "Orbifolia Prayer Plant",
+      "lightCategory": "low to medium (bright indirect, shade-loving understory)",
+      "ppfd": {
+        "min": 30,
+        "optimal": 150,
+        "max": 300
+      },
+      "dli": {
+        "min": 1.3,
+        "optimal": 6.5,
+        "max": 13
+      },
+      "lux": {
+        "min": 1600,
+        "optimal": 8100,
+        "max": 16200,
+        "conversionAssumption": "sunlight, factor 54 (lux per μmol/m²/s); cross-checked with IFAS foot-candle values converted at 10.764 lux/fc"
+      },
+      "careNotesEn": "Shade-loving rainforest understory plant with large, thin, paddle-shaped leaves that scorch easily — keep out of direct sun. Best in bright indirect light a few feet back from an east window, or behind a sheer curtain in south/west exposure. Faded leaf patterns and curling edges indicate too little light; bleached patches or crispy brown edges signal too much direct light (or low humidity). Tolerates lower light than most calatheas but grows slowly there; aim for the 100-200 μmol/m²/s optimal band for vigorous new leaves.",
+      "careNotesKo": "칼라데아 오르비폴리아는 그늘을 좋아하는 열대 우림 하층 식물이에요. 크고 얇은 패들 모양 잎이 직사광선에 정말 쉽게 타니까 무조건 피해 주세요. 동향 창에서 조금 떨어진 자리, 또는 남서향 창에 얇은 커튼을 친 자리의 밝은 간접광이 가장 좋아요. 잎 무늬가 흐려지고 가장자리가 말리면 빛이 부족한 거고, 색이 하얗게 빠지거나 가장자리가 바삭하게 갈색으로 변하면 빛이 너무 많거나 습도가 낮은 거예요. 다른 칼라데아보다는 낮은 빛도 견디지만 그 자리에서는 성장이 느려요. 새 잎을 부지런히 보고 싶다면 100~200 μmol/m²/s 범위를 노려 주세요.",
+      "derivationFlag": "category-derived from genus (Calathea / Goeppertia shade-foliage production class — orbifolia not directly studied in PPFD literature)",
+      "sources": [
+        {
+          "claim": "Commercial Calathea production: 1,000–2,000 fc under 80% shade (~10,764–21,528 lux; ~200–400 μmol/m²/s)",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP285",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Calathea interiorscape: optimal 150–200 fc; tolerated minimum 75 fc",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP285",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Calathea light compensation point 50–100 μmol/m²/s; photosynthesis saturates near 600 μmol/m²/s — confirms shade-plant classification",
+          "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5877565/",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Calathea makoyana — filtered light required; bright light washes out leaf colors",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/FP086",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "chamaedorea-elegans",
+      "scientificName": "Chamaedorea elegans",
+      "koreanName": "테이블야자",
+      "englishName": "Parlor Palm",
+      "lightCategory": "low (understory, low to medium indirect)",
+      "ppfd": {
+        "min": 10,
+        "optimal": 25,
+        "max": 100
+      },
+      "dli": {
+        "min": 0.4,
+        "optimal": 1.1,
+        "max": 4.3
+      },
+      "lux": {
+        "min": 540,
+        "optimal": 1350,
+        "max": 5400,
+        "conversionAssumption": "sunlight, factor 54 (1 ftc = 10.76 lux; lux/54 = PPFD)"
+      },
+      "careNotesEn": "Understory Mexican rainforest palm — thrives in low to moderate indirect light near a north- or east-facing window. Avoid direct midday sun, which scorches the fine pinnae. Tolerates very dim interiors (down to ~50 ftc / 540 lux) better than most palms, making it a classic windowless-room plant; growth slows dramatically below 1000 lux. Optimal vigor and new frond production at 1000–2500 lux of bright indirect light.",
+      "careNotesKo": "테이블야자는 멕시코 열대 우림 하층의 야자수예요. 북향이나 동향 창 근처의 낮은~중간 밝기 간접광에서 가장 잘 자라요. 한낮 직사광선은 가느다란 잎을 태우니까 피해 주세요. 다른 야자수보다 어두운 자리(약 540 lux / 50 ftc까지)도 잘 견뎌서 창문 없는 방의 클래식이에요. 다만 1,000 lux 아래로 떨어지면 성장이 확 느려져요. 새 잎이 자주 나오는 가장 좋은 자리는 1,000~2,500 lux의 밝은 간접광이에요.",
+      "derivationFlag": "category-derived from low-light foliage class — foot-candle ranges are direct citations (UF/IFAS, UKY, FSHS, UC ANR); PPFD/DLI converted via sunlight factor 54, no species-specific μmol literature exists",
+      "sources": [
+        {
+          "claim": "Chamaedorea elegans maintained at 100 fc in UF/IFAS indoor-quality study; tolerates as low as 50 ftc",
+          "sourceUrl": "https://mrec.ifas.ufl.edu/foliage/resrpts/rh_91_15.htm",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UKY HortFacts — parlor palm grows in 50–150 fc indoors",
+          "sourceUrl": "https://horticulture.mgcafe.uky.edu/sites/horticulture.ca.uky.edu/files/palms.pdf",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "FSHS proceedings — Chamaedorea elegans recommended for 50–75 fc interior areas",
+          "sourceUrl": "https://journals.flvc.org/fshs/article/download/98886/94872/127455",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "UF/IFAS Gardening Solutions: low 25–100 ftc; medium 100–500 ftc",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/light-for-houseplants/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UC ANR Master Gardener Handbook Table 11.1: Chamaedorea classified as low-light foliage",
+          "sourceUrl": "https://ucanr.edu/sites/default/files/2010-07/29023.pdf",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "NCSU Extension — Chamaedorea elegans dappled sunlight / deep shade",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/chamaedorea-elegans/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Clemson HGIC — parlor palms tolerate lower light; filtered indirect light optimal",
+          "sourceUrl": "https://hgic.clemson.edu/factsheet/indoor-palms/",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "pachira-aquatica",
+      "scientificName": "Pachira aquatica",
+      "koreanName": "파키라",
+      "englishName": "Money Tree",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 7,
+        "optimal": 200,
+        "max": 550
+      },
+      "dli": {
+        "min": 0.3,
+        "optimal": 8.6,
+        "max": 17
+      },
+      "lux": {
+        "min": 380,
+        "optimal": 10800,
+        "max": 29700,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Native to tropical rainforest understory, so Pachira tolerates surprisingly low light (survives at ~7 μmol/m²/s) but stretches and drops leaves below ~50 μmol/m²/s. Best indoor performance comes from bright indirect light near an east-facing window; filter any direct south or afternoon west sun to avoid leaf scorch and chlorophyll bleaching. Rotate the pot weekly so the trunks grow evenly.",
+      "careNotesKo": "파키라는 열대 우림 하층 출신이라 의외로 어두운 자리도 잘 견뎌요(7 μmol/m²/s까지도 살아남아요). 다만 50 μmol/m²/s 아래에서는 줄기가 웃자라고 잎이 떨어져요. 실내에서 가장 잘 자라는 자리는 동향 창 근처의 밝은 간접광이에요. 남향이나 오후 서향의 직사광선은 얇은 커튼 같은 걸로 한 번 걸러 주세요 — 그냥 쬐면 잎이 타고 엽록소가 빠져요. 매주 화분을 돌려서 줄기가 한쪽으로 기울지 않게 해 주세요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Pachira aquatica production PPFD optimum 285–350 μmol/m²/s; 550 μmol/m²/s upper-tested",
+          "sourceUrl": "https://www.researchgate.net/publication/264975654_Effects_of_Light_Intensity_and_Paclobutrazol_on_Growth_and_Interior_Performance_of_Pachira_aquatica_Aubl",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Pachira aquatica sustained growth at 500 lx ≈ 6.8 μmol/m²/s white LED, 9 h/day over 191 days",
+          "sourceUrl": "https://www.nature.com/articles/s41598-024-67877-y",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Indoor placement: east window ideal (~1,800 fc); unfiltered south >4,000 fc damages chlorophyll",
+          "sourceUrl": "https://soltech.com/products/money-tree-care",
+          "sourceType": "commercial-grower-spec"
+        },
+        {
+          "claim": "Pachira aquatica is shade-tolerant rainforest understory species widely used for indoor greening",
+          "sourceUrl": "https://libguides.nybg.org/pachira",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "peperomia-obtusifolia",
+      "scientificName": "Peperomia obtusifolia",
+      "koreanName": "페페로미아 오브투시폴리아",
+      "englishName": "Baby Rubber Plant",
+      "lightCategory": "low to medium (bright indirect)",
+      "ppfd": {
+        "min": 10,
+        "optimal": 50,
+        "max": 160
+      },
+      "dli": {
+        "min": 0.5,
+        "optimal": 2.5,
+        "max": 8
+      },
+      "lux": {
+        "min": 540,
+        "optimal": 2700,
+        "max": 8600,
+        "conversionAssumption": "sunlight, factor 54 (PPFD umol/m2/s x 54 = lux); foot-candles converted at 1 fc = 10.764 lux"
+      },
+      "careNotesEn": "Place 2-3 m from a south window or directly beside an east/north window; sheer curtain required if any direct sun touches the leaves. Thick succulent-like foliage tolerates extended low light (50-100 fc) for survival, but new leaves and compact form only appear in the 200-500 fc (medium) range. Direct midday sun bleaches and scorches leaves within hours.",
+      "careNotesKo": "페페로미아는 남향 창에서 2~3m 떨어진 자리나 동향·북향 창 바로 옆이 좋아요. 직사광선이 잎에 닿는다면 얇은 커튼을 꼭 쳐 주세요. 두꺼운 다육질 잎이라 50~100 fc의 어두운 자리에서도 오래 살아남긴 하지만, 새 잎이 나고 모양이 야무지게 자라려면 200~500 fc(중간 밝기)는 돼야 해요. 한낮 직사광선이 직접 닿으면 몇 시간 안에 잎이 하얗게 바래고 타 버려요.",
+      "derivationFlag": "category-derived from UF/IFAS shade plant + NCSU dappled sunlight / partial shade classification mapped to UF/IFAS foot-candle ranges (no species-specific PPFD published)",
+      "sources": [
+        {
+          "claim": "Peperomia obtusifolia grows in partial to deep shade; classified as a shade plant",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/FP466",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Peperomia obtusifolia: Dappled Sunlight; Partial Shade (2-6 hours); prefers bright indirect light; direct sun burns leaves",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/peperomia-obtusifolia/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS houseplant foot-candle ranges: Low 25-100 fc; Medium 100-500 fc; High 500-1000 fc; Direct >1000 fc",
+          "sourceUrl": "https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/light-for-houseplants/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Peperomia (baby rubber plant) medium light level; tolerates poor light for limited periods",
+          "sourceUrl": "https://extension.missouri.edu/publications/g6515",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "philodendron-hederaceum",
+      "scientificName": "Philodendron hederaceum",
+      "koreanName": "하트필로덴드론",
+      "englishName": "Heartleaf Philodendron",
+      "lightCategory": "low to medium (bright indirect preferred for mature form)",
+      "ppfd": {
+        "min": 20,
+        "optimal": 125,
+        "max": 250
+      },
+      "dli": {
+        "min": 1,
+        "optimal": 6,
+        "max": 9
+      },
+      "lux": {
+        "min": 160,
+        "optimal": 2150,
+        "max": 4300,
+        "conversionAssumption": "Indoor foot-candle floors taken directly from University of Missouri Extension for heartleaf philodendron (15 fc survival, 200 fc to thrive) and converted at 1 fc = 10.76 lux. Upper bound ~400 fc reflects medium-light category top from Missouri Extension."
+      },
+      "careNotesEn": "Tolerates very low light (survives near a north window or interior wall) but only develops its true mature, larger-leaf form with bright indirect light around 2,000-4,000 lux. Keep out of direct midday sun through glass — leaves scorch above ~400 fc / ~4,300 lux without diffusion. Forgiving, fast-growing trailer ideal for shelves and hanging baskets in dimmer Korean apartments.",
+      "careNotesKo": "하트필로덴드론은 정말 어두운 자리(북향 창 근처나 안쪽 벽)에서도 살아남지만, 성숙한 큰 잎 모양이 나오려면 2,000~4,000 lux 정도의 밝은 간접광이 필요해요. 유리창 너머 한낮 직사광선은 피해 주세요 — 가림 없이 400 fc(약 4,300 lux) 이상에 닿으면 잎이 타요. 어두운 한국 아파트의 선반이나 행잉 화분에 키우기 정말 좋은 식물이에요. 빨리 자라고 잘 안 죽어요.",
+      "derivationFlag": "PPFD and DLI category-derived from tropical foliage / low-to-medium indoor houseplant class (Apogee / Carnivero / Ariumology genus-level tropical foliage tables); lux floors are species-specific from University of Missouri Extension",
+      "sources": [
+        {
+          "claim": "Heartleaf philodendron tolerates 15 fc minimum survival; requires 200 fc to thrive",
+          "sourceUrl": "https://ipm.missouri.edu/meg/index.cfm?ID=279",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Missouri Extension light bands: low 50-250 fc; medium 250-1000 fc (best >750 fc)",
+          "sourceUrl": "https://ipm.missouri.edu/meg/index.cfm?ID=279",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Tropical foliage houseplants 100-250 umol/m2/s PPFD; DLI 4-9 mol/m2/day",
+          "sourceUrl": "https://www.carnivero.com/pages/grow-light-ppfd-recommendations",
+          "sourceType": "commercial-grower-spec"
+        },
+        {
+          "claim": "Houseplant PPFD/DLI: low 50-150 umol/m2/s, medium 150-250; DLI 1-9 mol/m2/day across low-to-medium tiers",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "DLI = PPFD x photoperiod (s) / 1,000,000",
+          "sourceUrl": "https://www.apogeeinstruments.com/daily-light-integral-measuring-light-for-plants/",
+          "sourceType": "apogee"
+        }
+      ]
+    },
+    {
+      "id": "ficus-lyrata",
+      "scientificName": "Ficus lyrata",
+      "koreanName": "떡갈잎고무나무",
+      "englishName": "Fiddle-Leaf Fig",
+      "lightCategory": "bright indirect (tolerates a few hours of direct sun)",
+      "ppfd": {
+        "min": 80,
+        "optimal": 200,
+        "max": 400
+      },
+      "dli": {
+        "min": 3.5,
+        "optimal": 8.6,
+        "max": 17.3
+      },
+      "lux": {
+        "min": 4300,
+        "optimal": 10800,
+        "max": 21600,
+        "conversionAssumption": "sunlight, factor 54 (PPFD umol/m2/s x 54 = lux); cross-checks with 1 FC = 10.76 lux against House Plant Journal foot-candle table"
+      },
+      "careNotesEn": "Place within 1-2 m of a bright east or filtered south window; needs sustained >=400 FC (~4,300 lux) of indirect light or it sheds lower leaves. Tolerates 3-4 hours of gentle direct sun (morning) but acclimate gradually over 10-14 days to avoid leaf scorch above ~400 umol PPFD. In Korean apartments, a south- or east-facing window with sheer curtain is ideal; rooms relying only on ambient ceiling light are too dim for long-term health.",
+      "careNotesKo": "떡갈잎고무나무는 밝은 동향 창이나 살짝 가린 남향 창에서 1~2m 이내에 두는 게 좋아요. 400 FC(약 4,300 lux) 이상의 간접광이 꾸준히 안 들어오면 아래 잎부터 떨어져 버려요. 아침 부드러운 직사광선 3~4시간은 괜찮지만, 잎이 타는 걸 막으려면 10~14일에 걸쳐 천천히 적응시켜 주세요(400 umol PPFD 이상에서 화상 위험). 한국 아파트에서는 얇은 커튼을 친 남향이나 동향 창이 이상적이에요. 천장등만 의지하는 안쪽 방은 장기적으로 너무 어두워서 키우기 힘들어요.",
+      "derivationFlag": "partially category-derived from Ficus benjamina photosynthesis research for upper PPFD ceiling; lower/optimal bounds are direct citations for F. lyrata",
+      "sources": [
+        {
+          "claim": "Ficus lyrata minimum indirect light 400 FC (80 umol PPFD); good indirect 800 FC (160 umol PPFD); tolerates 3-4 hrs direct sun",
+          "sourceUrl": "https://www.houseplantjournal.com/bright-indirect-light-requirements-by-plant/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Ficus lyrata listed as medium-light plant (250-1,000 FC); best growth >750 FC",
+          "sourceUrl": "https://extension.missouri.edu/publications/g6515",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS classifies Ficus lyrata as full sun to partial shade outdoors",
+          "sourceUrl": "https://hort.ifas.ufl.edu/database/documents/pdf/tree_fact_sheets/ficlyra.pdf",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Commercial Ficus production: 70-80% shade for interior placement at 100-200 FC; production 2,000-6,000 FC",
+          "sourceUrl": "https://edis.ifas.ufl.edu/ep136",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Ficus benjamina (genus analog) net photosynthesis saturates near 450 umol/m2/s PPFD",
+          "sourceUrl": "https://www.researchgate.net/publication/330790743_Plasticity_in_Leaf_and_Photosynthetic_Characteristics_of_Ficus_benjamina_Ggrown_under_Different_Lght_Regimes",
+          "sourceType": "peer-reviewed"
+        }
+      ]
+    },
+    {
+      "id": "maranta-leuconeura",
+      "scientificName": "Maranta leuconeura",
+      "koreanName": "마란타",
+      "englishName": "Prayer Plant",
+      "lightCategory": "low to medium (bright indirect, shade-tolerant)",
+      "ppfd": {
+        "min": 15,
+        "optimal": 50,
+        "max": 150
+      },
+      "dli": {
+        "min": 0.6,
+        "optimal": 2.2,
+        "max": 6.5
+      },
+      "lux": {
+        "min": 800,
+        "optimal": 2700,
+        "max": 8000,
+        "conversionAssumption": "sunlight, factor 54 (μmol/m²/s × 54 ≈ lux for daylight spectrum); cross-checked against foot-candle citations at 10.764 lux/fc"
+      },
+      "careNotesEn": "Place in bright indirect light near an east or north window; direct midday sun scorches leaves and bleaches the herringbone pattern. Below ~800 lux for prolonged periods the plant etiolates and loses its nyctinastic leaf-folding (prayer) movement. Acclimate gradually before exposing to brighter conditions.",
+      "careNotesKo": "마란타는 동향이나 북향 창 근처의 밝은 간접광을 좋아해요. 한낮 직사광선은 잎을 태우고 헤링본 무늬를 하얗게 바래 버리니까 피해 주세요. 800 lux 이하가 오래 지속되면 줄기가 웃자라고 잎이 밤마다 접히는 그 '기도' 동작도 사라져요. 더 밝은 자리로 옮길 때는 천천히 적응시켜 주세요.",
+      "derivationFlag": "category-derived from Calathea (Marantaceae, same shade-tropical interiorscape class per UF IFAS EP285); upper bound supported by general shade-tropical foliage PPFD literature",
+      "sources": [
+        {
+          "claim": "Calathea (sister genus) interior 75-200 fc; production 80% shade 1000-2000 fc — applied as analog for Maranta",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/EP285",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Tropical shade foliage PPFD baseline 100-250 μmol/m²/s; low-light shade foliage saturates at much lower PPFD",
+          "sourceUrl": "https://www.vanqled.com/blog/how-to-determine-the-ppfd-needs-of-your-indoor-plants",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Calathea species (Marantaceae) physiologically shade plants; photosynthesis saturates well below 600 μmol/m²/s",
+          "sourceUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5877565/",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Maranta leuconeura ideal 150-400 fc at leaf level; <50 fc for >8 h causes etiolation and loss of nyctinasty",
+          "sourceUrl": "https://thehealthyhouseplant.com/what-light-is-best-for-prayer-plants-the-complete-guide-to-lighting-marantas/",
+          "sourceType": "other"
+        },
+        {
+          "claim": "Maranta minimum ~100 fc to survive; 200-250 fc to thrive",
+          "sourceUrl": "https://trexplants.com/blog/care-diary-prayer-plant-maranta-leuconeura",
+          "sourceType": "other"
+        },
+        {
+          "claim": "Maranta leuconeura: bright indirect light; direct sun causes leaf scorch and pattern fading",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/maranta-leuconeura/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "DLI = PPFD × photoperiod × 0.0036 = mol/m²/day",
+          "sourceUrl": "https://www.pubs.ext.vt.edu/SPES/spes-720/spes-720.html",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "monstera-deliciosa",
+      "scientificName": "Monstera deliciosa",
+      "koreanName": "몬스테라 델리시오사",
+      "englishName": "Monstera / Swiss Cheese Plant",
+      "lightCategory": "bright indirect",
+      "ppfd": {
+        "min": 50,
+        "optimal": 150,
+        "max": 300
+      },
+      "dli": {
+        "min": 3,
+        "optimal": 6.5,
+        "max": 13
+      },
+      "lux": {
+        "min": 2700,
+        "optimal": 8100,
+        "max": 16200,
+        "conversionAssumption": "sunlight, factor 54 (lux per umol/m2/s for daylight/window-filtered light)"
+      },
+      "careNotesEn": "Place near a bright east- or south-facing window with sheer curtain — Monstera deliciosa is a hemiepiphytic understory aroid that climbs into canopy gaps, so it wants bright filtered light, not deep shade and not direct midday sun. Below ~50 µmol/m²/s growth slows and new leaves stop fenestrating; above ~300 µmol/m²/s without acclimatization the leaf edges can bleach or scorch. A 12–14 h photoperiod is ideal for hitting the 4–9 mol/m²/day DLI sweet spot.",
+      "careNotesKo": "몬스테라는 캐노피 틈으로 타고 올라가는 반착생 천남성과라 짙은 그늘도, 한낮 직사광선도 싫어해요. 얇은 커튼을 친 밝은 동향이나 남향 창 근처가 가장 좋아요. 50 µmol/m²/s 아래로 떨어지면 성장이 느려지고 새 잎에 찢김(펜스트레이션)이 안 생겨요. 반대로 적응 없이 300 µmol/m²/s 이상에 노출되면 잎 가장자리가 하얗게 바래거나 타요. 일조 시간 12~14시간이 4~9 mol/m²/day의 DLI 스위트 스팟을 맞추기에 딱 좋아요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Monstera deliciosa PPFD recommendation 30–150 µmol/m²/s, 10–14 h photoperiod",
+          "sourceUrl": "https://www.carnivero.com/pages/grow-light-ppfd-recommendations",
+          "sourceType": "commercial-grower-spec"
+        },
+        {
+          "claim": "Monstera deliciosa target PPFD 100–250 µmol/m²/s, DLI 4–9 mol/m²/day",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Monstera deliciosa fenestration/scorch thresholds: 150–250 µmol/m²/s functional target; bleach risk >350–400 µmol/m²/s",
+          "sourceUrl": "https://planethouseplant.com/how-to-use-grow-lights-with-monstera-deliciosa/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Supplemental lighting at 109 µmol/m²/s yields better Monstera leaf opening than 52 µmol/m²/s",
+          "sourceUrl": "https://www.barrina-led.com/blogs/news/the-impact-of-light-intensity-on-the-leaf-opening-of-monstera-deliciosa",
+          "sourceType": "commercial-grower-spec"
+        },
+        {
+          "claim": "Monstera deliciosa prefers light shade/filtered sunlight; intense sun causes leaf scorch",
+          "sourceUrl": "https://ask.ifas.ufl.edu/publication/HS311",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "DLI = PPFD × hours × 0.0036 (Virginia Tech)",
+          "sourceUrl": "https://www.pubs.ext.vt.edu/SPES/spes-720/spes-720.html",
+          "sourceType": "university-extension"
+        }
+      ]
+    },
+    {
+      "id": "sansevieria-trifasciata",
+      "scientificName": "Sansevieria trifasciata (syn. Dracaena trifasciata)",
+      "koreanName": "산세베리아",
+      "englishName": "Snake Plant",
+      "lightCategory": "low (tolerates very low; optimizes at medium / bright indirect)",
+      "ppfd": {
+        "min": 50,
+        "optimal": 200,
+        "max": 500
+      },
+      "dli": {
+        "min": 4,
+        "optimal": 10,
+        "max": 18
+      },
+      "lux": {
+        "min": 2700,
+        "optimal": 10800,
+        "max": 27000,
+        "conversionAssumption": "sunlight, factor 54 (Apogee Instruments)"
+      },
+      "careNotesEn": "Extremely light-tolerant: survives long periods at very low indoor light, but leaves grow narrower and color contrast fades below ~100 μmol/m²/s. For full upright, thick, well-banded foliage, place in bright indirect light near an east or south-facing window. Acclimate gradually before exposing to direct midday sun above ~500 μmol/m²/s to avoid scorch.",
+      "careNotesKo": "산세베리아는 빛에 대한 적응력이 정말 강해요. 어두운 실내에서도 오래 버티지만, 100 μmol/m²/s 이하면 잎이 좁아지고 줄무늬 대비가 흐려져요. 두툼하고 빳빳하게 서 있는 잎과 또렷한 줄무늬를 보려면 동향이나 남향 창 근처의 밝은 간접광 자리에 두세요. 한낮 직사광선(500 μmol/m²/s 이상)에 바로 노출하면 화상을 입을 수 있으니까 며칠에 걸쳐 천천히 적응시켜 주세요.",
+      "derivationFlag": "",
+      "sources": [
+        {
+          "claim": "Sansevieria trifasciata PPFD by growth stage: establishment 150-250, vegetative 250-350, mature 300-450 μmol/m²/s; DLI 8-18 mol/m²/day",
+          "sourceUrl": "https://aquahorti.com/sansevieria-trifasciata-light-requirements-par-dli-for-different-growth-stages/",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Sansevieria trifasciata classified as low-light houseplant; minimum 75 fc (~800 lux)",
+          "sourceUrl": "https://extension.illinois.edu/houseplants/lighting",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "UF/IFAS lists S. trifasciata as adaptable foliage plant tolerating shade but preferring warm sunny location; protect from hot afternoon sun",
+          "sourceUrl": "https://blogs.ifas.ufl.edu/nassauco/2017/06/10/fact-sheet-sansevieria-trifasciata/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Sun-tolerant Sansevieria cultivars grown under 35-75% shade with max PPFD 350-500 μmol/m²/s (USPTO plant patents)",
+          "sourceUrl": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP33168",
+          "sourceType": "commercial-grower-spec"
+        },
+        {
+          "claim": "Apogee Instruments sunlight conversion: lux ÷ 54 = PPFD μmol/m²/s",
+          "sourceUrl": "https://rareplantcare.com/lux-to-ppfd-houseplants/",
+          "sourceType": "apogee"
+        },
+        {
+          "claim": "Snake plant DLI 4-9 mol/m²/day optimal range for foliage tropicals",
+          "sourceUrl": "https://ariumology.com/2026/05/12/ppfd-and-dli-for-houseplants-2026-light-science-guide/",
+          "sourceType": "horticulture-table"
+        }
+      ]
+    },
+    {
+      "id": "hesperocyparis-macrocarpa-goldcrest",
+      "scientificName": "Hesperocyparis macrocarpa 'Goldcrest'",
+      "koreanName": "율마",
+      "englishName": "Goldcrest Cypress",
+      "lightCategory": "bright direct (sunlight-tolerant) — full sun",
+      "ppfd": {
+        "min": 200,
+        "optimal": 600,
+        "max": 1500
+      },
+      "dli": {
+        "min": 10,
+        "optimal": 20,
+        "max": 35
+      },
+      "lux": {
+        "min": 10800,
+        "optimal": 32400,
+        "max": 81000,
+        "conversionAssumption": "sunlight, factor 54"
+      },
+      "careNotesEn": "Goldcrest cypress is a full-sun outdoor conifer, not a true houseplant — it needs the brightest position you have, ideally <1 ft from an unobstructed south-facing window, and benefits enormously from being moved outdoors in spring/summer. Indoors in Korean apartments it commonly browns and drops needles within months because window glass cuts the DLI well below its 12+ mol/m²/day comfort zone; supplemental grow light or balcony placement is strongly recommended. In hot climates give afternoon shade; otherwise treat as a high-light species.",
+      "careNotesKo": "율마는 사실 진짜 실내 식물이 아니라 풀썬을 좋아하는 야외 침엽수예요. 가장 밝은 자리(가리지 않은 남향 창에서 30cm 이내)에 두고, 봄·여름엔 베란다나 옥상으로 내보내 주면 정말 좋아해요. 한국 아파트 실내에 두면 유리창이 빛을 너무 깎아서 DLI가 율마가 필요로 하는 12 mol/m²/day 아래로 떨어져 몇 달 안에 갈변하고 잎이 우수수 떨어지는 경우가 흔해요. 식물등을 보태 주거나 베란다로 옮기는 걸 강력 추천드려요. 한여름엔 오후 햇볕만 살짝 가려 주세요.",
+      "derivationFlag": "category-derived from full-sun / high-light ornamental class (no species-specific PPFD published)",
+      "sources": [
+        {
+          "claim": "Hesperocyparis macrocarpa 'Goldcrest' light: Full sun (6+ hours direct) or Partial Shade in hot climates",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/hesperocyparis-macrocarpa-goldcrest/",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Full-sun outdoor PPFD ceiling ~2000 µmol/m²/s; maximum natural DLI ~60 mol/m²/d",
+          "sourceUrl": "https://www.pubs.ext.vt.edu/SPES/spes-720/spes-720.html",
+          "sourceType": "university-extension"
+        },
+        {
+          "claim": "Light-loving ornamental crops DLI 12-18 mol/m²/d; high-light-loving >18 mol/m²/d",
+          "sourceUrl": "https://www.redusystems.com/en/articles/daily-light-integral-should-be-guide-for-optimal-production-of-ornamentals",
+          "sourceType": "horticulture-table"
+        },
+        {
+          "claim": "Cupressus sempervirens (congener) leaf morphology adapts across sun/shade gradient",
+          "sourceUrl": "https://www.sciencedirect.com/science/article/abs/pii/S1011134412002047",
+          "sourceType": "peer-reviewed"
+        },
+        {
+          "claim": "Indoor placement: <1 ft from south-facing window, 6 h direct sun minimum",
+          "sourceUrl": "https://plants.ces.ncsu.edu/plants/hesperocyparis-macrocarpa-goldcrest/",
+          "sourceType": "university-extension"
+        }
+      ]
+    }
+  ]
+}
