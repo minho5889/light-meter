@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var cameraViewModel = CameraViewModel()
     @State private var selectedTab: Int = 0
     @State private var previousTab: Int = 0
+    @State private var showModeSettings = false
 
     /// Camera tabs show the shared preview; non-camera tabs don't.
     private var isCameraTab: Bool { selectedTab == 0 || selectedTab == 1 || selectedTab == 2 }
@@ -62,6 +63,31 @@ struct ContentView: View {
                 }
             }
 
+            // Settings gear (top-right) — lets Advanced mode switch back to
+            // Regular. Hidden on Records (tab 3), which uses the top-right for
+            // its CSV-export share button.
+            if cameraViewModel.permissionGranted && selectedTab != 3 {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            showModeSettings = true
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .font(.system(.body, design: .rounded).weight(.semibold))
+                                .foregroundColor(.white)
+                                .frame(width: 40, height: 40)
+                                .background(.ultraThinMaterial, in: Circle())
+                                .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
+                        }
+                        .accessibilityLabel(LocalizedStrings.translate(key: "ax_settings", language: cameraViewModel.appLanguage))
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+            }
+
             // Permission-denied overlay — shown on top when camera access is missing
             if !cameraViewModel.permissionGranted {
                 VStack {
@@ -74,6 +100,9 @@ struct ContentView: View {
                     Spacer()
                 }
             }
+        }
+        .sheet(isPresented: $showModeSettings) {
+            RegularSettingsSheet(language: cameraViewModel.appLanguage)
         }
         .onAppear {
             cameraViewModel.requestPermission()
