@@ -49,6 +49,22 @@ public struct PlantSpecies: Codable, Identifiable, Hashable, Sendable {
     public func isOptimal(lux: Double) -> Bool {
         lux >= self.lux.min && lux <= self.lux.max
     }
+
+    /// Display name in the app's language. The catalog carries Korean + English
+    /// names (no French set yet), so French falls back to the English common
+    /// name — still meaningful for a Francophone grower.
+    public func displayName(_ language: AppLanguage) -> String {
+        switch language {
+        case .korean:  return koreanName
+        case .french:  return englishName
+        case .english: return englishName
+        }
+    }
+
+    /// Localized light-care note (Korean register vs English).
+    public func careNotes(_ language: AppLanguage) -> String {
+        language == .korean ? careNotesKo : careNotesEn
+    }
 }
 
 /// Top-level catalog: versioned + carries dataset-wide metadata so the in-app

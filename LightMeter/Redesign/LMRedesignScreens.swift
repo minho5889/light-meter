@@ -294,6 +294,61 @@ struct LMCaptureControls: View {
     }
 }
 
+// MARK: - Plant-fit verdict
+
+/// Gardening-pivot payoff card: given a (captured) lux reading, names the
+/// catalogued houseplants that thrive at that light level. Sits below the
+/// readout card on the captured Brightness screen. Dark-glass styling matches
+/// the readout card. Honest by design — when nothing matches we say so rather
+/// than force a bad suggestion.
+struct LMPlantFitView: View {
+    let lux: Double
+    var language: AppLanguage = .english
+    /// How many plant names to show before collapsing into "+N more".
+    private let displayCap = 6
+
+    private var matches: [PlantSpecies] { PlantCatalog.shared.plants(matchingLux: lux) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 6) {
+                Image(systemName: "leaf.fill")
+                    .font(LM.font(LM.FontSize.caption, .bold))
+                    .accessibilityHidden(true)
+                Text(LocalizedStrings.translate(key: "plant_fit_title", language: language))
+                    .font(LM.font(LM.FontSize.caption, .bold))
+            }
+            .foregroundStyle(LM.readoutText)
+
+            if matches.isEmpty {
+                Text(LocalizedStrings.translate(key: "plant_fit_empty", language: language))
+                    .font(LM.font(LM.FontSize.body, .regular))
+                    .foregroundStyle(LM.readoutText)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                let names = matches.prefix(displayCap).map { $0.displayName(language) }
+                let overflow = matches.count - names.count
+
+                Text(names.joined(separator: " · "))
+                    .font(LM.font(LM.FontSize.body, .medium))
+                    .foregroundStyle(LM.readoutText)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if overflow > 0 {
+                    Text(String(format: LocalizedStrings.translate(key: "plant_fit_more", language: language), overflow))
+                        .font(LM.font(LM.FontSize.caption, .regular))
+                        .foregroundStyle(LM.readoutText.opacity(0.7))
+                }
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .lmGlass(tint: LM.readoutGlass, dark: true)
+        .accessibilityElement(children: .combine)
+    }
+}
+
 // MARK: - Record Card
 
 /// A single record card on the Records screen.

@@ -10,6 +10,12 @@ public struct LocalizedStrings {
         "tab_check": [.english: "Check", .korean: "플리커", .french: "Sécurité"],
         "tab_records": [.english: "Records", .korean: "기록", .french: "Historique"],
         "ax_settings": [.english: "Settings", .korean: "설정", .french: "Réglages"],
+
+        // Plant-fit verdict (gardening pivot — captured Brightness card)
+        "plant_fit_title": [.english: "Plants that thrive here", .korean: "이 빛에서 잘 자라요", .french: "Plantes adaptées à cette lumière"],
+        "plant_fit_empty": [.english: "Few common houseplants thrive at this light level.", .korean: "이 밝기에선 잘 자라는 실내식물이 많지 않아요.", .french: "Peu de plantes d'intérieur prospèrent à ce niveau."],
+        "plant_fit_more": [.english: "+%d more", .korean: "외 %d종", .french: "+%d autres"],
+        "plant_fit_count": [.english: "%d plants match this light", .korean: "이 빛에 맞는 식물 %d종", .french: "%d plantes correspondent"],
         // Regular-mode tab labels per Figma (distinct from the Advanced-mode
         // "Temperature"/"Check" above, which ContentView still uses).
         "tab_color_temp": [.english: "Color Temp", .korean: "색온도", .french: "Temp. couleur"],

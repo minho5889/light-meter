@@ -145,6 +145,18 @@ struct PlantCatalogTests {
         }
     }
 
+    @Test func displayName_localizesByLanguage() throws {
+        let data = try Data(contentsOf: Self.catalogURL())
+        let catalog = try PlantCatalog(data: data)
+        let monstera = try #require(catalog.plant(id: "monstera-deliciosa"))
+        // Korean returns the Korean name (Hangul present); English/French return the English common name.
+        #expect(monstera.displayName(.korean).unicodeScalars.contains { 0xAC00...0xD7A3 ~= $0.value })
+        #expect(monstera.displayName(.english) == monstera.englishName)
+        #expect(monstera.displayName(.french) == monstera.englishName)
+        // Korean care note differs from English (not an accidental duplicate).
+        #expect(monstera.careNotes(.korean) != monstera.careNotes(.english))
+    }
+
     @Test func plantsMatchingLux_extremeReadingsReturnSensibleResults() throws {
         let data = try Data(contentsOf: Self.catalogURL())
         let catalog = try PlantCatalog(data: data)
