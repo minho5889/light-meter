@@ -234,6 +234,29 @@ struct RegularRootView: View {
         .accessibilityLabel(LocalizedStrings.translate(key: "ui_back", language: language))
     }
 
+    /// Captured-state bottom controls: Back (centered, replaces the shutter)
+    /// paired with the camera-flip button in the same trailing position it
+    /// holds live — per the Figma Brightness-detail screens, both stay
+    /// available once captured rather than the flip button disappearing.
+    private var capturedControls: some View {
+        ZStack {
+            backControl
+            HStack {
+                Spacer()
+                Button {
+                    cameraViewModel.toggleCamera()
+                } label: {
+                    Image(systemName: "camera.rotate")
+                        .font(.system(size: 18, weight: .regular))
+                }
+                .buttonStyle(LMGlassCircleButtonStyle(diameter: 46))
+                .accessibilityLabel(LocalizedStrings.translate(key: "accessibility_switch_camera", language: language))
+            }
+            .padding(.trailing, 46)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
     // MARK: - Bottom bar (capture + tab bar)
 
     private var bottomBar: some View {
@@ -246,7 +269,7 @@ struct RegularRootView: View {
                 )
                 .padding(.bottom, 24)
             } else if isCaptured && selection == .brightness {
-                backControl
+                capturedControls
                     .padding(.bottom, 24)
             }
             if cameraViewModel.permissionGranted {
