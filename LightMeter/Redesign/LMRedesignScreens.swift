@@ -90,17 +90,81 @@ enum LMTab: String, CaseIterable, Identifiable {
 }
 
 /// A single tappable item inside `LMCapsuleTabBar`.
+/// Custom dotted-sunburst Brightness icon (a center dot + 8 radial dots),
+/// matching the Figma icon. SF Symbol "sun.max" draws solid triangular rays
+/// instead, which don't match the design's dotted style.
+private struct LMSunburstIcon: View {
+    var size: CGFloat = 18
+
+    var body: some View {
+        let centerDot = size * 0.32
+        let rayDot = size * 0.1
+        let radius = size * 0.5 - rayDot * 0.6
+        ZStack {
+            ForEach(0..<8, id: \.self) { i in
+                Circle()
+                    .frame(width: rayDot, height: rayDot)
+                    .offset(y: -radius)
+                    .rotationEffect(.degrees(Double(i) * 45))
+            }
+            Circle()
+                .frame(width: centerDot, height: centerDot)
+        }
+        .frame(width: size, height: size)
+    }
+}
+
+/// Custom Color-Temp thermometer icon: a capsule tube + round bulb + a small
+/// loop at the top, matching the Figma icon. SF Symbol "thermometer.medium"
+/// has a plain rounded top with no loop.
+private struct LMThermometerIcon: View {
+    var size: CGFloat = 18
+
+    var body: some View {
+        let lineWidth = max(1.2, size * 0.09)
+        let loopSize = size * 0.22
+        let bulbSize = size * 0.46
+        let bodyWidth = size * 0.24
+        let bodyHeight = size * 0.42
+        ZStack {
+            Circle()
+                .stroke(lineWidth: lineWidth)
+                .frame(width: bulbSize, height: bulbSize)
+                .offset(y: size * 0.29)
+            Capsule()
+                .stroke(lineWidth: lineWidth)
+                .frame(width: bodyWidth, height: bodyHeight)
+                .offset(y: -size * 0.02)
+            Circle()
+                .stroke(lineWidth: lineWidth)
+                .frame(width: loopSize, height: loopSize)
+                .offset(y: -size * 0.38)
+        }
+        .frame(width: size, height: size)
+    }
+}
+
 private struct LMTabItem: View {
     let tab: LMTab
     let isSelected: Bool
     var language: AppLanguage = .english
     let action: () -> Void
 
+    @ViewBuilder
+    private var icon: some View {
+        switch tab {
+        case .brightness:  LMSunburstIcon(size: 18)
+        case .temperature: LMThermometerIcon(size: 18)
+        case .check, .records:
+            Image(systemName: tab.symbol)
+                .font(.system(size: 18, weight: .regular))
+        }
+    }
+
     var body: some View {
         Button(action: action) {
             VStack(spacing: 4) {
-                Image(systemName: tab.symbol)
-                    .font(.system(size: 18, weight: .regular))
+                icon
                     // "빛나는" glow on the active tab's icon, matching the
                     // Figma _On variant (a soft white halo + faint dark
                     // shadow beneath — 000000@50%/FAFAFA@50% in the source).
