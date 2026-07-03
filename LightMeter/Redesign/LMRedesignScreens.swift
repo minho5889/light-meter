@@ -69,9 +69,14 @@ enum LMTab: String, CaseIterable, Identifiable {
     var symbol: String {
         switch self {
         case .brightness:  return "sun.max"
-        case .temperature: return "thermometer.medium"
+        // Plain "thermometer" is a single continuous outline (dome top
+        // flowing into the bulb) — matches the Figma icon. "thermometer.medium"
+        // adds a fill-level indicator that doesn't match.
+        case .temperature: return "thermometer"
         case .check:       return "magnifyingglass"
-        case .records:     return "record.circle"
+        // Plain "circle" (hollow ring) matches the Figma icon; "record.circle"
+        // adds an inner filled disc that doesn't match.
+        case .records:     return "circle"
         }
     }
 
@@ -90,14 +95,16 @@ enum LMTab: String, CaseIterable, Identifiable {
 }
 
 /// A single tappable item inside `LMCapsuleTabBar`.
-/// Custom dotted-sunburst Brightness icon (a center dot + 8 radial dots),
-/// matching the Figma icon. SF Symbol "sun.max" draws solid triangular rays
-/// instead, which don't match the design's dotted style.
+/// Custom dotted-sunburst Brightness icon: a hollow ring in the center with
+/// 8 small filled dots arranged radially around it, matching the Figma icon.
+/// SF Symbol "sun.max" draws a filled center with solid triangular rays
+/// instead, which doesn't match the design's dotted style.
 private struct LMSunburstIcon: View {
     var size: CGFloat = 18
 
     var body: some View {
-        let centerDot = size * 0.32
+        let centerRing = size * 0.36
+        let centerLineWidth = max(1.2, size * 0.09)
         let rayDot = size * 0.1
         let radius = size * 0.5 - rayDot * 0.6
         ZStack {
@@ -108,37 +115,8 @@ private struct LMSunburstIcon: View {
                     .rotationEffect(.degrees(Double(i) * 45))
             }
             Circle()
-                .frame(width: centerDot, height: centerDot)
-        }
-        .frame(width: size, height: size)
-    }
-}
-
-/// Custom Color-Temp thermometer icon: a capsule tube + round bulb + a small
-/// loop at the top, matching the Figma icon. SF Symbol "thermometer.medium"
-/// has a plain rounded top with no loop.
-private struct LMThermometerIcon: View {
-    var size: CGFloat = 18
-
-    var body: some View {
-        let lineWidth = max(1.2, size * 0.09)
-        let loopSize = size * 0.22
-        let bulbSize = size * 0.46
-        let bodyWidth = size * 0.24
-        let bodyHeight = size * 0.42
-        ZStack {
-            Circle()
-                .stroke(lineWidth: lineWidth)
-                .frame(width: bulbSize, height: bulbSize)
-                .offset(y: size * 0.29)
-            Capsule()
-                .stroke(lineWidth: lineWidth)
-                .frame(width: bodyWidth, height: bodyHeight)
-                .offset(y: -size * 0.02)
-            Circle()
-                .stroke(lineWidth: lineWidth)
-                .frame(width: loopSize, height: loopSize)
-                .offset(y: -size * 0.38)
+                .stroke(lineWidth: centerLineWidth)
+                .frame(width: centerRing, height: centerRing)
         }
         .frame(width: size, height: size)
     }
@@ -153,9 +131,9 @@ private struct LMTabItem: View {
     @ViewBuilder
     private var icon: some View {
         switch tab {
-        case .brightness:  LMSunburstIcon(size: 18)
-        case .temperature: LMThermometerIcon(size: 18)
-        case .check, .records:
+        case .brightness:
+            LMSunburstIcon(size: 18)
+        case .temperature, .check, .records:
             Image(systemName: tab.symbol)
                 .font(.system(size: 18, weight: .regular))
         }
