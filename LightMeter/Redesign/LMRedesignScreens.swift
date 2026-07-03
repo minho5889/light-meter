@@ -103,12 +103,12 @@ private struct LMSunburstIcon: View {
     var size: CGFloat = 18
 
     var body: some View {
-        let centerRing = size * 0.36
-        // Thinner stroke to match the Figma icon's finer line weight (was
-        // rendering noticeably bolder than the reference).
-        let centerLineWidth = max(1.0, size * 0.06)
-        let rayDot = size * 0.1
-        let radius = size * 0.5 - rayDot * 0.6
+        // Ratios measured from the designer's btn_nav.png export (icon 55px):
+        // ring outer Ø 32px, ring stroke 6px, dots Ø 8px at radius 23.5px.
+        let ringStroke = size * (6.0 / 55.0)
+        let ringCenterline = size * (32.0 / 55.0) - ringStroke   // outer Ø 0.58×size
+        let rayDot = size * (8.0 / 55.0)
+        let radius = size * (23.5 / 55.0)
         ZStack {
             ForEach(0..<8, id: \.self) { i in
                 Circle()
@@ -117,8 +117,8 @@ private struct LMSunburstIcon: View {
                     .rotationEffect(.degrees(Double(i) * 45))
             }
             Circle()
-                .stroke(lineWidth: centerLineWidth)
-                .frame(width: centerRing, height: centerRing)
+                .stroke(lineWidth: ringStroke)
+                .frame(width: ringCenterline, height: ringCenterline)
         }
         .frame(width: size, height: size)
     }
@@ -140,11 +140,14 @@ private struct LMTabItem: View {
             // (see LMTabIcons.swift) — outline + mercury ball + column.
             LMColorTempIcon()
                 .frame(width: 18, height: 18)
-        case .check, .records:
-            // Thin weight matches the Figma icons' finer stroke — .regular
-            // rendered noticeably bolder than the reference.
+        case .check:
+            // Semibold matches the reference's measured stroke (~0.10 × size);
+            // thin/regular rendered visibly lighter than the design.
             Image(systemName: tab.symbol)
-                .font(.system(size: 18, weight: .thin))
+                .font(.system(size: 18, weight: .semibold))
+        case .records:
+            // Ring + filled disc, measured from the design (LMTabIcons.swift).
+            LMRecordsIcon(size: 18)
         }
     }
 
@@ -165,7 +168,10 @@ private struct LMTabItem: View {
             }
             // On the dark bar: selected tab = dark text on a white pill;
             // unselected = light (near-white) text/icons.
-            .foregroundStyle(isSelected ? LM.textPrimary : LM.readoutText.opacity(0.7))
+            // Unselected icons/labels are full-strength white in the design
+            // (measured 255 in the btn_nav export; Figma fill FFFFFF 100%) —
+            // the white pill alone distinguishes the selected tab.
+            .foregroundStyle(isSelected ? LM.textPrimary : LM.readoutText)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .padding(.horizontal, 4)

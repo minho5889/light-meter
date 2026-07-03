@@ -144,6 +144,29 @@ struct LMColorTempIcon: Shape {
     }
 }
 
+/// The Records tab icon: a thin outer ring around a large filled disc.
+/// Ratios measured from the designer's btn_nav.png export (icon 52px):
+/// outer ring Ø 52px with a 3px stroke, inner filled disc Ø 35px.
+/// SF Symbol "record.circle" is the same idea but its disc is noticeably
+/// smaller relative to the ring, so this is drawn directly.
+struct LMRecordsIcon: View {
+    var size: CGFloat = 18
+
+    var body: some View {
+        let ringStroke = size * (3.0 / 52.0)
+        let ringCenterline = size - ringStroke   // outer edge = full size
+        let disc = size * (35.0 / 52.0)
+        ZStack {
+            Circle()
+                .stroke(lineWidth: ringStroke)
+                .frame(width: ringCenterline, height: ringCenterline)
+            Circle()
+                .frame(width: disc, height: disc)
+        }
+        .frame(width: size, height: size)
+    }
+}
+
 #Preview("LMColorTempIcon") {
     ZStack {
         Color(hex: 0x2C2C2C).ignoresSafeArea()
