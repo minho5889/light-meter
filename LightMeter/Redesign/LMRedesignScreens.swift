@@ -135,7 +135,12 @@ private struct LMTabItem: View {
         switch tab {
         case .brightness:
             LMSunburstIcon(size: 18)
-        case .temperature, .check, .records:
+        case .temperature:
+            // Exact shape generated from the designer's exported SVG
+            // (see LMTabIcons.swift) — outline + mercury ball + column.
+            LMColorTempIcon()
+                .frame(width: 18, height: 18)
+        case .check, .records:
             // Thin weight matches the Figma icons' finer stroke — .regular
             // rendered noticeably bolder than the reference.
             Image(systemName: tab.symbol)

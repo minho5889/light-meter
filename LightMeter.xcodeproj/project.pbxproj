@@ -35,6 +35,7 @@
 		61203EE432D8DEDA7575C925 /* LuxInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A18AB3EA5964212F531FE3 /* LuxInterpreterTests.swift */; };
 		6252F288CBF710360F50DB20 /* SignalSmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A2201BDA5BDE1531A500B /* SignalSmootherTests.swift */; };
 		62BB4D3470F81E7E14658541 /* FlickerInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D12298CC3BE30BEF0BEC84 /* FlickerInterpreterTests.swift */; };
+		679DD6C59E350393A3C23298 /* LMTabIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03AAF104DCF8AD10AAD57DC /* LMTabIcons.swift */; };
 		6AF688582A251DBCB4ECD15E /* TintInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B945079B10C40A86AC117A50 /* TintInterpreterTests.swift */; };
 		6BA6F9CC64F5BBA2DBE870D2 /* RegularRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440FF8453EAF88226011E845 /* RegularRootView.swift */; };
 		6FFDC72D6B60277F88C94396 /* FlickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B365D9B743B9FC75C575FE68 /* FlickerModel.swift */; };
@@ -160,6 +161,7 @@
 		D7678EA3B5B7AF942CD08A38 /* LuxRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxRangeTests.swift; sourceTree = "<group>"; };
 		D95BE6F33722B640FD540AF9 /* Inter-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.otf"; sourceTree = "<group>"; };
 		DA4508894EF1207B077AF446 /* TintInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TintInterpreter.swift; sourceTree = "<group>"; };
+		E03AAF104DCF8AD10AAD57DC /* LMTabIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMTabIcons.swift; sourceTree = "<group>"; };
 		E1AE321F0ACA6F202AED95BD /* CameraFrameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFrameProvider.swift; sourceTree = "<group>"; };
 		E4C7FC900A635BA48145427C /* AppMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMode.swift; sourceTree = "<group>"; };
 		ED0F44D6F9686E67479A6D05 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */,
 				FB5ED9664D0D38546DC14383 /* LMDesign.swift */,
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
+				E03AAF104DCF8AD10AAD57DC /* LMTabIcons.swift */,
 				440FF8453EAF88226011E845 /* RegularRootView.swift */,
 				3B8C3240A5CE287AE8AE55FA /* RegularSettingsSheet.swift */,
 				BB1700B0E28EB28A3707600D /* Fonts */,
@@ -533,6 +536,7 @@
 				EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */,
 				743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */,
 				3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */,
+				679DD6C59E350393A3C23298 /* LMTabIcons.swift in Sources */,
 				E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */,
 				43E99B1CDDFE154BB77B66F3 /* LightRecord.swift in Sources */,
 				180557121E4CC474A5FB65A5 /* LightRecordEntity.swift in Sources */,
