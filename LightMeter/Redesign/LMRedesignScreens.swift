@@ -101,8 +101,16 @@ private struct LMTabItem: View {
             VStack(spacing: 4) {
                 Image(systemName: tab.symbol)
                     .font(.system(size: 18, weight: .regular))
+                    // "빛나는" glow on the active tab's icon, matching the
+                    // Figma _On variant (a soft white halo + faint dark
+                    // shadow beneath — 000000@50%/FAFAFA@50% in the source).
+                    // Inactive icons stay flat, no shadow.
+                    .shadow(color: isSelected ? .white.opacity(0.5) : .clear, radius: isSelected ? 3 : 0)
+                    .shadow(color: isSelected ? .black.opacity(0.18) : .clear, radius: isSelected ? 1.5 : 0, y: isSelected ? 1 : 0)
                 Text(tab.title(language))
-                    .font(LM.font(LM.FontSize.micro, .medium))
+                    // Bumped from micro (11pt) to caption (12pt) per
+                    // designer note: nav bar font was too small.
+                    .font(LM.font(LM.FontSize.caption, .medium))
             }
             // On the dark bar: selected tab = dark text on a white pill;
             // unselected = light (near-white) text/icons.
