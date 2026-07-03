@@ -104,7 +104,9 @@ private struct LMSunburstIcon: View {
 
     var body: some View {
         let centerRing = size * 0.36
-        let centerLineWidth = max(1.2, size * 0.09)
+        // Thinner stroke to match the Figma icon's finer line weight (was
+        // rendering noticeably bolder than the reference).
+        let centerLineWidth = max(1.0, size * 0.06)
         let rayDot = size * 0.1
         let radius = size * 0.5 - rayDot * 0.6
         ZStack {
@@ -134,8 +136,10 @@ private struct LMTabItem: View {
         case .brightness:
             LMSunburstIcon(size: 18)
         case .temperature, .check, .records:
+            // Thin weight matches the Figma icons' finer stroke — .regular
+            // rendered noticeably bolder than the reference.
             Image(systemName: tab.symbol)
-                .font(.system(size: 18, weight: .regular))
+                .font(.system(size: 18, weight: .thin))
         }
     }
 
