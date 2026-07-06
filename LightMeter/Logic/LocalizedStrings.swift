@@ -11,6 +11,16 @@ public struct LocalizedStrings {
         "tab_records": [.english: "Records", .korean: "기록", .french: "Historique"],
         "ax_settings": [.english: "Settings", .korean: "설정", .french: "Réglages"],
 
+        // Activity verdict (Analysis tab — tap a pill for a suitability check,
+        // per the Figma 04_Check_2 screen). %@ = localized activity name.
+        "verdict_brightness_ideal": [.english: "Ideal brightness for %@", .korean: "'%@'에 이상적인 밝기입니다", .french: "Luminosité idéale pour %@"],
+        "verdict_brightness_dark": [.english: "A bit dark for %@", .korean: "'%@' 하기에는 조금 어두워요", .french: "Un peu sombre pour %@"],
+        "verdict_brightness_bright": [.english: "A bit bright for %@", .korean: "'%@' 하기에는 조금 밝아요", .french: "Un peu lumineux pour %@"],
+        "verdict_brightness_off": [.english: "Not the ideal brightness for %@", .korean: "'%@'에 딱 맞는 밝기는 아니에요", .french: "Pas la luminosité idéale pour %@"],
+        "verdict_kelvin_good": [.english: "The color temperature suits %@", .korean: "'%@'에 색온도가 적합합니다", .french: "La température de couleur convient à %@"],
+        "verdict_kelvin_warm": [.english: "The light is a bit warm for %@", .korean: "'%@' 하기에는 색온도가 다소 따뜻해요", .french: "Lumière un peu chaude pour %@"],
+        "verdict_kelvin_cool": [.english: "The light is a bit cool for %@", .korean: "'%@' 하기에는 색온도가 다소 차가워요", .french: "Lumière un peu froide pour %@"],
+
         // Plant-fit verdict (gardening pivot — captured Brightness card)
         "plant_fit_title": [.english: "Plants that thrive here", .korean: "이 빛에서 잘 자라요", .french: "Plantes adaptées à cette lumière"],
         "plant_fit_empty": [.english: "Few common houseplants thrive at this light level.", .korean: "이 밝기에선 잘 자라는 실내식물이 많지 않아요.", .french: "Peu de plantes d'intérieur prospèrent à ce niveau."],

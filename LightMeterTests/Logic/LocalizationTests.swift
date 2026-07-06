@@ -54,4 +54,30 @@ struct LocalizationTests {
         #expect(ActivityChip.activeChips(for: 7).isEmpty)
         #expect(ActivityChip.activeChips(for: 100).isEmpty)
     }
+
+    @Test func activityChips_suitableLuxIndices_isExactInverseOfActiveChips() {
+        // Every chip's suitable indices must round-trip through activeChips(for:).
+        for chip in ActivityChip.allCases {
+            let indices = chip.suitableLuxIndices
+            #expect(!indices.isEmpty, "\(chip) has no suitable lux range")
+            for i in 0...7 {
+                #expect(indices.contains(i) == ActivityChip.activeChips(for: i).contains(chip))
+            }
+        }
+        // Spot checks against the canonical table.
+        #expect(ActivityChip.sleepAndComfort.suitableLuxIndices == [0, 1])
+        #expect(ActivityChip.officeAndFocus.suitableLuxIndices == [4, 5])
+        #expect(ActivityChip.coffeeAndTeaTime.suitableLuxIndices == [3, 6])
+    }
+
+    @Test func activityChips_suitableKelvin_rangesAreSane() {
+        for chip in ActivityChip.allCases {
+            let range = chip.suitableKelvin
+            #expect(range.lowerBound >= 1000 && range.upperBound <= 10000,
+                "\(chip) CCT range outside plausible interior lighting bounds")
+            #expect(range.lowerBound < range.upperBound)
+        }
+        // The Figma 04_Check_2 example: 3,800 K suits TV & Movies.
+        #expect(ActivityChip.tvAndMovies.suitableKelvin.contains(3800))
+    }
 }

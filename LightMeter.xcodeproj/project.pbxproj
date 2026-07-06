@@ -70,6 +70,7 @@
 		C453045400C97ADDD86FD197 /* DesignConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6490821C1E2B9BD28DF3DE4 /* DesignConstants.swift */; };
 		C48F515E26CEA8B6B15CC3EF /* CalibrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA478C98177BF80E25C1D1C /* CalibrationStore.swift */; };
 		CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8E7BEEC38FFD5E382C517 /* InterpretationResult.swift */; };
+		D6EFC840D6DB47BD4186C63D /* LMActivityVerdict.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28405CC3A6C832FB9B9005B1 /* LMActivityVerdict.swift */; };
 		D8287656B2497407BF3354EA /* CameraStateOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503076F82DF9B8AD34B455B3 /* CameraStateOverlay.swift */; };
 		DE16C20F92FF3A460C87986A /* TabTransitionActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */; };
 		E2825F6D9C8BAFD56F68BEDD /* LightMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BAB4CD2C382B32711F111 /* LightMeterApp.swift */; };
@@ -109,6 +110,7 @@
 		2018A0361538AFF56AF67F5C /* ExposureValueCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureValueCalculator.swift; sourceTree = "<group>"; };
 		2144C8464E2EEBA61FBD1839 /* CameraSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionActor.swift; sourceTree = "<group>"; };
 		269857D946F301075B6B5E73 /* FlickerCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerCheckView.swift; sourceTree = "<group>"; };
+		28405CC3A6C832FB9B9005B1 /* LMActivityVerdict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMActivityVerdict.swift; sourceTree = "<group>"; };
 		2AEEF4F3EEE549A3A13C7B0D /* TabTransitionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTransitionActionTests.swift; sourceTree = "<group>"; };
 		2C410B49C8249C192BBB0EC9 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		3046556155B9CF0608A10FB7 /* RecordsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsStore.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 			children = (
 				E4C7FC900A635BA48145427C /* AppMode.swift */,
 				1D1DEEFF246D4BCA7D71AB65 /* LMActivityGrid.swift */,
+				28405CC3A6C832FB9B9005B1 /* LMActivityVerdict.swift */,
 				FB5ED9664D0D38546DC14383 /* LMDesign.swift */,
 				CC4FF566EC33A68F5F664C14 /* LMRedesignScreens.swift */,
 				E03AAF104DCF8AD10AAD57DC /* LMTabIcons.swift */,
@@ -534,6 +537,7 @@
 				CC05482E43992679CF8D1CDC /* InterpretationResult.swift in Sources */,
 				3009DF3774694FD7E329C83A /* KelvinInterpreter.swift in Sources */,
 				EB63BC21D1991F3DC3D6DF64 /* LMActivityGrid.swift in Sources */,
+				D6EFC840D6DB47BD4186C63D /* LMActivityVerdict.swift in Sources */,
 				743DB024A11BD180DE15B8FF /* LMDesign.swift in Sources */,
 				3483AD2B454A96190AB56891 /* LMRedesignScreens.swift in Sources */,
 				679DD6C59E350393A3C23298 /* LMTabIcons.swift in Sources */,

@@ -29,6 +29,9 @@ struct RegularRootView: View {
     // snapshots (not the live measurement) to hold steady. See `capture()`.
     @State private var capturedLux: Double? = nil
     @State private var capturedKelvin: Double? = nil
+    /// Activity whose suitability verdict is showing on the Analysis tab
+    /// (nil = the pill grid), per the Figma 04_Check_2 tap-through.
+    @State private var analysisActivity: ActivityChip? = nil
     @State private var showSettings = false
 
     private var language: AppLanguage { cameraViewModel.appLanguage }
@@ -158,12 +161,28 @@ struct RegularRootView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
-    private var checkContent: some View {
+    @ViewBuilder private var checkContent: some View {
         let labels = activities.map { $0.localizedName(language: language) }
-        return ScrollView {
-            LMActivityGrid(activities: labels)
+        if let chip = analysisActivity {
+            // Tap-through verdict for the selected activity (04_Check_2).
+            let m = cameraViewModel.measurement
+            LMActivityVerdictView(chip: chip, lux: m.lux,
+                                  kelvin: m.colorTemperature, language: language)
+                .padding(.horizontal, LM.readoutMargin)
+                .padding(.top, 64)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        } else {
+            ScrollView {
+                LMActivityGrid(activities: labels) { label in
+                    if let index = labels.firstIndex(of: label) {
+                        withAnimation(.snappy(duration: 0.25)) {
+                            analysisActivity = activities[index]
+                        }
+                    }
+                }
                 .padding(.top, 64)
                 .padding(.bottom, 140)
+            }
         }
     }
 
@@ -212,17 +231,10 @@ struct RegularRootView: View {
         .frame(maxHeight: .infinity, alignment: .top)
     }
 
-    /// Bottom-center "Back" control shown over a captured frame (replaces the
-    /// shutter), per the Figma Brightness-detail screen.
-    private var backControl: some View {
-        Button {
-            withAnimation(.snappy(duration: 0.25)) {
-                isCaptured = false
-                frozenFrame = nil
-                capturedLux = nil
-                capturedKelvin = nil
-            }
-        } label: {
+    /// Bottom-center "Back" circle (the btn_back Figma component), reused by
+    /// the captured Brightness state and the Analysis verdict state.
+    private func backButton(_ action: @escaping () -> Void) -> some View {
+        Button(action: action) {
             VStack(spacing: 0) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 24, weight: .semibold))
@@ -232,6 +244,19 @@ struct RegularRootView: View {
         }
         .buttonStyle(LMBackButtonStyle())
         .accessibilityLabel(LocalizedStrings.translate(key: "ui_back", language: language))
+    }
+
+    /// Back over a captured frame (replaces the shutter), per the Figma
+    /// Brightness-detail screen.
+    private var backControl: some View {
+        backButton {
+            withAnimation(.snappy(duration: 0.25)) {
+                isCaptured = false
+                frozenFrame = nil
+                capturedLux = nil
+                capturedKelvin = nil
+            }
+        }
     }
 
     /// Captured-state bottom controls: Back (centered, replaces the shutter)
@@ -271,6 +296,12 @@ struct RegularRootView: View {
             } else if isCaptured && selection == .brightness {
                 capturedControls
                     .padding(.bottom, 24)
+            } else if selection == .check && analysisActivity != nil {
+                // Back from the activity verdict to the pill grid.
+                backButton {
+                    withAnimation(.snappy(duration: 0.25)) { analysisActivity = nil }
+                }
+                .padding(.bottom, 24)
             }
             if cameraViewModel.permissionGranted {
                 LMCapsuleTabBar(selection: $selection, language: language)
@@ -307,6 +338,7 @@ struct RegularRootView: View {
         frozenFrame = nil
         capturedLux = nil
         capturedKelvin = nil
+        analysisActivity = nil
         let index = tabIndex(newTab)
         cameraViewModel.activeTab = index
         switch TabTransitionAction.resolve(from: previousTabIndex, to: index) {
