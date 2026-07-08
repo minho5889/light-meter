@@ -69,9 +69,14 @@ enum LMTab: String, CaseIterable, Identifiable {
     var symbol: String {
         switch self {
         case .brightness:  return "sun.max"
-        case .temperature: return "thermometer.medium"
+        // Plain "thermometer" is a single continuous outline (dome top
+        // flowing into the bulb) — matches the Figma icon. "thermometer.medium"
+        // adds a fill-level indicator that doesn't match.
+        case .temperature: return "thermometer"
         case .check:       return "magnifyingglass"
-        case .records:     return "record.circle"
+        // Plain "circle" (hollow ring) matches the Figma icon; "record.circle"
+        // adds an inner filled disc that doesn't match.
+        case .records:     return "circle"
         }
     }
 
@@ -90,23 +95,83 @@ enum LMTab: String, CaseIterable, Identifiable {
 }
 
 /// A single tappable item inside `LMCapsuleTabBar`.
+/// Custom dotted-sunburst Brightness icon: a hollow ring in the center with
+/// 8 small filled dots arranged radially around it, matching the Figma icon.
+/// SF Symbol "sun.max" draws a filled center with solid triangular rays
+/// instead, which doesn't match the design's dotted style.
+private struct LMSunburstIcon: View {
+    var size: CGFloat = 18
+
+    var body: some View {
+        // Ratios measured from the designer's btn_nav.png export (icon 55px):
+        // ring outer Ø 32px, ring stroke 6px, dots Ø 8px at radius 23.5px.
+        let ringStroke = size * (6.0 / 55.0)
+        let ringCenterline = size * (32.0 / 55.0) - ringStroke   // outer Ø 0.58×size
+        let rayDot = size * (8.0 / 55.0)
+        let radius = size * (23.5 / 55.0)
+        ZStack {
+            ForEach(0..<8, id: \.self) { i in
+                Circle()
+                    .frame(width: rayDot, height: rayDot)
+                    .offset(y: -radius)
+                    .rotationEffect(.degrees(Double(i) * 45))
+            }
+            Circle()
+                .stroke(lineWidth: ringStroke)
+                .frame(width: ringCenterline, height: ringCenterline)
+        }
+        .frame(width: size, height: size)
+    }
+}
+
 private struct LMTabItem: View {
     let tab: LMTab
     let isSelected: Bool
     var language: AppLanguage = .english
     let action: () -> Void
 
+    @ViewBuilder
+    private var icon: some View {
+        switch tab {
+        case .brightness:
+            LMSunburstIcon(size: 18)
+        case .temperature:
+            // Exact shape generated from the designer's exported SVG
+            // (see LMTabIcons.swift) — outline + mercury ball + column.
+            LMColorTempIcon()
+                .frame(width: 18, height: 18)
+        case .check:
+            // Semibold matches the reference's measured stroke (~0.10 × size);
+            // thin/regular rendered visibly lighter than the design.
+            Image(systemName: tab.symbol)
+                .font(.system(size: 18, weight: .semibold))
+        case .records:
+            // Ring + filled disc, measured from the design (LMTabIcons.swift).
+            LMRecordsIcon(size: 18)
+        }
+    }
+
     var body: some View {
         Button(action: action) {
             VStack(spacing: 4) {
-                Image(systemName: tab.symbol)
-                    .font(.system(size: 18, weight: .regular))
+                icon
+                    // "빛나는" glow on the active tab's icon, matching the
+                    // Figma _On variant (a soft white halo + faint dark
+                    // shadow beneath — 000000@50%/FAFAFA@50% in the source).
+                    // Inactive icons stay flat, no shadow.
+                    .shadow(color: isSelected ? .white.opacity(0.5) : .clear, radius: isSelected ? 3 : 0)
+                    .shadow(color: isSelected ? .black.opacity(0.18) : .clear, radius: isSelected ? 1.5 : 0, y: isSelected ? 1 : 0)
                 Text(tab.title(language))
-                    .font(LM.font(LM.FontSize.micro, .medium))
+                    // Bumped from micro (11pt) to caption (12pt) per
+                    // designer note: nav bar font was too small.
+                    .font(LM.font(LM.FontSize.caption, .medium))
             }
             // On the dark bar: selected tab = dark text on a white pill;
             // unselected = light (near-white) text/icons.
-            .foregroundStyle(isSelected ? LM.textPrimary : LM.readoutText.opacity(0.7))
+            // Unselected icons/labels are full-strength white in the design
+            // (measured 255 in the btn_nav export; Figma fill FFFFFF 100%) —
+            // the white pill alone distinguishes the selected tab.
+            .foregroundStyle(isSelected ? LM.textPrimary : LM.readoutText)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .padding(.horizontal, 4)
@@ -291,6 +356,61 @@ struct LMCaptureControls: View {
             .padding(.trailing, 46)
         }
         .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Plant-fit verdict
+
+/// Gardening-pivot payoff card: given a (captured) lux reading, names the
+/// catalogued houseplants that thrive at that light level. Sits below the
+/// readout card on the captured Brightness screen. Dark-glass styling matches
+/// the readout card. Honest by design — when nothing matches we say so rather
+/// than force a bad suggestion.
+struct LMPlantFitView: View {
+    let lux: Double
+    var language: AppLanguage = .english
+    /// How many plant names to show before collapsing into "+N more".
+    private let displayCap = 6
+
+    private var matches: [PlantSpecies] { PlantCatalog.shared.plants(matchingLux: lux) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 6) {
+                Image(systemName: "leaf.fill")
+                    .font(LM.font(LM.FontSize.caption, .bold))
+                    .accessibilityHidden(true)
+                Text(LocalizedStrings.translate(key: "plant_fit_title", language: language))
+                    .font(LM.font(LM.FontSize.caption, .bold))
+            }
+            .foregroundStyle(LM.readoutText)
+
+            if matches.isEmpty {
+                Text(LocalizedStrings.translate(key: "plant_fit_empty", language: language))
+                    .font(LM.font(LM.FontSize.body, .regular))
+                    .foregroundStyle(LM.readoutText)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                let names = matches.prefix(displayCap).map { $0.displayName(language) }
+                let overflow = matches.count - names.count
+
+                Text(names.joined(separator: " · "))
+                    .font(LM.font(LM.FontSize.body, .medium))
+                    .foregroundStyle(LM.readoutText)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if overflow > 0 {
+                    Text(String(format: LocalizedStrings.translate(key: "plant_fit_more", language: language), overflow))
+                        .font(LM.font(LM.FontSize.caption, .regular))
+                        .foregroundStyle(LM.readoutText.opacity(0.7))
+                }
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .lmGlass(tint: LM.readoutGlass, dark: true)
+        .accessibilityElement(children: .combine)
     }
 }
 

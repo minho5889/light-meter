@@ -88,4 +88,29 @@ public enum ActivityChip: String, CaseIterable, Codable, Sendable {
             return []
         }
     }
+
+    /// The lux-range indices (0–7) where this activity is a good match —
+    /// the inverse of `activeChips(for:)`, derived from it so the two can
+    /// never drift apart.
+    public var suitableLuxIndices: [Int] {
+        (0...7).filter { Self.activeChips(for: $0).contains(self) }
+    }
+
+    /// Recommended correlated color temperature (Kelvin) for the activity.
+    /// Ranges follow common interior-lighting guidance (EN 12464-1 /
+    /// residential CCT recommendations): warm (<3000K) for rest and intimate
+    /// settings, neutral for care tasks and screens, cool (4000K+) for
+    /// focus/task work.
+    public var suitableKelvin: ClosedRange<Double> {
+        switch self {
+        case .readingAndStudy:  return 4000...6500
+        case .officeAndFocus:   return 4000...6500
+        case .tvAndMovies:      return 2700...4500
+        case .diningAndSocial:  return 2200...3500
+        case .sleepAndComfort:  return 1800...3000
+        case .babyAndParenting: return 2700...4000
+        case .datingAndRomance: return 1800...3000
+        case .coffeeAndTeaTime: return 2200...3800
+        }
+    }
 }
