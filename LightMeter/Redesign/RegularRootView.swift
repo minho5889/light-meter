@@ -79,9 +79,18 @@ struct RegularRootView: View {
         } else if selection == .records {
             LM.recordsGradient.ignoresSafeArea()
         } else if isCaptured, let frame = frozenFrame {
-            Image(uiImage: frame)
-                .resizable()
-                .scaledToFill()
+            // The photo must NOT be a plain scaledToFill child: aspect-fill
+            // reports the covering size (wider than the screen for a 4:3
+            // camera frame), which inflates the whole ZStack and every card
+            // in it. Hosting it in an overlay of a clear, screen-sized layer
+            // keeps layout at screen size; clipped() trims the overflow.
+            Color.clear
+                .overlay {
+                    Image(uiImage: frame)
+                        .resizable()
+                        .scaledToFill()
+                }
+                .clipped()
                 .ignoresSafeArea()
             LM.scrimGradient.opacity(0.25).ignoresSafeArea()
         } else {
@@ -418,6 +427,15 @@ struct RegularRootView: View {
             // simulator (where the live camera always reads 0).
             capturedLux = Double(env["LM_LUX"] ?? "") ?? 12345
             capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? 3800
+            // Synthesize a camera-sized 4:3 frozen frame — the simulator has no
+            // camera, so frozenFrame stays nil there and any layout bug the
+            // frozen photo causes (e.g. scaledToFill inflating the ZStack)
+            // would otherwise only reproduce on-device.
+            let size = CGSize(width: 4032, height: 3024)
+            frozenFrame = UIGraphicsImageRenderer(size: size).image { ctx in
+                UIColor(red: 0.55, green: 0.5, blue: 0.45, alpha: 1).setFill()
+                ctx.fill(CGRect(origin: .zero, size: size))
+            }
             isCaptured = true
         }
         if env["LM_SETTINGS"] != nil { showSettings = true }
