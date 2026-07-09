@@ -114,29 +114,18 @@ struct RegularRootView: View {
         let interp = isCaptured
             ? LuxInterpreter.interpret(lux: lux, language: language)
             : nil
-        return ScrollView {
-            VStack(spacing: LM.gap) {
-                LMGlassReadoutCard(
-                    lux: luxDisplay(lux),
-                    unit: "LUX",
-                    temperature: "\(formatNumber(kelvin))K",
-                    guideTitle: interp != nil
-                        ? LocalizedStrings.translate(key: "ui_actionable_tip", language: language)
-                        : nil,
-                    guideDescription: interp?.description,
-                    guideTip: interp?.tip
-                )
-                // Plant-fit verdict: which catalogued plants thrive at the
-                // frozen reading. Only meaningful once captured (live lux jitters).
-                if isCaptured {
-                    LMPlantFitView(lux: lux, language: language)
-                }
-            }
-            .padding(.horizontal, LM.readoutMargin)
-            .padding(.top, 64)
-            .padding(.bottom, 180)   // clear the Back control + tab bar when scrolled
-        }
-        .scrollDisabled(!isCaptured)   // live view has just the one card; no scroll
+        return LMGlassReadoutCard(
+            lux: luxDisplay(lux),
+            unit: "LUX",
+            temperature: "\(formatNumber(kelvin))K",
+            guideTitle: interp != nil
+                ? LocalizedStrings.translate(key: "ui_actionable_tip", language: language)
+                : nil,
+            guideDescription: interp?.description,
+            guideTip: interp?.tip
+        )
+        .padding(.horizontal, LM.readoutMargin)
+        .padding(.top, 64)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
