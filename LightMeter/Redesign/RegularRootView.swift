@@ -36,8 +36,14 @@ struct RegularRootView: View {
 
     private var language: AppLanguage { cameraViewModel.appLanguage }
     private var isCameraTab: Bool { selection != .records }
+    /// Tabs with a live readout that can be frozen with the shutter —
+    /// Brightness and Color Temp both capture (per the Figma 03_Temperature
+    /// captured frames).
+    private var isCaptureTab: Bool {
+        selection == .brightness || selection == .temperature
+    }
     private var canCapture: Bool {
-        selection == .brightness && !isCaptured && cameraViewModel.permissionGranted
+        isCaptureTab && !isCaptured && cameraViewModel.permissionGranted
     }
 
     /// The 8 standard activities, in the Figma's reading order.
@@ -140,11 +146,15 @@ struct RegularRootView: View {
 
     private var temperatureContent: some View {
         let m = cameraViewModel.measurement
-        let interp = KelvinInterpreter.interpret(kelvin: m.colorTemperature, language: language)
+        // When captured, hold the frozen snapshot; otherwise track live —
+        // same freeze contract as the Brightness card.
+        let lux = isCaptured ? (capturedLux ?? m.lux) : m.lux
+        let kelvin = isCaptured ? (capturedKelvin ?? m.colorTemperature) : m.colorTemperature
+        let interp = KelvinInterpreter.interpret(kelvin: kelvin, language: language)
         return LMGlassReadoutCard(
-            lux: formatNumber(m.colorTemperature),
+            lux: formatNumber(kelvin),
             unit: "K",
-            temperature: "\(luxDisplay(m.lux)) LUX",
+            temperature: "\(luxDisplay(lux)) LUX",
             infoRows: [
                 LMInfoRow(
                     label: LocalizedStrings.translate(key: "ui_color_tone", language: language),
@@ -291,7 +301,7 @@ struct RegularRootView: View {
                     onFlip: { cameraViewModel.toggleCamera() }
                 )
                 .padding(.bottom, 24)
-            } else if isCaptured && selection == .brightness {
+            } else if isCaptured && isCaptureTab {
                 capturedControls
                     .padding(.bottom, 24)
             } else if selection == .check && analysisActivity != nil {
@@ -424,19 +434,23 @@ struct RegularRootView: View {
         }
         if env["LM_CAPTURED"] != nil {
             // Seed frozen readout values so the captured card is verifiable in the
-            // simulator (where the live camera always reads 0).
-            capturedLux = Double(env["LM_LUX"] ?? "") ?? 12345
-            capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? 3800
-            // Synthesize a camera-sized 4:3 frozen frame — the simulator has no
-            // camera, so frozenFrame stays nil there and any layout bug the
-            // frozen photo causes (e.g. scaledToFill inflating the ZStack)
-            // would otherwise only reproduce on-device.
-            let size = CGSize(width: 4032, height: 3024)
-            frozenFrame = UIGraphicsImageRenderer(size: size).image { ctx in
-                UIColor(red: 0.55, green: 0.5, blue: 0.45, alpha: 1).setFill()
-                ctx.fill(CGRect(origin: .zero, size: size))
+            // simulator (where the live camera always reads 0). Deferred: the
+            // LM_TAB selection change above fires handleTabChange during the
+            // next view update, which resets capture state — so seed after it.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                capturedLux = Double(env["LM_LUX"] ?? "") ?? 12345
+                capturedKelvin = Double(env["LM_KELVIN"] ?? "") ?? 3800
+                // Synthesize a camera-sized 4:3 frozen frame — the simulator has
+                // no camera, so frozenFrame stays nil there and any layout bug
+                // the frozen photo causes (e.g. scaledToFill inflating the
+                // ZStack) would otherwise only reproduce on-device.
+                let size = CGSize(width: 4032, height: 3024)
+                frozenFrame = UIGraphicsImageRenderer(size: size).image { ctx in
+                    UIColor(red: 0.55, green: 0.5, blue: 0.45, alpha: 1).setFill()
+                    ctx.fill(CGRect(origin: .zero, size: size))
+                }
+                isCaptured = true
             }
-            isCaptured = true
         }
         if env["LM_SETTINGS"] != nil { showSettings = true }
         #endif

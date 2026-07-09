@@ -28,7 +28,7 @@ targets:
         NSCameraUsageDescription: "This app needs camera access to measure light levels (lux and color temperature) in your environment."
         UILaunchScreen: {}
         ITSAppUsesNonExemptEncryption: false
-        CFBundleDisplayName: "Sunny Light Meter"
+        CFBundleDisplayName: "Lightbella"
         UIRequiresFullScreen: true
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
