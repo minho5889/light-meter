@@ -55,29 +55,31 @@ struct LocalizationTests {
         #expect(ActivityChip.activeChips(for: 100).isEmpty)
     }
 
-    @Test func activityChips_suitableLuxIndices_isExactInverseOfActiveChips() {
-        // Every chip's suitable indices must round-trip through activeChips(for:).
-        for chip in ActivityChip.allCases {
-            let indices = chip.suitableLuxIndices
-            #expect(!indices.isEmpty, "\(chip) has no suitable lux range")
-            for i in 0...7 {
-                #expect(indices.contains(i) == ActivityChip.activeChips(for: i).contains(chip))
-            }
-        }
-        // Spot checks against the canonical table.
-        #expect(ActivityChip.sleepAndComfort.suitableLuxIndices == [0, 1])
-        #expect(ActivityChip.officeAndFocus.suitableLuxIndices == [4, 5])
-        #expect(ActivityChip.coffeeAndTeaTime.suitableLuxIndices == [3, 6])
+    @Test func activityChips_suitableRanges_matchTheInAppTextSheet() {
+        // Values must stay verbatim to the team's "Light Meter.xlsx" In-App
+        // Text sheet — spot-check every activity's lux range and a few kelvin.
+        #expect(ActivityChip.readingAndStudy.suitableLux == 500...750)
+        #expect(ActivityChip.officeAndFocus.suitableLux == 300...500)
+        #expect(ActivityChip.tvAndMovies.suitableLux == 30...100)
+        #expect(ActivityChip.diningAndSocial.suitableLux == 150...300)
+        #expect(ActivityChip.sleepAndComfort.suitableLux == 10...50)
+        #expect(ActivityChip.babyAndParenting.suitableLux == 10...100)
+        #expect(ActivityChip.datingAndRomance.suitableLux == 50...150)
+        #expect(ActivityChip.coffeeAndTeaTime.suitableLux == 150...250)
+
+        #expect(ActivityChip.tvAndMovies.suitableKelvin == 3000...4000)
+        #expect(ActivityChip.readingAndStudy.suitableKelvin == 5000...6500)
+        #expect(ActivityChip.sleepAndComfort.suitableKelvin == 2000...2700)
     }
 
-    @Test func activityChips_suitableKelvin_rangesAreSane() {
+    @Test func activityChips_suitableRanges_areSane() {
         for chip in ActivityChip.allCases {
-            let range = chip.suitableKelvin
-            #expect(range.lowerBound >= 1000 && range.upperBound <= 10000,
+            #expect(chip.suitableLux.lowerBound > 0 && chip.suitableLux.upperBound <= 100_000)
+            #expect(chip.suitableLux.lowerBound < chip.suitableLux.upperBound)
+            let cct = chip.suitableKelvin
+            #expect(cct.lowerBound >= 1000 && cct.upperBound <= 10000,
                 "\(chip) CCT range outside plausible interior lighting bounds")
-            #expect(range.lowerBound < range.upperBound)
+            #expect(cct.lowerBound < cct.upperBound)
         }
-        // The Figma 04_Check_2 example: 3,800 K suits TV & Movies.
-        #expect(ActivityChip.tvAndMovies.suitableKelvin.contains(3800))
     }
 }

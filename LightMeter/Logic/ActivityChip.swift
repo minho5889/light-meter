@@ -89,28 +89,35 @@ public enum ActivityChip: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    /// The lux-range indices (0–7) where this activity is a good match —
-    /// the inverse of `activeChips(for:)`, derived from it so the two can
-    /// never drift apart.
-    public var suitableLuxIndices: [Int] {
-        (0...7).filter { Self.activeChips(for: $0).contains(self) }
+    /// Suitable illuminance for the activity, in lux. Values come verbatim
+    /// from the team's "Light Meter.xlsx" In-App Text sheet (the Analysis
+    /// verdict table) — the product source of truth for these ranges.
+    public var suitableLux: ClosedRange<Double> {
+        switch self {
+        case .readingAndStudy:  return 500...750
+        case .officeAndFocus:   return 300...500
+        case .tvAndMovies:      return 30...100
+        case .diningAndSocial:  return 150...300
+        case .sleepAndComfort:  return 10...50
+        case .babyAndParenting: return 10...100
+        case .datingAndRomance: return 50...150
+        case .coffeeAndTeaTime: return 150...250
+        }
     }
 
-    /// Recommended correlated color temperature (Kelvin) for the activity.
-    /// Ranges follow common interior-lighting guidance (EN 12464-1 /
-    /// residential CCT recommendations): warm (<3000K) for rest and intimate
-    /// settings, neutral for care tasks and screens, cool (4000K+) for
-    /// focus/task work.
+    /// Suitable correlated color temperature for the activity, in Kelvin.
+    /// Values come verbatim from the team's "Light Meter.xlsx" In-App Text
+    /// sheet (the Analysis verdict table).
     public var suitableKelvin: ClosedRange<Double> {
         switch self {
-        case .readingAndStudy:  return 4000...6500
-        case .officeAndFocus:   return 4000...6500
-        case .tvAndMovies:      return 2700...4500
-        case .diningAndSocial:  return 2200...3500
-        case .sleepAndComfort:  return 1800...3000
-        case .babyAndParenting: return 2700...4000
-        case .datingAndRomance: return 1800...3000
-        case .coffeeAndTeaTime: return 2200...3800
+        case .readingAndStudy:  return 5000...6500
+        case .officeAndFocus:   return 4000...5000
+        case .tvAndMovies:      return 3000...4000
+        case .diningAndSocial:  return 2700...3500
+        case .sleepAndComfort:  return 2000...2700
+        case .babyAndParenting: return 2500...3000
+        case .datingAndRomance: return 2200...2700
+        case .coffeeAndTeaTime: return 2500...3000
         }
     }
 }
